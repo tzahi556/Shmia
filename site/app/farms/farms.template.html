@@ -1,0 +1,25 @@
+﻿<div class="panel panel-default">
+    <div class="panel-heading">
+        חוות
+    </div>
+    <div class="panel-body">
+        <a class="btn btn-success btn-xs" ui-sref="farm({id:0})">חווה חדשה</a>
+    </div>
+
+    <div class="col-md-6"> <input type="text" class="form-control" ng-model="$ctrl.filter.Name" placeholder="חפש שם חווה" /></div>
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th>שם</th>
+            </tr>
+        </thead>
+        <tbody>
+
+            <tr ng-repeat="farm in $ctrl.farms | filter:$ctrl.filter">
+                <td ui-sref="farm({id:farm.Id})">{{farm.Name}}</td>
+
+                <td><button type="button" class="btn btn-primary" ng-click="$ctrl.enterManger(farm.Id)">כנס בתור מנהל חווה</button></td>
+            </tr>
+        </tbody>
+    </table>
+</div>

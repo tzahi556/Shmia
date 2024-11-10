@@ -1,0 +1,29 @@
+﻿<div class="panel panel-default">
+    <div class="panel-heading">
+        {{(['farmAdminHorse','vetrinar','shoeing'].indexOf($ctrl.role)!=-1?'עובדים':'מדריכים')}}
+    </div>
+    <div class="panel-body">
+        <a class="btn btn-success btn-xs" ui-sref="instructor({id:0})"> {{(['farmAdminHorse','vetrinar','shoeing'].indexOf($ctrl.role)!=-1?'עובד':'מדריך')}} חדש</a>
+    </div>
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th>שם פרטי</th>
+                <th>שם משפחה</th>
+                <th>אימייל</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td colspan="3">
+                    <input type="text" class="form-control" ng-model="$ctrl.filter.$" placeholder="חיפוש חופשי" />
+                </td>
+            </tr>
+            <tr ng-repeat="user in $ctrl.users | filter: $ctrl.filter" ui-sref="instructor({id:user.Id})">
+                <td>{{user.FirstName}}</td>
+                <td>{{user.LastName}}</td>
+                <td>{{user.Email}}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>

@@ -1,0 +1,54 @@
+﻿<div class="panel panel-default">
+    <div class="panel-heading">
+      לוג תנועות מנהלים
+
+
+    </div>
+    <div class="panel-body">
+        <div class="form-group col-md-3">
+            <input type="date" class="form-control" ng-model="$ctrl.StartDate" placeholder=" תאריך התחלה" />
+        </div>
+        <div class="form-group col-md-3">
+            <input type="date" class="form-control" ng-model="$ctrl.EndDate" placeholder=" תאריך סיום" />
+        </div>
+        <div class="form-group col-md-3">
+
+            <select class="form-control" ng-model="$ctrl.UserId" ng-options="user.Id as user.FullName for user in $ctrl.users">
+                <option value="">בחרי מנהלת אזור</option>
+            </select>
+        </div>
+
+
+        <div class="form-group col-md-3">
+            <button type="submit" class="btn btn-success" ng-click="$ctrl.search()" >חפשי</button>
+        </div>
+    </div>
+    <div class="table-responsive">
+
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>מנהל אזור</th>
+                    <th>מכשיר שהתחבר</th>
+                    <th>תאריך</th>
+                    <th>פעולה</th>
+                    <th>שם עובדת</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td colspan="9">
+                        <input type="text" class="form-control" ng-model="$ctrl.filter.$" placeholder="חיפוש חופשי" />
+                    </td>
+                </tr>
+                <tr ng-repeat="log in $ctrl.logs | filter:$ctrl.filter" ng-class="{'set-status':log.Action.includes('שליחה למשרד')}">
+                    <td>{{log.UserName}}</td>
+                    <td>{{log.Device}}</td>
+                    <td>{{log.DateTime | ildate: 'HH:mm DD/MM/YYYY '}}</td>
+                    <td>{{log.Action}}</td>
+                    <td>{{log.WorkerName}}</td>
+                </tr>
+            </tbody>
+        </table>
+        </div>
+    </div>

@@ -1,0 +1,142 @@
+﻿<form name="farmForm" ng-submit="$ctrl.submit()" novalidate>
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            חווה
+        </div>
+        <div class="panel-body">
+            <div class="form-group">
+                <label>מזהה</label>
+                <input type="number" disabled class="form-control" ng-model="$ctrl.farm.Id" />
+            </div>
+            <div class="form-group">
+                <label>שם</label>
+                <input type="text" name="name" class="form-control" ng-model="$ctrl.farm.Name" required />
+            </div>
+            <div class="form-group">
+                <label>ezcount api key</label>
+                <input type="text" name="name" class="form-control" ng-model="$ctrl.farm.Meta.api_key" required />
+            </div>
+            <div class="form-group">
+                <label>ezcount ua uuid</label>
+                <input type="text" name="name" class="form-control" ng-model="$ctrl.farm.Meta.ua_uuid" />
+            </div>
+            <div class="form-group">
+                <label>ezcount api email</label>
+                <input type="text" name="name" class="form-control" ng-model="$ctrl.farm.Meta.api_email" required />
+            </div>
+            <div class="form-group">
+                <label>תאריך תחילת מנוי</label>
+                <input type="date" name="name" class="form-control" ng-model="$ctrl.farm.Meta.StartDate" required />
+            </div>
+            <div class="form-group">
+                <label>תאריך סוף מנוי</label>
+                <input type="date" name="name" class="form-control" ng-model="$ctrl.farm.Meta.EndDate" required />
+            </div>
+            <div class="form-group">
+                <label><input type="checkbox" ng-model="$ctrl.farm.Meta.IsAshrai" /> סליקת אשראי </label>
+
+            </div>
+            <div class="form-group">
+
+                <label><input type="checkbox" ng-model="$ctrl.farm.Meta.IsToken" /> חיוב בטוקן  </label>
+
+            </div>
+
+            <div class="form-group">
+
+                <label><input type="checkbox" ng-model="$ctrl.farm.Meta.IsDateInKabala" /> הצגת תאריכים בחשבונית  </label>
+                <label>&nbsp;&nbsp;</label>
+                <label><input type="checkbox" ng-model="$ctrl.farm.Meta.IsRekivaTipulitInKabala" /> הצגת רכיבה טיפולית בחשבונית  </label>
+            </div>
+
+            <div class="form-group">
+
+                <label><input type="checkbox" ng-model="$ctrl.farm.Meta.IsInstractorPolicy" /> חסימה למדריכים  </label>
+
+            </div>
+
+            <div class="form-group">
+                <label>שיטת חיוב בשיעור השלמה</label>
+                <select class="form-control" ng-model="$ctrl.farm.IsHiyuvInHashlama">
+                    <option value="0">דרוש שיעור השלמה</option>
+                    <option value="1">דרוש שיעור השלמה לחייב</option>
+                </select>
+            </div>
+
+
+            <div class="form-group">
+                <label>סגנון חווה</label>
+                <select class="form-control" ng-model="$ctrl.farm.Style">
+                    <option value="0">בית ספר תלמידים</option>
+                    <option value="1">טיולים בלבד</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>מס/קבלה אחרון</label>
+                <input type="number" disabled class="form-control" ng-model="$ctrl.farm.Meta.LastInvoiceId" />
+            </div>
+
+
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    תגים לחווה
+                </div>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>תיאור תג</th>
+                            <th>מספר התג במערכת</th>
+
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="farmTag in $ctrl.farm.Meta.farmTags">
+
+                            <td><input class="table-control" type="text" ng-model="farmTag.tag_name"></td>
+                            <td><input class="table-control" type="number" ng-model="farmTag.tag_id"></td>
+                            <td><button class="btn btn-xs btn-default" ng-click="$ctrl.removeTags(farmTag)">הסר</button></td>
+                        </tr>
+                        <tr>
+
+                            <td><input class="table-control" type="text" ng-model="$ctrl.newfarmTag.tag_name"></td>
+                            <td><input class="table-control" type="number" ng-model="$ctrl.newfarmTag.tag_id"></td>
+                            <td>
+                                <button ng-click="$ctrl.addNewTag()" type="button" class="btn btn-xs btn-success">הוספה</button>
+                            </td>
+
+                        </tr>
+
+
+
+                    </tbody>
+                </table>
+                <!--<div class="panel-footer">
+            <form name="newFarmTags">
+                <table>
+                    <tr>
+
+                        <td><input class="table-control" type="text" ng-model="$ctrl.newfarmTag.tag_name"></td>
+                        <td><input class="table-control" type="number" ng-model="$ctrl.newfarmTag.tag_id"></td>
+                        <td>
+                            <button ng-click="$ctrl.addNewTag()" ng-disabled="newFarmTags.$invalid" type="submit" class="btn btn-success">הוספה</button>
+                        </td>
+
+                    </tr>
+
+                </table>
+            </form>
+        </div>-->
+            </div>
+
+
+        </div>
+        <div class="panel-footer">
+            <button type="submit" class="btn btn-success" ng-disabled="farmForm.$invalid">עדכון</button>
+            <button type="button" class="btn btn-default" ng-click="$ctrl.delete()">מחק</button>
+        </div>
+    </div>
+</form>
+
+

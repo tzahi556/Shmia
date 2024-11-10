@@ -1,0 +1,181 @@
+﻿
+
+
+
+
+
+
+<div class="col-md-4" >
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            Portfolio List - {{$ctrl.portfolios.length}}
+
+        </div>
+        <div class="panel-body" style="overflow:auto; height: calc(100vh - 200px);">
+
+            <table class="table table-hover " style="">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Name</th>
+                      
+                     
+                    </tr>
+                </thead>
+                <tbody>
+                  
+                    <tr ng-repeat="portfolio in $ctrl.portfolios" 
+                        ng-click="$ctrl.portfolioasins='';$ctrl.GetHistoryData(1,portfolio.Id,$index);$ctrl.GetHistoryData(3,portfolio.Id,$index)"
+                        style="cursor: pointer; background:{{($ctrl.SelectedRow==$index)?'yellow':''}}"
+                        >
+                        <td>{{portfolio.Id}}</td>
+                       
+                        <td style="cursor:default">{{portfolio.Name}}</td>
+                      
+                    </tr>
+                </tbody>
+            </table>
+
+        </div>
+
+
+
+
+
+
+
+    </div>
+</div>
+
+
+<div class="col-md-4">
+    <div class="panel panel-danger">
+        <div class="panel-heading">
+            Negative Words
+
+
+            <div style="float:right">
+                <button type="button" class="btn btn-danger btn-xs" ng-click="$ctrl.downloadExcelAmazonePhrase()" data-dismiss="modal">Download Negative Phrase</button>
+            </div>
+        </div>
+        <div class="panel-body" style="overflow:auto; height: calc(100vh - 200px);">
+            <div class="col-md-12">
+
+                <label>Negative from Exact bulk</label>
+            </div>
+
+            <div class="col-md-12">
+
+                <button class="btn btn-danger btn-xs" style="margin:3px" ng-if="portfolioword.Type=='1' && !portfolioword.IsHard" ng-repeat="portfolioword in $ctrl.portfoliowords | orderByDateDesc track by $index">
+                    <!--<img src="../../images/notArrive.png" height="15px" ng-click="$ctrl.removeWords(portfolioword)" />-->
+                    <a class="" href="" ng-click="$ctrl.openGoogle(portfolioword)" style="color:white">  {{portfolioword.Word}}</a>
+                </button>
+
+            </div>
+
+            <div class="col-md-12">
+                <hr />
+
+            </div>
+
+            <!--<div class="col-md-6">
+
+                <input class="form-control" style="" type="text" ng-model="$ctrl.newHardNegative">
+            </div>
+            <div class="col-md-2">
+                <button style="" type="button" class="btn btn-danger" ng-click="$ctrl.AddHard(1)">Add Hard Negative</button>
+            </div>-->
+            <!--<div class="col-md-12">
+                <hr />
+                <label>Hard Negative</label>
+            </div>
+
+            <div class="col-md-12">
+
+                <button class="btn btn-danger btn-xs" style="margin:3px" ng-if="portfolioword.Type=='1' && portfolioword.IsHard" ng-repeat="portfolioword in $ctrl.portfoliowords | orderByDateDesc track by $index">
+                    <img src="../../images/notArrive.png" height="15px" ng-click="$ctrl.removeWords(portfolioword)" />
+                    <a class="" href="" ng-click="$ctrl.openGoogle(portfolioword)" style="color:white">  {{portfolioword.Word}}</a>
+                </button>-->
+
+                <!-- </a>-->
+
+            <!--</div>-->
+
+
+
+
+
+        </div>
+
+    </div>
+</div>
+
+<div class="col-md-4">
+    <div class="panel panel-danger">
+        <div class="panel-heading">
+            Hard Words(Negative + Positive)
+
+            <div style="float:right">
+
+
+                <!--<button type="button" class="btn btn-success btn-xs" ng-click="$ctrl.downloadExcelPhrase()" data-dismiss="modal">Download Positive Phrase</button>-->
+            </div>
+        </div>
+        <div class="panel-body" style="overflow:auto; height: calc(100vh - 200px);">
+
+            <div class="col-md-12">
+
+                <label>Hard Negative</label>
+            </div>
+            <div class="col-md-12">
+                <button class="btn btn-danger btn-xs" style="margin:3px" ng-if="portfolioword.Type=='1' && portfolioword.IsHard" ng-repeat="portfolioword in $ctrl.portfoliowords | orderByDateDesc track by $index">
+                    <!--<img src="../../images/notArrive.png" height="15px" ng-click="$ctrl.removeWords(portfolioword)" />-->
+                    <a class="" href="" ng-click="$ctrl.openGoogle(portfolioword)" style="color:white">  {{portfolioword.Word}}</a>
+                </button>
+
+            </div>
+
+            <div class="col-md-12">
+                <hr />
+
+            </div>
+            <div class="col-md-12">
+
+                <label>Hard Positive</label>
+            </div>
+            <div class="col-md-12">
+                <button class="btn btn-success btn-xs" style="margin:3px" ng-if="portfolioword.Type=='2' && portfolioword.IsHard" ng-repeat="portfolioword in $ctrl.portfoliowords | orderByDateDesc track by $index">
+                    <!--<img src="../../images/notArrive.png" height="15px" ng-click="$ctrl.removeWords(portfolioword)" />-->
+                    <a class="" href="" ng-click="$ctrl.openGoogle(portfolioword)" style="color:white">  {{portfolioword.Word}}</a>
+                </button>
+
+            </div>
+
+            <div class="col-md-12">
+                <hr />
+
+            </div>
+
+            <!--<div class="col-md-6">
+        <input class="form-control" style="" type="text" ng-model="$ctrl.newHardPositive">
+    </div>
+    <div class="col-md-2">
+        <button style="" type="button" class="btn btn-success" ng-click="$ctrl.AddHard(2)">Add Hard Positive</button>
+    </div>-->
+            <!--<div class="col-md-12">
+        <hr />
+        <label>Hard Positive</label>
+    </div>
+    <div class="col-md-12">
+        <button class="btn btn-success btn-xs" ng-click="$ctrl.removeWords(portfolioword)" style="margin:3px" ng-if="portfolioword.Type=='2' && portfolioword.IsHard" ng-repeat="portfolioword in $ctrl.portfoliowords | orderByDateDesc track by $index">
+            <img src="../../images/notArrive.png" height="15px" />   {{portfolioword.Word}}
+        </button>
+    </div>-->
+
+
+        </div>
+
+    </div>
+</div>
+
+

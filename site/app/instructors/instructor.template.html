@@ -1,0 +1,99 @@
+﻿<form name="instructorForm" ng-submit="$ctrl.submit()" novalidate>
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            {{(['farmAdminHorse','vetrinar','shoeing'].indexOf($ctrl.role)!=-1?'עובדים':'מדריכים')}}
+        </div>
+        <div class="panel-body">
+
+            <div class="form-group">
+                <label>מזהה</label>
+                <input type="number" disabled class="form-control" ng-model="$ctrl.user.Id" />
+            </div>
+            <div class="form-group">
+                <label>צבע</label>
+                <input type="color" ng-model="$ctrl.user.EventsColor" />
+            </div>
+            <div class="form-group">
+                <label>אימייל</label>
+                <input type="email" name="email" class="form-control" ng-model="$ctrl.user.Email" ng-model-options="{updateOn:'blur'}" required email-exists="$ctrl.user.Id" />
+                <span ng-show="instructorForm.email.$error.emailExists">אימייל תפוס</span>
+            </div>
+            <div class="form-group">
+                <label>סיסמה</label>
+                <input type="text" name="password" class="form-control" ng-model="$ctrl.user.Password" required />
+            </div>
+            <div class="form-group">
+                <label>שם פרטי</label>
+                <input type="text" name="firstName" class="form-control" ng-model="$ctrl.user.FirstName" required />
+            </div>
+            <div class="form-group">
+                <label>שם משפחה</label>
+                <input type="text" name="lastName" class="form-control" ng-model="$ctrl.user.LastName" required />
+            </div>
+            <div class="form-group">
+                <label>טלפון</label>
+                <input type="text" name="phoneNumber" class="form-control" ng-model="$ctrl.user.PhoneNumber" required />
+            </div>
+            <div class="form-group" ng-show="$ctrl.role=='sysAdmin'">
+                <label>חווה</label>
+                <select class="form-control" ng-options="farm.Id as farm.Name for farm in $ctrl.farms" ng-model="$ctrl.user.Farm_Id" required>
+                    <option value="">בחר חווה</option>
+                </select>
+            </div>
+
+            <div class="form-group" ng-show="$ctrl.role==='farmAdminHorse'">
+                <label>תפקיד</label>
+                <select class="form-control" ng-model="$ctrl.user.SubRole" >
+                    <option value="">בחר תפקיד</option>
+                    <option value="worker">עובד כללי</option>
+                    <option value="stableman">סייס</option>
+                </select>
+            </div>
+
+
+            <div class="form-group">
+
+                <label><input type="checkbox" ng-model="$ctrl.user.IsMazkirut" ng-change="$ctrl.setAllHour()" /> האם מזכירות </label>
+                <label>--</label>
+                <label style="color:darkred">יש לשים לב שזה יהיה  כללי לצרכים כלליים!</label>
+            </div>
+
+
+            <div class="form-group">
+                <label>שעות עבודה</label>
+                <calendar events="$ctrl.availablehours"
+                          resources="$ctrl.resources"
+                          event-change="$ctrl.eventChange"
+                          event-click="$ctrl.eventClick"
+                          event-create="$ctrl.eventCreate"
+                          past-edit="true">
+                </calendar>
+            </div>
+        </div>
+        <div class="panel-footer">
+            <button type="submit" class="btn btn-success" ng-disabled="instructorForm.$invalid">עדכון</button>
+            <button type="button" class="btn btn-default" ng-disabled="$ctrl.selfEdit" ng-click="$ctrl.delete()">מחק</button>
+        </div>
+    </div>
+</form>
+
+
+<!--<div style="border:solid 1px gray;border-radius:5px;padding:2px;margin-bottom:2px;background:white">
+    <div style="font-weight:bold;text-decoration:underline">הובלת סוסים</div>
+    <div>להוציא את הסוסים לטיול יומי סתם כי בא לי</div>
+
+</div>
+
+
+<div style="border:solid 1px gray;border-radius:5px;padding:2px;margin-bottom:2px;background:white">
+    <div style="font-weight:bold;text-decoration:underline">הובלת סוסים</div>
+    <div>להוציא את הסוסים לטיול יומי סתם כי בא לי</div>
+
+</div>
+
+
+<div style="border:solid 1px gray;border-radius:5px;padding:2px;margin-bottom:2px;background:white">
+    <div style="font-weight:bold;text-decoration:underline">הובלת סוסים</div>
+    <div>להוציא את הסוסים לטיול יומי סתם כי בא לי</div>
+
+</div>-->

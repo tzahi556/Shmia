@@ -1,0 +1,25 @@
+{
+    "short_name": "Ofek",
+    "name": "ofek",
+    "display": "standalone",
+    "background_color": "#2196F3",
+    "gcm_sender_id": "103953800507",
+    "icons": [
+        {
+            "src": "favicon.ico",
+            "type": "image/png",
+            "sizes": "48x48"
+        },
+      {
+        "src": "favicon.ico",
+        "type": "image/png",
+        "sizes": "96x96"
+      },
+      {
+        "src": "favicon.ico",
+        "type": "image/png",
+        "sizes": "192x192"
+      }
+    ],
+    "start_url": "/"
+}

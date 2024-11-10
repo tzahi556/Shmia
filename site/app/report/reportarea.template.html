@@ -1,0 +1,122 @@
+﻿
+<style>
+
+    .nopadding {
+        padding: 0px !important;
+        margin: 0px !important;
+    }
+
+    input[type="file"] {
+        display: none;
+    }
+
+    .custom-file-upload {
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        background: #5bc0de;
+        display: inline-block;
+        padding: 6px 12px;
+        cursor: pointer;
+        color: white;
+    }
+
+    .number {
+        content: "1";
+        font-size: 40px;
+        color: darkslategray;
+        font-family: "Poppins-Medium";
+    }
+
+    .numberRed {
+        content: "1";
+        font-size: 40px;
+        color: red;
+        font-family: "Poppins-Medium";
+    }
+
+    .fromnumberRed {
+        content: "/ 4";
+        font-size: 18px;
+        color: red;
+        font-family: "Poppins-Medium";
+        /*left: 16px;*/
+        position: absolute;
+        top: 70px;
+        width: 40px;
+    }
+
+    .fromnumber {
+        content: "/ 4";
+        font-size: 18px;
+        color: darkslategray;
+        font-family: "Poppins-Medium";
+        /*left: 16px;*/
+        position:absolute;
+        top: 70px;
+        width: 40px;
+    }
+
+    .numberContainer {
+        direction: ltr !important;
+        text-align: center;
+    }
+</style>
+<!--<div id="loader"></div>-->
+
+<form name="workerForm" ng-submit="$ctrl.submit()">
+
+
+    <div class="col-md-12 nopadding">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                דוח אזורי לשנת {{$ctrl.shnatmas}}
+
+                <div style="float:left">
+                    <button ng-click="$ctrl.upload()" class="btn btn-success btn-xs">העלאת קובץ עובדים 101</button>
+
+                </div>
+            </div>
+            <div class="panel-body">
+
+
+                <div class="col-md-2" ng-repeat="report in $ctrl.reportarea">
+                    <div class="panel panel-primary">
+                        <div class="panel-heading">
+                            {{report.ManagerName}} - {{$ctrl.getHebArea(report.AreaId)}}{{$ctrl.getHebArea(report.AreaId2,2)}}
+                        </div>
+                        <div class="panel-body" style="">
+
+                            <div class="numberContainer">
+
+                                <span ng-class="report.Total == report.TotalDone ? 'number' : 'numberRed'" >{{report.TotalDone}}</span>
+                                <span ng-class="report.Total == report.TotalDone ? 'fromnumber' : 'fromnumberRed'" >/ {{report.Total}}</span>
+
+                                
+
+                            </div>
+                            <!--<div class="numberContainer">
+                                <span class="textSend">נשלחו</span>
+                            </div>-->
+
+
+                                <div class="numberContainer">
+                                    
+                                        <button class="form-control btn btn-info" ng-click="$ctrl.downloadData(report)">
+                                            הורדות קבצים
+                                            <i class="fa fa-cloud-download"></i>
+                                        </button>
+                                    
+                                </div>
+
+                            </div>
+
+                        </div>
+                </div>
+
+
+            </div>
+
+        </div>
+    </div>
+
+</form>

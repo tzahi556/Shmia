@@ -1,0 +1,117 @@
+﻿
+
+<div class="col-lg-7">
+
+    <div id="divContainer"
+         style="border:2px solid black;height:700px;overflow:auto">
+        <object id="objPdf" data="http://localhost:61957/102.pdf"
+                type="application/pdf"
+                width="100%"
+                height="9200px" style="">
+        </object>
+    </div>
+
+
+   
+
+</div>
+
+<div class="col-lg-5">
+
+   
+
+    <div class="panel-body">
+
+
+       
+
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th style="width:150px">Page </th>
+                    <th>lly</th>
+                    <th>urx</th>
+                    <!--<th>ury</th>-->
+                    <th>Text</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+
+                <tr>
+
+                    <td>
+                        <select class="form-control"
+                                ng-model="$ctrl.pageNumber" ng-change="$ctrl.changePageNumber();">
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                            <option value="6">6</option>
+                            <option value="9">9</option>
+                        </select>
+                    </td>
+                    <td><input class="form-control" style="" type="text" ng-model="$ctrl.lly"></td>
+                    <td><input class="form-control" style="" type="text" ng-model="$ctrl.urx"></td>
+                    <!--<td><input class="form-control" style="" type="text" ng-model="$ctrl.ury"></td>-->
+                    <td><input class="form-control" style="" type="text" ng-model="$ctrl.text"></td>
+                    <td> <button style="" type="button" class="btn btn-danger" ng-click="$ctrl.RunAPI(true)">הוסף</button></td>
+
+                </tr>
+            </tbody>
+        </table>
+
+    </div>
+
+
+
+
+    <div class="panel-body" style="height:500px;overflow:auto">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <!--<th>llx</th>-->
+                    <th>lly</th>
+                    <th>urx</th>
+                    <!--<th>ury</th>-->
+                    <th style="width:30%">Text</th>
+                    <th>F</th>
+                    <th>S</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+
+                <tr ng-repeat="portfolio in $ctrl.portfolios">
+
+                    <!--<td><input class="form-control" style="" type="text" ng-model="portfolio.llx"></td>-->
+                    <td><input class="form-control" style="" type="text" ng-model="portfolio.lly"></td>
+                    <td><input class="form-control" style="" type="text" ng-model="portfolio.urx"></td>
+                    <!--<td><input class="form-control" style="" type="text" ng-model="portfolio.ury"></td>-->
+                    <td><input class="form-control" style="" type="text" ng-model="portfolio.Word"></td>
+                    <td><input class="form-control" style="" type="text" ng-model="portfolio.Font"></td>
+                    <td><input class="form-control" style="" type="text" ng-model="portfolio.Space"></td>
+                    <td> <button style="" type="button" class="btn btn-danger" ng-click="$ctrl.UpdateParam(portfolio)">עדכן</button></td>
+
+                </tr>
+            </tbody>
+        </table>
+
+    </div>
+
+
+
+
+
+
+    <!--<img src="../../images/klalitPlatinum_.png" />
+    <p>Hello <strong>&#x2714;&#10004;</strong>!</p>-->
+    <!--llx : <input class="form-control" style="width:20%" type="text" ng-model="$ctrl.llx">
+    lly : <input class="form-control" style="width: 20%" type="text" ng-model="$ctrl.lly">
+    urx : <input class="form-control" style="width:20%" type="text" ng-model="$ctrl.urx">
+    ury : <input class="form-control" style="width: 20%" type="text" ng-model="$ctrl.ury">
+    Text :<input class="form-control" style="" type="text" ng-model="$ctrl.text">
+
+    <button style="" type="button" class="btn btn-danger" ng-click="$ctrl.RunAPI()">שלח</button>-->
+</div>

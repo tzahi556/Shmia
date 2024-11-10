@@ -1,0 +1,37 @@
+﻿<form name="loginForm" novalidate>
+    <div class="panel panel-default">
+        <div class="panel-heading">
+           כניסה למערכת
+        </div>
+        <div class="panel-body">
+            
+            <div style="text-align:center">
+              
+                <img src="../../favicon.png" width="200px" />
+
+
+            </div>
+            
+            
+            <div class="form-group">
+                <label>מייל</label>
+                <input class="form-control" type="email" ng-model="$ctrl.email" required  />
+            </div>
+            <div class="form-group">
+                <label>סיסמה</label>
+                <input class="form-control" type="password" ng-model="$ctrl.password" required />
+            </div>
+
+
+
+
+            <!--<div class="panel-footer">
+                <button class="btn btn-success" type="button"  ng-click="$ctrl.login22()">ddddd</button>
+            </div>-->
+
+        </div>
+        <div class="panel-footer">
+            <button class="btn btn-success" type="submit" ng-disabled="loginForm.$invalid" ng-click="$ctrl.login()">הכנסי</button>
+        </div>
+    </div>
+</form>

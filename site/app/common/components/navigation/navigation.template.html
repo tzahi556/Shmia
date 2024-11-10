@@ -1,0 +1,49 @@
+﻿
+
+
+<div class="navbar-collapse collapse navbar-responsive-collapse">
+    <ul class="nav navbar-nav">
+
+        <li data-ui-sref-active="active" ng-if="$ctrl.awsmangers"><a ui-sref="awsmangers"> ממשק PDF</a></li>
+
+
+        <li data-ui-sref-active="active" ng-if="$ctrl.bindtodata"><a ui-sref="bindtodata"> התאמת שדות ל pdf</a></li>
+
+
+
+        <li data-ui-sref-active="active" ng-if="$ctrl.farms"><a ui-sref="farms">חוות</a></li>
+
+        <li data-ui-sref-active="active" ng-if="$ctrl.users"><a ui-sref="users">משתמשים</a></li>
+        <li data-ui-sref-active="active" ng-if="$ctrl.workers"><a ui-sref="workers">קליטת עובדים</a></li>
+        <li data-ui-sref-active="active" ng-if="$ctrl.workersnew">
+            <a ui-sref="workersnew">
+                101
+                שנתי
+            </a>
+        </li>
+        <li data-ui-sref-active="active" ng-if="$ctrl.reportarea"><a ui-sref="reportarea">דוח 101 לפי אזורים</a></li>
+        <li data-ui-sref-active="active" ng-if="$ctrl.docs"><a ui-sref="docs">העלאת טפסים</a></li>
+        <li data-ui-sref-active="active" ng-if="$ctrl.logs"><a ui-sref="logs">לוג תנועות מנהלים</a></li>
+
+    </ul>
+
+
+
+
+
+    <ul ng-if="$ctrl.username" class="nav navbar-nav navbar-left">
+
+      
+
+        <!--<li data-ui-sref-active="active"><a ui-sref="contact">יצירת קשר</a></li>-->
+        <li data-ui-sref-active="active" class="dropdown">
+            <a href="" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{$ctrl.username}} <span class="caret"></span></a>
+            <ul class="dropdown-menu">
+                <li><a ui-sref="login" ng-click="$ctrl.login()">Log Out</a></li>
+            </ul>
+        </li>
+
+
+    </ul>
+    <notifications-nav ng-if="$ctrl.username"></notifications-nav>
+</div>

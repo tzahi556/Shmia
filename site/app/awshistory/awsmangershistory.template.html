@@ -1,0 +1,176 @@
+﻿
+
+
+
+
+
+
+<div class="col-md-4" >
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            Portfolio List - {{$ctrl.portfolios.length}}
+
+        </div>
+        <div class="panel-body" style="overflow:auto; height: calc(100vh - 200px);">
+
+            <table class="table table-hover " style="">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Name</th>
+                      
+                     
+                    </tr>
+                </thead>
+                <tbody>
+                  
+                    <tr ng-repeat="portfolio in $ctrl.portfolios" 
+                        ng-click="$ctrl.filteritems=0;$ctrl.SelectedRowItems=-1;$ctrl.portfolioasins='';$ctrl.GetHistoryData(1,portfolio.Id,$index);$ctrl.GetHistoryData(3,portfolio.Id,$index);$ctrl.tempportfolioId = portfolio.Id"
+                        style="cursor: pointer; background:{{($ctrl.SelectedRow==$index)?'yellow':''}}"
+                        >
+                        <td>{{portfolio.Id}}</td>
+                       
+                        <td style="cursor:default">{{portfolio.Name}}</td>
+                      
+                    </tr>
+                </tbody>
+            </table>
+
+        </div>
+
+
+
+
+
+
+
+    </div>
+</div>
+
+
+<div class="col-md-4">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            Term List - {{$ctrl.filterData(1)}}
+            <div style="float:right">
+                <!--<span style="">Min:</span>
+        <input class="" style="width:70px;" type="number" ng-model="$ctrl.count">-->
+
+
+                <button type="button" class="btn btn-danger btn-xs" ng-click="$ctrl.filteritems=1;$ctrl.SelectedRowItems=-1" data-dismiss="modal">N</button>
+                <button type="button" class="btn btn-success btn-xs" ng-click="$ctrl.filteritems=2;$ctrl.SelectedRowItems=-1" data-dismiss="modal">P</button>
+                <button type="button" class="btn btn-default btn-xs" ng-click="$ctrl.filteritems=0;$ctrl.SelectedRowItems=-1;$ctrl.filterasin=0;$ctrl.GetHistoryData(3,$ctrl.tempportfolioId,0)" data-dismiss="modal">A</button>
+                <button type="button" class="btn btn-danger btn-xs" ng-click="$ctrl.downloadExcelAmazone()" data-dismiss="modal">Download Negative</button>
+                <button type="button" class="btn btn-success btn-xs" ng-click="$ctrl.downloadExcel()" data-dismiss="modal">Download Positive</button>
+
+
+
+            </div>
+        </div>
+        <div class="panel-body" style="overflow:auto; height: calc(100vh - 200px);">
+
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th><input type="checkbox" ng-model="$ctrl.checkAllData" ng-click="$ctrl.checkAll()"></th>
+                        <th>#</th>
+                        <th>Name</th>
+                        <th></th>
+
+                    </tr>
+                </thead>
+                <tbody>
+                    <!--"$ctrl.GetHistoryData(2,portfolioitem.Id,$index)"-->
+                    <tr ng-repeat="portfolioitem in $ctrl.portfolioitems" ng-if="($ctrl.filteritems==1 && portfolioitem.IsNegative==1)||
+                        !$ctrl.filteritems || $ctrl.filteritems==0 ||($ctrl.filteritems==2 && portfolioitem.IsNegative!=1)"
+                        ng-click="$ctrl.GetHistoryData(2,portfolioitem.Id,$index);  $ctrl.SelectedRowItems=$index;$ctrl.filterasin=portfolioitem.Id"
+                        style="cursor: pointer; background:{{(portfolioitem.IsNegative==1 && $ctrl.SelectedRowItems==$index)?'#cc8800':(portfolioitem.IsNegative==1?'#ffa2a2':($ctrl.SelectedRowItems==$index?'yellow':''))}}">
+
+                        <!--;background:{{($ctrl.SelectedRowItems==$index)?'yellow':''}}-->
+                        <td><input class="" type="checkbox" ng-model="portfolioitem.IsSelected"></td>
+
+
+                        <td>{{portfolioitem.Id}}</td>
+
+                        <td style="cursor:default">{{portfolioitem.CustomerSearchTerm}}</td>
+                        <td style="text-align:right">
+                            <button ng-if="portfolioitem.IsNegative!=1" type="button" class="btn btn-danger btn-xs" ng-click="portfolioitem.IsNegative=1;$ctrl.setStatusForTerm(portfolioitem.Id,1)" data-dismiss="modal">N</button>
+                            <button ng-if="portfolioitem.IsNegative==1" type="button" class="btn btn-success btn-xs" ng-click="portfolioitem.IsNegative=0;$ctrl.setStatusForTerm(portfolioitem.Id,0)" data-dismiss="modal">P</button>
+
+                        </td>
+
+                    </tr>
+                </tbody>
+            </table>
+
+        </div>
+
+
+
+
+
+
+
+    </div>
+</div>
+
+<div class="col-md-4">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            Asin List  -  {{$ctrl.filterData(2)}}  
+
+            <div style="float:right">
+
+                <button type="button" class="btn btn-danger btn-xs" ng-click="$ctrl.filteritemsasin=1;" data-dismiss="modal">N</button>
+                <button type="button" class="btn btn-success btn-xs" ng-click="$ctrl.filteritemsasin=2;" data-dismiss="modal">P</button>
+                <button type="button" class="btn btn-default btn-xs" ng-click="$ctrl.filteritemsasin=0;$ctrl.filteritems=0;$ctrl.filterasin=0;$ctrl.SelectedRowItems=-1;$ctrl.GetHistoryData(3,$ctrl.tempportfolioId,0)" data-dismiss="modal">A</button>
+                <button type="button" class="btn btn-danger btn-xs" ng-click="$ctrl.downloafile(1)" data-dismiss="modal">Download Negative</button>
+                <button type="button" class="btn btn-success btn-xs" ng-click="$ctrl.downloafile(2)" data-dismiss="modal">Download Positive</button>
+            </div>
+
+        </div>
+            <div class="panel-body" style="overflow:auto; height: calc(100vh - 200px);">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+
+                            <th></th>
+                            <th>Asin</th>
+                            <th>Image</th>
+                            <!--<th style="width:50%">Desc</th>-->
+                            <th>Price</th>
+
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                        <tr ng-repeat="portfolio in $ctrl.portfolioasins" ng-if="(($ctrl.filteritemsasin==1 && portfolio.Status!=1)|| !$ctrl.filteritemsasin || $ctrl.filteritemsasin==0 ||($ctrl.filteritemsasin==2 && portfolio.Status==1)) ">
+                            <td ng-if="portfolio.Status!=1">
+                                <button type="button" class="btn btn-danger" ng-click="$ctrl.setStatusForAsin(portfolio,1)">Negative</button>
+                            </td>
+                            <td ng-if="portfolio.Status==1">
+                                <button type="button" class="btn btn-success" ng-click="$ctrl.setStatusForAsin(portfolio,0)">Positive</button>
+                            </td>
+                            <td title="{{portfolio.CustomerSearchTerm}}" style="cursor:pointer;">
+                                <span style="background:{{($ctrl.isAsininCs(portfolio.CustomerSearchTerm))?'yellow':''}}">{{portfolio.Asin}}</span>
+                            </td>
+                            <td><a href="{{portfolio.Link}}" style="cursor:pointer" target="_blank"><img width="100px" height="100px" ng-src="{{portfolio.ImageUrl}}" /></a></td>
+                            <!--<td><a href="{{portfolio.Link}}" style="cursor:pointer" target="_blank">{{portfolio.Desc}}</a></td>-->
+
+                            <td>{{portfolio.Price}}</td>
+
+                           
+                        </tr>
+                    </tbody>
+                </table>
+
+            </div>
+
+
+
+
+
+        </div>
+    </div>
+
+

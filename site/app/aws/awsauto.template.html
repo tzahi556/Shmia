@@ -1,0 +1,169 @@
+﻿<div class="panel panel-default">
+    <div class="panel-heading">
+        <div style="font-weight:bold;text-align:center;font-size:16px;" class="row">
+            <div class="col-md-4" > {{$ctrl.protname}} - {{$ctrl.portfolioasins.length}}</div>
+
+
+            <div class="col-md-4">
+                <label for="rdoTitleDisc">All</label>
+                <input type="radio" name="Gender" ng-change="$ctrl.FilterAsins()" value="-1" ng-model="$ctrl.Asins">
+
+                <label for="rdoTitleDisc">Negative</label>
+                <input type="radio" name="Gender" value="0" ng-change="$ctrl.FilterAsins()" ng-model="$ctrl.Asins">
+
+                <label for="rdoTitleDisc">Positive</label>
+                <input type="radio" name="Gender" value="1" ng-change="$ctrl.FilterAsins()" ng-model="$ctrl.Asins">
+               
+            </div>
+
+            <div class="col-md-4">
+                <!--<button style="" type="button" class="btn btn-primary" ng-click="$ctrl.SaveAsins()">Save Data</button>-->
+                <button style="" type="button" class="btn btn-primary" ng-click="$ctrl.SaveAsins()">Save & Finish</button>
+                <span style="">Min:</span>
+                <input class="" style="width:70px;" type="number" ng-model="$ctrl.count">
+
+                <button style="" type="button" class="btn btn-default" ng-click="$ctrl.Summery()">Summary</button>
+
+                <button style="" type="button" class="btn btn-primary" ng-click="$ctrl.NextPrev(2)">Prev</button>
+                <button style="" type="button" class="btn btn-primary" ng-click="$ctrl.NextPrev(1)">Next</button>
+
+
+            </div>
+
+        </div>
+        <!--<div style="">
+
+        </div>
+        <div style="float:right">
+            <input type="radio" name="Gender" value="1" ng-model="$ctrl.user.Gender">
+            <label for="rdoTitleDisc">זכר</label>
+
+            <input type="radio" name="Gender" value="0" ng-model="$ctrl.user.Gender">
+            <label for="rdoTitleDisc">נקבה</label>
+        </div>-->
+    </div>
+    <div class="panel-body" style="height:800px;overflow:auto">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th style="width:20%">Asin</th>
+                    <th>Image</th>
+                    <th style="width:50%">Desc</th>
+                    <th>Price</th>
+
+                </tr>
+            </thead>
+            <tbody>
+
+                <tr ng-repeat="portfolio in $ctrl.portfolioasins">
+                    <td ng-if="portfolio.Status!=1">
+                        <button type="button" class="btn btn-danger" ng-click="$ctrl.setStatusForAsin(portfolio,1)">Negative</button>
+                    </td>
+                    <td ng-if="portfolio.Status==1">
+                        <button type="button" class="btn btn-success" ng-click="$ctrl.setStatusForAsin(portfolio,0)">Positive</button>
+                    </td>
+                    <td title="{{portfolio.CustomerSearchTerm}}" style="cursor:pointer;">
+                        <span style="background:{{($ctrl.isAsininCs(portfolio.CustomerSearchTerm))?'yellow':''}}">{{portfolio.Asin}}</span> 
+                    </td>
+                    <td><a href="{{portfolio.Link}}" style="cursor:pointer" target="_blank"><img width="100px" height="100px" ng-src="{{portfolio.ImageUrl}}" /></a></td>
+                    <td><a href="{{portfolio.Link}}" style="cursor:pointer" target="_blank">{{portfolio.Desc}}</a></td>
+
+                    <td>{{portfolio.Price}}</td>
+
+                    <!--<td>
+                        <button type="button" class="btn btn-danger btn-xs" ng-click="$ctrl.deletePro(portfolio)">Delete</button>
+                    </td>-->
+                </tr>
+            </tbody>
+        </table>
+
+    </div>
+
+    <style>
+
+        .tableFixHead thead th {
+            position: sticky;
+            top: 0;
+            background:white;
+        }
+       
+
+    </style>
+
+    <div class="modal fade" id="modal" style="margin-left:20%;margin-top:2%;z-index:50000" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">All Negative List - {{$ctrl.portfolioitems.length}}</h4>
+
+                    <div style="">
+                        <button type="button" class="btn btn-primary btn-xs" ng-click="$ctrl.downloadExcelAmazone()" data-dismiss="modal">Download Excel Amazone</button>
+                        <button type="button" class="btn btn-primary btn-xs" ng-click="$ctrl.downloadExcel()" data-dismiss="modal">Download Excel</button>
+                        <button type="button" class="btn btn-danger btn-xs" data-dismiss="modal">Close </button>
+
+                        <button type="button" style="margin-left:10px" class="btn btn-primary btn-xs" ng-click="$ctrl.addToBulkMaster()" >Add to negative exact bulk master</button>
+
+
+                    </div>
+                </div>
+                <div class="modal-body" style="height:400px;overflow:auto;padding:0px">
+                   
+                        <table class="table tableFixHead" >
+                        <thead>
+                            <tr>
+                                <th></th>
+                                <th>Name</th>
+                                <th>7 days sales</th>
+                                <th>Impressions</th>
+                                <th>Clicks</th>
+
+                                <th>CTR</th>
+
+                                <th>Spend</th>
+                                <th>ACOS</th>
+
+
+                            </tr>
+                        </thead>
+                        <tbody >
+                            <tr ng-repeat="portfolioitem in $ctrl.portfolioitems | orderByDateDesc track by $index">
+                                <td>
+
+                                    <!--<input type="checkbox" ng-model="portfolioitem.Remove" />-->
+
+                                    <img src="../../images/delete.jpg" height="15px"  ng-click="$ctrl.removeNegative(portfolioitem)" />
+                                </td>
+                                <td><a ng-href="https://www.amazon.com/s?k={{portfolioitem.CustomerSearchTerm}}" target="_blank">{{portfolioitem.CustomerSearchTerm}}</a></td>
+                                <td>{{portfolioitem.Days7}}</td>
+                                <td>{{portfolioitem.Impressions}}</td>
+                                <td>{{portfolioitem.Clicks}}</td>
+
+                                <td>{{portfolioitem.CTR}}</td>
+
+                                <td>{{portfolioitem.Spend}}</td>
+                                <td>{{portfolioitem.ACOS}}</td>
+                                <!--<td>{{expense.Date | ildate: 'DD/MM/YYYY'}}</td>-->
+
+
+                            </tr>
+                        </tbody>
+                    </table>
+
+
+                    <div class="footer">
+
+
+
+                    </div>
+
+
+
+                </div>
+
+              
+            </div>
+        </div>
+    </div>
+</div>
