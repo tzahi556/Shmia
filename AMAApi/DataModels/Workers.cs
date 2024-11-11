@@ -152,7 +152,16 @@ namespace FarmsApi.DataModels
         public string UniqNumber { get; set; }
         public bool IsNew { get; set; }
 
-     
+        public string FullAddress
+        {
+            get
+            {
+               
+                
+                return this.City + ' ' + this.Street + ' ' + this.HouseNumber + ' ' + this.Mikud;
+
+            }
+        }
 
         public string ManagerName
         {
