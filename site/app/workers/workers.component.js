@@ -42,7 +42,24 @@
                 'כתובת',
                 'מייל',
                 'חבר קופת חולים',
-                'קופת חולים'
+                'קופת חולים',
+
+                'שכר שעתי',
+                'שכר חודשי',
+                'מצב משפחתי',
+                'תחילת עבודה',
+                'תאריך לידה',
+                'עיר',
+                'סוג משרה',
+                'בנק',
+                'סניף',
+                'חשבון'
+
+
+              /*  שכר שעתי, שכר חודשי, נסיעות, מספר עובד, מצב משפחתי, מספר הנהלח, תחילת עבודה, תאריך לידה, עיר, סוג משרה, דרוג, דרגה, תת מפעל, בנק, סניף, חשבון*/
+
+
+
             ]);
 
             this.workers.forEach(function (worker) {
@@ -57,6 +74,17 @@
                     worker.Email,
                     (worker.KupatHolim == 1) ? "כן" : "לא",
                     getKupaName(worker.Kupa),
+                    worker.HeskemWorkerMaskuert3,
+                    worker.HeskemWorkerMaskuert4,
+                    getMatzavMish(worker.StatusFamely),
+                    getFormatDate(worker.StartWorkDate),
+                    getFormatDate(worker.BirthDate),
+                    worker.City,
+                    getSugMisra(worker.SugMaskuret),
+                    worker.BankNumName,
+                    worker.BrunchNumName,
+                    worker.BankAccountNumber
+
 
                 ]);
             });
@@ -64,6 +92,69 @@
             _getReport(data);
 
 
+            function getFormatDate(date) {
+                if (date)
+                    return moment(date).format("DD-MM-YYYY");
+                else
+                    return "";
+                
+            }
+
+            function getSugMisra(SugMaskuret) {
+
+                switch (SugMaskuret) {
+                    case '1':
+                        return "משכורת חודש";
+                        break;
+                    case '2':
+                        return "שכר עבודה (עובד יומי)";
+                        break;
+                    case '3':
+                        return "משכורת נוספת";
+                        break;
+                    case '4':
+                        return "קצבה";
+                        break;
+                    case '5':
+                        return "משכורת חלקית";
+                        break;
+
+                    case '6':
+                        return "מלגה";
+                        break;
+                    default:
+                        return "";
+                }
+
+
+
+
+            }
+
+            function getMatzavMish(StatusFamely) {
+
+                switch (StatusFamely) {
+                    case '1':
+                        return "רווק/ה";
+                        break;
+                    case '2':
+                        return "נשוי/אה";
+                        break;
+                    case '3':
+                        return "גרוש/ה";
+                        break;
+                    case '4':
+                        return "אלמן/ה";
+                        break;
+                    case '5':
+                        return "פרוד/ה";
+                        break;
+                    default:
+                        return "";
+                }
+
+
+            }
 
             function getKupaName(Kupa) {
 
