@@ -7,6 +7,7 @@
 
 		this.request = _request;
 		this.responseError = _responseError;
+		
 
 		function _request(config) {
 
@@ -23,12 +24,29 @@
 
 		function _responseError(rejection) {
 
+			//alert(window.location.href);
+			//authenticationService = $inject.get('authenticationService');
+
 			if (rejection.status === 401) {
+
+				
+				//login({ userName: "tzahi556@gmail.com", password: "123" });
+
+				//authenticationService.login({ userName: "tzahi556@gmail.com", password: "123" }).then(function (res) {
+
+				//	location.href = './';
+				//},
+				//	function (res) {
+				//		alert(res.error_description);
+				//	});
+
 				$location.path('/login/');
 			}
 
 			return $q.reject(rejection);
 		}
+
+		
 	}
 
 })();

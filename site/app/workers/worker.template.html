@@ -72,7 +72,7 @@
                        
                     </div>
 
-                    <div class="col-md-3" ng-if="$ctrl.role!='instructor'">
+                    <div class="col-md-3" ng-if="$ctrl.role!=null && $ctrl.role!='instructor'">
                         <div class="form-group">
                             <label>מנהל אזור</label>
                             <select class="form-control" ng-options="user.Id as user.FullName for user in $ctrl.users" ng-model="$ctrl.worker.UserId">

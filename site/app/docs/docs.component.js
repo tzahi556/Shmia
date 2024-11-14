@@ -80,9 +80,12 @@
         }
 
         function _sendForms() {
-           
 
-            filesService.uploadAfterPost(this.sendfiles, "sendmail", "0", this.Comment).then(function (data) {
+
+           var usersId = localStorage.getItem('userLoginId');
+
+
+            filesService.uploadAfterPost(this.sendfiles, "sendmail", usersId, this.Comment).then(function (data) {
 
                 if (data == "false") {
                     alertMessage("תקלה בשליחת מייל , אנא נסי במעוד מאוחר יותר!");

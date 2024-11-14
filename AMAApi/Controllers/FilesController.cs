@@ -8,10 +8,13 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Mail;
+//using System.Runtime.Remoting.Contexts;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Http;
+using FarmsApi.DataModels;
+
 
 namespace FarmsApi.Controllers
 {
@@ -126,10 +129,37 @@ namespace FarmsApi.Controllers
         }
 
 
+        //[Route("DeleteYear")]
+        //[HttpGet]
+        //public string DeleteYear()
+        //{
+        //    using (var Context = new Context())
+        //    {
+
+        //        var Wor = Context.Workers.Where(x => x.ShnatMas == "2021").ToList();
+        //        foreach (var item in Wor)
+        //        {
+        //            DeleteWorkerLoop(item.Id, true);
+        //        }
+
+
+        //    }
+
+        //    //UploadFromAccess uac = new UploadFromAccess();
+        //    //uac.UpdateUsersLessons();
+        //    return "sdsdsdsd";
+
+
+        //}
+
+
         [Route("uploadformail/{folder}/{workerid}/{text}")]
         [HttpPost]
         public async Task<IHttpActionResult> UploadForMail(string folder, int workerid, string text)
         {
+
+
+          
 
             if (folder == "send") return Ok("true");
 
@@ -159,8 +189,21 @@ namespace FarmsApi.Controllers
 
             try
             {
+                var CurrentUser = new User();
+                using (var Context = new Context())
+                {
 
-                var CurrentUser = UsersService.GetCurrentUser();
+                    CurrentUser =  Context.Users.Where(x => x.Id == workerid).FirstOrDefault();
+                   
+
+
+                }
+
+
+                if (text == "undefined") text = "";
+
+
+               // var CurrentUser = UsersService.GetCurrentUser();
 
                 string MailTo = ConfigurationSettings.AppSettings["MailTo"].ToString();
 
@@ -202,9 +245,6 @@ namespace FarmsApi.Controllers
                 }
                 client.Send(actMSG);
 
-
-
-
             }
             catch (Exception ex)
             {
@@ -215,11 +255,6 @@ namespace FarmsApi.Controllers
 
 
             }
-
-
-
-
-
             return Ok(fileList);
         }
 

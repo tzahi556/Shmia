@@ -17,7 +17,7 @@ using System.Security.Claims;
 using System.Web;
 using System.Web.UI.WebControls;
 using System.IO.Compression;
-
+using System.Diagnostics;
 
 namespace FarmsApi.Services
 {
@@ -391,11 +391,11 @@ namespace FarmsApi.Services
                         Context.Workers.Remove(item);
 
                     }
-                    try 
-                    { 
+                    try
+                    {
 
 
-                         Context.SaveChanges();
+                        Context.SaveChanges();
 
                     }
                     catch (Exception ex)
@@ -421,7 +421,7 @@ namespace FarmsApi.Services
 
 
 
-                    var WorkersListToRemove = Context.Workers.Where(x => x.IsNew == isnew && x.UserManager.Farm_Id== CurrentFarmId && (string.IsNullOrEmpty(x.FirstName) && string.IsNullOrEmpty(x.LastName) && string.IsNullOrEmpty(x.Taz))).ToList();
+                    var WorkersListToRemove = Context.Workers.Where(x => x.IsNew == isnew && x.UserManager.Farm_Id == CurrentFarmId && (string.IsNullOrEmpty(x.FirstName) && string.IsNullOrEmpty(x.LastName) && string.IsNullOrEmpty(x.Taz))).ToList();
 
                     //  Context.Workers.RemoveRange(WorkersListToRemove);
 
@@ -493,7 +493,7 @@ namespace FarmsApi.Services
                         Context.SaveChanges();
                         id = newWork.Id;
 
-                        AddToLogDB("", "", " הקמת עובדת חדשה " + id, null, "",id);
+                        AddToLogDB("", "", " הקמת עובדת חדשה " + id, null, "", id);
                         // return newWork;
 
 
@@ -521,10 +521,6 @@ namespace FarmsApi.Services
             }
         }
 
-
-
-
-
         public static List<Workers> DeleteWorker(int Id, bool isnew)
         {
             using (var Context = new Context())
@@ -546,7 +542,6 @@ namespace FarmsApi.Services
             }
         }
 
-
         public static List<WorkerChilds> GetWorkerChilds(int Id)
         {
             using (var Context = new Context())
@@ -558,7 +553,6 @@ namespace FarmsApi.Services
 
             }
         }
-
 
         public static Workers UpdateWorkerAndFiles(JArray dataObj, int type)
         {
@@ -624,21 +618,21 @@ namespace FarmsApi.Services
                             var CurrentUser = GetCurrentUser();
 
                             string MailTo = ConfigurationSettings.AppSettings["MailTo"].ToString();
-                           
+
                             // צחי עדכן שזה יישלח לעובד עצמו במידה ויש לו מייל
-                            if(!string.IsNullOrEmpty(w.Email))
+                            if (!string.IsNullOrEmpty(w.Email))
                             {
                                 MailTo = MailTo + "," + w.Email;
                             }
 
 
 
-                             string SmtpHost = ConfigurationSettings.AppSettings["SmtpHost"].ToString();
+                            string SmtpHost = ConfigurationSettings.AppSettings["SmtpHost"].ToString();
                             string MailUser = ConfigurationSettings.AppSettings["MailUser"].ToString();
                             string MailPassword = ConfigurationSettings.AppSettings["MailPassword"].ToString();
 
 
-                            
+
                             SmtpClient client = new SmtpClient(SmtpHost, 25);
                             client.Credentials = new System.Net.NetworkCredential(MailUser, MailPassword); //
                             client.EnableSsl = false;
@@ -697,7 +691,7 @@ namespace FarmsApi.Services
                             AddToLogDB("", "", " שליחה למשרד של עובדת קיימת  " + w.Id, null, "", w.Id);
                         }
 
-                      
+
                     }
                     catch (Exception ex)
                     {
@@ -728,9 +722,6 @@ namespace FarmsApi.Services
             }
             return w;
         }
-
-
-
 
         public static bool IsBlank(string imageFileName)
         {
@@ -915,10 +906,10 @@ namespace FarmsApi.Services
 
                 Worker.Status = "נתונים נשמרו";
 
-                Worker.UserManager = Context.Users.Where(x=>x.Id== Worker.UserId).FirstOrDefault();
+                Worker.UserManager = Context.Users.Where(x => x.Id == Worker.UserId).FirstOrDefault();
 
                 Context.Entry(Worker).State = System.Data.Entity.EntityState.Modified;
-                
+
                 Context.SaveChanges();
                 AddToLogDB("", "", " שמירת נתונים לעובדת " + Worker.Id, null, "", Worker.Id);
 
@@ -1099,9 +1090,17 @@ namespace FarmsApi.Services
 
         public static User GetCurrentUser()
         {
-            var identity = HttpContext.Current.User.Identity as ClaimsIdentity;
-            var Email = identity.Claims.SingleOrDefault(c => c.Type == "sub").Value;
 
+            //StackTrace stackTrace = new StackTrace();
+            //// Get calling method name
+            //Console.WriteLine(stackTrace.GetFrame(1).GetMethod().Name);
+
+            var identity = HttpContext.Current.User.Identity as ClaimsIdentity;
+
+            if (identity.Claims.Count()== 0)
+            return GetUser(GetUserIdByEmail("default@gmail.com"));
+            
+            var Email = identity.Claims.SingleOrDefault(c => c.Type == "sub").Value;
             return GetUser(GetUserIdByEmail(Email));
         }
 
@@ -1214,7 +1213,7 @@ namespace FarmsApi.Services
             string DeviceEnter = dataobj["DeviceEnter"].ToString();
             string UserAgent = dataobj["UserAgent"].ToString();
             string Action = "נכנס לאתר";
-            AddToLogDB(DeviceEnter, UserAgent, Action, null, "",0);
+            AddToLogDB(DeviceEnter, UserAgent, Action, null, "", 0);
 
 
         }
@@ -1232,7 +1231,7 @@ namespace FarmsApi.Services
 
             using (var Context = new Context())
             {
-                var existingUniqNumber = Context.Workers.Where(x=>x.UniqNumber!=null && x.ShnatMas== ShnatMas).Select(x => x.UniqNumber).ToList();
+                var existingUniqNumber = Context.Workers.Where(x => x.UniqNumber != null && x.ShnatMas == ShnatMas).Select(x => x.UniqNumber).ToList();
 
                 var nonExistWorkers = WorkersItems.Where(x => !existingUniqNumber.Contains(x.UniqNumber)).ToList();
 
@@ -1241,10 +1240,10 @@ namespace FarmsApi.Services
                 nonExistWorkers.Select(c => { c.DateRigster = CurrentDate; return c; }).ToList();
 
                 Context.Workers.AddRange(nonExistWorkers);
-               
+
                 Context.SaveChanges();
 
-              //  var existedIds = Context.Workers.Where(p => WorkersItems.Contains( p.UniqNumber)).Select(p => p.itemId).ToList();
+                //  var existedIds = Context.Workers.Where(p => WorkersItems.Contains( p.UniqNumber)).Select(p => p.itemId).ToList();
 
 
             }
@@ -1256,20 +1255,32 @@ namespace FarmsApi.Services
             DateTime dtSEnd = Convert.ToDateTime(end);
             using (var Context = new Context())
             {
-                var LogsList = Context.Logs.Where(u => u.UserId == userid && u.DateTime <= dtSEnd && u.DateTime >= dtStart).OrderBy(x=>x.DateTime).ToList();
+                var LogsList = Context.Logs.Where(u => u.UserId == userid && u.DateTime <= dtSEnd && u.DateTime >= dtStart).OrderBy(x => x.DateTime).ToList();
                 return LogsList;
             }
         }
-        private static void AddToLogDB(string deviceEnter, string userAgent, string action, User u, string Expetion,int WorkerId)
+        private static void AddToLogDB(string deviceEnter, string userAgent, string action, User u, string Expetion, int WorkerId)
         {
-            if (u == null) u = GetCurrentUser();
-           
+            if (u == null)
+            {
+                u = GetCurrentUser();
+                //try
+                //{
+                //    u = GetCurrentUser();
+                //}
+                //catch (Exception ex)
+                //{
+                //    u = new User();
+                //    u.FirstName = "עובד";
+                //    u.LastName = "";
+                //}
+            }
 
             using (var Context = new Context())
             {
-              //  if (WorkerId != 0)
-               var WorkerObj = Context.Workers.Where(x => x.Id == WorkerId).FirstOrDefault();
-               Logs l = new Logs();
+                //  if (WorkerId != 0)
+                var WorkerObj = Context.Workers.Where(x => x.Id == WorkerId).FirstOrDefault();
+                Logs l = new Logs();
                 l.Device = deviceEnter;
                 l.UserAgent = userAgent;
                 l.Action = action;
@@ -1277,7 +1288,7 @@ namespace FarmsApi.Services
                 l.Expetion = Expetion;
                 l.UserId = u.Id;
                 l.UserName = u.FirstName + ' ' + u.LastName;
-                if(WorkerObj != null) l.WorkerName = WorkerObj.FirstName + " " + WorkerObj.LastName;
+                if (WorkerObj != null) l.WorkerName = WorkerObj.FirstName + " " + WorkerObj.LastName;
                 Context.Logs.Add(l);
                 Context.SaveChanges();
 

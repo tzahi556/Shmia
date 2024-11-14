@@ -2,7 +2,7 @@
 
     var app = angular.module('app');
 
-
+   // https://test.dgtracking.co.il/#/worker/1880/
 
     app.component('worker', {
         templateUrl: 'app/workers/worker.template.html?v=3',
@@ -29,7 +29,7 @@
         // this.selfEdit = angular.fromJson(localStorage.getItem('authorizationData')).userName == this.user.Email;
         this.role = localStorage.getItem('currentRole');
 
-       // alert(this.users.length);
+       // alert(this.role);
       
         this.uploadFile = _uploadFile.bind(this);
         this.uploadFileParud = _uploadFileParud.bind(this);

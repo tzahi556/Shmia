@@ -3,13 +3,16 @@
     var app = angular.module('app', ['ui.router', 'angular-loading-bar', 'ui.bootstrap']);
 
     app.config(function ($urlRouterProvider, $stateProvider) {
-
+       
         $urlRouterProvider.otherwise(function ($inject) {
             $state = $inject.get('$state');
             usersService = $inject.get('usersService');
             var roles = usersService.roles;
             var role = localStorage.getItem('currentRole');
+
+
             if (role == null) {
+
                 $state.go('login');
             }
             for (var i in roles) {
@@ -153,7 +156,6 @@
                         },
 
                         users: function (usersService) {
-
                             return usersService.getUsers("instructor");
                         }
 

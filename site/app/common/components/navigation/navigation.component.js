@@ -10,7 +10,7 @@
         }
     });
 
-    function NavigationController($scope, $rootScope) {
+    function NavigationController($scope, $state, $rootScope) {
         this.init = _init.bind(this);
 
         $rootScope.$on('$stateChangeSuccess', this.init);
@@ -65,15 +65,20 @@
         }
 
 
-        //this.login = _login;
+        this.login = _login;
 
-        //function _login() {
+        function _login() {
 
-        //    alert(sharedValues.apiUrl);
 
-        //    //window.location.href = 'http://localhost:61957/#/login/%D7%92%D7%99%D7%93%D7%99%D7%92%D7%93%D7%92%D7%97%20%D7%93%D7%92%D7%93%D7%92/';
+
+            localStorage.removeItem('authorizationData');
+            localStorage.removeItem('currentRole');
+            localStorage.removeItem('currentSubRole');
+
+            $state.go('login');
             
-        //}
+            
+        }
     }
 
 })();
