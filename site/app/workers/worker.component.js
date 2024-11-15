@@ -557,7 +557,7 @@
 
         function _saveWorker(type) {
 
-            debugger
+           
             try {
 
                 var thisCtrl = this;
@@ -604,6 +604,9 @@
 
                     usersService.updateWorker(obj, this.files, this.childs, type).then(function (worker) {
                         //  this.worker = worker;
+
+
+                       
                         alertMessage('הנתונים נשמרו בהצלחה!');
                         // $.unblockUI();
                         //
@@ -671,7 +674,7 @@
                     }
 
                     else {
-                        alertMessage("יש למלא את כל השדות המסומנים באדום , אלו שדות חובה");
+                        alertMessage("יש למלא את כל השדות המסומנים באדום , אלו שדות חובה",3);
 
                     }
 

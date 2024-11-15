@@ -14,6 +14,8 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Web.Http;
 using FarmsApi.DataModels;
+using System.Security.Cryptography;
+using Amazon.Auth.AccessControlPolicy;
 
 
 namespace FarmsApi.Controllers
@@ -30,7 +32,7 @@ namespace FarmsApi.Controllers
                 throw new HttpResponseException(HttpStatusCode.UnsupportedMediaType);
 
 
-            
+
 
 
 
@@ -71,7 +73,7 @@ namespace FarmsApi.Controllers
 
                     string Taz = folder.Replace("taz_", "");
 
-                    if (string.IsNullOrEmpty(Taz) || Taz=="null") return Ok("NoTaz");
+                    if (string.IsNullOrEmpty(Taz) || Taz == "null") return Ok("NoTaz");
 
                     var LabelContainsTaz = labels.Where(x => x.Description.Length >= 7 && Taz.Contains(x.Description)).ToList();
 
@@ -82,7 +84,23 @@ namespace FarmsApi.Controllers
 
                 }
 
-                if (!IsImageTazOk) return Ok(false);
+                if (!IsImageTazOk)
+                {
+
+                    for (int i = 0; i < file.FileData.Count; i++)
+                    {
+                        var source = file.FileData[i].LocalFileName;
+                        if (File.Exists(source))
+                        {
+                            File.Delete(source);
+                        }
+
+                    }
+
+                   
+
+                    return Ok(false);
+                };
 
 
             }
@@ -159,7 +177,7 @@ namespace FarmsApi.Controllers
         {
 
 
-          
+
 
             if (folder == "send") return Ok("true");
 
@@ -193,8 +211,8 @@ namespace FarmsApi.Controllers
                 using (var Context = new Context())
                 {
 
-                    CurrentUser =  Context.Users.Where(x => x.Id == workerid).FirstOrDefault();
-                   
+                    CurrentUser = Context.Users.Where(x => x.Id == workerid).FirstOrDefault();
+
 
 
                 }
@@ -203,7 +221,7 @@ namespace FarmsApi.Controllers
                 if (text == "undefined") text = "";
 
 
-               // var CurrentUser = UsersService.GetCurrentUser();
+                // var CurrentUser = UsersService.GetCurrentUser();
 
                 string MailTo = ConfigurationSettings.AppSettings["MailTo"].ToString();
 

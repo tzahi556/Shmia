@@ -153,13 +153,53 @@
 
     <script src="css/jquery.inputmask.bundle.js"></script>
 
-
-
+    <link href="css/jquery.toast.css" rel="stylesheet" />
+    <!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>-->
+    <script src="css/jquery.toast.js"></script>
     <script>
 
-        function alertMessage(mes) {
-            $('#hmessage').html(mes);
-            $.blockUI({ message: $('#question'), css: { width: '275px' } });
+
+
+        //alertMessage("ssdsdsd");
+
+        function alertMessage(mes, type) {
+            
+            if (type == 1 || !type) {
+
+                $.toast({
+                    heading: '<u><b>הודעת מערכת</b></u>',
+                    text: mes,
+                    position: 'mid-center',
+                    hideAfter: false,
+                    showHideTransition: 'plain',
+                    icon: 'success'
+                })
+            }
+
+            if (type == 2) {
+                $.toast({
+                    heading: '<u><b>הודעת מערכת</b></u>',
+                    text: mes,
+                    position: 'mid-center',
+                    hideAfter: false,
+                    showHideTransition: 'plain',
+                    icon: 'info'
+                })
+            }
+            if (type == 3) {
+                $.toast({
+                    heading: '<u><b>הודעת מערכת</b></u>',
+                    text: mes,
+                    position: 'mid-center',
+                    hideAfter: false,
+                    showHideTransition: 'plain',
+                    icon: 'error'
+                })
+            }
+
+
+            //$('#hmessage').html(mes);
+            //$.blockUI({ message: $('#question'), css: { width: '275px' } });
 
         }
 
@@ -167,11 +207,10 @@
 
     </script>
 
-    <div id="question" style="display:none; cursor: default">
+    <!--<div id="question" style="display:none; cursor: default">
         <h3 id="hmessage"></h3>
         <input type="button" class="btn  btn-info" id="yes" value="אישור" onclick="$.unblockUI();" />
-
-    </div>
+    </div>-->
 
 
 

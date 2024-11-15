@@ -156,7 +156,8 @@
                         },
 
                         users: function (usersService) {
-                            return usersService.getUsers("instructor");
+                            if (localStorage.getItem('currentRole')=="farmAdmin")
+                                return usersService.getUsers("instructor");
                         }
 
 

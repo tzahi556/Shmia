@@ -20,7 +20,7 @@
         this.getHebRole = _getHebRole.bind(this);
         this.checkAll = _checkAll.bind(this);
         this.deleteAll = _deleteAll.bind(this);
-        
+        this.sendSMS = _sendSMS.bind(this);
 
         this.delete = _delete.bind(this);
         this.downloadExcel = _downloadExcel.bind(this);
@@ -299,6 +299,7 @@
             }
 
         }
+
         function _delete(workerid) {
             if (confirm('האם למחוק את העובד?')) {
               
@@ -312,6 +313,27 @@
                     //$state.go('students');
                 });
             }
+        }
+
+        function _sendSMS() {
+
+            if (confirm('האם לשלוח SMS לכל העובדים המסומנים?')) {
+
+
+                var selected = this.workers.filter(x => x.IsSelected);
+
+                for (var i in selected) {
+                    var ctrl = this;
+                    usersService.deleteWorker(selected[i].Id, true).then(function (res) {
+                        ctrl.workers = res;
+
+                    });
+
+                }
+
+
+            }
+
         }
     }
 

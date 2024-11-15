@@ -64,7 +64,7 @@ namespace FarmsApi.Services
 
 
 
-        //[Authorize]
+        [Authorize]
         [Route("getUsers/{role?}/{includeDeleted?}")]
         [HttpGet]
         public IHttpActionResult GetUsers(string role = null, bool includeDeleted = false)
@@ -72,7 +72,7 @@ namespace FarmsApi.Services
             return Ok(UsersService.GetUsers(role, includeDeleted));
         }
 
-        //[Authorize]
+        [Authorize]
         [Route("getUser/{id?}")]
         [HttpGet]
         public IHttpActionResult GetUser(int? id = null)
@@ -80,7 +80,7 @@ namespace FarmsApi.Services
             return Ok(UsersService.GetUser(id));
         }
 
-        //[Authorize]
+        [Authorize]
         [Route("getsetUserEnter/{isForCartis}/{id?}")]
         [HttpGet]
         public IHttpActionResult GetSetUserEnter(int? id = null, bool isForCartis = false)
@@ -90,7 +90,7 @@ namespace FarmsApi.Services
 
 
 
-        //[Authorize]
+        [Authorize]
         [Route("newUser")]
         [HttpGet]
         public IHttpActionResult NewUser()
@@ -98,7 +98,7 @@ namespace FarmsApi.Services
             return Ok(new User());
         }
 
-        //[Authorize]
+        [Authorize]
         [Route("getUserIdByEmail/{email}")]
         [HttpGet]
         public IHttpActionResult GetUserIdByEmail(string email)
@@ -124,7 +124,7 @@ namespace FarmsApi.Services
             return Ok();
         }
 
-        //[Authorize]
+        [Authorize]
         [Route("updateUser")]
         [HttpPost]
         public IHttpActionResult UpdateUser(DataModels.User user)
@@ -133,7 +133,7 @@ namespace FarmsApi.Services
         }
 
 
-        //[Authorize]
+        [Authorize]
         [Route("getPortfolios/{llx}/{lly}/{urx}/{ury}/{text}/{font}/{space}/{id}/{pagenumber}")]
         [HttpGet]
         public IHttpActionResult GetPortfolios(int llx, int lly, int urx, int ury, string text, int font, int space, int id, int pagenumber)
@@ -141,7 +141,7 @@ namespace FarmsApi.Services
             return Ok(UsersService.GetPortfolios(llx, lly, urx, ury, text, font, space, id, pagenumber));
         }
 
-        //[Authorize]
+        [Authorize]
         [Route("bindData/{id}/{comment}/{pagenumber}/{value}")]
         [HttpGet]
         public IHttpActionResult BindData(int id, string comment, int pagenumber, string value)
@@ -159,7 +159,7 @@ namespace FarmsApi.Services
             return Ok(UsersService.GetFiles(Workerid));
         }
 
-        //[Authorize]
+        [Authorize]
         [Route("getWorkers/{isnew}")]
         [HttpGet]
         public IHttpActionResult GetWorkers(bool isnew)
@@ -167,7 +167,7 @@ namespace FarmsApi.Services
             return Ok(UsersService.GetWorkers(isnew));
         }
 
-        //[Authorize]
+       // [Authorize]
         [Route("getWorker/{id}")]
         [HttpGet]
         public IHttpActionResult GetWorker(int id)
@@ -175,7 +175,7 @@ namespace FarmsApi.Services
             return Ok(UsersService.GetWorker(id));
         }
 
-        //[Authorize]
+        [Authorize]
         [Route("deleteWorker/{id}/{isnew}")]
         [HttpGet]
         public IHttpActionResult DeleteWorker(int id, bool isnew)
@@ -195,7 +195,7 @@ namespace FarmsApi.Services
         }
 
 
-        //[Authorize]
+       // [Authorize]
         [Route("updateWorker/{type}")]
         [HttpPost]
         public IHttpActionResult UpdateWorkerAndFiles(JArray dataobj, int type)
@@ -203,7 +203,7 @@ namespace FarmsApi.Services
             return Ok(UsersService.UpdateWorkerAndFiles(dataobj, type));
         }
 
-        //[Authorize]
+       // [Authorize]
         [Route("setUserDevice")]
         [HttpPost]
         public IHttpActionResult SetUserDevice(JObject dataobj)
@@ -251,7 +251,7 @@ namespace FarmsApi.Services
         //******************************************** End Master Table *****************************
 
         //******************************************** Report *****************************
-        //[Authorize]
+        [Authorize]
         [Route("getReportData/{type}")]
         [HttpGet]
         public IHttpActionResult GetReportData(int type)
@@ -260,7 +260,7 @@ namespace FarmsApi.Services
         }
 
 
-        //[Authorize]
+        [Authorize]
         [Route("downloadAllManagerFiles/{Id}/{Shnatmas}")]
         [HttpGet]
         public IHttpActionResult DownloadAllManagerFiles(int Id, int Shnatmas)
@@ -269,7 +269,7 @@ namespace FarmsApi.Services
         }
 
 
-        //[Authorize]
+        [Authorize]
         [Route("importWorkers/{counter}")]
         [HttpPost]
         public IHttpActionResult ImportWorkers(int counter, List<DataModels.Workers> WorkersItems)
@@ -281,7 +281,7 @@ namespace FarmsApi.Services
         }
 
 
-        //[Authorize]
+        [Authorize]
         [Route("getLogsData")]
         [HttpGet]
         public IHttpActionResult GetLogsData(int userid, string start, string end)

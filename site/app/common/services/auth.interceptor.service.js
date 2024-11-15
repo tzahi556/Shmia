@@ -24,8 +24,7 @@
 
 		function _responseError(rejection) {
 
-			//alert(window.location.href);
-			//authenticationService = $inject.get('authenticationService');
+			
 
 			if (rejection.status === 401) {
 
@@ -39,8 +38,10 @@
 				//	function (res) {
 				//		alert(res.error_description);
 				//	});
+				//http://localhost:61957/#/worker/1880/
 
 				$location.path('/login/');
+				//$location.path('/login/');
 			}
 
 			return $q.reject(rejection);
