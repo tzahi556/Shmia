@@ -1,7 +1,10 @@
 ﻿using FarmsApi.DataModels;
+using Google.Rpc;
 using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Web.Http;
 
@@ -154,9 +157,18 @@ namespace FarmsApi.Services
         //[Authorize]
         [Route("getFiles/{workerid}")]
         [HttpGet]
-        public IHttpActionResult GetFiles(int Workerid)
+        public IHttpActionResult GetFiles(string Workerid)
         {
-            return Ok(UsersService.GetFiles(Workerid));
+
+            string res = Workerid;
+
+            if (Regex.Matches(Workerid, @"[a-zA-Z]").Count > 0)
+            {
+                Workerid = Workerid.Replace("@@", "+");
+                res = UsersService.DecryptString(Workerid);
+            }
+            return Ok(UsersService.GetFiles(Convert.ToInt32(res)));
+            //return Ok(UsersService.GetFiles(Workerid));
         }
 
         [Authorize]
@@ -170,10 +182,20 @@ namespace FarmsApi.Services
        // [Authorize]
         [Route("getWorker/{id}")]
         [HttpGet]
-        public IHttpActionResult GetWorker(int id)
+        public IHttpActionResult GetWorker(string id)
         {
-            return Ok(UsersService.GetWorker(id));
+            string res = id;
+
+            if (Regex.Matches(id, @"[a-zA-Z]").Count > 0)
+            {
+                id = id.Replace("@@", "+");
+                res = UsersService.DecryptString(id);
+            }
+            return Ok(UsersService.GetWorker(Convert.ToInt32(res)));
         }
+
+
+
 
         [Authorize]
         [Route("deleteWorker/{id}/{isnew}")]
@@ -188,10 +210,16 @@ namespace FarmsApi.Services
         //[Authorize]
         [Route("getWorkerChilds/{id}")]
         [HttpGet]
-        public IHttpActionResult GetWorkerChilds(int id)
+        public IHttpActionResult GetWorkerChilds(string id)
         {
+            string res = id;
 
-            return Ok(UsersService.GetWorkerChilds(id));
+            if (Regex.Matches(id, @"[a-zA-Z]").Count > 0)
+            {
+                id = id.Replace("@@", "+");
+                res = UsersService.DecryptString(id);
+            }
+            return Ok(UsersService.GetWorkerChilds(Convert.ToInt32(res)));
         }
 
 
@@ -214,7 +242,15 @@ namespace FarmsApi.Services
         }
 
 
+        [Authorize]
+        [Route("sendSMS/{IsNew}")]
+        [HttpPost]
+        public IHttpActionResult SendSMS(List<DataModels.Workers> WorkersItems,int IsNew)
+        {
 
+            return Ok(UsersService.SendSMS(WorkersItems, IsNew));
+         
+        }
 
 
         //******************************************** End Workers *****************************

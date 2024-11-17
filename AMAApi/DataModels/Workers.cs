@@ -151,6 +151,19 @@ namespace FarmsApi.DataModels
         public string Comments { get; set; }
         public string UniqNumber { get; set; }
         public bool IsNew { get; set; }
+        public bool IsSendSMS { get; set; }
+
+
+        public string FullName
+        {
+            get
+            {
+
+
+                return this.LastName + ' ' + this.FirstName;
+
+            }
+        }
 
         public string FullAddress
         {

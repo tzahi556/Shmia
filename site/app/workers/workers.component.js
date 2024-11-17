@@ -264,7 +264,7 @@
 
         function _checkAll() {
 
-         
+            
             this.workers.forEach(x => x.IsSelected = this.checkAllc);
         }
 
@@ -317,19 +317,30 @@
 
         function _sendSMS() {
 
+
+            var ctrl = this;
+
             if (confirm('האם לשלוח SMS לכל העובדים המסומנים?')) {
 
 
                 var selected = this.workers.filter(x => x.IsSelected);
 
-                for (var i in selected) {
-                    var ctrl = this;
-                    usersService.deleteWorker(selected[i].Id, true).then(function (res) {
-                        ctrl.workers = res;
+                usersService.sendSMS(selected, 1).then(function (res) {
+                      
 
-                    });
+                    ctrl.workers = res;
+                    ctrl.checkAllc = false;
+                    ctrl.checkAll();
+                   });
 
-                }
+                //for (var i in selected) {
+                //    var ctrl = this;
+                //    usersService.deleteWorker(selected[i].Id, true).then(function (res) {
+                //        ctrl.workers = res;
+
+                //    });
+
+                //}
 
 
             }

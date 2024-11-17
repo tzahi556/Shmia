@@ -29,7 +29,7 @@ namespace FarmsApi.Services
 
     public class PdfAPI
     {
-        public static readonly List<string> ImageExtensions = new List<string> { ".JPG", ".JPE", ".BMP", ".GIF", ".PNG", ".JPEG" };
+        public static readonly List<string> ImageExtensions = new List<string> { ".JPG", ".JPE", ".BMP", ".GIF", ".PNG", ".JPEG",".JFIF" };
 
         public string MavidPrati = ConfigurationSettings.AppSettings["MavidPrati"].ToString();
         public string MavidCtovet = ConfigurationSettings.AppSettings["MavidCtovet"].ToString();

@@ -11,8 +11,8 @@
         <a class="btn btn-success btn-xs" ui-sref="worker({id:0})">עובד חדש</a>
 
         <button class="btn btn-danger btn-xs" style="float:left" ng-click="$ctrl.deleteAll()">מחיקת מסומנים</button>
-
-        <button class="btn btn-success btn-xs" style="float:left" ng-click="$ctrl.sendSMS()">שליחת SMS למסומנים</button>
+       
+        <button class="btn btn-success btn-xs" style="float:left;margin-left:10px;" ng-click="$ctrl.sendSMS()">שליחת SMS למסומנים</button>
     </div>
     <div class="table-responsive">
 
@@ -26,6 +26,7 @@
                     <th>אימייל</th>
                     <th>ת.עדכון</th>
                     <th>סטטוס</th>
+                    <th>SMS</th>
                     <th>PDF</th>
                     <th></th>
                     <th></th>
@@ -46,6 +47,7 @@
                     <td>{{worker.Email}}</td>
                     <td>{{worker.DateRigster | ildate: 'HH:mm DD/MM/YYYY '}}</td>
                     <td>{{worker.Status}}</td>
+                    <td>{{worker.IsSendSMS==1 ? 'נשלח':'' }}</td>
                     <td><a class="btn  btn-success" ng-href="{{$ctrl.uploadsUri + worker.Id + '/OfekAllPdf.pdf'}}" target="_blank">PDF</a></td>
                     <td> <button class="btn  btn-warning" ui-sref="worker({id:worker.Id})">עדכון</button></td>
                     <td> <button class="btn  btn-danger" ng-click="$ctrl.delete(worker.Id)">מחק עובד</button></td>

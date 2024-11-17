@@ -35,6 +35,10 @@
         this.getWorker = _getWorker;
         this.getCitiesList = _getCitiesList;
         this.deleteWorker = _deleteWorker;
+
+        this.sendSMS = _sendSMS;
+        
+
         this.updateWorker = _updateWorker;
         this.getFiles = _getFiles;
         this.getWorkerChilds = _getWorkerChilds;
@@ -211,6 +215,22 @@
             });
             return deferred.promise;
         }
+
+
+
+
+        function _sendSMS(workers, isnew) {
+
+            var deferred = $q.defer();
+            $http.post(sharedValues.apiUrl + 'users/sendSMS/' + isnew, workers).then(function (res) {
+                var res = res.data;
+                deferred.resolve(res);
+            });
+            return deferred.promise;
+        }
+
+
+
 
          //************************** End Worker ****************
          //************************** Master Data ****************

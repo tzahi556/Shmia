@@ -18,6 +18,13 @@ using System.Web;
 using System.Web.UI.WebControls;
 using System.IO.Compression;
 using System.Diagnostics;
+using RestSharp;
+using FarmsApi.Migrations;
+using System.Security.Cryptography;
+using System.Text;
+using ThirdParty.Json.LitJson;
+using System.Text.Json;
+using Newtonsoft.Json;
 
 namespace FarmsApi.Services
 {
@@ -949,6 +956,200 @@ namespace FarmsApi.Services
             return Convert.FromBase64String(s);
         }
 
+        public static string DecryptString(string Val)
+        {
+           return AesOperation.DecryptString(Val);
+        }
+
+
+        public static List<Workers> SendSMS(List<Workers> WorkersItems, int IsNew)
+        {
+
+            string SiteRegisterLink = ConfigurationSettings.AppSettings["SiteRegisterLink"].ToString();
+
+            using (var Context = new Context())
+            {
+                foreach (var item in WorkersItems)
+                {
+
+                    var Phone = item.PhoneSelular;
+                    var Id = item.Id;
+                    var FullName = item.FullName;
+                    string EncryptId = AesOperation.EncryptString(Id.ToString());
+
+                    EncryptId = EncryptId.Replace("+", "@@");
+
+                    //string DecryptId = AesOperation.DecryptString(EncryptId);
+
+
+
+                    if (!string.IsNullOrEmpty(Phone) && Phone.Length > 7)
+                    {
+                        var Message = string.Format("שלום רב {0}\r\nלהשלמת הטופס ולחתימה על 101 לחץ כאן:\r\n{1}\r\n", FullName, SiteRegisterLink + EncryptId + "/");
+
+                        var res = SendSMSEndPoint(Phone, Message);
+
+                        var resObj = ResAsJson(res);
+
+                        if (resObj["success"] == "true")
+                        {
+                            item.IsSendSMS = true;
+                            
+                            Context.Entry(item).State = System.Data.Entity.EntityState.Modified;
+
+                        }
+                    }
+
+                }
+
+                Context.SaveChanges();
+            }
+
+            return GetWorkers(true);
+
+        }
+
+
+        public static dynamic ResAsJson(string jsonString)
+        {
+            dynamic jsonObj = JsonConvert.DeserializeObject<dynamic>(jsonString);
+
+            return jsonObj;
+
+
+        }
+
+
+        private static string SendSMSEndPoint(string Phone, string message)
+        {
+
+            if (string.IsNullOrEmpty(Phone) || string.IsNullOrEmpty(message)) return "{'success':'false','message':'no Phone or no message sent.'}";
+
+
+            RestSharp.RestClient val = new RestSharp.RestClient("https://api.multisend.co.il/v2/sendsms")
+            {
+
+                Timeout = -1
+
+            };
+
+            RestSharp.RestRequest val2 = new RestSharp.RestRequest((RestSharp.Method)1);
+
+            val2.AddHeader("Content-Type", "multipart/form-data; boundary=--------------------------486507896899304374172095");
+
+            //val2.AlwaysMultipartFormData = true;
+
+            val2.AddParameter("user", (object)"shmiatech");
+
+            val2.AddParameter("password", (object)"shmiatech@01");
+
+            val2.AddParameter("from", (object)"101Form");
+
+            val2.AddParameter("recipient", (object)Phone);
+
+            val2.AddParameter("message", (object)message);
+
+            val2.AddParameter("message_type", (object)"SMS");
+
+            RestSharp.IRestResponse val3 = val.Execute((RestSharp.IRestRequest)(object)val2);
+
+            return val3.Content;
+
+
+
+            //InsertLog("INFO", "SendSmsTtsNew - " + message_type, Phone, "Response: " + val3.Content);
+
+        }
+
+
+
+
+
+
+        //public static string SendSMSEndPoint(string Phone, string Message)
+        //{
+        //    try
+        //    {
+
+
+        //        if (string.IsNullOrEmpty(Phone) || string.IsNullOrEmpty(Message)) return "{'success':'false','message':'no Phone or no message sent.'}";
+
+        //        var options = new RestClientOptions("https://api.multisend.co.il")
+        //        {
+        //            MaxTimeout = -1,
+        //        };
+        //        var client = new RestClient(options);
+
+        //        var request = new RestRequest("/v2/sendsms/", Method.Get);
+
+        //        request.AddHeader("Content-Type", "application/json");
+
+        //        request.AddParameter("user", "bpreven");
+
+        //        request.AddParameter("password", "Bpreven@3817");
+
+        //        request.AddParameter("from", "Bpreven");
+
+        //        request.AddParameter("recipient", Phone);
+
+        //        request.AddParameter("message", Message);
+
+        //        request.AddParameter("message_type", "SMS");
+
+
+
+        //        RestResponse response = client.Execute(request);
+        //        //only throws the exception. Let target choose what to do
+        //        if (response.ErrorException != null)
+        //        {
+
+        //            //if (_context != null)
+        //            //{
+        //            //    Logs l = new Logs();
+
+        //            //    l.Text = response.ErrorException.ToString();
+
+        //            //    _context.Logs.Add(l);
+        //            //    _context.SaveChanges();
+
+
+        //            //}
+        //            return "{'success':'false','message':" + response.ErrorException.ToString() + "}";
+
+        //           //return response.ErrorException.ToString();
+        //        }
+
+
+
+
+        //        return response.Content;
+
+
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        //if (_context != null)
+        //        //{
+        //        //    Logs l = new Logs();
+
+        //        //    l.Text = ex.Message.ToString();
+
+        //        //    _context.Logs.Add(l);
+        //        //    _context.SaveChanges();
+
+
+        //        //}
+
+        //        return "{'success':'false','message':" +ex.Message +"}";
+
+        //    }
+
+
+
+
+        //}
+
+
 
         //********************* End Workers ***************************
         //********************* Master Table ***************************
@@ -1317,7 +1518,65 @@ namespace FarmsApi.Services
             return User;
         }
 
+      
 
         #endregion
+    }
+
+
+    public class AesOperation
+    {
+        public static string key = "b14ca5898a4e4133bbce2ea2315a1916";
+        public static string EncryptString(string plainText)
+        {
+            byte[] iv = new byte[16];
+            byte[] array;
+
+            using (Aes aes = Aes.Create())
+            {
+                aes.Key = Encoding.UTF8.GetBytes(key);
+                aes.IV = iv;
+
+                ICryptoTransform encryptor = aes.CreateEncryptor(aes.Key, aes.IV);
+
+                using (MemoryStream memoryStream = new MemoryStream())
+                {
+                    using (CryptoStream cryptoStream = new CryptoStream((Stream)memoryStream, encryptor, CryptoStreamMode.Write))
+                    {
+                        using (StreamWriter streamWriter = new StreamWriter((Stream)cryptoStream))
+                        {
+                            streamWriter.Write(plainText);
+                        }
+
+                        array = memoryStream.ToArray();
+                    }
+                }
+            }
+
+            return Convert.ToBase64String(array);
+        }
+        public static string DecryptString(string cipherText)
+        {
+            byte[] iv = new byte[16];
+            byte[] buffer = Convert.FromBase64String(cipherText);
+
+            using (Aes aes = Aes.Create())
+            {
+                aes.Key = Encoding.UTF8.GetBytes(key);
+                aes.IV = iv;
+                ICryptoTransform decryptor = aes.CreateDecryptor(aes.Key, aes.IV);
+
+                using (MemoryStream memoryStream = new MemoryStream(buffer))
+                {
+                    using (CryptoStream cryptoStream = new CryptoStream((Stream)memoryStream, decryptor, CryptoStreamMode.Read))
+                    {
+                        using (StreamReader streamReader = new StreamReader((Stream)cryptoStream))
+                        {
+                            return streamReader.ReadToEnd();
+                        }
+                    }
+                }
+            }
+        }
     }
 }
