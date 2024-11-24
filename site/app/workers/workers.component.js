@@ -2,19 +2,19 @@
 
     var app = angular.module('app');
 
-  
+
     app.component('workers', {
         templateUrl: 'app/workers/workers.template.html?v=2',
         controller: WorkersController,
         bindings: {
             workers: '<'
-            
+
         }
     });
 
     function WorkersController(usersService, sharedValues, $state) {
 
-   
+
         this.roles = usersService.roles;
         this.sharedValues = sharedValues;
         this.getHebRole = _getHebRole.bind(this);
@@ -26,13 +26,14 @@
         this.downloadExcel = _downloadExcel.bind(this);
         this.uploadsUri = sharedValues.apiUrl + '/uploads/';
 
-
+        this.role = localStorage.getItem('currentRole');
+        this.farmStyle = localStorage.getItem('FarmStyle');
 
         function _downloadExcel() {
 
             var data = [];
             data.push([
-                
+
                 'ת.ז.',
                 'מין',
                 'שם פרטי',
@@ -56,7 +57,7 @@
                 'חשבון'
 
 
-              /*  שכר שעתי, שכר חודשי, נסיעות, מספר עובד, מצב משפחתי, מספר הנהלח, תחילת עבודה, תאריך לידה, עיר, סוג משרה, דרוג, דרגה, תת מפעל, בנק, סניף, חשבון*/
+                /*  שכר שעתי, שכר חודשי, נסיעות, מספר עובד, מצב משפחתי, מספר הנהלח, תחילת עבודה, תאריך לידה, עיר, סוג משרה, דרוג, דרגה, תת מפעל, בנק, סניף, חשבון*/
 
 
 
@@ -97,7 +98,7 @@
                     return moment(date).format("DD-MM-YYYY");
                 else
                     return "";
-                
+
             }
 
             function getSugMisra(SugMaskuret) {
@@ -175,7 +176,7 @@
                     default:
                         return "";
                 }
-                
+
 
             }
 
@@ -185,7 +186,7 @@
 
 
 
-      
+
 
         function _getReport(rows) {
             function s2ab(s) {
@@ -264,7 +265,7 @@
 
         function _checkAll() {
 
-            
+
             this.workers.forEach(x => x.IsSelected = this.checkAllc);
         }
 
@@ -273,7 +274,7 @@
 
         function _getHebRole(id) {
 
-        
+
             return this.sharedValues.roles.filter(x => x.id == id)[0].name;//(users[i].Role);
         }
 
@@ -289,8 +290,8 @@
                     usersService.deleteWorker(selected[i].Id, true).then(function (res) {
 
 
-                         ctrl.workers = res;
-                       
+                        ctrl.workers = res;
+
                     });
 
                 }
@@ -302,13 +303,13 @@
 
         function _delete(workerid) {
             if (confirm('האם למחוק את העובד?')) {
-              
-                var ctrl = this;
-                usersService.deleteWorker(workerid,true).then(function (res) {
 
-                   
+                var ctrl = this;
+                usersService.deleteWorker(workerid, true).then(function (res) {
+
+
                     ctrl.workers = res;
-                   // $state.go('workers');
+                    // $state.go('workers');
                     //ctrl.user.Deleted = true;
                     //$state.go('students');
                 });
@@ -320,30 +321,34 @@
 
             var ctrl = this;
 
-            if (confirm('האם לשלוח SMS לכל העובדים המסומנים?')) {
+            var selected = this.workers.filter(x => x.IsSelected && (x.IsValid || this.farmStyle != 1));
+
+            ctrl.checkAllc = false;
+            ctrl.checkAll();
 
 
-                var selected = this.workers.filter(x => x.IsSelected);
-
-                usersService.sendSMS(selected, 1).then(function (res) {
-                      
-
-                    ctrl.workers = res;
-                    ctrl.checkAllc = false;
-                    ctrl.checkAll();
-                   });
-
-                //for (var i in selected) {
-                //    var ctrl = this;
-                //    usersService.deleteWorker(selected[i].Id, true).then(function (res) {
-                //        ctrl.workers = res;
-
-                //    });
-
-                //}
-
-
+            for (var i = 0; i < selected.length; i++) {
+                selected[i].IsSelected = true;
             }
+
+            if (selected.length > 0)
+                if (confirm('האם לשלוח SMS לכל העובדים המסומנים?')) {
+
+
+
+
+                    usersService.sendSMS(selected, 1).then(function (res) {
+
+
+                        ctrl.workers = res;
+                        ctrl.checkAllc = false;
+                        ctrl.checkAll();
+                    });
+
+
+
+
+                }
 
         }
     }

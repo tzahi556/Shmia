@@ -28,8 +28,9 @@
         this.delete = _delete.bind(this);
         // this.selfEdit = angular.fromJson(localStorage.getItem('authorizationData')).userName == this.user.Email;
         this.role = localStorage.getItem('currentRole');
+        this.farmStyle = localStorage.getItem('FarmStyle');
 
-       // alert(this.role);
+        
       
         this.uploadFile = _uploadFile.bind(this);
         this.uploadFileParud = _uploadFileParud.bind(this);
@@ -582,7 +583,15 @@
 
                 if (type == 1) {
 
+                    if (this.scope.workerForm.$valid && this.tazfiles.length > 0) {
 
+                        obj["IsValid"] = true;
+
+
+                    } else {
+                        obj["IsValid"] = false;
+                         
+                    }
 
                     //$.blockUI({ css: {}, message: '<h5><div id="loader"></div><div class="tzahiStyle"> אנחנו כרגע שומרים את הנתונים  <br/>אנא המתנ/י...</div></h5>' });
 

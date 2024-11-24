@@ -153,6 +153,7 @@ namespace FarmsApi.DataModels
         public bool IsNew { get; set; }
         public bool IsSendSMS { get; set; }
 
+        public bool IsValid { get; set; }
 
         public string FullName
         {

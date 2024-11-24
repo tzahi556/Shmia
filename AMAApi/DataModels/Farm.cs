@@ -7,7 +7,7 @@ namespace FarmsApi.DataModels
         public int Id { get; set; }
         public string Name { get; set; }
         public bool Deleted { get; set; }
-        public string Meta { get; set; }
+        //public string Meta { get; set; }
 
         public int? IsHiyuvInHashlama { get; set; }
 

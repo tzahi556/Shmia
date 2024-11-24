@@ -70,9 +70,9 @@
         
             $http.get(sharedValues.apiUrl + 'farms/getfarms' + (includeDeleted ? '/' + includeDeleted : '')).then(function (res) {
                 var farms = res.data;
-                for (var i in farms) {
-                    farms[i].Meta = JSON.parse(farms[i].Meta);
-                }
+                //for (var i in farms) {
+                //    farms[i].Meta = JSON.parse(farms[i].Meta);
+                //}
                 deferred.resolve(farms);
             });
             return deferred.promise;
