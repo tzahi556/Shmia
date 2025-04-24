@@ -43,13 +43,17 @@
 
         this.changePageNumber();
         function _changePageNumber() {
-           
+          //  alert(1);
             //alert($("#objPdf").scrollTop());
-           
+
           //  this.RunAPI();
            // this.pageNumber = eval(this.pageNumber);
            // alert(this.pageNumber);
-            this.RunAPI();
+
+
+
+
+             this.RunAPI();
 
         }
 

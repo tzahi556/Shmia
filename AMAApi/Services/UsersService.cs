@@ -977,7 +977,7 @@ namespace FarmsApi.Services
                     var FullName = item.FullName;
                     string EncryptId = AesOperation.EncryptString(Id.ToString());
 
-                    EncryptId = EncryptId.Replace("+", "@@");
+                    EncryptId = EncryptId.Replace("+", "@@").Replace("/", "ofekslash");
 
                     //string DecryptId = AesOperation.DecryptString(EncryptId);
 

@@ -318,69 +318,6 @@
 
 
 
-
-
-        //$stateProvider.state('lessons', {
-        //    url: '/lessons/',
-        //    views: {
-        //        'main': {
-        //            template: '<lessons instructors="$ctrl.instructors" students="$ctrl.students" availablehours="$ctrl.availablehours" horses="$ctrl.horses" groups="$ctrl.groups"></lessons>',
-        //            controller: function (instructors, students, availablehours, horses, groups) {
-        //                this.instructors = instructors;
-        //                this.students = students;
-        //                this.availablehours = availablehours;
-        //                this.horses = horses;
-        //                this.groups = groups;
-        //            },
-        //            controllerAs: '$ctrl',
-        //            resolve: {
-        //                instructors: function (usersService) {
-        //                    return usersService.getUsers(['instructor', 'profAdmin']);
-        //                },
-        //                availablehours: function (usersService, $stateParams) {
-        //                    return usersService.getAvailablehours();
-        //                },
-        //                students: function (usersService) {
-        //                    return usersService.getUsers('student', true);
-        //                },
-        //                horses: function (horsesService) {
-        //                    return horsesService.getHorsesForLessons();
-        //                },
-        //                groups: function (horsesService) {
-        //                    return horsesService.getSetHorseGroups(1);
-        //                }
-        //            }
-        //        }
-        //    }
-        //});
-
-        //$stateProvider.state('instructor', {
-        //    url: '/instructor/{id}/',
-        //    views: {
-        //        'main': {
-        //            template: '<instructor user="$ctrl.user" farms="$ctrl.farms" availablehours="$ctrl.availablehours"></instructor>',
-        //            controller: function (user, farms, availablehours) {
-        //                this.user = user;
-        //                this.farms = farms;
-        //                this.availablehours = availablehours;
-        //            },
-        //            controllerAs: '$ctrl',
-        //            resolve: {
-        //                user: function (usersService, $stateParams) {
-        //                    return usersService.getUser($stateParams.id);
-        //                },
-        //                availablehours: function (usersService, $stateParams) {
-        //                    return usersService.getAvailablehours($stateParams.id);
-        //                },
-
-        //                farms: function (farmsService) {
-        //                    return farmsService.getFarms();
-        //                }
-        //            }
-        //        }
-        //    }
-        //});
-
         $stateProvider.state('awsmangershistory', {
             url: '/awsmangershistory/',
             views: {
@@ -536,6 +473,57 @@
                 }
             }
         });
+
+
+        $stateProvider.state('farmmanager', {
+            url: '/farmmanager/',
+            views: {
+                'main': {
+                    template: '<farmmanager farmmanager="$ctrl.farmmanager" farm="$ctrl.farm"></farmmanager>',
+                    controller: function (farmmanager,farm) {
+                        this.farm = farm;
+                        this.farmmanager = farmmanager;
+                        
+                        //this.horses = horses;
+                        //this.horsegroups = horsegroups;
+                        //this.horsegroupshorses = horsegroupshorses;
+
+                    },
+                    controllerAs: '$ctrl',
+                    resolve: {
+                        farmmanager: function (farmsService, $stateParams) {
+                            
+                            return [];
+                        },
+
+                        farm: function (farmsService, $stateParams) {
+                            
+                            return farmsService.getFarm(localStorage.getItem('FarmId'));
+                        }
+
+                        //,
+                      
+                        //horses: function (horsesService) {
+                        //    debugger
+
+                        //    return [];
+                        //},
+                        //horsegroups: function (horsesService) {
+                           
+                        //    return [];
+                        //},
+
+                        //horsegroupshorses: function (horsesService) {
+                           
+                        //    return [];
+                        //},
+
+
+                    }
+                }
+            }
+        });
+
 
         //$stateProvider.state('student', {
         //    url: '/student/{id}/',

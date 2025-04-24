@@ -75,7 +75,7 @@
             link: function (scope, element, attributes) {
                 element.bind("change", function (changeEvent) {
 
-                    debugger
+                   
 
                     if (changeEvent.target.files.length > 0) {
                         filesService.upload(changeEvent.target.files, scope.folder, scope.workerid).then(function (data) {

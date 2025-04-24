@@ -51,7 +51,7 @@
             //this.reports = ['sysAdmin', 'farmAdmin', 'farmAdminHorse', 'vetrinar', 'shoeing'].indexOf(role) != -1 ? true : false;
             //this.horses = ['sysAdmin', 'farmAdmin', 'profAdmin', 'stableman', "worker", 'assistant', 'farmAdminHorse', 'vetrinar', 'shoeing'].indexOf(role) != -1 || ["stableman", "worker"].indexOf(this.subrole) != -1 ? true : false;
 
-            //this.farmmanager = ['sysAdmin', 'farmAdmin', 'farmAdminHorse'].indexOf(role) != -1 ? true : false;
+            this.farmmanager = ['sysAdmin', 'farmAdmin'].indexOf(role) != -1 ? true : false;
             //this.files = role != null;
 
             var authData = localStorage.getItem('authorizationData');

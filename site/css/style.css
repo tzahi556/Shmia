@@ -15015,86 +15015,251 @@ html:not(.nav-ewc-persistent-hover) #navbar #nav-flyout-ewc .nav-flyout-body #ew
 
 
 /* Center the loader */
-#loader {
+
+
+    @-webkit-keyframes spin {
+        0% {
+            -webkit-transform: rotate(0deg);
+        }
+
+        100% {
+            -webkit-transform: rotate(360deg);
+        }
+    }
+
+    @keyframes spin {
+        0% {
+            transform: rotate(0deg);
+        }
+
+        100% {
+            transform: rotate(360deg);
+        }
+    }
+
+    /* Add animation to "page content" */
+    .animate-bottom {
+        position: relative;
+        -webkit-animation-name: animatebottom;
+        -webkit-animation-duration: 1s;
+        animation-name: animatebottom;
+        animation-duration: 1s
+    }
+
+    @-webkit-keyframes animatebottom {
+        from {
+            bottom: -100px;
+            opacity: 0
+        }
+
+        to {
+            bottom: 0px;
+            opacity: 1
+        }
+    }
+
+    @keyframes animatebottom {
+        from {
+            bottom: -100px;
+            opacity: 0
+        }
+
+        to {
+            bottom: 0;
+            opacity: 1
+        }
+    }
+
+    #myDiv {
+        display: none;
+        text-align: center;
+    }
+
+
+
+
+@media (min-width:1024px) {
+    #loader {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        z-index: 1;
+        width: 120px;
+        height: 120px;
+        margin: -76px 0 0 -76px;
+        border: 16px solid #f3f3f3;
+        border-radius: 50%;
+        border-top: 16px solid #3498db;
+        -webkit-animation: spin 2s linear infinite;
+        animation: spin 2s linear infinite;
+    }
+
+
+
+    .tzahiStyle {
+        margin-top: 150px !important;
+        text-align: center;
+        color: #3498db;
+        font-weight: bold;
+        font-size: 16px;
+        text-align: center !important;
+    }
+}
+
+
+@media (max-width:1024px) {
+    #loader {
+        position: absolute;
+        left: 55%;
+       /* top: 50%;*/
+       
+       
+        z-index: 1;
+        width: 100px;
+        height: 100px;
+        margin: -110px 0 0 -76px;
+        border: 16px solid #f3f3f3;
+        border-radius: 50%;
+        border-top: 16px solid #3498db;
+        -webkit-animation: spin 2s linear infinite;
+        animation: spin 2s linear infinite;
+    }
+
+    .blockMsg {
+        width: 100% !important;
+        left:0% !important;
+    }
+
+
+    .tzahiStyle {
+        margin-top: 120px !important;
+        
+        color: #3498db;
+        font-weight: bold;
+        font-size: 16px;
+    }
+    .jq-toast-wrap {
+        left: 0% !important;
+        width:100% !important;
+    }
+
+}
+
+
+#overlay {
+    background-color: rgba(0, 0, 0, 0.1);
+    z-index: 999;
     position: absolute;
-    left: 50%;
-    top: 50%;
-    z-index: 1;
-    width: 120px;
-    height: 120px;
-    margin: -76px 0 0 -76px;
-    border: 16px solid #f3f3f3;
-    border-radius: 50%;
-    border-top: 16px solid #3498db;
-    -webkit-animation: spin 2s linear infinite;
-    animation: spin 2s linear infinite;
-}
-
-@-webkit-keyframes spin {
-    0% {
-        -webkit-transform: rotate(0deg);
-    }
-
-    100% {
-        -webkit-transform: rotate(360deg);
-    }
-}
-
-@keyframes spin {
-    0% {
-        transform: rotate(0deg);
-    }
-
-    100% {
-        transform: rotate(360deg);
-    }
-}
-
-/* Add animation to "page content" */
-.animate-bottom {
-    position: relative;
-    -webkit-animation-name: animatebottom;
-    -webkit-animation-duration: 1s;
-    animation-name: animatebottom;
-    animation-duration: 1s
-}
-
-@-webkit-keyframes animatebottom {
-    from {
-        bottom: -100px;
-        opacity: 0
-    }
-
-    to {
-        bottom: 0px;
-        opacity: 1
-    }
-}
-
-@keyframes animatebottom {
-    from {
-        bottom: -100px;
-        opacity: 0
-    }
-
-    to {
-        bottom: 0;
-        opacity: 1
-    }
-}
-
-#myDiv {
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 30000px;
     display: none;
-    text-align: center;
 }
 
 
-.tzahiStyle {
-    margin-top: 150px !important;
-    text-align: center;
-    color: #3498db;
-    font-weight:bold;
-    font-size:16px;
+
+/* Avatar File Input Wrapper */
+div#AvatarFileUpload {
+    position: relative;
+    width: 250px;
+    height: 250px;
+    background: #f9f9f9;
+    border: 3px solid #bbb;
+    border-radius: 50% 50%;
+    margin: auto;
+}
+    /* Image Preview Wrapper and Container */
+    div#AvatarFileUpload > .selected-image-holder {
+        width: 100%;
+        height: 100%;
+        border-radius: 50% 50%;
+    }
+
+    div#AvatarFileUpload > .selected-image-holder {
+        width: 100%;
+        overflow: hidden;
+    }
+
+        div#AvatarFileUpload > .selected-image-holder > img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-fit: center center;
+        }
+
+    /* Image Selector to Browse Image to Upload */
+    div#AvatarFileUpload > .avatar-selector {
+        position: absolute;
+        bottom: 8px;
+        right: 19%;
+        width: 20px;
+        height: 20px;
+    }
+
+        div#AvatarFileUpload > .avatar-selector input[type="file"] {
+            /*display: none;*/
+            opacity: 0;
+            cursor: pointer !important;
+            position: relative;
+            top: -45px;
+           
+        }
+
+        div#AvatarFileUpload > .avatar-selector > .avatar-selector-btn {
+            width: 100%;
+            height: 100%;
+            background: #f5f5f59e;
+            padding: 5px 7px;
+            border-radius: 50% 50%;
+            cursor:pointer !important;
+        }
+
+            div#AvatarFileUpload > .avatar-selector > .avatar-selector-btn > img {
+                width: 100%;
+                height: 100%;
+                object-fit: scale-down;
+                object-position: center center;
+                z-index: 2;
+            }
+        div#AvatarFileUpload > .avatar-selector > .avatar-selector-btn-del {
+            width: 100%;
+            height: 100%;
+            background: #f5f5f59e;
+            padding: 5px 7px;
+            border-radius: 50% 50%;
+            cursor: pointer !important;
+            position: relative;
+            left: -120px;
+            top: -20px;
+        }
+
+            div#AvatarFileUpload > .avatar-selector > .avatar-selector-btn-del > img {
+                width: 100%;
+                height: 100%;
+               
+                z-index: 2;
+            }
+
+
+
+.bg-dark {
+    --bs-bg-opacity: 1;
+    background-color: rgba(var(--bs-dark-rgb),var(--bs-bg-opacity)) !important;
+    border:dashed 2px lightgray;
+    padding:4px;
+    border-radius:10px;
+}
+
+.logoTitle{
+
+    text-align:center;
+    
+
 }
 
 
+.colAlignLeft {
+    text-align: left;
+    
+}

@@ -6,10 +6,10 @@
         controller: FarmmanagerController,
         bindings: {
             farmmanager: '<',
-            farminstructors: '<',
-            horses: '<',
-            horsegroups: '<',
-            horsegroupshorses: '<',
+            farm: '<',
+            //horses: '<',
+            //horsegroups: '<',
+            //horsegroupshorses: '<',
         }
     });
     app.filter('dateRangeClalit', function () {
@@ -30,18 +30,20 @@
             return results;
         }
     });
-    function FarmmanagerController($scope, farmsService, horsesService, $state, sharedValues, $http) {
+    function FarmmanagerController($scope, farmsService, filesService, $state, sharedValues, $http) {
 
 
         var self = this;
         this.scope = $scope;
-        this.horsesService = horsesService;
+        //this.horsesService = horsesService;
         this.farmsService = farmsService;
         this.SaveData = _SaveData.bind(this);
         this.delete = _delete.bind(this);
 
         //this.addNewTag = _addNewTag.bind(this);
         //   this.removeTags = _removeTags.bind(this);
+
+        this.uploadFile = _uploadFile.bind(this);
         this.initNewTags = _initNewTags.bind(this);
 
         this.getKlalitHistoriPage = _getKlalitHistoriPage.bind(this);
@@ -53,11 +55,26 @@
         this.getFreeHorses = _getFreeHorses.bind(this);
         this.checkAll = _checkAll.bind(this);
 
+        this.deleteLogo = _deleteLogo.bind(this);
+        
+
         this.init = _init.bind(this);
         this.role = localStorage.getItem('currentRole');
 
         this.IsPopUp = false;
         this.IsStop = false;
+
+        function _deleteLogo() {
+
+            filesService.delete(self.LogoTemp).then(function () {
+                
+                self.farm.Logo = "../../images/default-avatar.png";
+
+
+            }.bind(this));
+
+        }
+
         function _setKlalitHistoriPage(type, klalitId) {
             this.IsStop = false;
 
@@ -99,7 +116,6 @@
 
 
         }
-
 
         function _setPostToKlalit(index, ctrlthis) {
 
@@ -143,8 +159,6 @@
             this.klalits.filter(x => x.ResultNumber != 1)
                 .forEach(x => x.IsDo = this.checkAllc);
         }
-
-
 
         function _getKlalitHistoriPage(type, klalitId) {
 
@@ -259,7 +273,6 @@
 
         }
 
-
         var getUrlParameter = function getUrlParameter(sParam) {
 
           
@@ -271,20 +284,19 @@
              
         };
 
-
         function _init() {
-           
-          
+            //this.farm;
+            //debugger
 
-            if (getUrlParameter("fromSend")) {
+            //if (getUrlParameter("fromSend")) {
               
-                this.IsPopUp = true;
+            //    this.IsPopUp = true;
 
-                this.klalitsBefore = window.opener.klalitsBefore;
+            //    this.klalitsBefore = window.opener.klalitsBefore;
 
-                this.setKlalitHistoriPage(4, 0);
+            //    this.setKlalitHistoriPage(4, 0);
 
-            }
+            //}
            
             //   alert(self.farminstructors.length);
 
@@ -294,24 +306,57 @@
             //self.farm.IsHiyuvInHashlama = (self.farm.IsHiyuvInHashlama) ? self.farm.IsHiyuvInHashlama.toString() : "0";
 
             //self.initNewTags();
+           
+            self.farm.Style = (self.farm.Style) ? self.farm.Style.toString() : "0";
+            self.LogoTemp = (self.farm.Logo) ? "/Companies/" + self.farm.Id + "/Logo/" + self.farm.Logo : "";
+            self.farm.Logo = (self.farm.Logo) ? sharedValues.apiUrl + "/Uploads/Companies/" + self.farm.Id + "/Logo/" + self.farm.Logo : "../../images/default-avatar.png";
 
-
-
+          
+         
         }
 
         this.init();
 
 
+        function _uploadFile(file) {
+
+            /*alert(file);*/
+
+            farmsService.getFarm(this.farm.Id).then(function (farm) {
+
+                self.farm = farm;
+
+                self.init();
+
+            });
+
+          
+            //var allfiles = file.split(",") || [];
+
+
+            //for (var i in allfiles) {
+            //    var Obj = { "Id": 0, "Type": 1, "FileName": allfiles[i] };
+            //    this.files.push(Obj);
+            //    this.tazfiles.push(Obj);
+            //}
+
+        }
+
+
+
         this.dateFromClalit = moment().add(0, 'months').toDate();
         this.dateToClalit = moment().add(1, 'days').toDate();
 
-        function _SaveData(type, isNoAlert) {
+        function _SaveData(type) {
+
+
+
 
             if (type == 1) {
 
-                this.farmsService.setMangerInstructorFarm(this.farminstructors).then(function (farm) {
-
-                    alert('נשמר בהצלחה');
+                this.farmsService.updateFarm(this.farm).then(function (farm) {
+                    alertMessage('הנתונים נשמרו בהצלחה!',2);
+                   
                 }.bind(this));
 
 
@@ -319,16 +364,16 @@
 
 
 
-            if (type == 2) {
+            //if (type == 2) {
 
-                this.farmsService.setMangerFarm(this.farmmanager).then(function (farmmanager) {
+            //    this.farmsService.setMangerFarm(this.farmmanager).then(function (farmmanager) {
                   
-                    this.farmmanager = farmmanager;
-                    if (!isNoAlert) alert('נשמר בהצלחה');
-                }.bind(this));
+            //        this.farmmanager = farmmanager;
+            //        if (!isNoAlert) alert('נשמר בהצלחה');
+            //    }.bind(this));
 
 
-            }
+            //}
         }
 
         function _delete() {
@@ -339,8 +384,6 @@
             }
         }
 
-
-
         function _initNewTags() {
 
             self.farm.Meta.farmTags = self.farm.Meta.farmTags || [];
@@ -350,9 +393,6 @@
             //    $scope.newHorseForm.$setPristine();
             //}
         }
-
-
-
 
         ///**************************************************
         function _getHorsesGroup(id) {
@@ -477,7 +517,6 @@
 
 
         }
-
 
         function _getFreeHorses() {
 

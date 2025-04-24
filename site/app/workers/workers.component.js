@@ -321,7 +321,11 @@
 
             var ctrl = this;
 
-            var selected = this.workers.filter(x => x.IsSelected && (x.IsValid || this.farmStyle != 1));
+
+            //debugger
+
+            //var selected = this.workers.filter(x => x.IsSelected && (x.IsValid || this.farmStyle != 1));
+            var selected = this.workers.filter(x => x.IsSelected);
 
             ctrl.checkAllc = false;
             ctrl.checkAll();

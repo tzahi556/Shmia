@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <meta charset="UTF-8">
+  <style>
+
+
+
+    #the-canvas {
+      border: 1px solid black;
+      direction: ltr;
+    }
+  </style>
+
+
+
+  <style>
+
+    .draggable {
+      width: 150px;
+      padding: 0px !important;
+      border: solid 1px red;
+      text-align: right;
+      cursor:pointer;
+    }
+
+    .draggableOut {
+      width: 150px;
+      padding: 0px !important;
+      /* border: solid 1px red;*/
+      text-align: right;
+     /* font-weight: bold;
+      font-size:12px;*/
+    }
+
+    .ui-draggable-dragging {
+      width: 150px;
+      padding: 0px;
+      /*border: solid 1px red;*/
+      text-align: right;
+    }
+
+    .page-item {
+      cursor: pointer;
+    }
+
+    .pager {
+      margin:5px !important;
+    /*  margin-bottom: 30px !important;
+      margin-top: 0px !important;
+      margin-bottom: -31px !important;*/
+
+    }
+
+    .spCurPage {
+      font-size: 45px;
+      font-weight: bold;
+      border: 0 !important;
+      text-align: right;
+      padding: 2px !important;
+      padding-left: 12px !important;
+    }
+
+    .spCurTotalPage {
+      padding: 2px !important;
+      font-size: 25px;
+      border: 0 !important;
+      padding-right: 12px !important;
+    }
+
+    .pager li > a, .pager li > span{
+
+      cursor:pointer;
+
+    }
+
+    
+  </style>
+
+
+
+  <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+
+  <script src="https://code.jquery.com/ui/1.14.1/jquery-ui.js"></script>
+
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.6.347/pdf.min.js"></script>
+
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.6.347/pdf_viewer.min.css"
+        rel="stylesheet" type="text/css" />
+
+
+
+
+
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+
+
+
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+
+
+
+
+  <!--<link rel="stylesheet" href="https://code.jquery.com/ui/1.14.1/themes/base/jquery-ui.css">
+
+  <link rel="stylesheet" href="/resources/demos/style.css">-->
+
+
+
+  <script type="text/javascript">
+
+    var CurrentViewport;
+
+    var NumPages = 0;
+    var CurrentPage = 1;
+    var CurrentPDF;
+    // header on that server.
+    var url = "web/OfekAll.pdf";//'https://raw.githubusercontent.com/mozilla/pdf.js/ba2edeae/web/compressed.tracemonkey-pldi-09.pdf';
+    // Loaded via <script> tag, create shortcut to access PDF.js exports.
+    var { pdfjsLib } = globalThis;
+    // The workerSrc property shall be specified.
+    pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.6.347/pdf.worker.min.js';
+    // Asynchronous download of PDF
+    var loadingTask = pdfjsLib.getDocument(url);
+    loadingTask.promise.then(function (pdf) {
+
+      console.log('PDF loaded');
+
+
+      CurrentPDF = pdf;
+      // Fetch the first page
+
+     // var pageNumber = 1;
+      NumPages = pdf.numPages;
+      $("#spCurTotalPage").text(NumPages);
+
+
+      $('#liPrev').addClass('disabled');
+      if (NumPages == 1) {
+
+        $('#liNext').addClass('disabled');
+      }
+
+
+      //Start with first page
+      pdf.getPage(CurrentPage).then(handlePages);
+
+      //pdf.getPage(CurrentPage).then(function (page) {
+
+      // // console.log('Page loaded');
+
+      //  var scale = 1.5;
+      //  var viewport = page.getViewport({ scale: scale });
+
+      //  // Prepare canvas using PDF page dimensions
+
+      //  var canvas = document.getElementById('the-canvas');
+
+      //  var context = canvas.getContext('2d');
+
+      //  canvas.height = viewport.height;
+
+      //  canvas.width = viewport.width;
+
+
+
+      //  // Render PDF page into canvas context
+
+      //  var renderContext = {
+
+      //    canvasContext: context,
+
+      //    viewport: viewport
+
+      //  };
+
+      //  var renderTask = page.render(renderContext);
+
+      //  renderTask.promise.then(function () {
+
+      //    console.log('Page rendered');
+
+      //  });
+
+
+      //  CurrentViewport = viewport;
+
+
+      //});
+
+    }
+      ,function (reason) {
+      console.error(reason);
+
+      });
+
+
+    function handlePages(page) {
+
+      // console.log('Page loaded');
+      $("#canvasContainer div").not('#the-canvas').remove();
+     
+
+      var scale = 1.5;
+      var viewport = page.getViewport({ scale: scale });
+
+      // Prepare canvas using PDF page dimensions
+
+      var canvas = document.getElementById('the-canvas');
+
+      var context = canvas.getContext('2d');
+
+      canvas.height = viewport.height;
+
+      canvas.width = viewport.width;
+
+
+
+      // Render PDF page into canvas context
+
+      var renderContext = {
+
+        canvasContext: context,
+
+        viewport: viewport
+
+      };
+
+      var renderTask = page.render(renderContext);
+
+      renderTask.promise.then(function () {
+
+        console.log('Page rendered');
+
+      });
+
+
+      CurrentViewport = viewport;
+
+      // if currentpage etc///
+
+      if (CurrentPage==1)
+      $("#canvasContainer").append('<div class="draggableOut" style="position: absolute; left: 599px; top: 204px;">שם</div>');
+           
+      $(".draggableOut").draggable({ cursor: "pointer" });  
+     
+
+    }
+
+
+    function changePage(delta) {
+
+
+      if ((CurrentPage == 1 && delta == -1) || (CurrentPage == NumPages && delta == 1)) {
+        return;
+      }
+     // alert();
+
+      $('li').removeClass('disabled');
+      
+      CurrentPage += delta;
+
+      if (CurrentPage == 1) {
+
+        $('#liPrev').addClass('disabled');
+      
+      }
+
+
+      if (CurrentPage == NumPages) {
+
+        $('#liNext').addClass('disabled');
+      }
+
+      $('#spCurPage').text(CurrentPage);
+      CurrentPDF.getPage(CurrentPage).then(handlePages);
+
+    }
+
+    $(function () {
+
+      $(".draggable").draggable(
+        {
+          helper: "clone",
+          cursor: "pointer",
+          drag: function (event, ui) {
+            $(ui.helper).removeClass("draggable")
+          // var leftPosition = ui.offset.left - $(this).offset().left;
+
+            //$('#spx').text(leftPosition);
+
+          }
+
+        }
+
+
+      );
+
+      /*alert(url);*/
+      $('#the-canvas').droppable({
+
+        drop: function (event, ui) {
+
+
+
+
+          var x = ui.offset.left - $(this).offset().left;
+          var y = ui.offset.top - $(this).offset().top;
+
+          var itemWidth = $(ui.helper).width();
+          var itemHeight = $(ui.helper).height();
+          //alert(itemHeight);
+          var PdfPoints = CurrentViewport.convertToPdfPoint(x + itemWidth, y - (itemHeight));
+
+          $('#spx').text(PdfPoints[0]);
+          $('#spy').text(PdfPoints[1]-5);
+
+          $('#spxx').text(x + 15);
+          $('#spyy').text(y);
+          
+
+          // $('#spy').text(y-1);
+
+          if (!$(ui.helper).hasClass("draggableOut")) {
+
+            $("#canvasContainer").append(ui.helper.clone(true).css({ left: x + 15, top: y }).addClass("draggableOut").removeClass("draggable"));
+
+            $(".draggableOut").draggable({ cursor: "pointer" });
+
+          }
+
+          //var offsetY = 7;
+
+          //var maxPDFx = 595;
+          //var maxPDFy = 842;
+
+
+
+          var maxHTMLx = $('#the-canvas').width();
+
+          //alert(itemWidth);
+          //alert(maxHTMLx);
+          //var maxHTMLy = $('#the-canvas').height();
+
+
+          //var pdfY = y * maxPDFy / maxHTMLy;
+          //var posizioneY = maxPDFy + offsetY - pdfY;
+          //var posizioneX = x * maxPDFx / maxHTMLx  + itemWidth - 6;//+ offsetX;
+
+          //$('#spx').text(posizioneX);
+          //$('#spy').text(posizioneY);
+
+
+
+
+        },
+
+        out: function (event, ui) {
+          if ($(ui.helper).hasClass("draggableOut")) {
+            $(ui.draggable).fadeOut(1000, function () {
+              $(this).remove();
+            });
+          }
+        }
+
+
+        //over: function (event, ui) {
+
+        //  if ($(ui.helper).hasClass("draggableOut")) {
+
+        //    ui.draggable.remove();
+
+        //  }
+        //}
+      });
+
+     
+
+     
+    });
+
+
+
+
+  </script>
+
+
+</head>
+
+<body>
+
+
+  <div class="container">
+
+    <!--<div class="row">
+
+      <div class="col-md-12">Hello World!</div>
+      <div class="col-md-12"><span id="spx"></span> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span id="spy"></span> </div>
+
+    </div>-->
+
+
+    <div class="row">
+
+      <div class="col-md-4">
+        <span id="spxx"></span> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span id="spyy"></span>
+        <br />
+        <span id="spx"></span> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span id="spy"></span>
+      </div>
+        <div class="col-md-4" >
+
+          <ul id="pager" class="pager" style="float:left !important">
+            <li id="liPrev" onclick="changePage(-1)"><span>«</span></li>
+            <li><span id="spCurPage" class="spCurPage">1</span>/<span id="spCurTotalPage" class="spCurTotalPage"></span></li>
+            <li id="liNext" onclick="changePage(1)"><span>&raquo;</span></li>
+          </ul>
+
+        </div>
+        <div class="col-md-10">
+
+          <div id="canvasContainer" style="width:fit-content">
+
+            <canvas id="the-canvas">
+            </canvas>
+
+          </div>
+
+        </div>
+
+        <div class="col-md-2">
+
+          <div id="drag1" class="draggable">
+            שם
+          </div>
+          <div id="drag2" class="draggable">2841720</div>
+
+
+        </div>
+
+
+
+
+
+
+
+      </div>
+
+    </div>
+</body>
+</html>

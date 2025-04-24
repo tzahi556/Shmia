@@ -152,6 +152,8 @@
     <script src="app/login/login.component.js"></script>
 
     <script src="css/jquery.inputmask.bundle.js"></script>
+    <script src="app/farms/farmmanager.component.js"></script>
+
 
     <link href="css/jquery.toast.css" rel="stylesheet" />
     <!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>-->
@@ -163,7 +165,7 @@
         //alertMessage("ssdsdsd");
 
         function alertMessage(mes, type) {
-            
+
             if (type == 1 || !type) {
 
                 $.toast({
@@ -172,7 +174,16 @@
                     position: 'mid-center',
                     hideAfter: false,
                     showHideTransition: 'plain',
-                    icon: 'success'
+                    icon: 'success',
+                    beforeShow: function () {
+                        /*  alert('Toast has appeared.');*/
+                        $("#overlay").show();
+                    },
+                    afterHidden: function () {
+                        $("#overlay").hide();
+                        //alert('Toast has been hidden.');
+                    }
+
                 })
             }
 
@@ -183,7 +194,16 @@
                     position: 'mid-center',
                     hideAfter: false,
                     showHideTransition: 'plain',
-                    icon: 'info'
+                    icon: 'info',
+                    beforeShow: function () {
+                        /*  alert('Toast has appeared.');*/
+                        $("#overlay").show();
+                    },
+                    afterHidden: function () {
+                        $("#overlay").hide();
+                        //alert('Toast has been hidden.');
+                    }
+
                 })
             }
             if (type == 3) {
@@ -193,7 +213,16 @@
                     position: 'mid-center',
                     hideAfter: false,
                     showHideTransition: 'plain',
-                    icon: 'error'
+                    icon: 'error',
+
+                    beforeShow: function () {
+                        /*  alert('Toast has appeared.');*/
+                        $("#overlay").show();
+                    },
+                    afterHidden: function () {
+                        $("#overlay").hide();
+                        //alert('Toast has been hidden.');
+                    }
                 })
             }
 
@@ -215,19 +244,7 @@
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+    <div id="overlay"></div>
 </body>
 
 </html>

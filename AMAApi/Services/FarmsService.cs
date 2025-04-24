@@ -3,8 +3,10 @@ using RestSharp.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
+using System.IO;
 using System.Linq;
 using System.Threading;
+using System.Web;
 using System.Web.Http.Results;
 using System.Xml;
 
@@ -75,7 +77,29 @@ namespace FarmsApi.Services
         public static Farm GetFarm(int Id)
         {
             using (var Context = new Context())
-                return Context.Farms.SingleOrDefault(u => u.Id == Id);
+            {
+
+                Farm farm = Context.Farms.SingleOrDefault(u => u.Id == Id);
+
+
+                if (farm != null)
+                {
+
+                    var root = HttpContext.Current.Server.MapPath("~/Uploads/Companies/" +Id.ToString() + "/Logo/");
+
+                    string[] files = System.IO.Directory.GetFiles(root);
+                    if (files.Length != 0)
+                    {
+
+                        farm.Logo = Path.GetFileName(files[0]);
+                    }
+
+                }
+
+                return farm;
+
+            }
+                
         }
 
         public static FarmManagers GetMangerFarm()

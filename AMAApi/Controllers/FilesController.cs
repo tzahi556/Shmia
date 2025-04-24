@@ -32,11 +32,14 @@ namespace FarmsApi.Controllers
                 throw new HttpResponseException(HttpStatusCode.UnsupportedMediaType);
 
 
-
-
-
-
             string root = HttpContext.Current.Server.MapPath("~/Uploads/");
+
+            if (folder.Contains("Companies"))
+            {
+                root = HttpContext.Current.Server.MapPath("~/Uploads/Companies/");
+            }
+
+
 
             string tempRoot = root;
 
@@ -57,7 +60,9 @@ namespace FarmsApi.Controllers
             if (folder.Contains("taz_"))
             {
                 string credential_path = tempRoot + "CrediJson/cerdi.json";   //HttpContext.Current.Server.MapPath("~/Uploads/CrediJson/cerdi.json");
-                // יצירת סרביס אקאונט ואז יצירת מפתח ולהוריד את הגייסון
+                //// יצירת סרביס אקאונט ואז יצירת מפתח ולהוריד את הגייסון
+                /// כשלא עובד להלן הסבר עם לינק פשוט ליצור אחד חדש
+                ///https://stackoverflow.com/questions/72198894/how-to-download-the-default-service-account-json-key
                 System.Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", credential_path);
 
 
@@ -74,6 +79,8 @@ namespace FarmsApi.Controllers
                     string Taz = folder.Replace("taz_", "");
 
                     if (string.IsNullOrEmpty(Taz) || Taz == "null") return Ok("NoTaz");
+
+
 
                     var LabelContainsTaz = labels.Where(x => x.Description.Length >= 7 && Taz.Contains(x.Description)).ToList();
 
@@ -97,7 +104,7 @@ namespace FarmsApi.Controllers
 
                     }
 
-                   
+
 
                     return Ok(false);
                 };
@@ -106,6 +113,18 @@ namespace FarmsApi.Controllers
             }
 
 
+            if (folder.Contains("Companies_Logo"))
+            {
+                if (!Directory.Exists(WorkerPath + "/Logo/"))
+                {
+                    Directory.CreateDirectory(WorkerPath + "/Logo/");
+
+                }
+
+                // var rootss = HttpContext.Current.Server.MapPath("~/App_Data/Companies/59/Logo/");
+
+                root = root + "/Logo";
+            }
 
 
 
@@ -124,10 +143,6 @@ namespace FarmsApi.Controllers
 
 
                 File.Move(source, dest);
-
-
-
-
 
 
                 if (i == 0)

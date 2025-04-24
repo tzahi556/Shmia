@@ -1,37 +1,257 @@
 ﻿
 
 
+
+
+<script>
+
+
+
+    $(document).ready(function () {
+
+
+        //$('.avatar-selector-btn').click(function () {
+        //    debugger
+        //    alert('OK!');
+        //});
+
+        //// Main Wrapper Selector
+        //const avatarFileUpload = document.getElementById('AvatarFileUpload');
+        //// Preview Wrapper Selector
+        //const imageViewer = avatarFileUpload.querySelector('.selected-image-holder>img');
+        //// Image Selector button Selector
+        //const imageSelector = avatarFileUpload.querySelector('.avatar-selector-btn');
+        //// Image Input File Selector
+        //const imageInput = avatarFileUpload.querySelector('input[name="avatar"]');
+
+        ///** Trigger Browsing Image to Upload */
+        //imageSelector.addEventListener('click', e => {
+        //    e.preventDefault()
+        //    // Trigger Image input click
+        //    imageInput.click()
+        //})
+
+        ///** IF Selected Image has change */
+        //imageInput.addEventListener('change', e => {
+        //    // Open File eader
+        //    var reader = new FileReader();
+        //    reader.onload = function () {
+        //        // Preview Image
+        //        imageViewer.src = reader.result;
+        //    };
+        //    // Read Selected Image as DataURL
+        //    reader.readAsDataURL(e.target.files[0]);
+        //})
+
+
+    });
+
+    //var currentHorseId = "";
+    //function dragStart(event) {
+    //    //  $(".hadPeami").hide();
+
+    //    currentHorseId = event.target.id;
+
+
+
+    //}
+
+    //function allowDrop(event) {
+    //    event.preventDefault();
+    //}
+
+    //function drop(event) {
+    //    var currentGroupeId = event.target.id;
+
+    //    // debugger
+    //    angular.element(document.getElementById('mainControllerHorse')).scope().makeDropHorse(event, currentHorseId, currentGroupeId);
+    //    currentHorseId = "";
+
+    //}
+
+
+
+</script>
+
 <form name="farmmangerForm" novalidate>
 
-    
+
 
     <uib-tabset active="active" class="tab-form-demo" ng-show="!$ctrl.IsPopUp">
         <!---->
-        <uib-tab index="0" heading="קישורים">
+        <uib-tab index="0" heading="פרטי חברה">
 
 
             <div class="col-md-12">
                 <div class="panel panel-default">
                     <div class="panel-heading">
-                        קישורים
+                        פרטי חברה
 
                     </div>
                     <div class="panel-body">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label>מזהה</label>
+                                <input type="number" disabled class="form-control" ng-model="$ctrl.farm.Id" />
+                            </div>
+                            <div class="form-group">
+                                <label>שם</label>
+                                <input type="text" name="name" class="form-control" ng-model="$ctrl.farm.Name" required/>
+                            </div>
+                            <div class="form-group">
+                                <label>כתובת</label>
+                                <input type="text" class="form-control" ng-model="$ctrl.farm.Address" />
+                            </div>
+                            <div class="form-group">
+                                <label>ח.פ</label>
+                                <input type="text" class="form-control" ng-model="$ctrl.farm.IdNumber" required/>
+                            </div>
+
+
+                            <div class="form-group">
+                                <label>תיק ניכויים</label>
+                                <input type="text" class="form-control" ng-model="$ctrl.farm.TikNikuim" />
+                            </div>
+
+                            <div class="form-group">
+                                <label>שיטת הצגה נתונים לעובד/ת</label>
+                                <select class="form-control" ng-model="$ctrl.farm.Style">
+                                    <option value="0">הצגה רגילה</option>
+                                    <option value="1">הצגת חתימה בלבד</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+
+
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label>טלפון משרד</label>
+                                    <input type="text" name="name" class="form-control" ng-model="$ctrl.farm.OfficeNumber" />
+                                </div>
+
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>מייל משרד</label>
+                                    <input type="text" name="name" class="form-control" ng-model="$ctrl.farm.OfficeMail" />
+
+                                </div>
+
+
+                            </div>
+
+                            <div class="col-md-6">
+                                <label><br /><input type="checkbox" ng-model="$ctrl.farm.OfficeIsMail" />  האם לשלוח מייל  </label>
+
+                            </div>
+
+                            <!--<div class="col-md-12">
+
+                                <div class="form-group"><br />
+                                    
+                                   <br />
+                                    <hr />
+                                </div>
+                              
+                            </div>-->
+                                <div class="col-md-12">
+                                    
+                                    <div class="form-group">
+                                        <label>שם איש קשר</label>
+                                        <input type="text" name="name" class="form-control" ng-model="$ctrl.farm.ContactName" />
+                                    </div>
+                                </div>
+
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label>טלפון איש קשר</label>
+                                        <input type="text" name="name" class="form-control" ng-model="$ctrl.farm.ContactNumber" />
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>מייל איש קשר</label>
+                                        <input type="text" name="name" class="form-control" ng-model="$ctrl.farm.ContactMail" />
+                                    </div>
+
+                                </div>
+
+                                <div class="col-md-6">
+
+                                    <label><br /><input type="checkbox" ng-model="$ctrl.farm.ContactIsMail" />  האם לשלוח מייל  </label>
+
+                                </div>
 
 
 
-                        <a target="_blank" class="btn btn-primary" href="https://www.ezcount.co.il/backoffice">הנהלת חשבונות</a><br /><br />
-                        <a target="_blank" class="btn btn-primary" href="//drive.google.com">Google Drive</a><br /><br />
-                        <a target="_blank" class="btn btn-primary" href="//www.dropbox.com">DropBox</a>
-                    </div>
-                    <div class="panel-footer">
 
+
+
+
+
+
+
+
+                            </div>
+
+                            <div class="col-md-4">
+
+                                <div class="col-md-12 logoTitle">
+                                    <div class="">
+                                        <label>לוגו חברה</label>
+
+                                    </div>
+
+                                </div>
+
+                                <div class="col-md-12">
+
+                                    <div class="bg-dark">
+
+                                        <div id="AvatarFileUpload">
+                                            <!-- Image Preview Wrapper -->
+                                            <div class="selected-image-holder">
+                                                <img ng-src="{{$ctrl.farm.Logo}}" />
+                                                <!--<img src="../../images/default-avatar.png" alt="AvatarInput">-->
+                                            </div>
+                                            <!-- Image Preview Wrapper -->
+                                            <!-- Browse Image to Upload Wrapper -->
+                                            <div class="avatar-selector">
+                                                <span class="avatar-selector-btn">
+                                                    <img src="../../images/camera.svg" alt="cam">
+
+                                                </span>
+
+                                                <span class="avatar-selector-btn-del">
+                                                    <img src="../../images/_notArrive.png" ng-click="$ctrl.deleteLogo()" alt="cam">
+                                                </span>
+
+                                                <input type="file" accept="images/*" name="avatar" class="form-control" filename="" folder="'Companies_Logo'" workerid="$ctrl.farm.Id" filename-callback="$ctrl.uploadFile">
+
+
+                                            </div>
+                                            <!-- Browse Image to Upload Wrapper -->
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                            </div>
+
+
+                        </div>
+                    <div class="panel-footer colAlignLeft">
+
+                        <button class="btn btn-success" ng-click="$ctrl.SaveData(1)">שמירת נתונים</button>
                     </div>
                 </div>
             </div>
 
         </uib-tab>
-     
+
         <uib-tab index="1" heading="דיווחי כללית" ng-if="$ctrl.role!='farmAdminHorse'">
 
             <uib-tabset active="active" class="tab-form-demo">
@@ -103,7 +323,7 @@
                                 </div>
 
                                 <div class="col-md-2 form-group">
-                                     <label style="color:white">דיווח </label><br />
+                                    <label style="color:white">דיווח </label><br />
                                     <button class="btn btn-primary" ng-click="$ctrl.getKlalitHistoriPage(4)" ng-disabled="farmmangerForm.$invalid">שדר דיווח לכללית</button>
                                 </div>
 
@@ -154,7 +374,7 @@
                                 </div>
 
                                 <!--<div class="col-md-1 form-group">
-                                   
+
                                 </div>-->
 
 
@@ -178,13 +398,13 @@
                                         </thead>
                                         <tbody style="border:solid 1px gray">
 
-                                            <tr ng-if="ResultNumberFilter==klalit.ResultNumber || !ResultNumberFilter || (klalit.ResultNumber==2 && ResultNumberFilter==-1)" ng-repeat="klalit in $ctrl.klalits | orderBy:['FirstName','LastName','DateLesson'] |  filter:$ctrl.filter" 
+                                            <tr ng-if="ResultNumberFilter==klalit.ResultNumber || !ResultNumberFilter || (klalit.ResultNumber==2 && ResultNumberFilter==-1)" ng-repeat="klalit in $ctrl.klalits | orderBy:['FirstName','LastName','DateLesson'] |  filter:$ctrl.filter"
                                                 style="background:{{(klalit.ResultNumber==-1 || klalit.ResultNumber==2)?'#ffa2a2':''}}">
                                                 <td>{{$index + 1}}</td>
                                                 <td><input class="" type="checkbox" ng-if="klalit.ResultNumber==-1 || klalit.ResultNumber==2" ng-model="klalit.IsDo"></td>
-                                               
-                                                
-                                                <td >{{klalit.DateSend | ildate: 'HH:mm DD/MM/YYYY'}}</td>
+
+
+                                                <td>{{klalit.DateSend | ildate: 'HH:mm DD/MM/YYYY'}}</td>
                                                 <td>{{klalit.DateLesson | ildate: 'DD/MM/YYYY'}}</td>
                                                 <td>{{klalit.Taz}}</td>
                                                 <td>{{klalit.FirstName + ' ' +klalit.LastName}}  </td>
@@ -203,10 +423,10 @@
                             </div>
                         </div>
                     </div>
-                 </uib-tab>
+                </uib-tab>
             </uib-tabset>
 
-</uib-tab>
+        </uib-tab>
 
 
 
@@ -465,7 +685,7 @@
 
 
     </div>
-            <!--</div>
+    <!--</div>
         </div>
     </div>-->
 

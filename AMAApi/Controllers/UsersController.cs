@@ -164,12 +164,48 @@ namespace FarmsApi.Services
 
             if (Regex.Matches(Workerid, @"[a-zA-Z]").Count > 0)
             {
-                Workerid = Workerid.Replace("@@", "+");
+                Workerid = Workerid.Replace("@@", "+").Replace("ofekslash", "/");
                 res = UsersService.DecryptString(Workerid);
             }
             return Ok(UsersService.GetFiles(Convert.ToInt32(res)));
             //return Ok(UsersService.GetFiles(Workerid));
         }
+
+
+        //[Authorize]
+        [Route("getWorkerChilds/{id}")]
+        [HttpGet]
+        public IHttpActionResult GetWorkerChilds(string id)
+        {
+            string res = id;
+
+            if (Regex.Matches(id, @"[a-zA-Z]").Count > 0)
+            {
+                id = id.Replace("@@", "+").Replace("ofekslash", "/");
+                res = UsersService.DecryptString(id);
+            }
+            return Ok(UsersService.GetWorkerChilds(Convert.ToInt32(res)));
+        }
+
+
+
+        // [Authorize]
+        [Route("getWorker/{id}")]
+        [HttpGet]
+        public IHttpActionResult GetWorker(string id)
+        {
+            string res = id;
+
+            if (Regex.Matches(id, @"[a-zA-Z]").Count > 0)
+            {
+                id = id.Replace("@@", "+").Replace("ofekslash", "/");
+                res = UsersService.DecryptString(id);
+            }
+            return Ok(UsersService.GetWorker(Convert.ToInt32(res)));
+        }
+
+
+
 
         [Authorize]
         [Route("getWorkers/{isnew}")]
@@ -179,21 +215,7 @@ namespace FarmsApi.Services
             return Ok(UsersService.GetWorkers(isnew));
         }
 
-       // [Authorize]
-        [Route("getWorker/{id}")]
-        [HttpGet]
-        public IHttpActionResult GetWorker(string id)
-        {
-            string res = id;
-
-            if (Regex.Matches(id, @"[a-zA-Z]").Count > 0)
-            {
-                id = id.Replace("@@", "+");
-                res = UsersService.DecryptString(id);
-            }
-            return Ok(UsersService.GetWorker(Convert.ToInt32(res)));
-        }
-
+     
 
 
 
@@ -207,20 +229,7 @@ namespace FarmsApi.Services
         }
 
 
-        //[Authorize]
-        [Route("getWorkerChilds/{id}")]
-        [HttpGet]
-        public IHttpActionResult GetWorkerChilds(string id)
-        {
-            string res = id;
-
-            if (Regex.Matches(id, @"[a-zA-Z]").Count > 0)
-            {
-                id = id.Replace("@@", "+");
-                res = UsersService.DecryptString(id);
-            }
-            return Ok(UsersService.GetWorkerChilds(Convert.ToInt32(res)));
-        }
+     
 
 
        // [Authorize]

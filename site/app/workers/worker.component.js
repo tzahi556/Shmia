@@ -166,6 +166,8 @@
 
             //img.src = this.uploadsUri + "/" + this.worker.Id + "/Signature.png";
           
+
+           
         }
 
         
@@ -216,7 +218,6 @@
       //  alert(this.worker.BankNumName);
 
         }
-        
 
         function _getFileName(type) {
 
@@ -705,8 +706,8 @@
 
                     usersService.updateWorker(obj, this.files, this.childs, type).then(function (worker) {
 
-                        $.unblockUI();
-                        $window.open(this.uploadsUri + "/" + this.worker.Id + "/OfekAllPdf.pdf", '_blank');
+                       $.unblockUI();
+                       $window.open(this.uploadsUri + "/" + this.worker.Id + "/OfekAllPdf.pdf", '_blank');
 
                     }.bind(this));
 
