@@ -64,7 +64,10 @@
         this.IsPopUp = false;
         this.IsStop = false;
 
-        function _deleteLogo() {
+        function _deleteLogo(type) {
+
+           
+            if (type==1)
 
             filesService.delete(self.LogoTemp).then(function () {
                 
@@ -72,6 +75,15 @@
 
 
             }.bind(this));
+
+            if (type == 2)
+
+                filesService.delete(self.SignTemp).then(function () {
+
+                    self.farm.Sign = "../../images/empty.png";
+
+
+                }.bind(this));
 
         }
 
@@ -289,7 +301,7 @@
             //debugger
 
             //if (getUrlParameter("fromSend")) {
-              
+
             //    this.IsPopUp = true;
 
             //    this.klalitsBefore = window.opener.klalitsBefore;
@@ -297,7 +309,7 @@
             //    this.setKlalitHistoriPage(4, 0);
 
             //}
-           
+
             //   alert(self.farminstructors.length);
 
             //self.farm.Meta = self.farm.Meta || {};
@@ -306,17 +318,26 @@
             //self.farm.IsHiyuvInHashlama = (self.farm.IsHiyuvInHashlama) ? self.farm.IsHiyuvInHashlama.toString() : "0";
 
             //self.initNewTags();
+
            
+
             self.farm.Style = (self.farm.Style) ? self.farm.Style.toString() : "0";
+
+
             self.LogoTemp = (self.farm.Logo) ? "/Companies/" + self.farm.Id + "/Logo/" + self.farm.Logo : "";
             self.farm.Logo = (self.farm.Logo) ? sharedValues.apiUrl + "/Uploads/Companies/" + self.farm.Id + "/Logo/" + self.farm.Logo : "../../images/default-avatar.png";
+
+
+            self.SignTemp = (self.farm.Sign) ? "/Companies/" + self.farm.Id + "/PDFS/" + self.farm.Sign : "";
+
+            self.farm.Sign = (self.farm.Sign) ? sharedValues.apiUrl + "/Uploads/Companies/" + self.farm.Id + "/PDFS/" + self.farm.Sign + "?" +(new Date()).getTime() : "../../images/empty.png";
 
           
          
         }
 
         this.init();
-
+            
 
         function _uploadFile(file) {
 

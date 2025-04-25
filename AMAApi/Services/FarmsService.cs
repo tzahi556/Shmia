@@ -85,21 +85,35 @@ namespace FarmsApi.Services
                 if (farm != null)
                 {
 
-                    var root = HttpContext.Current.Server.MapPath("~/Uploads/Companies/" +Id.ToString() + "/Logo/");
+                    var root = HttpContext.Current.Server.MapPath("~/Uploads/Companies/" + Id.ToString());
 
-                    string[] files = System.IO.Directory.GetFiles(root);
-                    if (files.Length != 0)
+                    
+
+
+                    if (Directory.Exists(root + "/Logo/"))
                     {
+                        string[] files = System.IO.Directory.GetFiles(root + "/Logo/");
+                        if (files.Length != 0)
+                        {
 
-                        farm.Logo = Path.GetFileName(files[0]);
+                            farm.Logo = Path.GetFileName(files[0]);
+                        }
                     }
+                    if (Directory.Exists(root + "/PDFS/"))
+                    {
+                        string[] files = System.IO.Directory.GetFiles(root + "/PDFS/");
+                        if (files.Length != 0)
+                        {
 
+                            farm.Sign = Path.GetFileName(files[0]);
+                        }
+                    }
                 }
 
                 return farm;
 
             }
-                
+
         }
 
         public static FarmManagers GetMangerFarm()
@@ -123,7 +137,7 @@ namespace FarmsApi.Services
 
                 var InstructorList = from u in Context.Users
                                      from um in Context.FarmInstructors.Where(x => x.UserId == u.Id).DefaultIfEmpty()//  on u.Id equals um.UserId
-                                     where (u.Role == "instructor" || u.Role == "profAdmin") && u.Farm_Id == CurrentUserFarmId && !u.Deleted 
+                                     where (u.Role == "instructor" || u.Role == "profAdmin") && u.Farm_Id == CurrentUserFarmId && !u.Deleted
                                      select new { Id = u.Id, ClalitNumber = um.ClalitNumber, UserId = u.Id, InstructorName = u.FirstName + " " + u.LastName };
 
 
@@ -227,7 +241,7 @@ namespace FarmsApi.Services
 
 
 
-        
+
 
         public static List<KlalitHistoris> GetKlalitHistoris(int FarmId, string startDate = null, string endDate = null, int? type = null, int? klalitId = null)
         {
@@ -249,7 +263,7 @@ namespace FarmsApi.Services
                 ("GetKlalitHistoris  @FarmId,@StartDate,@EndDate,@Type,@KlalitId", FarmIdPara, StartDatePara, EndDatePara, TypePara, KlalitIdPara);
                 var Objects = query.ToList();
 
-                if ((type == 2 || type == 1) && Objects.Count >0 && Objects[0].Id!=-1)
+                if ((type == 2 || type == 1) && Objects.Count > 0 && Objects[0].Id != -1)
                 {
 
 
@@ -324,7 +338,7 @@ namespace FarmsApi.Services
 
                         khv.CounterSend = 1;
                         khv.Instructor_Id = item.Instructor_Id;
-                       // Context.KlalitHistoris.Add(khv);
+                        // Context.KlalitHistoris.Add(khv);
 
                     }
                     else
@@ -345,7 +359,7 @@ namespace FarmsApi.Services
                 string LastName = item.LastName;
                 string DateStart = item.DateLesson.ToString("ddMMyyyy");
 
-               // KlalitAPI.SupplierRequest kp = new KlalitAPI.SupplierRequest();
+                // KlalitAPI.SupplierRequest kp = new KlalitAPI.SupplierRequest();
 
 
                 // kp.Url = "https://sapaktest.clalit.co.il/mushlamsupplierservice/SupplierRequest.asmx";
@@ -366,7 +380,7 @@ namespace FarmsApi.Services
 	                                    <DoctorID>" + fs.ClalitNumber + @"</DoctorID>
 	                                    <OnlineServiceType>0</OnlineServiceType>
                                     </XMLInput>";
-              //  var resXML = kp.SendXML(xml); //203700003 //203700007
+                //  var resXML = kp.SendXML(xml); //203700003 //203700007
 
 
 
@@ -391,7 +405,7 @@ namespace FarmsApi.Services
                     kh.DateSend = DateTime.Now;
                     kh.DateLesson = item.DateLesson;
                     kh.ClaimNumber = (ClaimNumber == null) ? "" : ClaimNumber.InnerText;
-                  //  kh.ResultXML = resXML.ToString();
+                    //  kh.ResultXML = resXML.ToString();
                     kh.ResultNumber = Result;
                     kh.Result = (Int32.Parse(Result) > 0) ? AnswerDetails.InnerText : ErrorDescription.InnerText;
 
@@ -399,7 +413,7 @@ namespace FarmsApi.Services
 
                     kh.CounterSend = 1;
                     kh.Instructor_Id = item.Instructor_Id;
-                  //  Context.KlalitHistoris.Add(kh);
+                    //  Context.KlalitHistoris.Add(kh);
 
                 }
                 else
@@ -407,7 +421,7 @@ namespace FarmsApi.Services
                     kh.DateSend = DateTime.Now;
                     kh.DateLesson = item.DateLesson;
                     kh.ClaimNumber = (ClaimNumber == null) ? "" : ClaimNumber.InnerText;
-                   // kh.ResultXML = resXML.ToString();
+                    // kh.ResultXML = resXML.ToString();
                     kh.ResultNumber = Result;
                     kh.Result = (Int32.Parse(Result) > 0) ? AnswerDetails.InnerText : ErrorDescription.InnerText;
 
@@ -466,10 +480,10 @@ namespace FarmsApi.Services
 	                                    <DoctorID>" + fs.ClalitNumber + @"</DoctorID>
 	                                    <OnlineServiceType>0</OnlineServiceType>
                                     </XMLInput>";
-                 //   var resXML = kp.SendXML(xml); //203700003 //203700007
+                    //   var resXML = kp.SendXML(xml); //203700003 //203700007
 
                     XmlDocument XmlRes = new XmlDocument();
-                  //  XmlRes.LoadXml(resXML.ToString());
+                    //  XmlRes.LoadXml(resXML.ToString());
 
                     var Result = XmlRes.DocumentElement.SelectSingleNode("Result").InnerText;// 1 נקלטה
                     var AnswerDetails = XmlRes.DocumentElement.SelectSingleNode("AnswerDetails");// התשובה כאן
@@ -482,7 +496,7 @@ namespace FarmsApi.Services
                     kh.DateSend = DateTime.Now;
                     kh.DateLesson = item.DateLesson;
                     kh.ClaimNumber = (ClaimNumber == null) ? "" : ClaimNumber.InnerText;
-                  //  kh.ResultXML = resXML.ToString();
+                    //  kh.ResultXML = resXML.ToString();
                     kh.ResultNumber = Result;
                     kh.Result = (Int32.Parse(Result) > 0) ? AnswerDetails.InnerText : ErrorDescription.InnerText;
 

@@ -27,6 +27,8 @@ namespace FarmsApi.DataModels
         public string Password { get; set; }
         [NotMapped]
         public string Logo { get; set; }
+        [NotMapped]
+        public string Sign { get; set; }
 
     }
 

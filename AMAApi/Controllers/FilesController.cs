@@ -128,6 +128,20 @@ namespace FarmsApi.Controllers
 
 
 
+            if (folder.Contains("Companies_Sign"))
+            {
+                if (!Directory.Exists(WorkerPath + "/PDFS/"))
+                {
+                    Directory.CreateDirectory(WorkerPath + "/PDFS/");
+
+                }
+
+                // var rootss = HttpContext.Current.Server.MapPath("~/App_Data/Companies/59/Logo/");
+
+                root = root + "/PDFS";
+            }
+
+
             string fileList = "";
             for (int i = 0; i < file.FileData.Count; i++)
             {
@@ -135,6 +149,13 @@ namespace FarmsApi.Controllers
 
                 var dest = root + "/" + file.FileData[i].Headers.ContentDisposition.FileName.Replace("\"", "");
                 //dest = filterFilename(dest);
+
+                if (folder.Contains("Companies_Sign"))
+                {
+                    dest = root + "/SignatureAmuta.png";
+
+                }
+
 
                 if (File.Exists(dest))
                 {
