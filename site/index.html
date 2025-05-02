@@ -17,20 +17,7 @@
     <link href="node_modules/angular-loading-bar/build/loading-bar.min.css" rel="stylesheet" />
     <link href="node_modules/font-awesome/css/font-awesome.min.css" rel="stylesheet" />
 
-
-
-
-
-
-
-    <!--calendar-->
-    <!--<link rel="stylesheet" href="node_modules/fullcalendar/dist/fullcalendar.css">
-    <link rel="stylesheet" href="node_modules/fullcalendar-scheduler/dist/scheduler.css">
-    <link rel="stylesheet" href="app/common/components/calendar/calendar.css" />-->
-    <!--event-->
-    <!--<link rel="stylesheet" href="app/common/components/event/event.css" />-->
-    <!--notifications-->
-    <!--<link rel="stylesheet" href="app/common/components/notifications/notifications.css" />-->
+   
 
     <link rel="stylesheet" href="css/style.css" />
     <link rel="stylesheet" href="css/autocomplete.css" />
@@ -160,74 +147,395 @@
 
 
     <link href="css/jquery.toast.css" rel="stylesheet" />
-    <!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>-->
+    
     <script src="css/jquery.toast.js"></script>
-    <script>
 
 
 
-        //alertMessage("ssdsdsd");
+   
+
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.6.347/pdf.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.6.347/pdf_viewer.min.css" rel="stylesheet" type="text/css" />
+    <!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>-->
+    <!--<script type="text/javascript">
+
+
+
+
+
+    </script>-->
+
+    <script type="text/javascript" src="css/webToast.js" charset="windows-1255"></script>
+    <link href="css/webToast.css" rel="stylesheet" />
+    <script type="text/javascript">
+
+
+        function CallPdfJs(elemId, width, height, url) {
+
+
+            var CurrentViewport;
+
+            var NumPages = 0;
+            var CurrentPage = 1;
+            var CurrentPDF;
+            // header on that server.
+            //  var url = 'https://raw.githubusercontent.com/mozilla/pdf.js/ba2edeae/web/compressed.tracemonkey-pldi-09.pdf';
+            // Loaded via <script> tag, create shortcut to access PDF.js exports.
+            var { pdfjsLib } = globalThis;
+
+            // The workerSrc property shall be specified.
+            pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.6.347/pdf.worker.min.js';
+            // Asynchronous download of PDF
+            var loadingTask = pdfjsLib.getDocument(url);
+            loadingTask.promise.then(function (pdf) {
+
+                CurrentPDF = pdf;
+
+                NumPages = pdf.numPages;
+
+                pdf.getPage(CurrentPage).then(handlePages);
+
+
+
+            }
+                , function (reason) {
+                    console.error(reason);
+
+                });
+
+            function handlePages(page) {
+
+                // console.log('Page loaded');
+                // $("#canvasContainer div").not('#the-canvas').remove();
+
+
+                //var scale = 1.5;
+                //var viewport = page.getViewport({ scale: scale });
+
+
+
+                //var canvas = document.getElementById('the-canvas');
+
+                //var context = canvas.getContext('2d');
+
+
+
+                //canvas.height = viewport.height;
+
+                //canvas.width =  viewport.width;
+
+
+                //  var container = document.getElementById('dvSeq');
+                var canvas = document.getElementById(elemId);
+                var context = canvas.getContext('2d');
+                var viewport = page.getViewport({ scale: 1 });
+                var scale = width / viewport.width;
+                viewport = page.getViewport({ scale: scale });
+
+
+
+                viewport.height = height;
+
+
+                canvas.height = viewport.height - 4;
+                canvas.width = viewport.width - 4;
+
+
+
+                // Render PDF page into canvas context
+
+                var renderContext = {
+
+                    canvasContext: context,
+
+                    viewport: viewport
+
+                };
+
+                var renderTask = page.render(renderContext);
+
+                renderTask.promise.then(function () {
+
+                    console.log('Page rendered');
+
+                });
+
+
+                CurrentViewport = viewport;
+
+
+
+                //if (CurrentPage == 1)
+                //    $("#canvasContainer").append('<div class="draggableOut" style="position: absolute; left: 599px; top: 204px;">שם</div>');
+
+                //$(".draggableOut").draggable({ cursor: "pointer" });
+
+
+            }
+
+
+        }
+
+        var CurrentViewport;
+        var NumPages = 0;
+        var CurrentPage = 1;
+        var CurrentPDF;
+        var elemId;
+
+        function CallEditPdfJs(elementId, url) {
+            elemId = elementId;
+
+            
+            var url = url;
+            // Loaded via <script> tag, create shortcut to access PDF.js exports.
+            var { pdfjsLib } = globalThis;
+            // The workerSrc property shall be specified.
+            pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.6.347/pdf.worker.min.js';
+            // Asynchronous download of PDF
+            var loadingTask = pdfjsLib.getDocument(url);
+            loadingTask.promise.then(function (pdf) {
+
+                console.log('PDF loaded');
+
+                CurrentPage = 1;
+                CurrentPDF = pdf;
+               
+                NumPages = pdf.numPages;
+
+                $("#spCurTotalPage").text(NumPages);
+                $("#spCurPage").text(CurrentPage);
+
+
+                //$('li').removeClass('disabled');
+
+                //$('#liPrev').addClass('disabled');
+
+                
+                //if (NumPages == 1) {
+                //    $('#liNext').addClass('disabled');
+                //}
+
+
+                //Start with first page
+                pdf.getPage(CurrentPage).then(handlePages);
+
+            
+
+            }
+                , function (reason) {
+                    console.error(reason);
+
+                });
+
+            
+
+
+           
+
+
+        }
+
+        function handlePages(page) {
+
+            // console.log('Page loaded');
+            $("#canvasContainer div").not('#' + elemId).remove();
+
+
+            var scale = 1.5;
+            var viewport = page.getViewport({ scale: scale });
+
+            // Prepare canvas using PDF page dimensions
+
+            var canvas = document.getElementById(elemId);
+
+            var context = canvas.getContext('2d');
+
+            canvas.height = viewport.height;
+
+            canvas.width = viewport.width;
+
+
+
+            // Render PDF page into canvas context
+
+            var renderContext = {
+
+                canvasContext: context,
+
+                viewport: viewport
+
+            };
+
+            var renderTask = page.render(renderContext);
+
+            renderTask.promise.then(function () {
+
+                console.log('Page rendered');
+
+            });
+
+            CurrentViewport = viewport;
+
+            // if currentpage etc///
+
+            //if (CurrentPage == 1)
+            //    $("#canvasContainer").append('<div class="draggableOut" style="position: absolute; left: 599px; top: 204px;">שם</div>');
+
+            // $(".draggableOut").draggable({ cursor: "pointer" });
+
+
+        }
+
+        function changePage(delta) {
+
+
+
+            if ((CurrentPage == 1 && delta == -1) || (CurrentPage == NumPages && delta == 1)) {
+                return;
+            }
+
+
+            //$('li').removeClass('disabled');
+
+            CurrentPage += delta;
+
+            //if (CurrentPage == 1) {
+
+            //    $('#liPrev').addClass('disabled');
+
+            //}
+
+
+            //if (CurrentPage == NumPages) {
+
+            //    $('#liNext').addClass('disabled');
+            //}
+
+            $('#spCurPage').text(CurrentPage);
+            CurrentPDF.getPage(CurrentPage).then(handlePages);
+
+        }
 
         function alertMessage(mes, type) {
 
+
+
+        
+          
+
             if (type == 1 || !type) {
 
-                $.toast({
-                    heading: '<u><b>הודעת מערכת</b></u>',
-                    text: mes,
-                    position: 'mid-center',
-                    hideAfter: false,
-                    showHideTransition: 'plain',
-                    icon: 'success',
-                    beforeShow: function () {
-                        /*  alert('Toast has appeared.');*/
-                        $("#overlay").show();
-                    },
-                    afterHidden: function () {
-                        $("#overlay").hide();
-                        //alert('Toast has been hidden.');
-                    }
+                webToast.Success({
+                    // REQUIRED
+                    status: 'הודעת מערכת',
+                    message: mes,
+                    align: 'topcenter',
+                    // OPTIONAL. 
+                    // Default: 3000
+                    delay: 50000000
+                });
 
-                })
+
+              
+
+
+                //$.toast({
+                //    heading: '<u><b>הודעת מערכת</b></u>',
+                //    text: mes,
+                //    position: 'mid-center',
+                //    hideAfter: false,
+                //    showHideTransition: 'plain',
+                //    icon: 'success',
+                //    beforeShow: function () {
+                //        /*  alert('Toast has appeared.');*/
+                //        $("#overlay").show();
+                //    },
+                //    afterHidden: function () {
+                //        $("#overlay").hide();
+                //        //alert('Toast has been hidden.');
+                //    }
+
+                //})
+
+
+
             }
 
             if (type == 2) {
-                $.toast({
-                    heading: '<u><b>הודעת מערכת</b></u>',
-                    text: mes,
-                    position: 'mid-center',
-                    hideAfter: false,
-                    showHideTransition: 'plain',
-                    icon: 'info',
-                    beforeShow: function () {
-                        /*  alert('Toast has appeared.');*/
-                        $("#overlay").show();
-                    },
-                    afterHidden: function () {
-                        $("#overlay").hide();
-                        //alert('Toast has been hidden.');
-                    }
 
-                })
+
+                webToast.Info({
+                    // REQUIRED
+                    status: 'הודעת מערכת',
+                    message: mes,
+                    align: 'topcenter',
+                    // OPTIONAL. 
+                    // Default: 3000
+                    delay: 5000000000
+                });
+
+                //$.toast({
+                //    heading: '<u><b>הודעת מערכת</b></u>',
+                //    text: mes,
+                //    position: 'mid-center',
+                //    hideAfter: false,
+                //    showHideTransition: 'plain',
+                //    icon: 'info',
+                //    beforeShow: function () {
+                //        /*  alert('Toast has appeared.');*/
+                //        $("#overlay").show();
+                //    },
+                //    afterHidden: function () {
+                //        $("#overlay").hide();
+                //        //alert('Toast has been hidden.');
+                //    }
+
+                //})
             }
-            if (type == 3) {
-                $.toast({
-                    heading: '<u><b>הודעת מערכת</b></u>',
-                    text: mes,
-                    position: 'mid-center',
-                    hideAfter: false,
-                    showHideTransition: 'plain',
-                    icon: 'error',
 
-                    beforeShow: function () {
-                        /*  alert('Toast has appeared.');*/
-                        $("#overlay").show();
-                    },
-                    afterHidden: function () {
-                        $("#overlay").hide();
-                        //alert('Toast has been hidden.');
-                    }
-                })
+            if (type == 3) {
+
+                webToast.Danger({
+                    // REQUIRED
+                    status: 'הודעת מערכת',
+                    message: mes,
+                    align: 'topcenter',
+                    // OPTIONAL. 
+                    // Default: 3000
+                    delay: 5000000000
+                });
+
+
+
+                //$.toast({
+                //    heading: '<u><b>הודעת מערכת</b></u>',
+                //    text: mes,
+                //    position: 'mid-center',
+                //    hideAfter: false,
+                //    showHideTransition: 'plain',
+                //    icon: 'error',
+
+                //    beforeShow: function () {
+                //        /*  alert('Toast has appeared.');*/
+                //        $("#overlay").show();
+                //    },
+                //    afterHidden: function () {
+                //        $("#overlay").hide();
+                //        //alert('Toast has been hidden.');
+                //    }
+                //})
+            }
+
+            if (type == 4) {
+                //var confirmBox = webToast.confirm(mes);
+
+                //confirmBox.click(function () {
+                //    alert('confirmed Data');
+
+                //})
+
+                return webToast.confirm(mes);
             }
 
 

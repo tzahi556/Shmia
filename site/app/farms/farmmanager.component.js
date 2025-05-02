@@ -7,6 +7,7 @@
         bindings: {
             farmmanager: '<',
             farm: '<',
+            farmspdffiles: '<'
             //horses: '<',
             //horsegroups: '<',
             //horsegroupshorses: '<',
@@ -34,7 +35,10 @@
 
 
         var self = this;
+
+        $scope.farm = this.farm;
         this.scope = $scope;
+
         //this.horsesService = horsesService;
         this.farmsService = farmsService;
         this.SaveData = _SaveData.bind(this);
@@ -44,6 +48,9 @@
         //   this.removeTags = _removeTags.bind(this);
 
         this.uploadFile = _uploadFile.bind(this);
+        this.uploadFilePdf = _uploadFilePdf.bind(this);
+
+
         this.initNewTags = _initNewTags.bind(this);
 
         this.getKlalitHistoriPage = _getKlalitHistoriPage.bind(this);
@@ -56,7 +63,7 @@
         this.checkAll = _checkAll.bind(this);
 
         this.deleteLogo = _deleteLogo.bind(this);
-        
+
 
         this.init = _init.bind(this);
         this.role = localStorage.getItem('currentRole');
@@ -66,15 +73,15 @@
 
         function _deleteLogo(type) {
 
-           
-            if (type==1)
 
-            filesService.delete(self.LogoTemp).then(function () {
-                
-                self.farm.Logo = "../../images/default-avatar.png";
+            if (type == 1)
+
+                filesService.delete(self.LogoTemp).then(function () {
+
+                    self.farm.Logo = "../../images/default-avatar.png";
 
 
-            }.bind(this));
+                }.bind(this));
 
             if (type == 2)
 
@@ -91,12 +98,12 @@
             this.IsStop = false;
 
             if (this.klalitsBefore.length > 0) {
-               
+
                 // $('#modalKlalitSend').modal('show');
                 var fromSend = getUrlParameter("fromSend");
                 if (fromSend) {
 
-                  
+
                     $('#modalKlalitSend').modal('show');
                     var ctrlthis = this;
                     ctrlthis.endMessage = false;
@@ -107,7 +114,7 @@
                         ctrlthis.klalitsBefore[i].ResultXML = null;
                         ctrlthis.klalitsBefore[i].FirstName = ctrlthis.klalitsBefore[i].FirstName;
                         ctrlthis.klalitsBefore[i].LastName = ctrlthis.klalitsBefore[i].LastName;
-                        
+
 
                     }
 
@@ -117,7 +124,7 @@
                     //https://www.giddyup.co.il/#/farmmanager/?fromSend=fromSend
                     //http://localhost:51517/#/farmmanager/?fromSend=fromSend
                     var payWind = window.open("https://www.giddyup.co.il/#/farmmanager/?fromSend=fromSend", "Upload Chapter content", "width=700,height=350,top=200,left=500");
-                   
+
 
                 }
 
@@ -166,7 +173,7 @@
 
             //  this.klalits.find(x => x.ResultNumber == -1).IsDo = this.checkAllc;
 
-           
+
 
             this.klalits.filter(x => x.ResultNumber != 1)
                 .forEach(x => x.IsDo = this.checkAllc);
@@ -174,7 +181,7 @@
 
         function _getKlalitHistoriPage(type, klalitId) {
 
-           
+
             var startDate = moment(this.dateFromClalit).format('YYYY-MM-DD');
             var endDate = moment(this.dateToClalit).format('YYYY-MM-DD');
 
@@ -190,7 +197,7 @@
 
                 farmsService.getKlalitHistoris(this.farmmanager.FarmId, startDate, endDate, 5, null, null).then(function (res) {
                     if (res[0] && res[0].Id == -1) {
-                      
+
                         this.klalitsBefore = this.klalitsBefore.slice(0, res[0].CounterSend);// סתם משתמש בשדה הזה לבדוק עוד כמה נותר לו
 
 
@@ -200,13 +207,13 @@
 
                             alert("עברת את מכסת התביעות האוטמטיות היומיות,ניתן לנסות מחר...");
 
-                        } else { 
+                        } else {
                             $('#modalKlalit').modal('show');
                         }
 
                     }
 
-                    
+
 
                 }.bind(this));
 
@@ -216,7 +223,7 @@
             }
 
 
-           
+
 
             // שליחה עצמה
             //if (type == 2) {
@@ -224,10 +231,10 @@
             //}
 
             // פתיחת חלון מקדים
-           // if (type == 4) 
+            // if (type == 4) 
 
             farmsService.getKlalitHistoris(this.farmmanager.FarmId, startDate, endDate, type, klalitId, null).then(function (res) {
-              
+
                 if (type == 2 && res[0].Id < 0) {
 
                     if (res[0].Id == -1) alert("אין הגדרות למדריכים");
@@ -248,7 +255,7 @@
                         window.klalitsBefore = res;
                         $('#modalKlalit').modal('show');
                     }
-                  
+
 
                 }
                 else if (type == 1) {
@@ -259,7 +266,7 @@
                         alert("עברת את מכסת התביעות האוטמטיות היומיות,ניתן לנסות מחר...");
                         return;
 
-                    } 
+                    }
 
                     this.getKlalitHistoriPage(null, null);
 
@@ -287,13 +294,13 @@
 
         var getUrlParameter = function getUrlParameter(sParam) {
 
-          
+
             var sPageURL = window.location.href;
 
             if (sPageURL.indexOf("fromSend") != -1) return true;
 
             else return false;
-             
+
         };
 
         function _init() {
@@ -319,6 +326,8 @@
 
             //self.initNewTags();
 
+
+
            
 
             self.farm.Style = (self.farm.Style) ? self.farm.Style.toString() : "0";
@@ -330,18 +339,77 @@
 
             self.SignTemp = (self.farm.Sign) ? "/Companies/" + self.farm.Id + "/PDFS/" + self.farm.Sign : "";
 
-            self.farm.Sign = (self.farm.Sign) ? sharedValues.apiUrl + "/Uploads/Companies/" + self.farm.Id + "/PDFS/" + self.farm.Sign + "?" +(new Date()).getTime() : "../../images/empty.png";
+            self.farm.Sign = (self.farm.Sign) ? sharedValues.apiUrl + "/Uploads/Companies/" + self.farm.Id + "/PDFS/" + self.farm.Sign + "?" + (new Date()).getTime() : "../../images/empty.png";
 
-          
+
          
+            for (var i in this.farmspdffiles) {
+
+                var f = this.farmspdffiles[i];
+
+
+                f.FullLink = sharedValues.apiUrl + "/Uploads/Companies/" + self.farm.Id + "/PDFS/" + f.FileName;
+
+                if (eval(f.Is101)) f.FullLink = sharedValues.apiUrl + "/Uploads/Companies/101.pdf";
+
+
+            }
+
+            //debugger
+            //var sddsds = this.farmspdffiles;
+
+        }
+
+        $scope.makeDropPdf = function (Id) {
+            // debugger
+            //var sddsds = self.farmspdffiles;
+
+
+            var confirmBox = alertMessage("האם אתה בטוח שברצונך להסיר את הקובץ?", 4);
+            confirmBox.click(function () {
+
+              
+                farmsService.updateFarmsPdfFiles(3, Id, self.farmspdffiles).then(function (farmspdffiles) {
+
+                    self.farmspdffiles = farmspdffiles;
+                    self.init();
+
+                    const myTimeout = setTimeout(RefreshPage, 300);
+                 /*   RefreshPage();*/
+                   
+
+                    //self.init();
+
+                    //$state.reload();
+
+                });
+
+            })
+            //alert($scope.farm.Id);
         }
 
         this.init();
-            
+
+        function _uploadFilePdf(file) {
+
+            farmsService.getFarmPDFFiles(this.farm.Id).then(function (farmspdffiles) {
+
+               
+
+                self.farmspdffiles = farmspdffiles;
+                self.init();
+                const myTimeout = setTimeout(RefreshPage, 300);
+
+                //self.init();
+               // $state.reload();
+
+            });
+
+
+        }
 
         function _uploadFile(file) {
 
-            /*alert(file);*/
 
             farmsService.getFarm(this.farm.Id).then(function (farm) {
 
@@ -351,7 +419,7 @@
 
             });
 
-          
+
             //var allfiles = file.split(",") || [];
 
 
@@ -365,36 +433,86 @@
 
 
 
-        this.dateFromClalit = moment().add(0, 'months').toDate();
-        this.dateToClalit = moment().add(1, 'days').toDate();
+        //this.dateFromClalit = moment().add(0, 'months').toDate();
+        //this.dateToClalit = moment().add(1, 'days').toDate();
+
+
+        $scope.sendNewOrderPdfs = function (IdsOrders) {
+            // debugger
+
+
+            // שליחה של הסדר החדש
+
+            var farmspdffilestemp = [];
+
+            for (var i = 0; i < IdsOrders.length; i++) {
+
+
+                var CurrentPdf = self.farmspdffiles.filter(x => x.Id == IdsOrders[i]);
+
+                if (CurrentPdf.length > 0) {
+
+                    CurrentPdf[0].Seq = i + 1;
+
+                    farmspdffilestemp.push(CurrentPdf[0]);
+
+                }
+
+
+            }
+
+            farmsService.updateFarmsPdfFiles(4, this.farm.Id, farmspdffilestemp).then(function (farmspdffiles) {
+
+              
+
+            });
+
+        }
+
 
         function _SaveData(type) {
 
 
 
-
+            //שמירת פרטי חברה
             if (type == 1) {
 
                 this.farmsService.updateFarm(this.farm).then(function (farm) {
-                    alertMessage('הנתונים נשמרו בהצלחה!',2);
-                   
+                    alertMessage('הנתונים נשמרו בהצלחה!', 1);
+
                 }.bind(this));
 
 
             }
 
 
-
-            //if (type == 2) {
-
-            //    this.farmsService.setMangerFarm(this.farmmanager).then(function (farmmanager) {
-                  
-            //        this.farmmanager = farmmanager;
-            //        if (!isNoAlert) alert('נשמר בהצלחה');
-            //    }.bind(this));
+            // הוספת קובץ 101 בלבד
+            if (type == 2) {
 
 
-            //}
+
+                farmsService.updateFarmsPdfFiles(2, self.farm.Id, self.farmspdffiles).then(function (farmspdffiles) {
+
+
+                   
+
+                    self.farmspdffiles = farmspdffiles;
+                    self.init();
+                    const myTimeout = setTimeout(RefreshPage, 300);
+
+                   // 
+
+                   // $state.reload();
+
+                });
+
+
+            }
+
+
+
+
+
         }
 
         function _delete() {

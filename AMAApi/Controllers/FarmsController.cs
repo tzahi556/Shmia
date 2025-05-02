@@ -10,6 +10,10 @@ using System.Drawing.Imaging;
 using System;
 using System.Drawing;
 using Spire.Pdf.Graphics;
+using System.Linq;
+using FarmsApi.DataModels;
+using System.Web;
+using iTextSharp.text.xml.xmp;
 
 namespace FarmsApi.Services
 {
@@ -43,19 +47,19 @@ namespace FarmsApi.Services
 
         }
 
-            //[Authorize] http://localhost:44033/farms/GetImage
-            [Route("GetImage")]
+        //[Authorize] http://localhost:44033/farms/GetImage
+        [Route("GetImage")]
         [HttpGet]
         public IHttpActionResult GetImage()
         {
 
             // Create an instance of the PdfDocument class
-            
+
             PdfDocument doc = new PdfDocument();
-           
+
             // Load a PDF document
             doc.LoadFromFile(@"C:\\Dev\Shmia\AMAApi\bin\Sample.pdf");
-           
+
 
 
 
@@ -210,7 +214,7 @@ namespace FarmsApi.Services
             }
             return images;
         }
-   
+
 
 
 
@@ -262,7 +266,7 @@ namespace FarmsApi.Services
         public IHttpActionResult UpdateFarmInvoice(Farm farm)
         {
             return Ok();
-           
+
         }
 
         [Authorize]
@@ -310,23 +314,134 @@ namespace FarmsApi.Services
 
 
         [Authorize]
-        [Route("getKlalitHistoris")]
+        [Route("getFarmPDFFiles/{id}")]
         [HttpGet]
-
-        public IHttpActionResult GetKlalitHistoris(int FarmId , string startDate = null, string endDate = null,int? type=null,int? klalitId = null)
+        public IHttpActionResult GetFarmPDFFiles(int id)
         {
-            return Ok(FarmsService.GetKlalitHistoris(FarmId, startDate, endDate,type,klalitId));
-        }
+            using (var Context = new Context())
+            {
+                List<FarmPDFFiles> FarmPDFFiles = Context.FarmPDFFiles.Where(x => x.FarmId == id && x.StatusId == 1).OrderBy(x => x.Seq).ToList();
 
+
+                return Ok(FarmPDFFiles);
+            }
+
+
+        }
 
         [Authorize]
-        [Route("setKlalitHistoris")]
+        [Route("updateFarmsPdfFiles/{type}/{id}")]
         [HttpPost]
-
-        public IHttpActionResult SetKlalitHistoris(KlalitHistoris kh)
+        public IHttpActionResult UpdateFarmsPdfFiles(int type, int id, List<FarmPDFFiles> farmPDFFiles)
         {
-            return Ok(FarmsService.SetKlalitHistoris(kh));
+            //הכנסה של 101 בלבד
+            if (type == 2)
+            {
+                using (var Context = new Context())
+                {
+                    var FarmPDFFilesList = Context.FarmPDFFiles.Where(x => x.FarmId == id && x.StatusId == 1).ToList();
+
+
+                    FarmPDFFiles farmPDFFile = new FarmPDFFiles();
+                    farmPDFFile.FarmId = id;
+                    farmPDFFile.StatusId = 1;
+                    farmPDFFile.FileName = "101.pdf";
+                    farmPDFFile.Is101 = true;
+
+                    if (FarmPDFFilesList.Count > 0)
+                        farmPDFFile.Seq = FarmPDFFilesList[0].Seq + 1;
+                    else
+                        farmPDFFile.Seq = 1;
+
+
+                    bool IsExistFileName = FarmPDFFilesList.Any(x => x.Is101);
+
+                    if (!IsExistFileName)
+                    {
+
+                        Context.FarmPDFFiles.Add(farmPDFFile);
+                        Context.SaveChanges();
+                    }
+
+                    FarmPDFFilesList = Context.FarmPDFFiles.Where(x => x.FarmId == id).ToList();
+
+                    return Ok(FarmPDFFilesList);
+
+                }
+            }
+
+            //מחיקה
+            if (type == 3)
+            {
+                using (var Context = new Context())
+                {
+                    FarmPDFFiles fpf = farmPDFFiles.Where(x => x.Id == id).FirstOrDefault();
+
+                    if (fpf != null)
+                    {
+                        int FarmId = fpf.FarmId;
+                        string FileName = fpf.FileName;
+
+                        Context.FarmPDFFiles.Attach(fpf);
+
+                        Context.FarmPDFFiles.Remove(fpf);
+                        Context.SaveChanges();
+
+                        if (!fpf.Is101)
+                        {
+                            var root = HttpContext.Current.Server.MapPath("~/Uploads/Companies/" + FarmId.ToString() + "/PDF/" + FileName);
+
+                            if (File.Exists(root))
+                            {
+                                File.Delete(root);
+                            }
+                        }
+
+
+                        var FarmPDFFilesList = Context.FarmPDFFiles.Where(x => x.FarmId == FarmId).ToList();
+
+                        return Ok(FarmPDFFilesList);
+                    }
+                }
+            }
+
+            //שינוי סדר מסמכים
+            if (type == 4)
+            {
+                using (var Context = new Context())
+                {
+                    foreach (var item in farmPDFFiles)
+                    {
+                        Context.Entry(item).State = System.Data.Entity.EntityState.Modified;
+                    }
+
+                    Context.SaveChanges();
+                }
+
+
+
+            }
+          
+            return Ok();
         }
+        //[Authorize]
+        //[Route("getKlalitHistoris")]
+        //[HttpGet]
+
+        //public IHttpActionResult GetKlalitHistoris(int FarmId , string startDate = null, string endDate = null,int? type=null,int? klalitId = null)
+        //{
+        //    return Ok(FarmsService.GetKlalitHistoris(FarmId, startDate, endDate,type,klalitId));
+        //}
+
+
+        //[Authorize]
+        //[Route("setKlalitHistoris")]
+        //[HttpPost]
+
+        //public IHttpActionResult SetKlalitHistoris(KlalitHistoris kh)
+        //{
+        //    return Ok(FarmsService.SetKlalitHistoris(kh));
+        //}
 
 
     }

@@ -270,6 +270,7 @@
     <Compile Include="Controllers\UsersController.cs" />
     <Compile Include="DataModels\Banks.cs" />
     <Compile Include="DataModels\BanksBrunchs.cs" />
+    <Compile Include="DataModels\Fields.cs" />
     <Compile Include="DataModels\Farm.cs" />
     <Compile Include="DataModels\FarmInstructors.cs" />
     <Compile Include="DataModels\FarmManager.cs" />

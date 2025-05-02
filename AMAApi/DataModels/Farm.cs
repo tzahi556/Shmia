@@ -32,5 +32,21 @@ namespace FarmsApi.DataModels
 
     }
 
-   
+
+
+    public class FarmPDFFiles
+    {
+        public int Id { get; set; }
+        public int FarmId { get; set; }
+        public string FileName { get; set; }
+        public int Seq { get; set; }
+        public int StatusId { get; set; }
+
+        public bool Is101 { get; set; }
+
+        [NotMapped]
+        public string FullLink { get; set; }
+
+    }
+
 }

@@ -479,11 +479,11 @@
             url: '/farmmanager/',
             views: {
                 'main': {
-                    template: '<farmmanager farmmanager="$ctrl.farmmanager" farm="$ctrl.farm"></farmmanager>',
-                    controller: function (farmmanager,farm) {
+                    template: '<farmmanager farmmanager="$ctrl.farmmanager" farm="$ctrl.farm" farmspdffiles="$ctrl.farmspdffiles"></farmmanager>',
+                    controller: function (farmmanager, farm, farmspdffiles) {
                         this.farm = farm;
                         this.farmmanager = farmmanager;
-                        
+                        this.farmspdffiles = farmspdffiles;
                         //this.horses = horses;
                         //this.horsegroups = horsegroups;
                         //this.horsegroupshorses = horsegroupshorses;
@@ -499,8 +499,12 @@
                         farm: function (farmsService, $stateParams) {
                             
                             return farmsService.getFarm(localStorage.getItem('FarmId'));
-                        }
+                        },
+                        farmspdffiles: function (farmsService) {
+                           
 
+                            return farmsService.getFarmPDFFiles(localStorage.getItem('FarmId'));
+                        }
                         //,
                       
                         //horses: function (horsesService) {
@@ -627,8 +631,6 @@
             }
         }
     });
-
-
 
     app.config(function ($httpProvider) {
         $httpProvider.interceptors.push('authInterceptorService');

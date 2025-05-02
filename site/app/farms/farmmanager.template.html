@@ -3,595 +3,930 @@
 
 
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.14.1/themes/base/jquery-ui.css">
-    
-    <style>
-       
 
-        #sortable {
+    <style>
+
+
+            /*#sortable {
             list-style-type: none;
             margin: 0;
             padding: 0;
-
-           
         }
 
-            #sortable li {
-                cursor:pointer;
-                background:white;
-                margin: 3px 3px 3px 0;
-                padding: 1px;
-                float: left;
-                width: 100px;
-                height: 90px;
+            #sortable li:not(.onlyPlus) {
+                cursor: pointer;
+                background: white;
+                margin: 15px;*/ /* 3px 3px 3px 0;*/
+                /*padding: 1px;
+                float: right;
+                width: 150px;
+                height: 150px;
                 font-size: 4em;
                 text-align: center;
-               
             }
 
-                #sortable li:hover {
-                    background: #e5e7eb;
-                }
+            #sortable li:hover:not(.onlyPlus) {
+                background: #e5e7eb;
+            }*/
+
+
+        .dvSeq:not(.onlyPlus) {
+            cursor: pointer;
+            background: white;
+            margin: 15px; /* 3px 3px 3px 0;*/
+            padding: 1px;
+            float: right;
+         
+            font-size: 4em;
+            text-align: center;
+            width: 150px;
+            height: 250px;
+        }
+
+        .dvSeq:hover:not(.onlyPlus) {
+            background: #e5e7eb;
+        }
+
+        .onlyPlus {
+            margin: 15px;
+            width: 150px;
+            height: 250px;
+            float: left;
+            background-image: url(../../images/Plusigul.png);
+            background-repeat: no-repeat;
+            background-position: right 50% top 50%;
+        }
+
+        .dvAddPdf {
+            cursor: pointer;
+            background: white;
+            margin: 3px 3px 3px 0;
+            padding: 1px;
+            float: right;
+            width: 150px;
+            height: 250px;
+            /*font-size: 4em;*/
+            text-align: center;
+            margin: 15px;
+            background-image: url(../../images/plus.png);
+            background-repeat: no-repeat;
+            background-position: right 50% top 30%;
+            padding-top: 130px;
+            opacity: 0.8;
+            font-weight: bold;
+            border-style: dashed;
+            border-width: 1px;
+            --tw-border-opacity: 1;
+            border-color: rgb(29 29 29/var(--tw-border-opacity));
+            border-radius: .5rem;
+        }
+
+        .dvAddPdf:hover {
+                background: #e5e7eb;
+                background-position: right 50% top 30%;
+                background-image: url(../../images/plus.png);
+                background-repeat: no-repeat;
+                padding-top: 130px;
+                border-style: dashed;
+                border-width: 1px;
+                --tw-border-opacity: 1;
+                border-color: rgb(29 29 29/var(--tw-border-opacity));
+                border-radius: .5rem;
+            }
 
         .btnAddPdf {
             background-image: url(../../images/Pdf.ico);
             background-repeat: no-repeat;
             background-position: left;
-            padding-left:35px;
+            padding-left: 35px;
+            margin: 15px; /* 3px 3px 3px 0;*/
+            
+        }
+
+        .hideUploadnew {
+            cursor: pointer;
+            opacity: 0;
+            position: relative;
+            top: -170px;
+            height: 250px;
+            width: 150px;
+        }
+
+        .portlet-placeholder {
+            margin: 15px;
+            float: right;
+            width: 150px;
+            height: 250px;
+            border: 2px dashed #3283a8;
+            /*  margin: 0 1em 1em 0;
+            height: 50px;*/
+        }
+
+        .ui-widget-header {
+           display:none;
+        }
+
+
+        #panelBody{
+
+            overflow:hidden;
+            height:500px;
+
+        }
+    </style>
+
+
+    <style>
+
+        #canvasEdit {
+            border-style: dashed;
+            border-width: 2px;
+            --tw-border-opacity: 1;
+            border-color: #337ab7;
+            border-radius: .7rem;
+            direction: ltr !important;
+            box-shadow: 10px 10px 5px lightblue;
+        }
+
+        .page-item {
+            cursor: pointer;
+        }
+
+        .pager li > a, .pager li > span{
+
+            background:none !important;
+
+        }
+
+        
+
+
+        .pager {
+            position: absolute;
+            top: -50px;
+            left: 60%;
+        }
+
+        .spCurPage {
+            font-size: 45px;
+            font-weight: bold;
+            border: 0 !important;
+            text-align: right;
+            padding: 2px !important;
+            padding-left: 12px !important;
+        }
+
+        .spCurTotalPage {
+            padding: 2px !important;
+            font-size: 25px;
+            border: 0 !important;
+            padding-right: 12px !important;
+        }
+
+        .pager li > a, .pager li > span {
+            cursor: pointer;
+        }
+
+
+
+
+        .navButton {
+            display: inline-block;
+            padding: 5px 14px;
+            background-color: #fff;
+            border: 1px solid #337ab7;
+            border-radius: 15px;
+            cursor: pointer;
+            float: right;
+            color: #337ab7;
+        }
+
+        .spMikra {
+            color: #337ab7;
+            margin-top: -25px;
+            float: right;
+        }
+
+        .panelFields {
+            cursor: move;
+        }
+        .panelFields {
+            z-index: 9999;
+        }
+
+        .borderSelectBlue {
+            border: 1px solid #337ab7;
+        }
+
+        .askIcon {
+            float: left;
+            cursor: pointer;
+
+
+        }
+
+        .imgAsk {
+            filter: brightness(0) invert(1);
            
-            }
+        }
 
 
     </style>
-    <!--<script src="https://code.jquery.com/jquery-3.7.1.js"></script>
-    <script src="https://code.jquery.com/ui/1.14.1/jquery-ui.js"></script>-->
-    <script>
-        $(function () {
-            $("#sortable").sortable();
-            $("#sortable").disableSelection();
-        });
-    </script>
 
+
+    <script>
+
+
+        var PdfList = [];
+
+        function RefreshPage() {
+
+            PdfList = [];
+          
+
+            $(".dvSeq").each(function (item) {
+
+
+                var Id = $(this).attr("Id").replace("dv_", "");
+                var FileName = $(this).attr("pdfname");
+                var FullLink = $(this).attr("pdffulllink");
+                var Is101 = $(this).attr("is101");
+
+                var JsonObj = { "Id": Id, "FileName": FileName, "FullLink": FullLink, "Is101": Is101};
+
+                PdfList.push(JsonObj);
+               
+                CallPdfJs("Canvas_" + Id, 150, 250, FullLink);
+              
+
+
+
+            });
+
+            $(".dvSeq").click(function () {
+                var FullLink = $(this).attr("pdffulllink");
+
+
+                $("#objPdf").attr('data', FullLink).hide().show();
+
+
+                $("#dialogContainer").dialog({
+                    modal: true, height: 590, width: 1005,
+                });
+            });
+
+            $("#panelClose").click(function () {
+
+                $("#dialogContainer").dialog('destroy');
+                /* $("#dialogContainer").dialog("close");*/
+            });
+
+            $(".btn-del").click(function (e) {
+
+                e.stopPropagation();
+                //alert($(this).attr("id"));
+
+                var Id = $(this).attr("Id").replace("dvDel_", "");
+
+
+                angular.element(document.getElementById('mainControllerHorse')).scope().makeDropPdf(Id);
+
+            });
+
+        }
+
+
+        $(function () {
+            $("#sortable").sortable({
+                items: ".ui-state-default",
+                placeholder: "portlet-placeholder ui-corner-all",
+                stop: function (event, ui) {
+                    
+                  
+                    var idsInOrder = $("#sortable").sortable("toArray");
+                    for (i in idsInOrder) {
+                        
+                        idsInOrder[i] = idsInOrder[i].replace("dv_","");
+
+                    }
+                    angular.element(document.getElementById('mainControllerHorse')).scope().sendNewOrderPdfs(idsInOrder);
+
+                }
+            });
+
+            $("#sortable").disableSelection();
+
+            RefreshPage();
+
+            BuildEditPDF();
+
+            $(".panelFields").draggable();
+           
+            // for dev
+            $("#ddlFiles").val("number:39");
+            $('#ddlFiles').trigger("change");
+        });
+
+        function BuildEditPDF() {
+
+            $("#ddlFiles").on("change", function () {
+
+
+                var PdfId = $(this).val().replace("number:", "");
+
+                var CurrentFilePDF = PdfList.filter(x => x.Id == PdfId)
+
+                if (CurrentFilePDF.length > 0) {
+
+                   
+                    CallEditPdfJs("canvasEdit", CurrentFilePDF[0].FullLink);
+                   
+
+                } else {
+
+                    $("#canvasContainer div").not('#canvasEdit').remove();
+
+                }
+
+                //alert($(this).val());
+
+
+            });
+
+
+            $("#liPrev").click(function () {
+
+                changePage(-1);
+            });
+
+            $("#liNext").click(function () {
+
+                changePage(1);
+            });
+        }
+
+
+    </script>
 
     <uib-tabset active="active" class="tab-form-demo" ng-show="!$ctrl.IsPopUp">
 
 
+            <uib-tab index="5" heading="עריכת PDF">
 
-        <uib-tab index="1" heading="הוספת קבצים">
+                <div class="col-md-6" >
 
-            <div class="col-md-12">
-                <div class="panel panel-primary">
-                    <div class="panel-heading">
-                        הוספת קבצים לשליחה
+
+                    <div class="col-md-12" style="">
+                        <div class="col-md-6">
+                            <div class="panel panel-primary panelFields" style="">
+                                <div class="panel-heading">
+                                    שדות קיימים במערכת
+                                    <span></span>
+                                </div>
+                                <div class="panel-body">
+
+                                    <div class="row">
+                                        <div class="col-md-8">
+
+                                            <input type="text" class="form-control" ng-model="$ctrl.filter.Name" placeholder="שם שדה" />
+
+                                        </div>
+                                        <div class="col-md-4">
+                                            <button style="" class="btn btn-success" ng-click="$ctrl.actionHorsesGroup(1)">הוסף שדה</button>
+                                        </div>
+
+                                    </div>
+
+
+                                    <!--<button style="margin:2px" id="{{horse.Id}}" draggable="true"
+            ondragover="allowDrop(event)"
+            ondragstart="dragStart(event)"
+            ng-repeat="horse in $ctrl.getFreeHorses() | filter:$ctrl.filter"
+            class="fc-draggable dvDragElement  btn btn-info">
+        {{horse.Name}} <span style="color:blue;font-weight:bold">({{(horse.ShoeingTimeZone)?horse.ShoeingTimeZone:7}})</span>
+    </button>-->
+
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="col-md-6">
+                            <div class="panel panel-primary panelFields" style="">
+                                <div class="panel-heading">
+                                    <div style="float:right">קבוצות שדות טופס</div>
+                                    <div class="askIcon">
+                                        <img src="../../images/ask.png" class="imgAsk" />
+                                    </div>
+                                    <div>&nbsp;</div>
+
+                                </div>
+                                <div class="panel-body">
+                                   
+                                    
+                                    <div class="row">
+                                        <div class="col-md-8">
+
+                                            <input type="text" class="form-control" ng-model="$ctrl.filter.Name" placeholder="שם קבוצה" />
+
+                                        </div>
+                                        <div class="col-md-4">
+                                            <button style="" class="btn btn-success" ng-click="$ctrl.actionHorsesGroup(1)">הוסף קבוצה</button>
+                                        </div>
+
+                                    
+                                       
+                                    </div>
+                                    </div>
+                            </div>
+                        </div>
+
 
                     </div>
-                    <div class="panel-body">
 
-                        <div class="col-md-2">
-                            <button id="btnAddPdf" class="btnAddPdf btn btn-default">
-                                הוספת קובץ PDF
-                            </button>
-                            <input type="file" accept="images/*" name="avatar" class="hideUpload" filename="" folder="'Companies_Logo'" workerid="$ctrl.farm.Id" filename-callback="$ctrl.uploadFile">
 
+                       
+                    </div>
+
+                <div class="col-md-6">
+
+                   
+
+                            <div class="col-md-4">
+                                <select id="ddlFiles" class="form-control borderSelectBlue" ng-model="$ctrl.fileId" ng-options="farmspdffile.Id as farmspdffile.FileName for farmspdffile in $ctrl.farmspdffiles | filter:{Is101:false}">
+                                    <option value="">בחירת קובץ</option>
+                                </select>
+                            </div>
+
+
+
+                            <div class="col-md-4">
+
+
+                                <div id="liNext" class="navButton">
+                                    <span>«</span>
+                                </div>
+                                <div class="spMikra">
+
+                                    <span id="spCurPage" class="spCurPage">0</span>/<span id="spCurTotalPage" class="spCurTotalPage">0</span>
+
+                                </div>
+                                <div id="liPrev" class="navButton">
+                                    <span>&raquo;</span>
+                                </div>
+
+
+                            </div>
+
+
+                            <div class="col-md-4">
+                                <span id="spxx"></span> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span id="spyy"></span>
+                                <br />
+                                <span id="spx"></span> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span id="spy"></span>
+                            </div>
+
+
+                            <div class="col-md-12">
+                                <div id="canvasContainer" style="width:fit-content">
+
+                                    <canvas id="canvasEdit">
+                                    </canvas>
+
+                                </div>
+                            </div>
+                        </div>
+                    
+
+            </uib-tab>
+
+            <!--פרטי חברה-->
+            <uib-tab index="0" heading="פרטי חברה">
+
+
+                <div class="col-md-12">
+                    <div class="panel panel-primary">
+                        <div class="panel-heading">
+                            פרטי חברה
 
                         </div>
-                        <div class="col-md-2">
-                            <button class="btnAddPdf btn btn-info">הוספת קובץ 101</button>
+                        <div class="panel-body">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label>מזהה</label>
+                                    <input type="number" disabled class="form-control" ng-model="$ctrl.farm.Id" />
+                                </div>
+                                <div class="form-group">
+                                    <label>שם</label>
+                                    <input type="text" name="name" class="form-control" ng-model="$ctrl.farm.Name" required />
+                                </div>
+                                <div class="form-group">
+                                    <label>כתובת</label>
+                                    <input type="text" class="form-control" ng-model="$ctrl.farm.Address" />
+                                </div>
+                                <div class="form-group">
+                                    <label>ח.פ</label>
+                                    <input type="text" class="form-control" ng-model="$ctrl.farm.IdNumber" required />
+                                </div>
 
-                            <input type="file" accept="images/*" name="avatar" class="hideUpload" filename="" folder="'Companies_Logo'" workerid="$ctrl.farm.Id" filename-callback="$ctrl.uploadFile">
 
-                        </div>
+                                <div class="form-group">
+                                    <label>תיק ניכויים</label>
+                                    <input type="text" class="form-control" ng-model="$ctrl.farm.TikNikuim" />
+                                </div>
 
-                        <div class="col-md-12">
-                            <ul id="sortable">
-                                <li class="ui-state-default" onclick="alert();">1</li>
-                                <li class="">+</li>
-                                <li class="ui-state-default">
-                                    2
+                                <div class="form-group">
+                                    <label>שיטת הצגה נתונים לעובד/ת</label>
+                                    <select class="form-control" ng-model="$ctrl.farm.Style">
+                                        <option value="0">הצגה רגילה</option>
+                                        <option value="1">הצגת חתימה בלבד</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+
+
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label>טלפון משרד</label>
+                                        <input type="text" name="name" class="form-control" ng-model="$ctrl.farm.OfficeNumber" />
+                                    </div>
+
+                                </div>
+
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>מייל משרד</label>
+                                        <input type="text" name="name" class="form-control" ng-model="$ctrl.farm.OfficeMail" />
+
+                                    </div>
+
+
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label><br /><input type="checkbox" ng-model="$ctrl.farm.OfficeIsMail" />  האם לשלוח מייל  </label>
+
+                                </div>
+
+                                <!--<div class="col-md-12">
+
+                                <div class="form-group"><br />
+
                                     <br />
-                                    <input type="file" accept="images/*" name="avatar" class="form-control" filename="" folder="'Companies_Logo'" workerid="$ctrl.farm.Id" filename-callback="$ctrl.uploadFile">
+                                    <hr />
+                                </div>
+
+                            </div>-->
+                                <div class="col-md-12">
+
+                                    <div class="form-group">
+                                        <label>שם איש קשר</label>
+                                        <input type="text" name="name" class="form-control" ng-model="$ctrl.farm.ContactName" />
+                                    </div>
+                                </div>
+
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label>טלפון איש קשר</label>
+                                        <input type="text" name="name" class="form-control" ng-model="$ctrl.farm.ContactNumber" />
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>מייל איש קשר</label>
+                                        <input type="text" name="name" class="form-control" ng-model="$ctrl.farm.ContactMail" />
+                                    </div>
+
+                                </div>
+
+                                <div class="col-md-6">
+
+                                    <label><br /><input type="checkbox" ng-model="$ctrl.farm.ContactIsMail" />  האם לשלוח מייל  </label>
+
+                                </div>
 
 
-                                </li>
-                                <li class="ui-state-default">3</li>
-                                <li class="ui-state-default">4</li>
-                                <li class="ui-state-default">5</li>
-                                <li class="ui-state-default">6</li>
-                                <li class="ui-state-default">7</li>
-                                <li class="ui-state-default">8</li>
-                                <li class="ui-state-default">9</li>
-                                <li class="ui-state-default">10</li>
-                                <li class="ui-state-default">11</li>
-                                <li class="ui-state-default">12</li>
-                            </ul>
+
+
+
+
+
+
+
+
+
+                            </div>
+
+                            <div class="col-md-4">
+
+                                <div class="col-md-12 logoTitle">
+
+                                    <label>לוגו חברה</label>
+
+
+
+                                </div>
+
+                                <div class="col-md-12">
+
+                                    <div class="bg-dark">
+
+                                        <div id="AvatarFileUpload">
+                                            <!-- Image Preview Wrapper -->
+                                            <div class="selected-image-holder">
+                                                <img ng-src="{{$ctrl.farm.Logo}}" />
+                                                <!--<img src="../../images/default-avatar.png" alt="AvatarInput">-->
+                                            </div>
+                                            <!-- Image Preview Wrapper -->
+                                            <!-- Browse Image to Upload Wrapper -->
+                                            <div class="avatar-selector">
+                                                <span class="avatar-selector-btn">
+                                                    <img src="../../images/camera.svg" alt="cam">
+
+                                                </span>
+
+                                                <span class="avatar-selector-btn-del">
+                                                    <img src="../../images/delete3.png" ng-click="$ctrl.deleteLogo(1)" alt="cam">
+                                                </span>
+
+                                                <input type="file" accept="image/*" name="avatar" class="form-control" filename="" folder="'Companies_Logo'" workerid="$ctrl.farm.Id" filename-callback="$ctrl.uploadFile">
+
+
+                                            </div>
+                                            <!-- Browse Image to Upload Wrapper -->
+                                        </div>
+
+                                    </div>
+                                </div>
+
+
+                                <div class="col-md-12 logoTitle">
+
+                                    <label>חותמת חברה</label>
+
+                                </div>
+                                <div class="col-md-12">
+
+                                    <div class="">
+
+                                        <div id="AvatarFileUploadSign">
+                                            <!-- Image Preview Wrapper -->
+                                            <div class="selected-image-holder">
+                                                <img ng-src="{{$ctrl.farm.Sign}}" />
+                                                <!--<img src="../../images/default-avatar.png" alt="AvatarInput">-->
+                                            </div>
+                                            <!-- Image Preview Wrapper -->
+                                            <!-- Browse Image to Upload Wrapper -->
+                                            <div class="avatar-selector">
+                                                <span class="avatar-selector-btn">
+                                                    <img src="../../images/camera.svg" alt="cam">
+
+                                                </span>
+
+                                                <span class="avatar-selector-btn-del">
+                                                    <img src="../../images/delete3.png" ng-click="$ctrl.deleteLogo(2)" alt="cam">
+                                                </span>
+
+                                                <input type="file" accept="image/*" name="avatar" class="form-control" filename="" folder="'Companies_Sign'" workerid="$ctrl.farm.Id" filename-callback="$ctrl.uploadFile">
+
+
+                                            </div>
+                                            <!-- Browse Image to Upload Wrapper -->
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                            </div>
+
+
+
 
                         </div>
+                        <div class="panel-footer colAlignLeft">
+
+                            <button class="btn btn-primary" ng-click="$ctrl.SaveData(1)">שמירת נתונים</button>
+                        </div>
+                    </div>
+                </div>
+
+            </uib-tab>
+
+            <!--הוספת קבצים-->
+            <uib-tab index="1" heading="הוספת קבצים">
+
+                <div class="col-md-12">
+                    <div class="panel panel-primary">
+                        <div class="panel-heading">
+                            הוספת קבצים לשליחה
+
+                        </div>
+                        <div class="panel-body">
+
+
+                            <div class="col-md-2">
+                                <button class="btnAddPdf btn btn-default" ng-click="$ctrl.SaveData(2)">הוספת קובץ 101</button>
+
+                                <!--<input type="file" accept="application/pdf" name="avatar" class="hideUpload" filename="" folder="'PDFS_101'" workerid="$ctrl.farm.Id" filename-callback="$ctrl.uploadFile">-->
+
+                            </div>
+
+                            <div class="col-md-12">
+
+                                <div id="sortable">
+
+
+                                    <div id="dv_{{farmspdffile.Id}}" ng-repeat="farmspdffile in $ctrl.farmspdffiles"
+                                            is101={{farmspdffile.Is101}}
+                                            pdfname="{{farmspdffile.FileName}}"
+                                            pdffulllink="{{farmspdffile.FullLink}}"
+                                            farmid="{{farmspdffile.FarmId}}"
+                                            class="ui-state-default dvSeq">
+
+
+
+                                        <canvas id="Canvas_{{farmspdffile.Id}}">
+                                        </canvas>
+
+                                        <div id="dvDel_{{farmspdffile.Id}}" class="btn-del">
+
+                                        </div>
+                                    </div>
+
+
+                                </div>
+                                <div class="dvAddPdf">
+                                    <!--<button id="btnAddPdf" class="btnAddPdf btn btn-default">-->
+                                    הוספת קובץ <br />
+                                    PDF
+
+                                    <input type="file" accept="application/pdf" name="avatar" class="hideUploadnew" filename="" folder="'Companies_PDFS_ALL'" workerid="$ctrl.farm.Id" filename-callback="$ctrl.uploadFilePdf">
+
+
+                                </div>
+
+                            </div>
+
+
+
                         </div>
                         <div class="panel-footer">
                             <label>במסך זה ניתן להגדיר את קבצי הPDF שישלחו לעובד. </label>
 
                         </div>
                     </div>
-            </div>
-
-        </uib-tab>
-
-
-        <!---->
-        <uib-tab index="0" heading="פרטי חברה">
-
-
-            <div class="col-md-12">
-                <div class="panel panel-primary">
-                    <div class="panel-heading">
-                        פרטי חברה
-
-                    </div>
-                    <div class="panel-body">
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <label>מזהה</label>
-                                <input type="number" disabled class="form-control" ng-model="$ctrl.farm.Id" />
-                            </div>
-                            <div class="form-group">
-                                <label>שם</label>
-                                <input type="text" name="name" class="form-control" ng-model="$ctrl.farm.Name" required />
-                            </div>
-                            <div class="form-group">
-                                <label>כתובת</label>
-                                <input type="text" class="form-control" ng-model="$ctrl.farm.Address" />
-                            </div>
-                            <div class="form-group">
-                                <label>ח.פ</label>
-                                <input type="text" class="form-control" ng-model="$ctrl.farm.IdNumber" required />
-                            </div>
-
-
-                            <div class="form-group">
-                                <label>תיק ניכויים</label>
-                                <input type="text" class="form-control" ng-model="$ctrl.farm.TikNikuim" />
-                            </div>
-
-                            <div class="form-group">
-                                <label>שיטת הצגה נתונים לעובד/ת</label>
-                                <select class="form-control" ng-model="$ctrl.farm.Style">
-                                    <option value="0">הצגה רגילה</option>
-                                    <option value="1">הצגת חתימה בלבד</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-
-
-                            <div class="col-md-12">
-                                <div class="form-group">
-                                    <label>טלפון משרד</label>
-                                    <input type="text" name="name" class="form-control" ng-model="$ctrl.farm.OfficeNumber" />
-                                </div>
-
-                            </div>
-
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label>מייל משרד</label>
-                                    <input type="text" name="name" class="form-control" ng-model="$ctrl.farm.OfficeMail" />
-
-                                </div>
-
-
-                            </div>
-
-                            <div class="col-md-6">
-                                <label><br /><input type="checkbox" ng-model="$ctrl.farm.OfficeIsMail" />  האם לשלוח מייל  </label>
-
-                            </div>
-
-                            <!--<div class="col-md-12">
-
-                                <div class="form-group"><br />
-
-                                   <br />
-                                    <hr />
-                                </div>
-
-                            </div>-->
-                            <div class="col-md-12">
-
-                                <div class="form-group">
-                                    <label>שם איש קשר</label>
-                                    <input type="text" name="name" class="form-control" ng-model="$ctrl.farm.ContactName" />
-                                </div>
-                            </div>
-
-                            <div class="col-md-12">
-                                <div class="form-group">
-                                    <label>טלפון איש קשר</label>
-                                    <input type="text" name="name" class="form-control" ng-model="$ctrl.farm.ContactNumber" />
-                                </div>
-                            </div>
-
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label>מייל איש קשר</label>
-                                    <input type="text" name="name" class="form-control" ng-model="$ctrl.farm.ContactMail" />
-                                </div>
-
-                            </div>
-
-                            <div class="col-md-6">
-
-                                <label><br /><input type="checkbox" ng-model="$ctrl.farm.ContactIsMail" />  האם לשלוח מייל  </label>
-
-                            </div>
-
-
-
-
-
-
-
-
-
-
-
-                        </div>
-
-                        <div class="col-md-4">
-
-                            <div class="col-md-12 logoTitle">
-
-                                <label>לוגו חברה</label>
-
-
-
-                            </div>
-
-                            <div class="col-md-12">
-
-                                <div class="bg-dark">
-
-                                    <div id="AvatarFileUpload">
-                                        <!-- Image Preview Wrapper -->
-                                        <div class="selected-image-holder">
-                                            <img ng-src="{{$ctrl.farm.Logo}}" />
-                                            <!--<img src="../../images/default-avatar.png" alt="AvatarInput">-->
-                                        </div>
-                                        <!-- Image Preview Wrapper -->
-                                        <!-- Browse Image to Upload Wrapper -->
-                                        <div class="avatar-selector">
-                                            <span class="avatar-selector-btn">
-                                                <img src="../../images/camera.svg" alt="cam">
-
-                                            </span>
-
-                                            <span class="avatar-selector-btn-del">
-                                                <img src="../../images/_notArrive.png" ng-click="$ctrl.deleteLogo(1)" alt="cam">
-                                            </span>
-
-                                            <input type="file" accept="images/*" name="avatar" class="form-control" filename="" folder="'Companies_Logo'" workerid="$ctrl.farm.Id" filename-callback="$ctrl.uploadFile">
-
-
-                                        </div>
-                                        <!-- Browse Image to Upload Wrapper -->
-                                    </div>
-
-                                </div>
-                            </div>
-
-
-                            <div class="col-md-12 logoTitle">
-
-                                <label>חותמת חברה</label>
-
-                            </div>
-                            <div class="col-md-12">
-
-                                <div class="">
-
-                                    <div id="AvatarFileUploadSign">
-                                        <!-- Image Preview Wrapper -->
-                                        <div class="selected-image-holder">
-                                            <img ng-src="{{$ctrl.farm.Sign}}" />
-                                            <!--<img src="../../images/default-avatar.png" alt="AvatarInput">-->
-                                        </div>
-                                        <!-- Image Preview Wrapper -->
-                                        <!-- Browse Image to Upload Wrapper -->
-                                        <div class="avatar-selector">
-                                            <span class="avatar-selector-btn">
-                                                <img src="../../images/camera.svg" alt="cam">
-
-                                            </span>
-
-                                            <span class="avatar-selector-btn-del">
-                                                <img src="../../images/_notArrive.png" ng-click="$ctrl.deleteLogo(2)" alt="cam">
-                                            </span>
-
-                                            <input type="file" accept="images/*" name="avatar" class="form-control" filename="" folder="'Companies_Sign'" workerid="$ctrl.farm.Id" filename-callback="$ctrl.uploadFile">
-
-
-                                        </div>
-                                        <!-- Browse Image to Upload Wrapper -->
-                                    </div>
-
-                                </div>
-                            </div>
-
-                        </div>
-
-
-
-
-                    </div>
-                    <div class="panel-footer colAlignLeft">
-
-                        <button class="btn btn-primary" ng-click="$ctrl.SaveData(1)">שמירת נתונים</button>
-                    </div>
-                </div>
-            </div>
-
-        </uib-tab>
-
-
-
-
-
-        <uib-tab index="2" heading="קבוצות פירזולים">
-
-            <script>
-
-
-                var currentHorseId = "";
-                function dragStart(event) {
-                    //  $(".hadPeami").hide();
-
-                    currentHorseId = event.target.id;
-
-
-
-                }
-
-                function allowDrop(event) {
-                    event.preventDefault();
-                }
-
-                function drop(event) {
-                    var currentGroupeId = event.target.id;
-
-                    // debugger
-                    angular.element(document.getElementById('mainControllerHorse')).scope().makeDropHorse(event, currentHorseId, currentGroupeId);
-                    currentHorseId = "";
-
-                }
-
-
-
-            </script>
-            <div class="col-md-12">
-                <div id="mainControllerHorse"></div>
-                <div class="col-md-2" style="text-align:left">
-                    <label> שם קבוצה חדשה:</label>
-                </div>
-                <div class="col-md-3">
-                    <input type="text" class="form-control" ng-model="$ctrl.newGroup" />
-
-                </div>
-                <div class="col-md-2">
-                    <button style="" class="btn  btn-success" ng-click="$ctrl.actionHorsesGroup(1)">הוסף קבוצה</button>
-                </div>
-                <br /> <br /> <br />
-            </div>
-            <div class="col-md-4">
-                <div class="panel panel-primary">
-                    <div class="panel-heading">
-                        סוסים בחווה -
-                        <span>(גרור את הסוס הרצוי לקבוצה המבוקשת)</span>
-                    </div>
-                    <div class="panel-body" id="dvAllHorses" ondrop="drop(event)" ondragover="allowDrop(event)">
-                        <div> <input type="text" class="form-control" ng-model="$ctrl.filter.Name" placeholder="שם סוס" /></div>
-                        <button style="margin:2px" id="{{horse.Id}}" draggable="true"
-                                ondragover="allowDrop(event)"
-                                ondragstart="dragStart(event)"
-                                ng-repeat="horse in $ctrl.getFreeHorses() | filter:$ctrl.filter"
-                                class="fc-draggable dvDragElement  btn btn-info">
-                            {{horse.Name}} <span style="color:blue;font-weight:bold">({{(horse.ShoeingTimeZone)?horse.ShoeingTimeZone:7}})</span>
-                        </button>
-
-                    </div>
                 </div>
 
-            </div>
 
-            <div ng-repeat="horsegroup in $ctrl.horsegroups">
-
-                <div class="col-md-2">
-                    <div class="panel panel-info">
+                <div id="dialogContainer" style="display:none">
+                    <div class="panel panel-primary">
                         <div class="panel-heading">
-                            {{horsegroup.Name}}
-                            <div style="float:left">  <button style="" class="btn btn-xs btn-danger" ng-click="$ctrl.actionHorsesGroup(2,horsegroup)">הסר</button></div>
+                            תצוגת קובץ PDF
+
+                            <div style="float:left;cursor:pointer" id="panelClose">
+                                <img src="../../images/_notArrive.png" width="24px" />
+                            </div>
+
                         </div>
-                        <div class="panel-body" id="{{horsegroup.Id}}" ondrop="drop(event)" ondragover="allowDrop(event)">
-                            <button style="margin:2px"
-                                    ng-repeat="horse in $ctrl.getHorsesGroup(horsegroup.Id)" ng-click="$ctrl.actionHorsesGroup(3,horse.HorseId)" class="col-md-12 btn btn-info">
-                                {{horse.Name}}<span style="color:blue;font-weight:bold">({{(horse.ShoeingTimeZone)?horse.ShoeingTimeZone:7}})</span>
+                        <div class="panel-body" id="panelBody">
+                            <div id="divContainer"
+                                    style="border:2px solid black;height:100%;overflow:auto;">
+                                <object id="objPdf" data=""
+                                        type="application/pdf"
+                                        width="100%"
+                                        height="99%" style="">
+                                </object>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </uib-tab>
+
+
+            <uib-tab index="2" heading="קבוצות פירזולים">
+
+                <script>
+
+
+                    var currentHorseId = "";
+                    function dragStart(event) {
+                        //  $(".hadPeami").hide();
+
+                        currentHorseId = event.target.id;
+
+
+
+                    }
+
+                    function allowDrop(event) {
+                        event.preventDefault();
+                    }
+
+                    function drop(event) {
+                        var currentGroupeId = event.target.id;
+
+                        // debugger
+                        angular.element(document.getElementById('mainControllerHorse')).scope().makeDropHorse(event, currentHorseId, currentGroupeId);
+                        currentHorseId = "";
+
+                    }
+
+
+
+                </script>
+                <div class="col-md-12">
+                    <div id="mainControllerHorse"></div>
+                    <div class="col-md-2" style="text-align:left">
+                        <label> שם קבוצה חדשה:</label>
+                    </div>
+                    <div class="col-md-3">
+                        <input type="text" class="form-control" ng-model="$ctrl.newGroup" />
+
+                    </div>
+                    <div class="col-md-2">
+                        <button style="" class="btn  btn-success" ng-click="$ctrl.actionHorsesGroup(1)">הוסף קבוצה</button>
+                    </div>
+                    <br /> <br /> <br />
+                </div>
+                <div class="col-md-4">
+                    <div class="panel panel-primary">
+                        <div class="panel-heading">
+                            סוסים בחווה -
+                            <span>(גרור את הסוס הרצוי לקבוצה המבוקשת)</span>
+                        </div>
+                        <div class="panel-body" id="dvAllHorses" ondrop="drop(event)" ondragover="allowDrop(event)">
+                            <div> <input type="text" class="form-control" ng-model="$ctrl.filter.Name" placeholder="שם סוס" /></div>
+                            <button style="margin:2px" id="{{horse.Id}}" draggable="true"
+                                    ondragover="allowDrop(event)"
+                                    ondragstart="dragStart(event)"
+                                    ng-repeat="horse in $ctrl.getFreeHorses() | filter:$ctrl.filter"
+                                    class="fc-draggable dvDragElement  btn btn-info">
+                                {{horse.Name}} <span style="color:blue;font-weight:bold">({{(horse.ShoeingTimeZone)?horse.ShoeingTimeZone:7}})</span>
                             </button>
+
                         </div>
                     </div>
 
                 </div>
 
-            </div>
+                <div ng-repeat="horsegroup in $ctrl.horsegroups">
 
-        </uib-tab>
+                    <div class="col-md-2">
+                        <div class="panel panel-info">
+                            <div class="panel-heading">
+                                {{horsegroup.Name}}
+                                <div style="float:left">  <button style="" class="btn btn-xs btn-danger" ng-click="$ctrl.actionHorsesGroup(2,horsegroup)">הסר</button></div>
+                            </div>
+                            <div class="panel-body" id="{{horsegroup.Id}}" ondrop="drop(event)" ondragover="allowDrop(event)">
+                                <button style="margin:2px"
+                                        ng-repeat="horse in $ctrl.getHorsesGroup(horsegroup.Id)" ng-click="$ctrl.actionHorsesGroup(3,horse.HorseId)" class="col-md-12 btn btn-info">
+                                    {{horse.Name}}<span style="color:blue;font-weight:bold">({{(horse.ShoeingTimeZone)?horse.ShoeingTimeZone:7}})</span>
+                                </button>
+                            </div>
+                        </div>
 
-        <uib-tab index="3" heading="הרשאות">
+                    </div>
 
-            <div class="col-md-12" style="">
-                <label style="color:brown">יש לשים לב כי ברגע שתינתן הרשאה למפרזל\וטרינר הוא יוכל לצפות בכל הסוסים שברשותך...</label>
-            </div>
+                </div>
 
-            <div class="col-md-2" style="">
-                <label> שם משתמש מפרזל</label>
-                <input type="text" class="form-control" ng-model="$ctrl.farmmanager.MefarzelUser" />
-            </div>
-            <div class="col-md-2">
-                <label>&nbsp;</label><br />
-                <button style="" class="btn  btn-success" ng-click="$ctrl.SaveData(2)">שמור</button>
-            </div>
+            </uib-tab>
 
+            <uib-tab index="3" heading="הרשאות">
 
-            <div class="col-md-2" style="">
-                <label> שם משתמש וטרינר</label>
-                <input type="text" class="form-control" ng-model="$ctrl.farmmanager.VetrinarUser" />
-            </div>
-            <div class="col-md-2">
-                <label>&nbsp;</label><br />
-                <button style="" class="btn  btn-success" ng-click="$ctrl.SaveData(2)">שמור</button>
-            </div>
+                <div class="col-md-12" style="">
+                    <label style="color:brown">יש לשים לב כי ברגע שתינתן הרשאה למפרזל\וטרינר הוא יוכל לצפות בכל הסוסים שברשותך...</label>
+                </div>
+
+                <div class="col-md-2" style="">
+                    <label> שם משתמש מפרזל</label>
+                    <input type="text" class="form-control" ng-model="$ctrl.farmmanager.MefarzelUser" />
+                </div>
+                <div class="col-md-2">
+                    <label>&nbsp;</label><br />
+                    <button style="" class="btn  btn-success" ng-click="$ctrl.SaveData(2)">שמור</button>
+                </div>
 
 
+                <div class="col-md-2" style="">
+                    <label> שם משתמש וטרינר</label>
+                    <input type="text" class="form-control" ng-model="$ctrl.farmmanager.VetrinarUser" />
+                </div>
+                <div class="col-md-2">
+                    <label>&nbsp;</label><br />
+                    <button style="" class="btn  btn-success" ng-click="$ctrl.SaveData(2)">שמור</button>
+                </div>
 
 
 
-        </uib-tab>
+
+
+            </uib-tab>
+
     </uib-tabset>
 
-    <div class="modal fade" id="modalKlalit" style="z-index:50000" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title" id="myModalLabel">רשימת תלמידים לדיווח כללית</h4>
-                </div>
-                <div class="modal-body">
-
-                    <div class="col-md-12">
-                        <div class="col-md-7">
-                            <input type="text" name="UserName" class="form-control" placeholder="חיפוש תלמיד" ng-model="$ctrl.filter.FirstName" />
-                        </div>
-                        <div class="col-md-3">
-                            <button type="button" class="btn btn-primary" ng-click="$ctrl.setKlalitHistoriPage(2)" data-dismiss="modal">שלח/י דיווח לכללית</button>
-                        </div>
-                        <div class="col-md-2">
-                            <button type="button" class="btn btn-danger" data-dismiss="modal">ביטול </button>
-                        </div>
-                    </div>
-                    <div class="col-md-12">
-                        <table class="table">
-                            <thead>
-
-
-                                <tr>
-
-                                    <th>תאריך שיעור</th>
-                                    <th>ת.ז</th>
-                                    <th>שם תלמיד</th>
-
-
-
-                                </tr>
-                            </thead>
-                            <tbody>
-
-                                <tr ng-repeat="klalit in $ctrl.klalitsBefore  | filter:$ctrl.filter">
-
-
-                                    <td>{{klalit.DateLesson | ildate: 'DD/MM/YYYY'}}</td>
-                                    <td>{{klalit.Taz}}</td>
-                                    <td>{{klalit.FirstName + ' ' + klalit.LastName}}</td>
-
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    <div class="clearfix"></div>
-
-
-
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!--<div class="modal fade" id="modalKlalitSend" style="z-index:50000" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-        <div class="modal-dialog" style="width:700px" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title" id="myModalLabel">סטטוס דיווח</h4>
-                </div>-->
-    <div ng-show="$ctrl.IsPopUp">
-
-
-        <div ng-if="!$ctrl.endMessage" style="font-size:18px;font-weight:bold;text-decoration:underline">
-            <div style="float:right"> אנחנו מתחילים לדווח תביעה על <span>{{$ctrl.klalitsBefore.length}}</span> תלמידים</div>
-
-            <!--<label style="color:brown">נא לא לסגור בעת הדיווח!</label>-->
-            <div style="float:left;"> <button class="btn btn-danger" ng-click="$ctrl.IsStop=true">עצור דיווח!</button><br /></div>
-
-            <br />
-
-            <div class="clearfix"></div>
-
-        </div>
-
-        <div class="col-md-12" ng-if="$ctrl.endMessage" style="color:blue;font-size:18px;text-align:center">
-
-            <label>הדיווח עבר בהצלחה!</label>
-            <br />
-            <img src="../../images/klalit.png" width="40px" /><br />
-            {{$ctrl.currentElement}} / {{$ctrl.klalitsBefore.length}}
-        </div>
-
-        <div style="float:right" ng-if="!$ctrl.endMessage">
-            <table style="font-size:16px;font-weight:bold">
-                <tr>
-
-                    <td>שם תלמיד:&nbsp;</td>
-                    <td>{{$ctrl.returnFirstName + ' ' + $ctrl.returnLastName}}</td>
-
-                </tr>
-                <tr>
-
-                    <td>תאריך שיעור:&nbsp;</td>
-                    <td>{{($ctrl.returnDate) ? ($ctrl.returnDate | ildate: 'DD/MM/YYYY'):''}}</td>
-                </tr>
-
-                <tr>
-
-                    <td>סטטוס:&nbsp;</td>
-                    <td>{{$ctrl.returnStatus}}</td>
-                </tr>
-
-            </table>
-            <div class="clearfix"></div>
-
-        </div>
-
-        <div style="float:left;font-weight:bold;font-size:18px;" ng-if="!$ctrl.endMessage">
-            <br />
-            <img src="../../images/klalit.png" width="40px" />  <br />
-
-
-        </div>
-
-        <div class="clearfix"></div>
-        <div style="float:left;font-weight:bold;font-size:18px;" ng-if="!$ctrl.endMessage">
-            <br />
-
-            {{$ctrl.klalitsBefore.length}} / {{$ctrl.currentElement}}
-        </div>
-
-
-
-
-
-        <div class="clearfix"></div>
-
-
-
-    </div>
-    <!--</div>
-        </div>
-    </div>-->
+   
 
 </form>
 

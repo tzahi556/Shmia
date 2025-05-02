@@ -26,6 +26,10 @@ namespace FarmsApi.DataModels
         public DbSet<Farm> Farms { get; set; }
         public DbSet<FarmManagers> FarmManagers { get; set; }
         public DbSet<FarmInstructors> FarmInstructors { get; set; }
+
+        public DbSet<FarmPDFFiles> FarmPDFFiles { get; set; }
+        
+
         public Context() : base("Farms") {
 
             // this.Configuration.ProxyCreationEnabled = false;

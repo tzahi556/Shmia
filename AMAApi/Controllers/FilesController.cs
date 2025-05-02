@@ -112,7 +112,6 @@ namespace FarmsApi.Controllers
 
             }
 
-
             if (folder.Contains("Companies_Logo"))
             {
                 if (!Directory.Exists(WorkerPath + "/Logo/"))
@@ -121,12 +120,8 @@ namespace FarmsApi.Controllers
 
                 }
 
-                // var rootss = HttpContext.Current.Server.MapPath("~/App_Data/Companies/59/Logo/");
-
                 root = root + "/Logo";
             }
-
-
 
             if (folder.Contains("Companies_Sign"))
             {
@@ -141,6 +136,18 @@ namespace FarmsApi.Controllers
                 root = root + "/PDFS";
             }
 
+            if (folder.Contains("PDFS_ALL"))
+            {
+               
+                if (!Directory.Exists(WorkerPath + "/PDFS/"))
+                {
+                    Directory.CreateDirectory(WorkerPath + "/PDFS/");
+
+                }
+
+
+                root = root + "/PDFS";
+            }
 
             string fileList = "";
             for (int i = 0; i < file.FileData.Count; i++)
@@ -155,6 +162,10 @@ namespace FarmsApi.Controllers
                     dest = root + "/SignatureAmuta.png";
 
                 }
+
+
+               
+
 
 
                 if (File.Exists(dest))
@@ -174,6 +185,40 @@ namespace FarmsApi.Controllers
                 else
                 {
                     fileList += "," + Path.GetFileName(dest);
+                }
+
+                if (folder.Contains("PDFS_ALL"))
+                {
+                    var CurrentFileName = Path.GetFileName(dest);
+
+                    using (var Context = new Context())
+                    {
+                        var FarmPDFFilesList = Context.FarmPDFFiles.Where(x => x.FarmId == workerid).OrderByDescending(x => x.Seq).ToList();
+
+
+                        FarmPDFFiles farmPDFFiles = new FarmPDFFiles();
+                        farmPDFFiles.FarmId = workerid;
+                        farmPDFFiles.StatusId = 1;
+                        farmPDFFiles.FileName = CurrentFileName;
+                        farmPDFFiles.Is101 = false;
+
+                        if (FarmPDFFilesList.Count > 0) 
+                            farmPDFFiles.Seq = FarmPDFFilesList[0].Seq + 1;
+                        else
+                            farmPDFFiles.Seq = 1;
+
+
+                        bool IsExistFileName = FarmPDFFilesList.Any(x => x.FileName == CurrentFileName);
+
+                        if (!IsExistFileName)
+                        {
+
+                            Context.FarmPDFFiles.Add(farmPDFFiles);
+                            Context.SaveChanges();  
+                        }
+
+
+                    }
                 }
 
             }

@@ -7,6 +7,8 @@
     function FarmsService(sharedValues, $http, $q) {
         this.getFarms = _getFarms;
         this.getFarm = _getFarm;
+        this.getFarmPDFFiles = _getFarmPDFFiles
+
         this.updateFarm = _updateFarm;
         this.deleteFarm = _deleteFarm;
         this.getMangerFarm = _getMangerFarm;
@@ -18,7 +20,7 @@
         this.getKlalitHistoris = _getKlalitHistoris;
         this.setKlalitHistoris = _setKlalitHistoris;
 
-
+        this.updateFarmsPdfFiles = _updateFarmsPdfFiles;
         function _setKlalitHistoris(klalithistoris) {
 
             
@@ -31,6 +33,22 @@
 
             return deferred.promise;
         }
+
+        function _updateFarmsPdfFiles(type,id,farmspdffiles) {
+
+
+
+            var deferred = $q.defer();
+            $http.post(sharedValues.apiUrl + 'farms/updateFarmsPdfFiles/' + type + "/" + id , farmspdffiles).then(function (res) {
+
+                deferred.resolve(res.data);
+            });
+
+            return deferred.promise;
+        }
+
+
+        
 
 
         function _getKlalitHistoris(farmId, startDate, endDate, type, klalitId) {
@@ -104,7 +122,18 @@
         }
 
 
+        function _getFarmPDFFiles(id) {
+            var deferred = $q.defer();
+           
+            $http.get(sharedValues.apiUrl + 'farms/getFarmPDFFiles/' + id).then(function (res) {
 
+                    var farmsfiles = res.data;
+                   
+                   deferred.resolve(farmsfiles);
+             });
+            
+            return deferred.promise;
+        }
 
         function _getFarm(id) {
             var deferred = $q.defer();
