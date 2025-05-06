@@ -15377,5 +15377,24 @@ div#AvatarFileUploadSign > .avatar-selector {
     background-repeat: no-repeat;
     background-size: contain;
 }
-    
 
+
+.colPadding0 {
+    padding: 0px !important;
+    
+}
+
+.colPadding0WithRight {
+    padding: 0px !important;
+    padding-right: 1px !important;
+}
+.dvFloatRight{
+
+    float:right !important;
+
+}
+
+
+.dvFloatLeft {
+    float: left !important;
+}

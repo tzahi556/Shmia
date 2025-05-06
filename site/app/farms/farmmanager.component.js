@@ -7,10 +7,10 @@
         bindings: {
             farmmanager: '<',
             farm: '<',
-            farmspdffiles: '<'
-            //horses: '<',
-            //horsegroups: '<',
-            //horsegroupshorses: '<',
+            farmspdffiles: '<',
+            btns: '<',
+            grps: '<',
+            btns2grps: '<'
         }
     });
     app.filter('dateRangeClalit', function () {
@@ -42,34 +42,15 @@
         //this.horsesService = horsesService;
         this.farmsService = farmsService;
         this.SaveData = _SaveData.bind(this);
-        this.delete = _delete.bind(this);
-
-        //this.addNewTag = _addNewTag.bind(this);
-        //   this.removeTags = _removeTags.bind(this);
-
         this.uploadFile = _uploadFile.bind(this);
         this.uploadFilePdf = _uploadFilePdf.bind(this);
-
-
-        this.initNewTags = _initNewTags.bind(this);
-
-        this.getKlalitHistoriPage = _getKlalitHistoriPage.bind(this);
-        this.setKlalitHistoriPage = _setKlalitHistoriPage.bind(this);
-        this.setPostToKlalit = _setPostToKlalit.bind(this);
-
-        this.getHorsesGroup = _getHorsesGroup.bind(this);
-        this.actionHorsesGroup = _actionHorsesGroup.bind(this);
-        this.getFreeHorses = _getFreeHorses.bind(this);
-        this.checkAll = _checkAll.bind(this);
-
         this.deleteLogo = _deleteLogo.bind(this);
-
+        this.actionFieldGroup = _actionFieldGroup.bind(this);
 
         this.init = _init.bind(this);
         this.role = localStorage.getItem('currentRole');
-
-        this.IsPopUp = false;
-        this.IsStop = false;
+        //this.IsPopUp = false;
+        //this.IsStop = false;
 
         function _deleteLogo(type) {
 
@@ -94,204 +75,6 @@
 
         }
 
-        function _setKlalitHistoriPage(type, klalitId) {
-            this.IsStop = false;
-
-            if (this.klalitsBefore.length > 0) {
-
-                // $('#modalKlalitSend').modal('show');
-                var fromSend = getUrlParameter("fromSend");
-                if (fromSend) {
-
-
-                    $('#modalKlalitSend').modal('show');
-                    var ctrlthis = this;
-                    ctrlthis.endMessage = false;
-                    ctrlthis.currentElement = 0;
-
-                    for (var i in ctrlthis.klalitsBefore) {
-
-                        ctrlthis.klalitsBefore[i].ResultXML = null;
-                        ctrlthis.klalitsBefore[i].FirstName = ctrlthis.klalitsBefore[i].FirstName;
-                        ctrlthis.klalitsBefore[i].LastName = ctrlthis.klalitsBefore[i].LastName;
-
-
-                    }
-
-                    ctrlthis.setPostToKlalit(0, ctrlthis);
-
-                } else {
-                    //https://www.giddyup.co.il/#/farmmanager/?fromSend=fromSend
-                    //http://localhost:51517/#/farmmanager/?fromSend=fromSend
-                    var payWind = window.open("https://www.giddyup.co.il/#/farmmanager/?fromSend=fromSend", "Upload Chapter content", "width=700,height=350,top=200,left=500");
-
-
-                }
-
-
-            }
-
-
-
-
-        }
-
-        function _setPostToKlalit(index, ctrlthis) {
-
-
-            if (this.IsStop) {
-
-                alert("השידור לכללית נעצר!");
-                return;
-            }
-
-            $http.post(sharedValues.apiUrl + 'farms/setKlalitHistoris/', ctrlthis.klalitsBefore[index]).then(function (response) {
-
-                ctrlthis.returnFirstName = response.data.FirstName;
-                ctrlthis.returnLastName = response.data.LastName;
-
-                ctrlthis.returnDate = response.data.DateLesson;
-                ctrlthis.returnStatus = response.data.Result;
-                ctrlthis.currentElement = index + 1;
-
-                if ((index + 1) < ctrlthis.klalitsBefore.length)
-                    ctrlthis.setPostToKlalit(index + 1, ctrlthis);
-                else {
-                    ctrlthis.endMessage = true;
-
-                    window.opener.$("#btnSearch").click();
-                    //window.opener.$scope.getKlalitHistoriPage();
-                    //ctrlthis;
-                }
-
-
-            });
-
-        }
-
-        function _checkAll() {
-
-            //  this.klalits.find(x => x.ResultNumber == -1).IsDo = this.checkAllc;
-
-
-
-            this.klalits.filter(x => x.ResultNumber != 1)
-                .forEach(x => x.IsDo = this.checkAllc);
-        }
-
-        function _getKlalitHistoriPage(type, klalitId) {
-
-
-            var startDate = moment(this.dateFromClalit).format('YYYY-MM-DD');
-            var endDate = moment(this.dateToClalit).format('YYYY-MM-DD');
-
-            // בחירת מסומנים
-            if (type == 5) {
-
-                this.klalitsBefore = this.klalits.filter(x => x.IsDo);
-                if (this.klalitsBefore.length == 0) {
-                    alert("עלייך לבחור רשומות לשליחה חוזרת!");
-                    return;
-                }
-
-
-                farmsService.getKlalitHistoris(this.farmmanager.FarmId, startDate, endDate, 5, null, null).then(function (res) {
-                    if (res[0] && res[0].Id == -1) {
-
-                        this.klalitsBefore = this.klalitsBefore.slice(0, res[0].CounterSend);// סתם משתמש בשדה הזה לבדוק עוד כמה נותר לו
-
-
-                        window.klalitsBefore = this.klalitsBefore;
-
-                        if (this.klalitsBefore.length == 0) {
-
-                            alert("עברת את מכסת התביעות האוטמטיות היומיות,ניתן לנסות מחר...");
-
-                        } else {
-                            $('#modalKlalit').modal('show');
-                        }
-
-                    }
-
-
-
-                }.bind(this));
-
-
-                return;
-
-            }
-
-
-
-
-            // שליחה עצמה
-            //if (type == 2) {
-            //    this.SaveData(2, true);
-            //}
-
-            // פתיחת חלון מקדים
-            // if (type == 4) 
-
-            farmsService.getKlalitHistoris(this.farmmanager.FarmId, startDate, endDate, type, klalitId, null).then(function (res) {
-
-                if (type == 2 && res[0].Id < 0) {
-
-                    if (res[0].Id == -1) alert("אין הגדרות למדריכים");
-                    if (res[0].Id == -2) alert("אין הגדרות לחווה");
-                    return;
-
-                }
-
-                if (type == 4) {
-
-                    if (res[0] && res[0].Id == -1) {
-
-                        alert("עברת את מכסת התביעות האוטמטיות היומיות,ניתן לנסות מחר...");
-                        return;
-
-                    } else {
-                        this.klalitsBefore = res;
-                        window.klalitsBefore = res;
-                        $('#modalKlalit').modal('show');
-                    }
-
-
-                }
-                else if (type == 1) {
-
-
-                    if (res[0] && res[0].Id == -1) {
-
-                        alert("עברת את מכסת התביעות האוטמטיות היומיות,ניתן לנסות מחר...");
-                        return;
-
-                    }
-
-                    this.getKlalitHistoriPage(null, null);
-
-
-
-                }
-
-                else {
-
-                    this.klalits = res;
-                    for (var i in this.klalits) {
-
-                        this.klalits[i].KlalitHistorisId = this.klalits[i].Id;
-                        //  ctrlthis.klalitsBefore[i].UserName = ctrlthis.klalitsBefore[i].UserName.replace(' ', ',');
-                        //
-
-                    }
-
-
-                }
-
-            }.bind(this));
-
-        }
-
         var getUrlParameter = function getUrlParameter(sParam) {
 
 
@@ -304,31 +87,7 @@
         };
 
         function _init() {
-            //this.farm;
-            //debugger
-
-            //if (getUrlParameter("fromSend")) {
-
-            //    this.IsPopUp = true;
-
-            //    this.klalitsBefore = window.opener.klalitsBefore;
-
-            //    this.setKlalitHistoriPage(4, 0);
-
-            //}
-
-            //   alert(self.farminstructors.length);
-
-            //self.farm.Meta = self.farm.Meta || {};
-            //self.farm.Meta.StartDate = self.farm.Meta.StartDate ? new Date(self.farm.Meta.StartDate) : null;
-            //self.farm.Meta.EndDate = self.farm.Meta.EndDate ? new Date(self.farm.Meta.EndDate) : null;
-            //self.farm.IsHiyuvInHashlama = (self.farm.IsHiyuvInHashlama) ? self.farm.IsHiyuvInHashlama.toString() : "0";
-
-            //self.initNewTags();
-
-
-
-           
+            
 
             self.farm.Style = (self.farm.Style) ? self.farm.Style.toString() : "0";
 
@@ -431,12 +190,6 @@
 
         }
 
-
-
-        //this.dateFromClalit = moment().add(0, 'months').toDate();
-        //this.dateToClalit = moment().add(1, 'days').toDate();
-
-
         $scope.sendNewOrderPdfs = function (IdsOrders) {
             // debugger
 
@@ -464,6 +217,61 @@
             farmsService.updateFarmsPdfFiles(4, this.farm.Id, farmspdffilestemp).then(function (farmspdffiles) {
 
               
+
+            });
+
+        }
+
+        $scope.sendNewOrderforGroupsFields = function (type,IdsOrders) {
+            // debugger
+            var grpstemp = [];
+
+            for (var i = 0; i < IdsOrders.length; i++) {
+
+
+                var grp = self.grps.filter(x => x.Id == IdsOrders[i]);
+
+                if (grp.length > 0) {
+
+                    grp[0].Seq = i + 1;
+
+                    grpstemp.push(grp[0]);
+
+                }
+
+
+            }
+
+            farmsService.actionFieldGroup(8, this.farm.Id, grpstemp).then(function (grps) {
+                
+                self.grps = grps;
+                const myTimeout = setTimeout(BuildEditPDF, 300);
+            });
+
+        }
+
+        $scope.sendFields2Groups = function (type, grpId, btnid) {
+
+
+            var existfield2group = self.btns2grps.filter(x => x.f2g.FieldsGroupsId == grpId && x.f2g.FieldsId == btnid);
+
+            if (existfield2group.length > 0) {
+
+                alertMessage("שדה קיים בקבוצה!", 3);
+                return;
+            }
+
+
+            var Objects = {FieldsId: btnid, FieldsGroupsId: grpId};
+
+            farmsService.actionFieldGroup(9, self.farm.Id, Objects).then(function (btns2grps) {
+               
+
+                self.btns2grps = btns2grps;
+                const myTimeout = setTimeout(BuildEditPDF, 300);
+
+
+
 
             });
 
@@ -509,202 +317,164 @@
 
             }
 
+            //עריכת קבוצה
+            if (type == 3) {
+               
 
+                var Objects = this.grp;
+                this.farmsService.actionFieldGroup(11, this.farm.Id, Objects).then(function (grps) {
 
+                    self.grps = grps;
+                    const myTimeout = setTimeout(BuildEditPDF, 300);
 
-
-        }
-
-        function _delete() {
-            if (confirm('האם למחוק את החווה?')) {
-                farmsService.deleteFarm(this.farm.Id).then(function () {
-                    $state.go('farms');
-                });
-            }
-        }
-
-        function _initNewTags() {
-
-            self.farm.Meta.farmTags = self.farm.Meta.farmTags || [];
-            self.newfarmTag = null;
-
-            //if ($scope.newHorseForm != null) {
-            //    $scope.newHorseForm.$setPristine();
-            //}
-        }
-
-        ///**************************************************
-        function _getHorsesGroup(id) {
-
-            var res = this.horsegroupshorses.filter(x => x.HorseGroupsId == id);
-
-            for (var i in res) {
-
-                var horse = this.horses.filter(y => y.Id == res[i].HorseId);
-                res[i].Name = horse[0].Name;
-                res[i].ShoeingTimeZone = horse[0].ShoeingTimeZone;
-
-            }
-
-            return res;
-
-        }
-
-        $scope.makeDropHorse = function (newEvent, currentHorseId, currentGroupeId) {
-
-            if (currentGroupeId == 0 || currentHorseId == 0) return;
-
-
-            var currentHorsesList = $scope.$ctrl.getHorsesGroup(currentGroupeId);
-
-            if (currentHorsesList.length > 0) {
-
-                var FirstShoeingTimeZone = currentHorsesList[0].ShoeingTimeZone;
-                var horse = $scope.$ctrl.horses.filter(y => y.Id == currentHorseId);
-                if (horse[0].ShoeingTimeZone != FirstShoeingTimeZone) {
-
-
-                    alert("לא ניתן לשייך פרקי זמן שונים בין פרזולים לאותה קבוצה...");
-                    return;
-                }
+                }.bind(this));
 
 
             }
 
 
-            $scope.$ctrl.horsegroupshorses.push({ HorseGroupsId: currentGroupeId, HorseId: currentHorseId, Id: 0, FarmId: localStorage.getItem('FarmId') });
-
-
-
-
-            $scope.$ctrl.horsesService.getSetHorseGroupsHorses(2, $scope.$ctrl.horsegroupshorses).then(function (res) {
-                $scope.$ctrl.horsegroupshorses = res;
-            }.bind(this));
         }
-
-        function _actionHorsesGroup(type, obj) {
+      
+        function _actionFieldGroup(type, objid) {
 
             var thisCtrl = this;
-            //הוספה קבוצה
-            if (type == 1) {
 
-                if (!this.newGroup) {
+            //הוספה שדה
+            if (type == 4) {
 
-                    alert("שדה שם קבוצה הינו שדה חובה!");
+                if (!this.FieldName) {
+
+                    alertMessage("שם שדה הינו שדה חובה!",3);
                     return;
                 }
 
-                this.horsegroups.push({ Name: this.newGroup, Id: 0, FarmId: localStorage.getItem('FarmId') });
+                var Objects = { Obj: this.FieldName };
 
-                this.horsesService.getSetHorseGroups(2, this.horsegroups).then(function (res) {
-                    thisCtrl.horsegroups = res;
+                this.farmsService.actionFieldGroup(4, this.farm.Id, Objects).then(function (btns) {
+
+
+
+                    if (btns == "exist obj") {
+
+                        alertMessage("שם שדה קיים כבר במערכת!", 3);
+                        return;
+
+                    }
+
+
+                    self.btns = btns;
+                    const myTimeout = setTimeout(BuildEditPDF, 300);
+              
+
+                   // self.init();
+                   // const myTimeout = setTimeout(RefreshPage, 300);
                 }.bind(this));
+
+            }
+
+            //מחיקת שדה
+            if (type == 5) {
+               
+                var Objects = { Obj: objid };
+                var confirmBox = alertMessage("האם אתה בטוח שברצונך להסיר את השדה?", 4);
+                confirmBox.click(function () {
+
+                    thisCtrl.farmsService.actionFieldGroup(5, thisCtrl.farm.Id, Objects).then(function (btns) {
+
+                        self.btns = btns;
+
+                        const myTimeout = setTimeout(BuildEditPDF, 300);
+
+                       
+                    }.bind(this));
+                   
+
+                })
+
+            }
+
+            //הוספה קבוצה
+            if (type == 6) {
+
+                
+                if (!this.GroupName) {
+
+                    alertMessage("שם קבוצה הינו שדה חובה!",3);
+                    return;
+                }
+                var Objects = { Obj: this.GroupName };
+
+                this.farmsService.actionFieldGroup(6, this.farm.Id, Objects).then(function (grps) {
+
+                    self.grps = grps;
+                    const myTimeout = setTimeout(BuildEditPDF, 300);
+
+                }.bind(this));
+                
 
             }
 
             //מחיקת קבוצה
-            if (type == 2) {
-                for (var i in this.horsegroups) {
-                    if (this.horsegroups[i] == obj) {
+            if (type == 7) {
+
+                var Objects = { Obj: objid };
+                var confirmBox = alertMessage("האם אתה בטוח שברצונך להסיר את הקבוצה?", 4);
+                confirmBox.click(function () {
+
+                    thisCtrl.farmsService.actionFieldGroup(7, thisCtrl.farm.Id, Objects).then(function (grps) {
+
+                        self.grps = grps;
+
+                        const myTimeout = setTimeout(BuildEditPDF, 300);
 
 
-                        this.horsegroups.splice(i, 1);
+                    }.bind(this));
 
 
-
-                        var m = this.horsegroupshorses.length;
-                        while (m--) {
-
-                            if (this.horsegroupshorses[m].HorseGroupsId == obj.Id) {
-                                this.horsegroupshorses.splice(m, 1);
-                            }
-                        }
-                        //מחיקת הסוסים ששייכים לקבוצה
-                        //for (var m in this.horsegroupshorses) {
-                        //    if (this.horsegroupshorses[m].HorseGroupsId == obj.Id) {
-                        //        this.horsegroupshorses.splice(m, 1);
-                        //    }
-                        //}
-
-                    }
-                }
-
-                this.horsesService.getSetHorseGroups(2, this.horsegroups).then(function (res) {
-                    thisCtrl.horsegroups = res;
-
-                }.bind(this));
-
-
+                })
 
             }
 
-            //מחיקת סוס
-            if (type == 3) {
-                for (var i in this.horsegroupshorses) {
-                    if (this.horsegroupshorses[i].HorseId == obj) {
-                        this.horsegroupshorses.splice(i, 1);
-                    }
+            //מחיקת שדה מתוך קבוצה
+            if (type == 10) {
+
+                var Objects = { Obj: objid };
+                var confirmBox = alertMessage("האם אתה בטוח שברצונך להסיר את השדה מהקבוצה?", 4);
+                confirmBox.click(function () {
+
+                    thisCtrl.farmsService.actionFieldGroup(10, thisCtrl.farm.Id, Objects).then(function (btns2grps) {
+
+                        
+
+                        thisCtrl.btns2grps = btns2grps;
+
+                        const myTimeout = setTimeout(BuildEditPDF, 300);
+
+
+                    }.bind(this));
+
+
+                })
+
+            }
+
+            //עריכת קבוצה
+            if (type == 11) {
+
+                var grp = this.grps.filter(x => x.Id == objid);
+
+                if (grp.length > 0) {
+
+                      thisCtrl.grp = grp[0];
+                      OpenDialog(1);
                 }
 
-                this.horsesService.getSetHorseGroupsHorses(2, this.horsegroupshorses).then(function (res) {
-                    this.horsegroupshorses = res;
-                }.bind(this));
-
-
+                
 
             }
 
 
         }
-
-        function _getFreeHorses() {
-
-            var res = [];
-
-            for (var i in this.horses) {
-
-                if (this.horsegroupshorses.filter(x => x.HorseId == this.horses[i].Id).length > 0) continue;
-
-
-                res.push(this.horses[i]);
-
-
-            }
-
-            return res;
-
-
-        }
-
-
-
-        //function _addNewTag() {
-
-
-        //    //for (var i in this.userhorses) {
-        //    //    if (this.userhorses[i].HorseId == this.newHorse.Id) {
-        //    //        return false;
-        //    //    }
-        //    //}
-
-        //    self.farm.Meta.farmTags.push({ tag_name: self.newfarmTag.tag_name, tag_id: self.newfarmTag.tag_id });
-        //    //self.newFarmTags.tag_name = "";
-        //    //self.newFarmTags.tag_id = "";
-        //    self.initNewTags();
-        //}
-
-        //function _removeTags(tag) {
-        //    var farmTags = self.farm.Meta.farmTags;
-        //    for (var i in farmTags) {
-        //        if (farmTags[i].tag_id == tag.tag_id && farmTags[i].tag_name == tag.tag_name) {
-        //            farmTags.splice(i, 1);
-        //        }
-        //    }
-        //}
-
-
-
-
 
     }
 

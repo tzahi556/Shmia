@@ -282,10 +282,11 @@
         var CurrentPage = 1;
         var CurrentPDF;
         var elemId;
+        var CurrentWidth;
 
-        function CallEditPdfJs(elementId, url) {
+        function CallEditPdfJs(elementId, url,width) {
             elemId = elementId;
-
+            CurrentWidth = width;
             
             var url = url;
             // Loaded via <script> tag, create shortcut to access PDF.js exports.
@@ -342,14 +343,26 @@
             $("#canvasContainer div").not('#' + elemId).remove();
 
 
-            var scale = 1.5;
-            var viewport = page.getViewport({ scale: scale });
+            //var scale = 1.5;
+            //var viewport = page.getViewport({ scale: scale });
 
-            // Prepare canvas using PDF page dimensions
+            //var canvas = document.getElementById(elemId);
 
+            //var context = canvas.getContext('2d');
+
+
+            
+            // נסיון
             var canvas = document.getElementById(elemId);
-
             var context = canvas.getContext('2d');
+            var viewport = page.getViewport({ scale: 1 });
+            var scale = CurrentWidth / viewport.width;
+            viewport = page.getViewport({ scale: scale });
+           
+
+
+
+
 
             canvas.height = viewport.height;
 

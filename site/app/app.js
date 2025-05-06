@@ -479,14 +479,14 @@
             url: '/farmmanager/',
             views: {
                 'main': {
-                    template: '<farmmanager farmmanager="$ctrl.farmmanager" farm="$ctrl.farm" farmspdffiles="$ctrl.farmspdffiles"></farmmanager>',
-                    controller: function (farmmanager, farm, farmspdffiles) {
+                    template: '<farmmanager farmmanager="$ctrl.farmmanager" btns="$ctrl.btns"  grps="$ctrl.grps"  btns2grps="$ctrl.btns2grps" farm="$ctrl.farm" farmspdffiles="$ctrl.farmspdffiles"></farmmanager>',
+                    controller: function (farmmanager, farm, farmspdffiles, btns, grps, btns2grps) {
                         this.farm = farm;
                         this.farmmanager = farmmanager;
                         this.farmspdffiles = farmspdffiles;
-                        //this.horses = horses;
-                        //this.horsegroups = horsegroups;
-                        //this.horsegroupshorses = horsegroupshorses;
+                        this.btns = btns;
+                        this.grps = grps;
+                        this.btns2grps = btns2grps;
 
                     },
                     controllerAs: '$ctrl',
@@ -501,10 +501,25 @@
                             return farmsService.getFarm(localStorage.getItem('FarmId'));
                         },
                         farmspdffiles: function (farmsService) {
-                           
 
                             return farmsService.getFarmPDFFiles(localStorage.getItem('FarmId'));
+                        },
+
+
+                        btns: function (farmsService) {
+
+                            return farmsService.actionFieldGroup(1,localStorage.getItem('FarmId'),null);
+                        },
+
+                        grps: function (farmsService) {
+
+                            return farmsService.actionFieldGroup(2,localStorage.getItem('FarmId'),null);
+                        },
+                        btns2grps: function (farmsService) {
+
+                            return farmsService.actionFieldGroup(3,localStorage.getItem('FarmId'),null);
                         }
+
                         //,
                       
                         //horses: function (horsesService) {

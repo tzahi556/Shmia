@@ -339,7 +339,7 @@ namespace FarmsApi.Services
             {
                 using (var Context = new Context())
                 {
-                    var FarmPDFFilesList = Context.FarmPDFFiles.Where(x => x.FarmId == id && x.StatusId == 1).ToList();
+                    var FarmPDFFilesList = Context.FarmPDFFiles.Where(x => x.FarmId == id && x.StatusId == 1).OrderByDescending(x => x.Seq).ToList();
 
 
                     FarmPDFFiles farmPDFFile = new FarmPDFFiles();
@@ -363,7 +363,7 @@ namespace FarmsApi.Services
                         Context.SaveChanges();
                     }
 
-                    FarmPDFFilesList = Context.FarmPDFFiles.Where(x => x.FarmId == id).ToList();
+                    FarmPDFFilesList = Context.FarmPDFFiles.Where(x => x.FarmId == id).OrderBy(x => x.Seq).ToList();
 
                     return Ok(FarmPDFFilesList);
 
@@ -424,25 +424,34 @@ namespace FarmsApi.Services
           
             return Ok();
         }
-        //[Authorize]
-        //[Route("getKlalitHistoris")]
-        //[HttpGet]
-
-        //public IHttpActionResult GetKlalitHistoris(int FarmId , string startDate = null, string endDate = null,int? type=null,int? klalitId = null)
-        //{
-        //    return Ok(FarmsService.GetKlalitHistoris(FarmId, startDate, endDate,type,klalitId));
-        //}
 
 
-        //[Authorize]
-        //[Route("setKlalitHistoris")]
-        //[HttpPost]
-
-        //public IHttpActionResult SetKlalitHistoris(KlalitHistoris kh)
-        //{
-        //    return Ok(FarmsService.SetKlalitHistoris(kh));
-        //}
+      
 
 
-    }
+
+
+
+
+            //[Authorize]
+            //[Route("getKlalitHistoris")]
+            //[HttpGet]
+
+            //public IHttpActionResult GetKlalitHistoris(int FarmId , string startDate = null, string endDate = null,int? type=null,int? klalitId = null)
+            //{
+            //    return Ok(FarmsService.GetKlalitHistoris(FarmId, startDate, endDate,type,klalitId));
+            //}
+
+
+            //[Authorize]
+            //[Route("setKlalitHistoris")]
+            //[HttpPost]
+
+            //public IHttpActionResult SetKlalitHistoris(KlalitHistoris kh)
+            //{
+            //    return Ok(FarmsService.SetKlalitHistoris(kh));
+            //}
+
+
+        }
 }

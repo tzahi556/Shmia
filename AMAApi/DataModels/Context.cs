@@ -28,7 +28,19 @@ namespace FarmsApi.DataModels
         public DbSet<FarmInstructors> FarmInstructors { get; set; }
 
         public DbSet<FarmPDFFiles> FarmPDFFiles { get; set; }
-        
+
+
+        public DbSet<FieldsDataTypes> FieldsDataTypes { get; set; }
+        public DbSet<FieldsGroups> FieldsGroups { get; set; }
+        public DbSet<Fields> Fields { get; set; }
+        public DbSet<Fields2Groups> Fields2Groups { get; set; }
+        public DbSet<FieldsDDL> FieldsDDL { get; set; }
+
+
+
+
+
+
 
         public Context() : base("Farms") {
 
