@@ -41,9 +41,8 @@ namespace FarmsApi.DataModels
     {
         public int Id { get; set; }
 
-        public int FarmId { get; set; }
+        public int? FarmId { get; set; }
 
-     
 
         public string Name { get; set; }
 

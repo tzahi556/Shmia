@@ -15384,6 +15384,10 @@ div#AvatarFileUploadSign > .avatar-selector {
     
 }
 
+.colPadding2 {
+    padding: 2px !important;
+}
+
 .colPadding0WithRight {
     padding: 0px !important;
     padding-right: 1px !important;

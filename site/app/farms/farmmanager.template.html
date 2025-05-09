@@ -3,263 +3,48 @@
 
 
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.14.1/themes/base/jquery-ui.css">
-
-    <style>
-
-
-        /*#sortable {
-            list-style-type: none;
-            margin: 0;
-            padding: 0;
-        }
-
-            #sortable li:not(.onlyPlus) {
-                cursor: pointer;
-                background: white;
-                margin: 15px;*/ /* 3px 3px 3px 0;*/
-        /*padding: 1px;
-                float: right;
-                width: 150px;
-                height: 150px;
-                font-size: 4em;
-                text-align: center;
-            }
-
-            #sortable li:hover:not(.onlyPlus) {
-                background: #e5e7eb;
-            }*/
-
-
-        .dvSeq:not(.onlyPlus) {
-            cursor: pointer;
-            background: white;
-            margin: 15px; /* 3px 3px 3px 0;*/
-            padding: 1px;
-            float: right;
-            font-size: 4em;
-            text-align: center;
-            width: 150px;
-            height: 250px;
-        }
-
-        .dvSeq:hover:not(.onlyPlus) {
-            background: #e5e7eb;
-        }
-
-        .onlyPlus {
-            margin: 15px;
-            width: 150px;
-            height: 250px;
-            float: left;
-            background-image: url(../../images/Plusigul.png);
-            background-repeat: no-repeat;
-            background-position: right 50% top 50%;
-        }
-
-        .dvAddPdf {
-            cursor: pointer;
-            background: white;
-            margin: 3px 3px 3px 0;
-            padding: 1px;
-            float: right;
-            width: 150px;
-            height: 250px;
-            /*font-size: 4em;*/
-            text-align: center;
-            margin: 15px;
-            background-image: url(../../images/plus.png);
-            background-repeat: no-repeat;
-            background-position: right 50% top 30%;
-            padding-top: 130px;
-            opacity: 0.8;
-            font-weight: bold;
-            border-style: dashed;
-            border-width: 1px;
-            --tw-border-opacity: 1;
-            border-color: rgb(29 29 29/var(--tw-border-opacity));
-            border-radius: .5rem;
-        }
-
-            .dvAddPdf:hover {
-                background: #e5e7eb;
-                background-position: right 50% top 30%;
-                background-image: url(../../images/plus.png);
-                background-repeat: no-repeat;
-                padding-top: 130px;
-                border-style: dashed;
-                border-width: 1px;
-                --tw-border-opacity: 1;
-                border-color: rgb(29 29 29/var(--tw-border-opacity));
-                border-radius: .5rem;
-            }
-
-        .btnAddPdf {
-            background-image: url(../../images/Pdf.ico);
-            background-repeat: no-repeat;
-            background-position: left;
-            padding-left: 35px;
-            margin: 15px; /* 3px 3px 3px 0;*/
-        }
-
-        .hideUploadnew {
-            cursor: pointer;
-            opacity: 0;
-            position: relative;
-            top: -170px;
-            height: 250px;
-            width: 150px;
-        }
-
-        .portlet-placeholder {
-            margin: 15px;
-            float: right;
-            width: 150px;
-            height: 250px;
-            border: 2px dashed #3283a8;
-            /*  margin: 0 1em 1em 0;
-            height: 50px;*/
-        }
-
-        .ui-widget-header {
-            display: none;
-        }
-
-
-        #panelBody {
-            overflow: hidden;
-            height: 500px;
-        }
-    </style>
-
-
-    <style>
-
-        #canvasEdit {
-            border-style: dashed;
-            border-width: 2px;
-            --tw-border-opacity: 1;
-            border-color: #337ab7;
-            border-radius: .7rem;
-            direction: ltr !important;
-            box-shadow: 10px 10px 5px lightblue;
-        }
-
-        .page-item {
-            cursor: pointer;
-        }
-
-        .pager li > a, .pager li > span {
-            background: none !important;
-        }
-
-
-
-
-        .pager {
-            position: absolute;
-            top: -50px;
-            left: 60%;
-        }
-
-        .spCurPage {
-            font-size: 45px;
-            font-weight: bold;
-            border: 0 !important;
-            text-align: right;
-            padding: 2px !important;
-            padding-left: 12px !important;
-        }
-
-        .spCurTotalPage {
-            padding: 2px !important;
-            font-size: 25px;
-            border: 0 !important;
-            padding-right: 12px !important;
-        }
-
-        .pager li > a, .pager li > span {
-            cursor: pointer;
-        }
-
-
-
-
-        .navButton {
-            display: inline-block;
-            padding: 5px 14px;
-            background-color: #fff;
-            border: 1px solid #337ab7;
-            border-radius: 15px;
-            cursor: pointer;
-            float: right;
-            color: #337ab7;
-        }
-
-        .spMikra {
-            color: #337ab7;
-            margin-top: -25px;
-            float: right;
-        }
-
-        /*  .panelFields {
-            cursor: move;
-        }
-
-        .panelFields {
-            z-index: 9999;
-        }*/
-
-        .borderSelectBlue {
-            border: 1px solid #337ab7;
-        }
-
-        .askIcon {
-            float: left;
-            cursor: pointer;
-        }
-
-        .imgAsk {
-            filter: brightness(0) invert(1);
-        }
-
-        .btnField {
-            margin-bottom: 5px;
-            z-index: 9999;
-        }
-
-        .btnGrpField {
-            margin-bottom: 5px;
-            z-index: 9999;
-            /* width: 150px;*/
-        }
-
-        .btnGrpFieldHelper {
-            z-index: 9999;
-            background-color: transparent !important;
-            padding: 0px;
-        }
-
-        .portlet-placeholderGroups {
-            margin: 15px;
-            float: right;
-            width: 90%;
-            height: 150px;
-            border: 2px dashed #3283a8;
-            /*  margin: 0 1em 1em 0;
-            height: 50px;*/
-        }
-
-        .btnLeft {
-            float: left;
-            cursor: pointer;
-        }
-    </style>
-
-
+    <link href="../../css/pdfstyle.css" rel="stylesheet" />
+  
     <script>
 
-
         var PdfList = [];
+
+        $(function () {
+
+            $("#sortable").sortable({
+                items: ".ui-state-default",
+                placeholder: "portlet-placeholder ui-corner-all",
+                stop: function (event, ui) {
+
+
+                    var idsInOrder = $("#sortable").sortable("toArray");
+                    for (i in idsInOrder) {
+
+                        idsInOrder[i] = idsInOrder[i].replace("dv_", "");
+
+                    }
+                    angular.element(document.getElementById('mainControllerHorse')).scope().sendNewOrderPdfs(idsInOrder);
+
+                }
+            });
+
+            $("#sortable").disableSelection();
+
+            RefreshPage();
+
+            BuildEditPDF();
+            $(".panelFields").draggable();
+            /* $(".panelFields").draggable();*/
+
+            // for dev
+            $("#ddlFiles").val("number:39");
+            $('#ddlFiles').trigger("change");
+
+
+        
+
+
+        });
 
         function RefreshPage() {
 
@@ -317,39 +102,11 @@
 
         }
 
-
-        $(function () {
-            $("#sortable").sortable({
-                items: ".ui-state-default",
-                placeholder: "portlet-placeholder ui-corner-all",
-                stop: function (event, ui) {
-
-
-                    var idsInOrder = $("#sortable").sortable("toArray");
-                    for (i in idsInOrder) {
-
-                        idsInOrder[i] = idsInOrder[i].replace("dv_", "");
-
-                    }
-                    angular.element(document.getElementById('mainControllerHorse')).scope().sendNewOrderPdfs(idsInOrder);
-
-                }
-            });
-
-            $("#sortable").disableSelection();
-
-            RefreshPage();
-
-            BuildEditPDF();
-
-            /* $(".panelFields").draggable();*/
-
-            // for dev
-            $("#ddlFiles").val("number:39");
-            $('#ddlFiles').trigger("change");
-        });
-
         function BuildEditPDF() {
+
+
+            
+
 
             $(".btnField").draggable({
 
@@ -360,12 +117,12 @@
 
             $(".btnGrpField").draggable({
 
-
+                //'fontSize': '18px',
+                //'border': '1px solid gray'
                 helper: function () {
-                    return $("<div class='btnGrpField btnGrpFieldHelper'>").text($(this).text()).css({
+                    return $("<div class='btnGrpField'>").text($(this).text()).css({
                         'padding': '0px',
-                        'fontSize': '18px',
-                        'border': '1px solid gray'
+                       /* 'fontSize': 19*/
                     });
                 },
 
@@ -405,11 +162,10 @@
             $(".btnGrpField").mouseover(function () {
                 $(".panelGroup").sortable("disable");
             });
+
             $(".btnGrpField").mouseout(function () {
                 $(".panelGroup").sortable("enable");
             });
-
-
 
             $("#ddlFiles").on("change", function () {
 
@@ -449,10 +205,11 @@
 
             });
 
-
             BuildCanvasDrop();
 
-
+            //$("#canvasContainer").append('<div class="btnGrpFieldHelper ui-draggable ui-draggable-handle" style="padding: 0px; font-size: 18px; border: 1px solid gray; position: absolute; left: 806.828px; top: 246px;"> שם פרטי  </div > ');
+            //$(".btnGrpFieldHelper").draggable({ cursor: "pointer" });                               
+                                                          
 
 
         }
@@ -466,32 +223,55 @@
                 });
             }
 
+            if (type == 2) {
+
+                $("#dialogContainerEditFields").dialog({
+                    modal: true, height: 'auto', width: 'auto'
+                });
+            }
+
+
+
+
         }
-
-
 
         function BuildCanvasDrop() {
 
             $('#canvasEdit').droppable({
-                accept: ".btnGrpField",
+                accept: ".btnGrpField, .btnGrpFieldHelper",
 
                 drop: function (event, ui) {
 
 
-
-
+                   
+                   
                     var x = ui.offset.left - $(this).offset().left;
                     var y = ui.offset.top - $(this).offset().top;
+
+
+                   
+                   
+
+                    //var canvas = document.getElementById("canvasEdit");
+                    //const rect = canvas.getBoundingClientRect();
+
+                    //x= event.clientX - rect.left,
+                    // y=event.clientY - rect.top
+                    //convertPixelsToPdfCoords(x , y, CurrentViewport);
+
+
 
                     var itemWidth = $(ui.helper).width();
                     var itemHeight = $(ui.helper).height();
 
-
-
+                    
+                    //alert(CurrentScale/14);
+                 
+                  
                     var PdfPoints = CurrentViewport.convertToPdfPoint(x + itemWidth, y - (itemHeight));
 
-                    $('#spx').text(PdfPoints[0]);
-                    $('#spy').text(PdfPoints[1] - 5);
+                    $('#spx').text(parseFloat(PdfPoints[0]).toFixed(2));
+                    $('#spy').text(parseFloat(PdfPoints[1]).toFixed(2));
 
                     //$('#spxx').text(x + 15);
                     //$('#spyy').text(y);
@@ -499,11 +279,11 @@
 
                     // $('#spy').text(y-1);
 
-                    if (!$(ui.helper).hasClass("draggableOut")) {
+                    if (!$(ui.helper).hasClass("btnGrpFieldHelper")) {
 
-                        $("#canvasContainer").append(ui.helper.clone(true).css({ left: x + 15, top: y }).addClass("draggableOut").removeClass("draggable"));
+                        $("#canvasContainer").append(ui.helper.clone(true).css({ left: x , top: y }).addClass("btnGrpFieldHelper"));//.removeClass("btnGrpField"));
 
-                        $(".draggableOut").draggable({ cursor: "pointer" });
+                        $(".btnGrpFieldHelper").draggable({ cursor: "pointer" });
 
                     }
 
@@ -556,11 +336,11 @@
 
         <uib-tab index="5" heading="עריכת PDF">
 
-            <div class="col-md-5">
+            <div class="col-md-5 colPadding0">
 
-                <div class="col-md-12">
+                <div class="col-md-12 colPadding0">
 
-                    <div class="col-md-6 ">
+                    <div class="col-md-6 colPadding2">
                         <div class="panel panel-primary panelFields" style="">
                             <div class="panel-heading">
                                 שדות קיימים במערכת
@@ -582,7 +362,7 @@
                                         <div id="btnField_{{btn.Id}}" class="btn btn-primary btnField" title="יש לגרור לקבוצה הרצויה">
                                             {{btn.Name}}
                                         </div>
-                                        <div class="btnLeft" ng-click="$ctrl.actionFieldGroup(5,btn.Id)">
+                                        <div ng-if="btn.FarmId>0" class="btnLeft" ng-click="$ctrl.actionFieldGroup(5,btn.Id)">
                                             <img src="../../images/delete3.png" width="18px" />
                                         </div>
                                     </div>
@@ -596,12 +376,8 @@
                     </div>
 
 
-                    <div class="col-md-6">
-
-
-
-
-                        <div class="panel panel-primary panelFields" style="">
+                    <div class="col-md-6 colPadding2">
+                        <div class="panel panel-primary panelFields" style="z-index:4 !important;">
                             <div class="panel-heading">
                                 <div style="float:right">קבוצות שדות טופס</div>
                                 <div class="askIcon">
@@ -650,19 +426,25 @@
 
                                                 <div class="panel-body grpBody" id="grpBody_{{grp.Id}}">
 
-                                                    <div class="col-md-12 colPadding0" ng-if="btns2grp.f2g.FieldsGroupsId==grp.Id" ng-repeat="btns2grp in $ctrl.btns2grps">
+                                                    <div class="col-md-12 colPadding0" style="" ng-if="btns2grp.f2g.FieldsGroupsId==grp.Id" ng-repeat="btns2grp in $ctrl.btns2grps">
 
-                                                        <div id="btnGrpField_{{btns2grp.f2g.Id}}" class="btn btn-primary btnGrpField" title="יש לגרור למקום הרצוי בטופס ">
-                                                            {{btns2grp.f.Name}}
+
+                                                        <div class="col-md-11 colPadding0"  style="">
+
+                                                            <div id="btnGrpField_{{btns2grp.f2g.Id}}" ng-click="$ctrl.actionFieldGroup(12,btns2grp.f2g.Id)" class="btn btn-primary btnGrpField" title="יש לגרור למקום הרצוי בטופס ">
+                                                                {{btns2grp.f.Name}}
+                                                            </div>
                                                         </div>
-                                                        <div class="btnLeft" ng-click="$ctrl.actionFieldGroup(10,btns2grp.f2g.Id)">
-                                                            <img src="../../images/delete3.png" width="18px" />
+
+                                                        <div class="col-md-1 colPadding0" style="">
+                                                            <div class="" ng-click="$ctrl.actionFieldGroup(10,btns2grp.f2g.Id)">
+                                                                <img src="../../images/delete3.png" width="18px" />
+                                                            </div>
                                                         </div>
                                                     </div>
 
 
-
-                                                </div>
+                                                    </div>
                                             </div>
                                         </div>
                                     </div>
@@ -674,7 +456,6 @@
                             </div>
                         </div>
 
-
                     </div>
 
 
@@ -684,7 +465,7 @@
             </div>
             <div class="col-md-7">
 
-                <div class="col-md-4 colPadding0">
+                <div class="col-md-4 colPadding2">
                     <select id="ddlFiles" class="form-control borderSelectBlue" ng-model="$ctrl.fileId" ng-options="farmspdffile.Id as farmspdffile.FileName for farmspdffile in $ctrl.farmspdffiles | filter:{Is101:false}">
                         <option value="">בחירת קובץ</option>
                     </select>
@@ -1091,17 +872,14 @@
 
             </div>
             <div class="panel-body">
-                <div class="col-md-12">
+                <div class="col-md-6">
 
                     <div class="form-group">
                         <label>כותרת</label>
                         <input type="text" name="name" class="form-control" ng-model="$ctrl.btns2grp.Title" />
                     </div>
 
-                    <div class="form-group">
-                        <label>שם</label>
-                        <input type="text" name="name" class="form-control" ng-model="$ctrl.btns2grp.Name" />
-                    </div>
+
 
                     <div class="form-group">
                         <label>סדר</label>
@@ -1109,7 +887,32 @@
                     </div>
 
                     <div class="form-group">
-                        <label><br /><input type="checkbox" ng-model="$ctrl.farm.OfficeIsMail" />  האם לשלוח מייל  </label>
+                        <label><br /><input type="checkbox" ng-model="$ctrl.btns2grp.IsWorkerShow" />  האם להציג לעובד/ת  </label>
+                    </div>
+
+
+                </div>
+
+                <div class="col-md-6">
+
+
+                    <div class="form-group">
+                        <label>שם</label>
+                        <input type="text" name="name" class="form-control" disabled ng-model="$ctrl.btns2grp.Name" />
+                    </div>
+
+
+
+                    <div class="form-group">
+                        <label>סוג שדה </label>
+                        <select id="ddlFieldsDataTypes" class="form-control" ng-model="$ctrl.btns2grp.FieldsDataTypesId">
+                         
+                            <option value="1">טקסט</option>
+                            <option value="2">מספר</option>
+                            <option value="3">תאריך</option>
+                            <option value="4">צ'קבוקס</option>
+
+                        </select>
                     </div>
 
                     <div class="form-group">
@@ -1117,29 +920,17 @@
                         <input type="text" class="form-control" ng-model="$ctrl.btns2grp.DefaultValue" />
                     </div>
 
+                </div>
+            </div>
 
-                    <div class="form-group">
-                        <label>סוג שדה </label>
-                        <select id="ddlFieldsDataTypes" class="form-control" ng-model="$ctrl.btns2grp.FieldsDataTypesId" ng-options="farmspdffile.Id as farmspdffile.FileName for farmspdffile in $ctrl.farmspdffiles | filter:{Is101:false}">
-                            <option value="">בחירת סוג</option>
-                        </select>
-                    </div>
+                <div class="panel-footer colAlignLeft">
 
+                    <button class="btn btn-primary panelClose" ng-click="$ctrl.SaveData(4)">שמירת נתונים</button>
 
+                    <button class="btn btn-danger panelClose">סגור</button>
 
                 </div>
-
-
             </div>
-
-            <div class="panel-footer colAlignLeft">
-
-                <button class="btn btn-primary panelClose" ng-click="$ctrl.SaveData(4)">שמירת נתונים</button>
-
-                <button class="btn btn-danger panelClose">סגור</button>
-
-            </div>
-        </div>
     </div>
 </form>
 

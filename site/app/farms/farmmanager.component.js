@@ -332,6 +332,23 @@
 
             }
 
+            //עריכת שדה
+            if (type == 4) {
+
+
+                var Objects = this.btns2grp;
+                this.farmsService.actionFieldGroup(12, this.farm.Id, Objects).then(function (btns2grps) {
+
+                    self.btns2grps = btns2grps;
+                    const myTimeout = setTimeout(BuildEditPDF, 300);
+
+                }.bind(this));
+
+
+            }
+
+
+
 
         }
       
@@ -361,7 +378,7 @@
 
                     }
 
-
+                    
                     self.btns = btns;
                     const myTimeout = setTimeout(BuildEditPDF, 300);
               
@@ -473,6 +490,25 @@
 
             }
 
+            //עריכת שדה בקבוצה
+            if (type == 12) {
+
+                var btns2grp = this.btns2grps.filter(x => x.f2g.Id == objid);
+
+                if (btns2grp.length > 0) {
+
+                    
+
+                    thisCtrl.btns2grp = btns2grp[0].f2g;
+                    thisCtrl.btns2grp.Name = btns2grp[0].f.Name;
+
+                    thisCtrl.btns2grp.FieldsDataTypesId = btns2grp[0].f2g.FieldsDataTypesId.toString();
+                    OpenDialog(2);
+                }
+
+
+
+            }
 
         }
 

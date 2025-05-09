@@ -1,0 +1,243 @@
+
+
+
+.dvSeq:not(.onlyPlus) {
+    cursor: pointer;
+    background: white;
+    margin: 15px; /* 3px 3px 3px 0;*/
+    padding: 1px;
+    float: right;
+    font-size: 4em;
+    text-align: center;
+    width: 150px;
+    height: 250px;
+}
+
+.dvSeq:hover:not(.onlyPlus) {
+    background: #e5e7eb;
+}
+
+.onlyPlus {
+    margin: 15px;
+    width: 150px;
+    height: 250px;
+    float: left;
+    background-image: url(../../images/Plusigul.png);
+    background-repeat: no-repeat;
+    background-position: right 50% top 50%;
+}
+
+.dvAddPdf {
+    cursor: pointer;
+    background: white;
+    margin: 3px 3px 3px 0;
+    padding: 1px;
+    float: right;
+    width: 150px;
+    height: 250px;
+    /*font-size: 4em;*/
+    text-align: center;
+    margin: 15px;
+    background-image: url(../../images/plus.png);
+    background-repeat: no-repeat;
+    background-position: right 50% top 30%;
+    padding-top: 130px;
+    opacity: 0.8;
+    font-weight: bold;
+    border-style: dashed;
+    border-width: 1px;
+    --tw-border-opacity: 1;
+    border-color: rgb(29 29 29/var(--tw-border-opacity));
+    border-radius: .5rem;
+}
+
+    .dvAddPdf:hover {
+        background: #e5e7eb;
+        background-position: right 50% top 30%;
+        background-image: url(../../images/plus.png);
+        background-repeat: no-repeat;
+        padding-top: 130px;
+        border-style: dashed;
+        border-width: 1px;
+        --tw-border-opacity: 1;
+        border-color: rgb(29 29 29/var(--tw-border-opacity));
+        border-radius: .5rem;
+    }
+
+.btnAddPdf {
+    background-image: url(../../images/Pdf.ico);
+    background-repeat: no-repeat;
+    background-position: left;
+    padding-left: 35px;
+    margin: 15px; /* 3px 3px 3px 0;*/
+}
+
+.hideUploadnew {
+    cursor: pointer;
+    opacity: 0;
+    position: relative;
+    top: -170px;
+    height: 250px;
+    width: 150px;
+}
+
+.portlet-placeholder {
+    margin: 15px;
+    float: right;
+    width: 150px;
+    height: 250px;
+    border: 2px dashed #3283a8;
+    /*  margin: 0 1em 1em 0;
+            height: 50px;*/
+}
+
+.ui-widget-header {
+    display: none;
+}
+
+
+#panelBody {
+    overflow: hidden;
+    height: 500px;
+}
+
+
+/*הטאב של הגרירה PDF*/
+
+#canvasEdit {
+    border-style: dashed;
+    border-width: 2px;
+    --tw-border-opacity: 1;
+    border-color: #337ab7;
+    border-radius: .7rem;
+    direction: ltr !important;
+    box-shadow: 10px 10px 5px lightblue;
+}
+
+.page-item {
+    cursor: pointer;
+}
+
+.pager li > a, .pager li > span {
+    background: none !important;
+}
+
+
+
+
+.pager {
+    position: absolute;
+    top: -50px;
+    left: 60%;
+}
+
+.spCurPage {
+    font-size: 45px;
+    font-weight: bold;
+    border: 0 !important;
+    text-align: right;
+    padding: 2px !important;
+    padding-left: 12px !important;
+}
+
+.spCurTotalPage {
+    padding: 2px !important;
+    font-size: 25px;
+    border: 0 !important;
+    padding-right: 12px !important;
+}
+
+.pager li > a, .pager li > span {
+    cursor: pointer;
+}
+
+
+
+
+.navButton {
+    display: inline-block;
+    padding: 5px 14px;
+    background-color: #fff;
+    border: 1px solid #337ab7;
+    border-radius: 15px;
+    cursor: pointer;
+    float: right;
+    color: #337ab7;
+}
+
+.spMikra {
+    color: #337ab7;
+    margin-top: -25px;
+    float: right;
+}
+
+/*  .panelFields {
+            cursor: move;
+        }*/
+
+
+
+.panelFields {
+   /* position: fixed;
+    max-width: 20%;
+    overflow-x: hidden !important;
+    z-index: 5;
+    height: calc(70% - 0.59em);
+    overflow-y: auto;*/
+}
+
+.borderSelectBlue {
+    border: 1px solid #337ab7;
+}
+
+.askIcon {
+    float: left;
+    cursor: pointer;
+}
+
+.imgAsk {
+    filter: brightness(0) invert(1);
+}
+
+.btnField {
+    margin-bottom: 5px;
+    z-index: 9999 !important;
+}
+
+.btnGrpField {
+    margin-bottom: 5px;
+    z-index: 9;
+    /* width: 150px;*/
+}
+
+.btnGrpFieldHelper {
+    z-index: 9;
+    background-color: transparent !important;
+    padding: 0px;
+}
+
+.portlet-placeholderGroups {
+    margin: 15px;
+    float: right;
+    width: 90%;
+    height: 150px;
+    border: 2px dashed #3283a8;
+    /*  margin: 0 1em 1em 0;
+            height: 50px;*/
+}
+
+.btnLeft {
+    float: left;
+    cursor: pointer;
+}
+
+
+
+@media (max-width:500px) {
+
+    .panelFields {
+        position: inherit;
+        width: 100%;
+    }
+
+}

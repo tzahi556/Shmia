@@ -36,9 +36,7 @@ namespace FarmsApi.Services
 
                 using (var Context = new Context())
                 {
-                    List<Fields> FieldsList = Context.Fields.Where(x => x.FarmId == farmid && x.StatusId == 1).ToList();
-
-
+                    List<Fields> FieldsList = Context.Fields.Where(x => (x.FarmId == farmid || x.FarmId==null) && x.StatusId == 1).ToList();
                     return Ok(FieldsList);
                 }
 
@@ -69,7 +67,7 @@ namespace FarmsApi.Services
 
 
                     var Results = (from f2g in Context.Fields2Groups.Where(x => x.FarmId == farmid).DefaultIfEmpty()
-                                   from f in Context.Fields.Where(x => x.FarmId == farmid && x.Id == f2g.FieldsId).DefaultIfEmpty()
+                                   from f in Context.Fields.Where(x => x.Id == f2g.FieldsId).DefaultIfEmpty()
 
 
 
@@ -78,7 +76,7 @@ namespace FarmsApi.Services
                                        f2g,
                                        f
 
-                                   }).ToList();
+                                   }).OrderBy(x=>x.f2g.Seq).ToList();
 
 
                     return Ok(Results);
@@ -113,7 +111,7 @@ namespace FarmsApi.Services
                         Context.Fields.Add(f);
                         Context.SaveChanges();
 
-                        List<Fields> FieldsList = Context.Fields.Where(x => x.FarmId == farmid && x.StatusId == 1).ToList();
+                        List<Fields> FieldsList = Context.Fields.Where(x => (x.FarmId == farmid || x.FarmId == null) && x.StatusId == 1).ToList();
                         return Ok(FieldsList);
 
 
@@ -144,7 +142,7 @@ namespace FarmsApi.Services
                     Context.Fields.Remove(FieldsObj);
                     Context.SaveChanges();
 
-                    List<Fields> FieldsList = Context.Fields.Where(x => x.FarmId == farmid && x.StatusId == 1).ToList();
+                    List<Fields> FieldsList = Context.Fields.Where(x => (x.FarmId == farmid || x.FarmId == null) && x.StatusId == 1).ToList();
                     return Ok(FieldsList);
 
                 }
@@ -324,6 +322,39 @@ namespace FarmsApi.Services
 
 
             }
+
+
+            //עריכה שדה
+            if (type == 12)
+            {
+
+                using (var Context = new Context())
+                {
+
+
+                    Fields2Groups f2g = JsonConvert.DeserializeObject<Fields2Groups>(objs.ToString());
+
+                    if (f2g != null)
+                    {
+                        Context.Entry(f2g).State = System.Data.Entity.EntityState.Modified;
+
+                        Context.SaveChanges();
+
+                    }
+
+
+                    //מחזירים את הזה שלנו החדש
+                    return ActionFieldGroup(3, farmid, null);
+
+
+                }
+
+
+
+
+
+            }
+
 
             return Ok();
         }

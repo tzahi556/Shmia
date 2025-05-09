@@ -147,15 +147,16 @@
 
 
     <link href="css/jquery.toast.css" rel="stylesheet" />
-    
+
     <script src="css/jquery.toast.js"></script>
 
 
 
-   
 
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.6.347/pdf.min.js"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.6.347/pdf_viewer.min.css" rel="stylesheet" type="text/css" />
+    <script src="js/pdf.min.js"></script>
+    <!--<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.6.347/pdf.min.js"></script>-->
+    <!--<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.6.347/pdf_viewer.js"></script>-->
+    <!--<link href="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.6.347/pdf_viewer.min.css" rel="stylesheet" type="text/css" />-->
     <!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>-->
     <!--<script type="text/javascript">
@@ -281,13 +282,15 @@
         var NumPages = 0;
         var CurrentPage = 1;
         var CurrentPDF;
+        var CurrentPDFPage;
+        var CurrentScale;
         var elemId;
         var CurrentWidth;
 
-        function CallEditPdfJs(elementId, url,width) {
+        function CallEditPdfJs(elementId, url, width) {
             elemId = elementId;
             CurrentWidth = width;
-            
+
             var url = url;
             // Loaded via <script> tag, create shortcut to access PDF.js exports.
             var { pdfjsLib } = globalThis;
@@ -301,27 +304,19 @@
 
                 CurrentPage = 1;
                 CurrentPDF = pdf;
-               
+
                 NumPages = pdf.numPages;
 
                 $("#spCurTotalPage").text(NumPages);
                 $("#spCurPage").text(CurrentPage);
 
 
-                //$('li').removeClass('disabled');
-
-                //$('#liPrev').addClass('disabled');
-
-                
-                //if (NumPages == 1) {
-                //    $('#liNext').addClass('disabled');
-                //}
-
 
                 //Start with first page
                 pdf.getPage(CurrentPage).then(handlePages);
 
-            
+
+
 
             }
                 , function (reason) {
@@ -329,18 +324,21 @@
 
                 });
 
-            
 
 
-           
+
+
 
 
         }
 
         function handlePages(page) {
-
+           
             // console.log('Page loaded');
-            $("#canvasContainer div").not('#' + elemId).remove();
+
+
+            // for clean all pages
+            //$("#canvasContainer div").not('#' + elemId).remove();
 
 
             //var scale = 1.5;
@@ -358,10 +356,6 @@
             var viewport = page.getViewport({ scale: 1 });
             var scale = CurrentWidth / viewport.width;
             viewport = page.getViewport({ scale: scale });
-           
-
-
-
 
 
             canvas.height = viewport.height;
@@ -389,7 +383,8 @@
             });
 
             CurrentViewport = viewport;
-
+            CurrentPDFPage = page;
+            CurrentScale = scale;
             // if currentpage etc///
 
             //if (CurrentPage == 1)
@@ -399,6 +394,38 @@
 
 
         }
+
+
+        function convertPixelsToPdfCoords(xPixel, yPixel, sssss) {
+
+            
+            debugger
+           // var scale = 1;
+            var viewport = CurrentPDFPage.getViewport({ scale: CurrentScale });
+
+
+            // Get viewport with scale
+          //  const viewport = pageView.viewport;
+
+            // Translate screen pixel coordinates to PDF coordinates
+            const transform = viewport.transform;
+
+            // Invert the transform matrix to map pixels to PDF space
+            const [a, b, c, d, e, f] = transform;
+
+            // Apply inverse transform
+            const det = a * d - b * c;
+            const xPdf = (d * (xPixel - e) - c * (yPixel - f)) / det;
+            const yPdf = (-b * (xPixel - e) + a * (yPixel - f)) / det;
+
+            return { x: xPdf, y: yPdf };
+        }
+
+
+
+      
+
+
 
         function changePage(delta) {
 
@@ -434,8 +461,8 @@
 
 
 
-        
-          
+
+
 
             if (type == 1 || !type) {
 
@@ -444,13 +471,13 @@
                     status: 'הודעת מערכת',
                     message: mes,
                     align: 'topcenter',
-                    // OPTIONAL. 
+                    // OPTIONAL.
                     // Default: 3000
                     delay: 50000000
                 });
 
 
-              
+
 
 
                 //$.toast({
@@ -483,7 +510,7 @@
                     status: 'הודעת מערכת',
                     message: mes,
                     align: 'topcenter',
-                    // OPTIONAL. 
+                    // OPTIONAL.
                     // Default: 3000
                     delay: 5000000000
                 });
@@ -514,7 +541,7 @@
                     status: 'הודעת מערכת',
                     message: mes,
                     align: 'topcenter',
-                    // OPTIONAL. 
+                    // OPTIONAL.
                     // Default: 3000
                     delay: 5000000000
                 });
