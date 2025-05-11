@@ -9,6 +9,8 @@
 
         var PdfList = [];
 
+        var CurrentFontSizeDrag;
+
         $(function () {
 
             $("#sortable").sortable({
@@ -33,18 +35,29 @@
             RefreshPage();
 
             BuildEditPDF();
+
             $(".panelFields").draggable();
             /* $(".panelFields").draggable();*/
 
             // for dev
             $("#ddlFiles").val("number:39");
+
             $('#ddlFiles').trigger("change");
 
 
-        
 
+            const myTimeout = setTimeout(setCurrentFontSizeDrag
+               
+            , 500);
 
         });
+
+        function setCurrentFontSizeDrag() {
+            CurrentFontSizeDrag = (CurrentScale / 1.7868541288718671).toString() + "em";
+            //alert(1);
+
+
+        }
 
         function RefreshPage() {
 
@@ -105,9 +118,6 @@
         function BuildEditPDF() {
 
 
-            
-
-
             $(".btnField").draggable({
 
                 helper: "clone",
@@ -122,7 +132,7 @@
                 helper: function () {
                     return $("<div class='btnGrpField'>").text($(this).text()).css({
                         'padding': '0px',
-                       /* 'fontSize': 19*/
+                        'fontSize': CurrentFontSizeDrag
                     });
                 },
 
@@ -248,9 +258,9 @@
                     var x = ui.offset.left - $(this).offset().left;
                     var y = ui.offset.top - $(this).offset().top;
 
+                   // debugger
+                  //  1.7868541288718671 / 809.03125
 
-                   
-                   
 
                     //var canvas = document.getElementById("canvasEdit");
                     //const rect = canvas.getBoundingClientRect();
@@ -259,15 +269,21 @@
                     // y=event.clientY - rect.top
                     //convertPixelsToPdfCoords(x , y, CurrentViewport);
 
+                  
+                    var dsdsd = CurrentViewport.convertToViewportPoint(489, 715);
 
 
                     var itemWidth = $(ui.helper).width();
                     var itemHeight = $(ui.helper).height();
 
+                    //1.7868541288718671
+                    //0.1276
+
+                    //1.1597225021836994
                     
-                    //alert(CurrentScale/14);
-                 
-                  
+                    // alert(CurrentScale/1.7868541288718671);
+                    
+                    
                     var PdfPoints = CurrentViewport.convertToPdfPoint(x + itemWidth, y - (itemHeight));
 
                     $('#spx').text(parseFloat(PdfPoints[0]).toFixed(2));
@@ -281,7 +297,7 @@
 
                     if (!$(ui.helper).hasClass("btnGrpFieldHelper")) {
 
-                        $("#canvasContainer").append(ui.helper.clone(true).css({ left: x , top: y }).addClass("btnGrpFieldHelper"));//.removeClass("btnGrpField"));
+                        $("#canvasContainer").append(ui.helper.clone(true).css({ left: x -3 , top: y }).addClass("btnGrpFieldHelper"));//.removeClass("btnGrpField"));
 
                         $(".btnGrpFieldHelper").draggable({ cursor: "pointer" });
 

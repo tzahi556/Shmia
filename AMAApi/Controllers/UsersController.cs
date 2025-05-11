@@ -20,7 +20,7 @@ namespace FarmsApi.Services
         {
             using (var Context = new Context())
             {
-
+                //סתם בירבורים
                 var Wor = Context.Workers.Where(x => x.ShnatMas == "2021").ToList();
                 foreach (var item in Wor)
                 {
