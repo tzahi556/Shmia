@@ -26,7 +26,6 @@ namespace FarmsApi.DataModels
         public DbSet<Farm> Farms { get; set; }
         public DbSet<FarmManagers> FarmManagers { get; set; }
         public DbSet<FarmInstructors> FarmInstructors { get; set; }
-
         public DbSet<FarmPDFFiles> FarmPDFFiles { get; set; }
 
 
@@ -35,10 +34,9 @@ namespace FarmsApi.DataModels
         public DbSet<Fields> Fields { get; set; }
         public DbSet<Fields2Groups> Fields2Groups { get; set; }
         public DbSet<FieldsDDL> FieldsDDL { get; set; }
+        public DbSet<Fields2PDF> Fields2PDF { get; set; }
 
-
-
-
+        
 
 
 

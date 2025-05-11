@@ -81,6 +81,32 @@ namespace FarmsApi.DataModels
 
 
 
+
+
+    [Table("Fields2PDF")]
+    public class Fields2PDF
+    {
+        public int Id { get; set; }
+
+        public int Fields2GroupsId { get; set; }
+
+        public int FarmPDFFilesId { get; set; }
+
+        public int PageNumber { get; set; }
+
+        public double? PdfX { get; set; }
+
+        public double? PdfY { get; set; }
+
+        public int StatusId { get; set; }
+
+    }
+
+
+
+
+
+
     [Table("FieldsDDL")]
     public class FieldsDDL
     {

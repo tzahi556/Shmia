@@ -187,7 +187,22 @@
                 if (CurrentFilePDF.length > 0) {
 
                     var currentWidth = $("#canvasContainer").width();
+
+
                     CallEditPdfJs("canvasEdit", CurrentFilePDF[0].FullLink, currentWidth);
+
+
+                   // const myTimeoutssss = setTimeout(AddParamsToPDF, 5000);
+
+                    
+                    //var fdfdf = CurrentViewport;
+
+                    
+                    var Objects = { Id: 0, Fields2GroupsId: 0, FarmPDFFilesId: PdfId, PageNumber: CurrentPage, PdfX: 0, PdfY: 0, StatusId: 1 };
+                   
+                    angular.element(document.getElementById('mainControllerHorse')).scope().getFields2PDF(Objects);
+
+
 
 
                 } else {
@@ -220,6 +235,22 @@
             //$("#canvasContainer").append('<div class="btnGrpFieldHelper ui-draggable ui-draggable-handle" style="padding: 0px; font-size: 18px; border: 1px solid gray; position: absolute; left: 806.828px; top: 246px;"> שם פרטי  </div > ');
             //$(".btnGrpFieldHelper").draggable({ cursor: "pointer" });                               
                                                           
+
+
+        }
+
+
+        function AddParamsToPDF(ObjList) {
+
+
+            //while (!CurrentViewport) {
+
+
+
+            //}
+
+            debugger
+            var ViewportPoints = CurrentViewport.convertToViewportPoint(489, 715);
 
 
         }
@@ -297,7 +328,7 @@
 
                     if (!$(ui.helper).hasClass("btnGrpFieldHelper")) {
 
-                        $("#canvasContainer").append(ui.helper.clone(true).css({ left: x -3 , top: y }).addClass("btnGrpFieldHelper"));//.removeClass("btnGrpField"));
+                        $("#canvasContainer").append(ui.helper.clone(true).css({ left: x-3 , top: y }).addClass("btnGrpFieldHelper"));//.removeClass("btnGrpField"));
 
                         $(".btnGrpFieldHelper").draggable({ cursor: "pointer" });
 

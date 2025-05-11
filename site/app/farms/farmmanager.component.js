@@ -277,6 +277,30 @@
 
         }
 
+        $scope.getFields2PDF = function (Objects) {
+
+            farmsService.actionFieldGroup(13, self.farm.Id, Objects).then(function (field2pdf) {
+                //debugger
+
+
+              //  return field2pdf;
+
+                //self.btns2grps = btns2grps;
+              // const myTimeout = setTimeout(AddParamsToPDF, 2000);
+
+                setTimeout(function () {
+                   
+                    AddParamsToPDF(field2pdf);
+                }, 4000);
+
+               // setTimeout(AddParamsToPDF.bind(null, field2pdf), 4000);
+
+
+
+            });
+
+        }
+
 
         function _SaveData(type) {
 

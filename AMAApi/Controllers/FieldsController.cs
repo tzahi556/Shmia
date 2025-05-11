@@ -323,7 +323,6 @@ namespace FarmsApi.Services
 
             }
 
-
             //עריכה שדה
             if (type == 12)
             {
@@ -355,6 +354,32 @@ namespace FarmsApi.Services
 
             }
 
+            //שליפה לפי פידפ שכרגע בוצע שולף את כל הנקודות שעל הפידפ 
+            if (type == 13) {
+                using (var Context = new Context())
+                {
+
+
+                    Fields2PDF fp = JsonConvert.DeserializeObject<Fields2PDF>(objs.ToString());
+
+
+                    var Results = (from f2p in Context.Fields2PDF.Where(x => x.FarmPDFFilesId == fp.FarmPDFFilesId && x.PageNumber==fp.PageNumber).DefaultIfEmpty()
+                                   from f2g in Context.Fields2Groups.Where(x => x.Id == f2p.Fields2GroupsId).DefaultIfEmpty()
+                                   from f in Context.Fields.Where(x => x.Id == f2g.FieldsId).DefaultIfEmpty()
+
+
+                                   select new
+                                   {
+                                       f2p,
+                                       f
+
+                                   }).ToList();
+
+
+                    return Ok(Results);
+                }
+
+            }
 
             return Ok();
         }
