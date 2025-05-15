@@ -11,6 +11,8 @@
 
         var CurrentFontSizeDrag;
 
+        var CurrentPdfId;
+
         $(function () {
 
             $("#sortable").sortable({
@@ -40,10 +42,31 @@
             /* $(".panelFields").draggable();*/
 
             // for dev
-            $("#ddlFiles").val("number:39");
 
-            $('#ddlFiles').trigger("change");
 
+            $('#tab3').click(function (e) {
+                if (PdfList.length > 0) {
+
+                  
+                    for (var i = 0; i < PdfList.length; i++) {
+
+                        debugger
+                        if (PdfList[i].Is101=="true")
+                        {
+                            continue;
+                        }
+
+                        $("#ddlFiles").val("number:" + PdfList[i].Id);
+                        $('#ddlFiles').trigger("change");
+
+                        break;
+                    }
+
+                  
+                    
+                   
+                }
+            });
 
 
             const myTimeout = setTimeout(setCurrentFontSizeDrag
@@ -55,8 +78,6 @@
         function setCurrentFontSizeDrag() {
             CurrentFontSizeDrag = (CurrentScale / 1.7868541288718671).toString() + "em";
             //alert(1);
-
-
         }
 
         function RefreshPage() {
@@ -130,7 +151,10 @@
                 //'fontSize': '18px',
                 //'border': '1px solid gray'
                 helper: function () {
-                    return $("<div class='btnGrpField'>").text($(this).text()).css({
+
+                    var btnGrpFieldId = $(this).attr("id");
+
+                    return $("<div id='" + btnGrpFieldId +"' class='btnGrpField'>").text($(this).text()).css({
                         'padding': '0px',
                         'fontSize': CurrentFontSizeDrag
                     });
@@ -179,18 +203,19 @@
 
             $("#ddlFiles").on("change", function () {
 
+                
+                CurrentPdfId = $(this).val().replace("number:", "");
 
-                var PdfId = $(this).val().replace("number:", "");
-
-                var CurrentFilePDF = PdfList.filter(x => x.Id == PdfId)
+                var CurrentFilePDF = PdfList.filter(x => x.Id == CurrentPdfId);
 
                 if (CurrentFilePDF.length > 0) {
 
                     var currentWidth = $("#canvasContainer").width();
+                    var currentHeight = $("#canvasContainer").height();
 
+                    CallEditPdfJs("canvasEdit", CurrentFilePDF[0].FullLink, currentWidth, currentHeight);
 
-                    CallEditPdfJs("canvasEdit", CurrentFilePDF[0].FullLink, currentWidth);
-
+                    
 
                    // const myTimeoutssss = setTimeout(AddParamsToPDF, 5000);
 
@@ -198,9 +223,9 @@
                     //var fdfdf = CurrentViewport;
 
                     
-                    var Objects = { Id: 0, Fields2GroupsId: 0, FarmPDFFilesId: PdfId, PageNumber: CurrentPage, PdfX: 0, PdfY: 0, StatusId: 1 };
+                    var Objects = { Id: 0, Fields2GroupsId: 0, FarmPDFFilesId: CurrentPdfId, PageNumber: CurrentPage, PdfX: 0, PdfY: 0, StatusId: 1 };
                    
-                    angular.element(document.getElementById('mainControllerHorse')).scope().getFields2PDF(Objects);
+                    angular.element(document.getElementById('mainControllerHorse')).scope().getSetFields2PDF(1,Objects);
 
 
 
@@ -219,12 +244,19 @@
             $("#liPrev").click(function () {
 
                 changePage(-1);
+                var Objects = { Id: 0, Fields2GroupsId: 0, FarmPDFFilesId: CurrentPdfId, PageNumber: CurrentPage, PdfX: 0, PdfY: 0, StatusId: 1 };
+
+                angular.element(document.getElementById('mainControllerHorse')).scope().getSetFields2PDF(1, Objects);
+                
             });
 
             $("#liNext").click(function () {
 
                 changePage(1);
+                var Objects = { Id: 0, Fields2GroupsId: 0, FarmPDFFilesId: CurrentPdfId, PageNumber: CurrentPage, PdfX: 0, PdfY: 0, StatusId: 1 };
 
+                angular.element(document.getElementById('mainControllerHorse')).scope().getSetFields2PDF(1, Objects);
+                
 
 
 
@@ -242,15 +274,53 @@
 
         function AddParamsToPDF(ObjList) {
 
+            
 
+            $("#canvasContainer div").not('#canvasEdit').remove();
             //while (!CurrentViewport) {
 
-
-
+            
+            CurrentFontSizeDrag = (CurrentScale / 1.7868541288718671).toString() + "em";
+           
             //}
 
-            debugger
-            var ViewportPoints = CurrentViewport.convertToViewportPoint(489, 715);
+            for (var i = 0; i < ObjList.length; i++) {
+                
+
+                var f2p = ObjList[i].f2p;
+                var f = ObjList[i].f;
+
+               
+
+                $("#canvasContainer").append('<div id="btnGrpFieldHelper_' + f2p.Id + '" fields2groupsid=' + f2p.Fields2GroupsId +' style="position:absolute;" class="btnGrpField btnGrpFieldHelper ui-draggable ui-draggable-handle">' + f.Name + '</div>');
+
+                var itemWidth = $("#btnGrpFieldHelper_" + f2p.Id).width();
+                var itemHeight = $("#btnGrpFieldHelper_" + f2p.Id).height();
+
+
+               
+                var ViewportPoints = CurrentViewport.convertToViewportPoint(f2p.PdfX, f2p.PdfY);
+                
+
+                $("#btnGrpFieldHelper_" + f2p.Id).css({ left: ViewportPoints[0]-3, top: ViewportPoints[1], fontSize: CurrentFontSizeDrag });
+
+                // for dev
+                $('#spxx').text(f2p.PdfX);
+                $('#spyy').text(f2p.PdfY);
+               
+                //$('#spxx').text(parseFloat(ViewportPoints[0] - itemWidth).toFixed(2));
+                //$('#spyy').text(parseFloat(ViewportPoints[1] + itemHeight).toFixed(2));
+
+                //$('#spScale').text(parseFloat(CurrentScale).toFixed(2));
+              //  $('#spWidth').text($("#canvasContainer").width());
+                //$('#spHeight').text($("#canvasContainer").height());
+               /* , fontSize: CurrentFontSizeDrag*/
+                
+
+            }
+            $(".btnGrpFieldHelper").draggable({ cursor: "pointer" });   
+
+           
 
 
         }
@@ -284,89 +354,84 @@
                 drop: function (event, ui) {
 
 
-                   
+                  
                    
                     var x = ui.offset.left - $(this).offset().left;
                     var y = ui.offset.top - $(this).offset().top;
 
-                   // debugger
-                  //  1.7868541288718671 / 809.03125
-
-
-                    //var canvas = document.getElementById("canvasEdit");
-                    //const rect = canvas.getBoundingClientRect();
-
-                    //x= event.clientX - rect.left,
-                    // y=event.clientY - rect.top
-                    //convertPixelsToPdfCoords(x , y, CurrentViewport);
-
                   
-                    var dsdsd = CurrentViewport.convertToViewportPoint(489, 715);
+                  
+                 
 
 
                     var itemWidth = $(ui.helper).width();
                     var itemHeight = $(ui.helper).height();
 
-                    //1.7868541288718671
-                    //0.1276
-
-                    //1.1597225021836994
-                    
-                    // alert(CurrentScale/1.7868541288718671);
+                   
                     
                     
-                    var PdfPoints = CurrentViewport.convertToPdfPoint(x + itemWidth, y - (itemHeight));
+                    
+                    var PdfPoints = CurrentViewport.convertToPdfPoint(x, y);
 
-                    $('#spx').text(parseFloat(PdfPoints[0]).toFixed(2));
-                    $('#spy').text(parseFloat(PdfPoints[1]).toFixed(2));
+                    var PdfX = parseFloat(PdfPoints[0]).toFixed(2);
+                    var PdfY = parseFloat(PdfPoints[1]).toFixed(2);
 
-                    //$('#spxx').text(x + 15);
-                    //$('#spyy').text(y);
+                    var PdfPointsNew = CurrentViewport.convertToPdfPoint(x + itemWidth, y - itemHeight);
+                    var PdfWidthX = parseFloat(PdfPointsNew[0]).toFixed(2);
+                    var PdfHeightY = parseFloat(PdfPointsNew[1]).toFixed(2);
+                    //$('#spxx').text(parseFloat(PdfPointsNew[0]).toFixed(2));
+                    //$('#spyy').text(parseFloat(PdfPointsNew[1]).toFixed(2));
 
-
-                    // $('#spy').text(y-1);
+                    //$('#spxx').text(x + itemWidth);
+                    //$('#spyy').text(y - (itemHeight));
+                   
 
                     if (!$(ui.helper).hasClass("btnGrpFieldHelper")) {
 
-                        $("#canvasContainer").append(ui.helper.clone(true).css({ left: x-3 , top: y }).addClass("btnGrpFieldHelper"));//.removeClass("btnGrpField"));
+                        var Fields2GroupsId = $(ui.helper).attr("id").replace("btnGrpField_", "");//.replace("btnGrpFieldHelper_", "");
+
+                        $("#canvasContainer").append(ui.helper.clone(true).css({ left: x-3, top: y }).addClass("btnGrpFieldHelper"));//.removeClass("btnGrpField"));
 
                         $(".btnGrpFieldHelper").draggable({ cursor: "pointer" });
 
+
+                        var Objects = { Id: 0, Fields2GroupsId: Fields2GroupsId, FarmPDFFilesId: CurrentPdfId, PageNumber: CurrentPage, PdfX: PdfX, PdfY: PdfY, PdfWidthX: PdfWidthX, PdfHeightY: PdfHeightY, StatusId: 1 };
+
+                        angular.element(document.getElementById('mainControllerHorse')).scope().getSetFields2PDF(2,Objects);
+
+
+                    } else {
+
+                        var Fields2PDFId = $(ui.helper).attr("id").replace("btnGrpFieldHelper_", "");
+                        var Fields2GroupsId = $(ui.helper).attr("fields2groupsid");
+
+
+                        var Objects = { Id: Fields2PDFId, Fields2GroupsId: Fields2GroupsId, FarmPDFFilesId: CurrentPdfId, PageNumber: CurrentPage, PdfX: PdfX, PdfY: PdfY, PdfWidthX: PdfWidthX, PdfHeightY: PdfHeightY, StatusId: 1 };
+
+                        angular.element(document.getElementById('mainControllerHorse')).scope().getSetFields2PDF(2, Objects);
+
                     }
-
-                    //var offsetY = 7;
-
-                    //var maxPDFx = 595;
-                    //var maxPDFy = 842;
-
-
-
-                    var maxHTMLx = $('#canvasEdit').width();
-
-                    //alert(itemWidth);
-                    //alert(maxHTMLx);
-                    //var maxHTMLy = $('#the-canvas').height();
-
-
-                    //var pdfY = y * maxPDFy / maxHTMLy;
-                    //var posizioneY = maxPDFy + offsetY - pdfY;
-                    //var posizioneX = x * maxPDFx / maxHTMLx  + itemWidth - 6;//+ offsetX;
-
-                    //$('#spx').text(posizioneX);
-                    //$('#spy').text(posizioneY);
-
 
 
 
                 },
 
-                //out: function (event, ui) {
-                //    if ($(ui.helper).hasClass("draggableOut")) {
-                //        $(ui.draggable).fadeOut(1000, function () {
-                //            $(this).remove();
-                //        });
-                //    }
-                //}
+                out: function (event, ui) {
+                    if ($(ui.helper).hasClass("btnGrpFieldHelper")) {
+                        $(ui.draggable).fadeOut(1000, function () {
+
+
+                            var Fields2PDFId = $(ui.helper).attr("id").replace("btnGrpFieldHelper_", "");
+                            $(this).remove();
+
+                         
+                            var Objects = { Id: Fields2PDFId, Fields2GroupsId: 0, FarmPDFFilesId: 0, PageNumber: 0, PdfX: 0, PdfY: 0, StatusId: 0 };
+
+                            angular.element(document.getElementById('mainControllerHorse')).scope().getSetFields2PDF(2, Objects);
+
+                        });
+                    }
+                }
 
 
             });
@@ -381,182 +446,6 @@
     <uib-tabset active="active" class="tab-form-demo" ng-show="!$ctrl.IsPopUp">
 
 
-        <uib-tab index="5" heading="עריכת PDF">
-
-            <div class="col-md-5 colPadding0">
-
-                <div class="col-md-12 colPadding0">
-
-                    <div class="col-md-6 colPadding2">
-                        <div class="panel panel-primary panelFields" style="">
-                            <div class="panel-heading">
-                                שדות קיימים במערכת
-                                <span></span>
-                            </div>
-                            <div class="panel-body">
-                                <div class="row">
-                                    <div class="col-md-8" style="margin:0">
-
-                                        <input type="text" style="margin:0" class="form-control" ng-model="$ctrl.FieldName" placeholder="שם שדה" />
-
-                                    </div>
-                                    <div class="col-md-4">
-                                        <button class="btn btn-success" title="הוספת שדה " ng-click="$ctrl.actionFieldGroup(4)">הוסף שדה</button>
-                                    </div>
-                                    <div class="col-md-12">&nbsp;</div>
-                                    <div class="col-md-12" ng-repeat="btn in $ctrl.btns">
-
-                                        <div id="btnField_{{btn.Id}}" class="btn btn-primary btnField" title="יש לגרור לקבוצה הרצויה">
-                                            {{btn.Name}}
-                                        </div>
-                                        <div ng-if="btn.FarmId>0" class="btnLeft" ng-click="$ctrl.actionFieldGroup(5,btn.Id)">
-                                            <img src="../../images/delete3.png" width="18px" />
-                                        </div>
-                                    </div>
-
-
-
-
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-
-                    <div class="col-md-6 colPadding2">
-                        <div class="panel panel-primary panelFields" style="z-index:4 !important;">
-                            <div class="panel-heading">
-                                <div style="float:right">קבוצות שדות טופס</div>
-                                <div class="askIcon">
-                                    <img src="../../images/ask.png" class="imgAsk" />
-                                </div>
-                                <div>&nbsp;</div>
-
-                            </div>
-                            <div class="panel-body">
-
-
-                                <div class="row">
-
-                                    <div class="col-md-8">
-                                        <input type="text" class="form-control" ng-model="$ctrl.GroupName" placeholder="שם קבוצה" />
-                                    </div>
-
-                                    <div class="col-md-4 colPadding0">
-
-
-                                        <button style="" class="btn btn-success" title="הוספת קבוצה" ng-click="$ctrl.actionFieldGroup(6)">הוסף קבוצה</button>
-
-
-                                    </div>
-
-                                    <div class="col-md-12">&nbsp;</div>
-
-
-                                    <div class="panelGroup">
-                                        <div id="grp_{{grp.Id}}" class="col-md-12" ng-repeat="grp in $ctrl.grps">
-
-                                            <div class="panel panel-info">
-
-                                                <div class="panel-heading">
-
-                                                    <div style="float:right">{{grp.Name}}</div>
-                                                    <div class="btnLeft" ng-click="$ctrl.actionFieldGroup(7,grp.Id)">
-                                                        <img src="../../images/delete3.png" width="24px" />
-                                                    </div>
-
-                                                    <div class="btnLeft" style="margin-left:5px;" ng-click="$ctrl.actionFieldGroup(11,grp.Id)">
-                                                        <img src="../../images/edit.png" width="24px" />
-                                                    </div>
-                                                    <div>&nbsp;</div>
-                                                </div>
-
-                                                <div class="panel-body grpBody" id="grpBody_{{grp.Id}}">
-
-                                                    <div class="col-md-12 colPadding0" style="" ng-if="btns2grp.f2g.FieldsGroupsId==grp.Id" ng-repeat="btns2grp in $ctrl.btns2grps">
-
-
-                                                        <div class="col-md-11 colPadding0"  style="">
-
-                                                            <div id="btnGrpField_{{btns2grp.f2g.Id}}" ng-click="$ctrl.actionFieldGroup(12,btns2grp.f2g.Id)" class="btn btn-primary btnGrpField" title="יש לגרור למקום הרצוי בטופס ">
-                                                                {{btns2grp.f.Name}}
-                                                            </div>
-                                                        </div>
-
-                                                        <div class="col-md-1 colPadding0" style="">
-                                                            <div class="" ng-click="$ctrl.actionFieldGroup(10,btns2grp.f2g.Id)">
-                                                                <img src="../../images/delete3.png" width="18px" />
-                                                            </div>
-                                                        </div>
-                                                    </div>
-
-
-                                                    </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-
-
-
-                            </div>
-                        </div>
-
-                    </div>
-
-
-
-                </div>
-
-            </div>
-            <div class="col-md-7">
-
-                <div class="col-md-4 colPadding2">
-                    <select id="ddlFiles" class="form-control borderSelectBlue" ng-model="$ctrl.fileId" ng-options="farmspdffile.Id as farmspdffile.FileName for farmspdffile in $ctrl.farmspdffiles | filter:{Is101:false}">
-                        <option value="">בחירת קובץ</option>
-                    </select>
-                </div>
-
-
-                <div class="col-md-4">
-
-
-                    <div id="liNext" class="navButton">
-                        <span>«</span>
-                    </div>
-                    <div class="spMikra">
-
-                        <span id="spCurPage" class="spCurPage">0</span>/<span id="spCurTotalPage" class="spCurTotalPage">0</span>
-
-                    </div>
-                    <div id="liPrev" class="navButton">
-                        <span>&raquo;</span>
-                    </div>
-
-
-                </div>
-
-
-                <div class="col-md-4">
-                    <span id="spxx"></span> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span id="spyy"></span>
-                    <br />
-                    <span id="spx"></span> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span id="spy"></span>
-                </div>
-
-
-                <div class="col-md-12 colPadding0">
-                    <div id="canvasContainer">
-
-                        <canvas id="canvasEdit">
-                        </canvas>
-
-                    </div>
-                </div>
-            </div>
-
-
-        </uib-tab>
 
         <!--פרטי חברה-->
         <uib-tab index="0" heading="פרטי חברה">
@@ -630,13 +519,13 @@
 
                             <!--<div class="col-md-12">
 
-                                <div class="form-group"><br />
+                            <div class="form-group"><br />
 
-                                    <br />
-                                    <hr />
-                                </div>
+                                <br />
+                                <hr />
+                            </div>
 
-                            </div>-->
+                        </div>-->
                             <div class="col-md-12">
 
                                 <div class="form-group">
@@ -802,7 +691,7 @@
                                      farmid="{{farmspdffile.FarmId}}"
                                      class="ui-state-default dvSeq">
 
-
+                                    <div class="dvfileNamePdf" title="{{farmspdffile.FileName}}">{{farmspdffile.FileName}}</div>
 
                                     <canvas id="Canvas_{{farmspdffile.Id}}">
                                     </canvas>
@@ -860,6 +749,233 @@
                 </div>
             </div>
         </uib-tab>
+
+        <!--עריכת PDF-->
+        <uib-tab index="5" id="tab3" heading="עריכת PDF">
+
+            <div class="col-md-5 colPadding0">
+
+                <div class="col-md-12 colPadding0">
+
+                    <div class="col-md-6 colPadding2">
+                        <div class="panel panel-primary panelFields" style="">
+                            <div class="panel-heading">
+                                שדות קיימים במערכת
+                                <span></span>
+                            </div>
+                            <div class="panel-body">
+                                <div class="row">
+                                    <div class="col-md-8" style="margin:0">
+
+                                        <input type="text" style="margin:0" class="form-control" ng-model="$ctrl.FieldName" placeholder="שם שדה" />
+
+                                    </div>
+                                    <div class="col-md-4">
+                                        <button class="btn btn-success" title="הוספת שדה " ng-click="$ctrl.actionFieldGroup(4)">הוסף שדה</button>
+                                    </div>
+                                    <div class="col-md-12">&nbsp;</div>
+                                    <div class="col-md-12" ng-repeat="btn in $ctrl.btns">
+
+                                        <div id="btnField_{{btn.Id}}" class="btn btn-primary btnField" title="יש לגרור לקבוצה הרצויה">
+                                            {{btn.Name}}
+                                        </div>
+                                        <div ng-if="btn.FarmId>0" class="btnLeft" ng-click="$ctrl.actionFieldGroup(5,btn.Id)">
+                                            <img src="../../images/delete3.png" width="18px" />
+                                        </div>
+                                    </div>
+
+
+
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="col-md-6 colPadding2">
+                        <div class="panel panel-primary panelFields" style="z-index:4 !important;">
+                            <div class="panel-heading">
+                                <div style="float:right">קבוצות שדות טופס</div>
+                                <div class="askIcon">
+                                    <img src="../../images/ask.png" class="imgAsk" />
+                                </div>
+                                <div>&nbsp;</div>
+
+                            </div>
+                            <div class="panel-body">
+
+
+                                <div class="row">
+
+                                    <div class="col-md-8">
+                                        <input type="text" class="form-control" ng-model="$ctrl.GroupName" placeholder="שם קבוצה" />
+                                    </div>
+
+                                    <div class="col-md-4 colPadding0">
+
+
+                                        <button style="" class="btn btn-success" title="הוספת קבוצה" ng-click="$ctrl.actionFieldGroup(6)">הוסף קבוצה</button>
+
+
+                                    </div>
+
+                                    <div class="col-md-12">&nbsp;</div>
+
+
+                                    <div class="panelGroup">
+                                        <div id="grp_{{grp.Id}}" class="col-md-12" ng-repeat="grp in $ctrl.grps">
+
+                                            <div class="panel panel-info">
+
+                                                <div class="panel-heading">
+
+                                                    <div style="float:right">{{grp.Name}}</div>
+                                                    <div class="btnLeft" ng-click="$ctrl.actionFieldGroup(7,grp.Id)">
+                                                        <img src="../../images/delete3.png" width="24px" />
+                                                    </div>
+
+                                                    <div class="btnLeft" style="margin-left:5px;" ng-click="$ctrl.actionFieldGroup(11,grp.Id)">
+                                                        <img src="../../images/edit.png" width="24px" />
+                                                    </div>
+                                                    <div>&nbsp;</div>
+                                                </div>
+
+                                                <div class="panel-body grpBody" id="grpBody_{{grp.Id}}">
+
+                                                    <div class="col-md-12 colPadding0" style="" ng-if="btns2grp.f2g.FieldsGroupsId==grp.Id" ng-repeat="btns2grp in $ctrl.btns2grps">
+
+
+                                                        <div class="col-md-11 colPadding0" style="">
+
+                                                            <div id="btnGrpField_{{btns2grp.f2g.Id}}" ng-click="$ctrl.actionFieldGroup(12,btns2grp.f2g.Id)" class="btn btn-primary btnGrpField" title="יש לגרור למקום הרצוי בטופס ">
+                                                                {{btns2grp.f.Name}}
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="col-md-1 colPadding0" style="">
+                                                            <div class="" ng-click="$ctrl.actionFieldGroup(10,btns2grp.f2g.Id)">
+                                                                <img src="../../images/delete3.png" width="18px" />
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+
+
+                            </div>
+                        </div>
+
+                    </div>
+
+
+
+                </div>
+
+            </div>
+            <div class="col-md-7">
+
+                <div class="col-md-4 colPadding2">
+                    <select id="ddlFiles" class="form-control borderSelectBlue" ng-model="$ctrl.fileId" ng-options="farmspdffile.Id as farmspdffile.FileName for farmspdffile in $ctrl.farmspdffiles | filter:{Is101:false}">
+                        <option value="">בחירת קובץ</option>
+                    </select>
+                </div>
+
+
+                <div class="col-md-4">
+
+
+                    <div id="liNext" class="navButton">
+                        <span>«</span>
+                    </div>
+                    <div class="spMikra">
+
+                        <span id="spCurPage" class="spCurPage">0</span>/<span id="spCurTotalPage" class="spCurTotalPage">0</span>
+
+                    </div>
+                    <div id="liPrev" class="navButton">
+                        <span>&raquo;</span>
+                    </div>
+
+
+                </div>
+
+
+                <div class="col-md-4">
+
+                    <span id="spxx"></span> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span id="spyy"></span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span id="spScale"></span>
+                    <!--<br />
+                <span id="spx"></span> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span id="spy"></span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+                <br />W-<span id="spWidth"></span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<br />H-<span id="spHeight"></span>-->
+                </div>
+
+
+                <div class="col-md-12 colPadding0">
+                    <div id="canvasContainer">
+
+
+                        <canvas id="canvasEdit">
+                        </canvas>
+
+                    </div>
+                </div>
+            </div>
+
+
+        </uib-tab>
+
+        <!--תצוגת-->
+        <uib-tab index="7" heading="תצוגת סופית של PDF">
+
+            <div class="col-md-12">
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        תצוגת סופית של PDF
+
+                    </div>
+                    <div class="panel-body">
+
+                        <div class="panel panel-primary">
+                            <!--<div class="panel-heading">
+                            תצוגת קובץ PDF
+
+                            <div style="float:left;cursor:pointer" class="panelClose">
+                                <img src="../../images/_notArrive.png" width="24px" />
+                            </div>
+
+                        </div>-->
+                            <div class="panel-body" id="panelBody">
+                                <div id="divContainerEnd"
+                                     style="border:2px solid black;height:100%;overflow:auto;">
+                                    <object id="objPdfEnd" data="http://localhost:44033/Uploads/DemoAll.pdf"
+                                            type="application/pdf"
+                                            width="100%"
+                                            height="99%" style="">
+                                    </object>
+                                </div>
+
+                            </div>
+                        </div>
+
+
+                    </div>
+                    <div class="panel-footer">
+                        <label>בחלק זה ניתן לצפות בקובץ PDF כפי שנבנה בשלבים הקודמים. </label>
+
+                    </div>
+                </div>
+            </div>
+
+
+        </uib-tab>
+
 
     </uib-tabset>
 

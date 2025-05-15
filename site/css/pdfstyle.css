@@ -91,6 +91,21 @@
             height: 50px;*/
 }
 
+
+.dvfileNamePdf {
+    font-size: 12px !important;
+    position: absolute;
+    top: -5px;
+    direction: ltr;
+    text-align: center !important;
+    font-weight: bold;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 145px;
+}
+
+
 .ui-widget-header {
     display: none;
 }

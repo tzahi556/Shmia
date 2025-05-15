@@ -98,6 +98,10 @@ namespace FarmsApi.DataModels
 
         public double? PdfY { get; set; }
 
+        public double? PdfWidthX { get; set; }
+
+        public double? PdfHeightY { get; set; }
+
         public int StatusId { get; set; }
 
     }

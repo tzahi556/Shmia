@@ -286,11 +286,11 @@
         var CurrentScale;
         var elemId;
         var CurrentWidth;
-
-        function CallEditPdfJs(elementId, url, width) {
+        var CurrentHeight;
+        function CallEditPdfJs(elementId, url, width,height) {
             elemId = elementId;
             CurrentWidth = width;
-
+            CurrentHeight = height;
             var url = url;
             // Loaded via <script> tag, create shortcut to access PDF.js exports.
             var { pdfjsLib } = globalThis;
@@ -354,7 +354,12 @@
             var canvas = document.getElementById(elemId);
             var context = canvas.getContext('2d');
             var viewport = page.getViewport({ scale: 1 });
+
             var scale = CurrentWidth / viewport.width;
+           // var scaleY = CurrentHeight / viewport.height;
+
+           // var scale = Math.max(scaleX, scaleY);
+
             viewport = page.getViewport({ scale: scale });
 
 

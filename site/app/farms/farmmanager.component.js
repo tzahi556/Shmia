@@ -87,21 +87,37 @@
         };
 
         function _init() {
-            
+
 
             self.farm.Style = (self.farm.Style) ? self.farm.Style.toString() : "0";
 
 
-            self.LogoTemp = (self.farm.Logo) ? "/Companies/" + self.farm.Id + "/Logo/" + self.farm.Logo : "";
-            self.farm.Logo = (self.farm.Logo) ? sharedValues.apiUrl + "/Uploads/Companies/" + self.farm.Id + "/Logo/" + self.farm.Logo : "../../images/default-avatar.png";
 
 
-            self.SignTemp = (self.farm.Sign) ? "/Companies/" + self.farm.Id + "/PDFS/" + self.farm.Sign : "";
+            if (self.farm.Logo && self.farm.Logo.indexOf("http") == -1) {
+                self.LogoTemp = "/Companies/" + self.farm.Id + "/Logo/" + self.farm.Logo;
+                self.farm.Logo = sharedValues.apiUrl + "/Uploads/Companies/" + self.farm.Id + "/Logo/" + self.farm.Logo;
+            } else if (!self.farm.Logo) {
 
-            self.farm.Sign = (self.farm.Sign) ? sharedValues.apiUrl + "/Uploads/Companies/" + self.farm.Id + "/PDFS/" + self.farm.Sign + "?" + (new Date()).getTime() : "../../images/empty.png";
+                self.LogoTemp = "";
+                self.farm.Logo = "../../images/default-avatar.png";
+            }
 
 
-         
+
+            if (self.farm.Sign && self.farm.Sign.indexOf("http") == -1) {
+                self.SignTemp = "/Companies/" + self.farm.Id + "/PDFS/" + self.farm.Sign ;
+                self.farm.Sign =  sharedValues.apiUrl + "/Uploads/Companies/" + self.farm.Id + "/PDFS/" + self.farm.Sign + "?" + (new Date()).getTime();
+            } else if (!self.farm.Sign) {
+
+                self.SignTemp = "";
+                self.farm.Sign = " ../../images/empty.png";
+            }
+
+           
+
+
+
             for (var i in this.farmspdffiles) {
 
                 var f = this.farmspdffiles[i];
@@ -127,15 +143,15 @@
             var confirmBox = alertMessage("האם אתה בטוח שברצונך להסיר את הקובץ?", 4);
             confirmBox.click(function () {
 
-              
+
                 farmsService.updateFarmsPdfFiles(3, Id, self.farmspdffiles).then(function (farmspdffiles) {
 
                     self.farmspdffiles = farmspdffiles;
                     self.init();
 
                     const myTimeout = setTimeout(RefreshPage, 300);
-                 /*   RefreshPage();*/
-                   
+                    /*   RefreshPage();*/
+
 
                     //self.init();
 
@@ -153,14 +169,13 @@
 
             farmsService.getFarmPDFFiles(this.farm.Id).then(function (farmspdffiles) {
 
-               
+
 
                 self.farmspdffiles = farmspdffiles;
                 self.init();
                 const myTimeout = setTimeout(RefreshPage, 300);
 
-                //self.init();
-               // $state.reload();
+
 
             });
 
@@ -216,13 +231,13 @@
 
             farmsService.updateFarmsPdfFiles(4, this.farm.Id, farmspdffilestemp).then(function (farmspdffiles) {
 
-              
+
 
             });
 
         }
 
-        $scope.sendNewOrderforGroupsFields = function (type,IdsOrders) {
+        $scope.sendNewOrderforGroupsFields = function (type, IdsOrders) {
             // debugger
             var grpstemp = [];
 
@@ -243,7 +258,7 @@
             }
 
             farmsService.actionFieldGroup(8, this.farm.Id, grpstemp).then(function (grps) {
-                
+
                 self.grps = grps;
                 const myTimeout = setTimeout(BuildEditPDF, 300);
             });
@@ -262,10 +277,10 @@
             }
 
 
-            var Objects = {FieldsId: btnid, FieldsGroupsId: grpId};
+            var Objects = { FieldsId: btnid, FieldsGroupsId: grpId };
 
             farmsService.actionFieldGroup(9, self.farm.Id, Objects).then(function (btns2grps) {
-               
+
 
                 self.btns2grps = btns2grps;
                 const myTimeout = setTimeout(BuildEditPDF, 300);
@@ -277,29 +292,64 @@
 
         }
 
-        $scope.getFields2PDF = function (Objects) {
+        $scope.getSetFields2PDF = function (type, Objects) {
 
-            farmsService.actionFieldGroup(13, self.farm.Id, Objects).then(function (field2pdf) {
-                //debugger
+            // שליפה של כל הנקודות
+            if (type == 1) {
+                farmsService.actionFieldGroup(13, self.farm.Id, Objects).then(function (field2pdf) {
 
+                    (async () => {
 
-              //  return field2pdf;
-
-                //self.btns2grps = btns2grps;
-              // const myTimeout = setTimeout(AddParamsToPDF, 2000);
-
-                setTimeout(function () {
+                        while (!CurrentScale && self.farmspdffiles.length>0) // define the condition as you like
+                            await new Promise(resolve => setTimeout(resolve, 200));
+                        AddParamsToPDF(field2pdf);
+                       
+                      
+                    })();
                    
-                    AddParamsToPDF(field2pdf);
-                }, 4000);
 
-               // setTimeout(AddParamsToPDF.bind(null, field2pdf), 4000);
+                   
+
+                });
+
+            }
+
+            // עדכון או הוספה או מחיקה
+            if (type == 2) {
+                farmsService.actionFieldGroup(14, self.farm.Id, Objects).then(function (field2pdf) {
+
+                    (async () => {
+
+                        while (!CurrentScale && self.farmspdffiles.length > 0) // define the condition as you like
+                            await new Promise(resolve => setTimeout(resolve, 200));
+                        AddParamsToPDF(field2pdf);
+
+
+                    })();
+
+
+                    //setTimeout(function () {
+
+                    //    AddParamsToPDF(field2pdf);
+                    //}, 400);
+
+                });
 
 
 
-            });
+
+
+
+
+            }
+
+
 
         }
+
+
+
+
 
 
         function _SaveData(type) {
@@ -326,15 +376,15 @@
                 farmsService.updateFarmsPdfFiles(2, self.farm.Id, self.farmspdffiles).then(function (farmspdffiles) {
 
 
-                   
+
 
                     self.farmspdffiles = farmspdffiles;
                     self.init();
                     const myTimeout = setTimeout(RefreshPage, 300);
 
-                   // 
+                    // 
 
-                   // $state.reload();
+                    // $state.reload();
 
                 });
 
@@ -343,7 +393,7 @@
 
             //עריכת קבוצה
             if (type == 3) {
-               
+
 
                 var Objects = this.grp;
                 this.farmsService.actionFieldGroup(11, this.farm.Id, Objects).then(function (grps) {
@@ -375,7 +425,7 @@
 
 
         }
-      
+
         function _actionFieldGroup(type, objid) {
 
             var thisCtrl = this;
@@ -385,7 +435,7 @@
 
                 if (!this.FieldName) {
 
-                    alertMessage("שם שדה הינו שדה חובה!",3);
+                    alertMessage("שם שדה הינו שדה חובה!", 3);
                     return;
                 }
 
@@ -402,20 +452,20 @@
 
                     }
 
-                    
+
                     self.btns = btns;
                     const myTimeout = setTimeout(BuildEditPDF, 300);
-              
 
-                   // self.init();
-                   // const myTimeout = setTimeout(RefreshPage, 300);
+
+                    // self.init();
+                    // const myTimeout = setTimeout(RefreshPage, 300);
                 }.bind(this));
 
             }
 
             //מחיקת שדה
             if (type == 5) {
-               
+
                 var Objects = { Obj: objid };
                 var confirmBox = alertMessage("האם אתה בטוח שברצונך להסיר את השדה?", 4);
                 confirmBox.click(function () {
@@ -426,9 +476,9 @@
 
                         const myTimeout = setTimeout(BuildEditPDF, 300);
 
-                       
+
                     }.bind(this));
-                   
+
 
                 })
 
@@ -437,10 +487,10 @@
             //הוספה קבוצה
             if (type == 6) {
 
-                
+
                 if (!this.GroupName) {
 
-                    alertMessage("שם קבוצה הינו שדה חובה!",3);
+                    alertMessage("שם קבוצה הינו שדה חובה!", 3);
                     return;
                 }
                 var Objects = { Obj: this.GroupName };
@@ -451,7 +501,7 @@
                     const myTimeout = setTimeout(BuildEditPDF, 300);
 
                 }.bind(this));
-                
+
 
             }
 
@@ -485,7 +535,7 @@
 
                     thisCtrl.farmsService.actionFieldGroup(10, thisCtrl.farm.Id, Objects).then(function (btns2grps) {
 
-                        
+
 
                         thisCtrl.btns2grps = btns2grps;
 
@@ -506,11 +556,11 @@
 
                 if (grp.length > 0) {
 
-                      thisCtrl.grp = grp[0];
-                      OpenDialog(1);
+                    thisCtrl.grp = grp[0];
+                    OpenDialog(1);
                 }
 
-                
+
 
             }
 
@@ -521,7 +571,7 @@
 
                 if (btns2grp.length > 0) {
 
-                    
+
 
                     thisCtrl.btns2grp = btns2grp[0].f2g;
                     thisCtrl.btns2grp.Name = btns2grp[0].f.Name;

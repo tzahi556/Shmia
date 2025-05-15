@@ -36,7 +36,7 @@ namespace FarmsApi.Services
 
                 using (var Context = new Context())
                 {
-                    List<Fields> FieldsList = Context.Fields.Where(x => (x.FarmId == farmid || x.FarmId==null) && x.StatusId == 1).ToList();
+                    List<Fields> FieldsList = Context.Fields.Where(x => (x.FarmId == farmid || x.FarmId == null) && x.StatusId == 1).ToList();
                     return Ok(FieldsList);
                 }
 
@@ -76,7 +76,7 @@ namespace FarmsApi.Services
                                        f2g,
                                        f
 
-                                   }).OrderBy(x=>x.f2g.Seq).ToList();
+                                   }).OrderBy(x => x.f2g.Seq).ToList();
 
 
                     return Ok(Results);
@@ -355,7 +355,8 @@ namespace FarmsApi.Services
             }
 
             //שליפה לפי פידפ שכרגע בוצע שולף את כל הנקודות שעל הפידפ 
-            if (type == 13) {
+            if (type == 13)
+            {
                 using (var Context = new Context())
                 {
 
@@ -363,7 +364,7 @@ namespace FarmsApi.Services
                     Fields2PDF fp = JsonConvert.DeserializeObject<Fields2PDF>(objs.ToString());
 
 
-                    var Results = (from f2p in Context.Fields2PDF.Where(x => x.FarmPDFFilesId == fp.FarmPDFFilesId && x.PageNumber==fp.PageNumber).DefaultIfEmpty()
+                    var Results = (from f2p in Context.Fields2PDF.Where(x => x.FarmPDFFilesId == fp.FarmPDFFilesId && x.PageNumber == fp.PageNumber).DefaultIfEmpty()
                                    from f2g in Context.Fields2Groups.Where(x => x.Id == f2p.Fields2GroupsId).DefaultIfEmpty()
                                    from f in Context.Fields.Where(x => x.Id == f2g.FieldsId).DefaultIfEmpty()
 
@@ -375,8 +376,58 @@ namespace FarmsApi.Services
 
                                    }).ToList();
 
+                    return Ok(Results);
+                }
+
+            }
+
+            //עדכון או הוספה או מחיקה לקנבס 
+            if (type == 14)
+            {
+                using (var Context = new Context())
+                {
+
+                    Fields2PDF fp = JsonConvert.DeserializeObject<Fields2PDF>(objs.ToString());
+                    if (fp != null)
+                    {
+                        //הוספה
+                        if (fp.Id == 0)
+                        {
+                            Context.Fields2PDF.Add(fp);
+                            Context.SaveChanges();
+                        }
+                        //עדכון
+                        else if(fp.StatusId == 1)
+                        {
+                            Context.Entry(fp).State = System.Data.Entity.EntityState.Modified;
+                            Context.SaveChanges();
+                        }
+                        //מחיקה
+                        else
+                        {
+                            fp = Context.Fields2PDF.Where(x => x.Id == fp.Id).FirstOrDefault();
+                            Context.Fields2PDF.Remove(fp);
+                            Context.SaveChanges();
+
+
+                        }
+                    }
+
+
+                    var Results = (from f2p in Context.Fields2PDF.Where(x => x.FarmPDFFilesId == fp.FarmPDFFilesId && x.PageNumber == fp.PageNumber).DefaultIfEmpty()
+                                   from f2g in Context.Fields2Groups.Where(x => x.Id == f2p.Fields2GroupsId).DefaultIfEmpty()
+                                   from f in Context.Fields.Where(x => x.Id == f2g.FieldsId).DefaultIfEmpty()
+
+
+                                   select new
+                                   {
+                                       f2p,
+                                       f
+
+                                   }).ToList();
 
                     return Ok(Results);
+
                 }
 
             }
