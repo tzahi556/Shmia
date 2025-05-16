@@ -1,10 +1,10 @@
 ﻿
 <form name="farmmangerForm" novalidate>
 
-
+   
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.14.1/themes/base/jquery-ui.css">
     <link href="../../css/pdfstyle.css" rel="stylesheet" />
-  
+
     <script>
 
         var PdfList = [];
@@ -45,35 +45,63 @@
 
 
             $('#tab3').click(function (e) {
-                if (PdfList.length > 0) {
-
-                  
-                    for (var i = 0; i < PdfList.length; i++) {
-
-                        debugger
-                        if (PdfList[i].Is101=="true")
-                        {
-                            continue;
-                        }
-
-                        $("#ddlFiles").val("number:" + PdfList[i].Id);
-                        $('#ddlFiles').trigger("change");
-
-                        break;
-                    }
-
-                  
-                    
-                   
-                }
+                RefreshComboFiles();
             });
 
 
             const myTimeout = setTimeout(setCurrentFontSizeDrag
-               
-            , 500);
+
+                , 500);
 
         });
+
+
+        function RefreshComboFiles() {
+
+            PdfList = [];
+
+
+            $(".dvSeq").each(function (item) {
+
+
+                var Id = $(this).attr("Id").replace("dv_", "");
+                var FileName = $(this).attr("pdfname");
+                var FullLink = $(this).attr("pdffulllink");
+                var Is101 = $(this).attr("is101");
+                var Seq = $(this).attr("seq");
+
+                var JsonObj = { "Id": Id, "FileName": FileName, "FullLink": FullLink, "Is101": Is101, "Seq": Seq };
+
+                PdfList.push(JsonObj);
+
+
+            });
+
+
+
+            if (PdfList.length > 0) {
+
+
+                for (var i = 0; i < PdfList.length; i++) {
+
+
+                    if (PdfList[i].Is101 == "true") {
+                        continue;
+                    }
+
+                    $("#ddlFiles").val("number:" + PdfList[i].Id);
+                    $('#ddlFiles').trigger("change");
+
+                    break;
+                }
+
+
+
+
+            }
+
+        }
+
 
         function setCurrentFontSizeDrag() {
             CurrentFontSizeDrag = (CurrentScale / 1.7868541288718671).toString() + "em";
@@ -92,8 +120,9 @@
                 var FileName = $(this).attr("pdfname");
                 var FullLink = $(this).attr("pdffulllink");
                 var Is101 = $(this).attr("is101");
+                var Seq = $(this).attr("seq");
 
-                var JsonObj = { "Id": Id, "FileName": FileName, "FullLink": FullLink, "Is101": Is101 };
+                var JsonObj = { "Id": Id, "FileName": FileName, "FullLink": FullLink, "Is101": Is101, "Seq": Seq };
 
                 PdfList.push(JsonObj);
 
@@ -154,7 +183,7 @@
 
                     var btnGrpFieldId = $(this).attr("id");
 
-                    return $("<div id='" + btnGrpFieldId +"' class='btnGrpField'>").text($(this).text()).css({
+                    return $("<div id='" + btnGrpFieldId + "' class='btnGrpField'>").text($(this).text()).css({
                         'padding': '0px',
                         'fontSize': CurrentFontSizeDrag
                     });
@@ -203,7 +232,7 @@
 
             $("#ddlFiles").on("change", function () {
 
-                
+
                 CurrentPdfId = $(this).val().replace("number:", "");
 
                 var CurrentFilePDF = PdfList.filter(x => x.Id == CurrentPdfId);
@@ -215,17 +244,17 @@
 
                     CallEditPdfJs("canvasEdit", CurrentFilePDF[0].FullLink, currentWidth, currentHeight);
 
-                    
 
-                   // const myTimeoutssss = setTimeout(AddParamsToPDF, 5000);
 
-                    
+                    // const myTimeoutssss = setTimeout(AddParamsToPDF, 5000);
+
+
                     //var fdfdf = CurrentViewport;
 
-                    
+
                     var Objects = { Id: 0, Fields2GroupsId: 0, FarmPDFFilesId: CurrentPdfId, PageNumber: CurrentPage, PdfX: 0, PdfY: 0, StatusId: 1 };
-                   
-                    angular.element(document.getElementById('mainControllerHorse')).scope().getSetFields2PDF(1,Objects);
+
+                    angular.element(document.getElementById('mainControllerHorse')).scope().getSetFields2PDF(1, Objects);
 
 
 
@@ -247,7 +276,7 @@
                 var Objects = { Id: 0, Fields2GroupsId: 0, FarmPDFFilesId: CurrentPdfId, PageNumber: CurrentPage, PdfX: 0, PdfY: 0, StatusId: 1 };
 
                 angular.element(document.getElementById('mainControllerHorse')).scope().getSetFields2PDF(1, Objects);
-                
+
             });
 
             $("#liNext").click(function () {
@@ -256,7 +285,7 @@
                 var Objects = { Id: 0, Fields2GroupsId: 0, FarmPDFFilesId: CurrentPdfId, PageNumber: CurrentPage, PdfX: 0, PdfY: 0, StatusId: 1 };
 
                 angular.element(document.getElementById('mainControllerHorse')).scope().getSetFields2PDF(1, Objects);
-                
+
 
 
 
@@ -265,8 +294,8 @@
             BuildCanvasDrop();
 
             //$("#canvasContainer").append('<div class="btnGrpFieldHelper ui-draggable ui-draggable-handle" style="padding: 0px; font-size: 18px; border: 1px solid gray; position: absolute; left: 806.828px; top: 246px;"> שם פרטי  </div > ');
-            //$(".btnGrpFieldHelper").draggable({ cursor: "pointer" });                               
-                                                          
+            //$(".btnGrpFieldHelper").draggable({ cursor: "pointer" });
+
 
 
         }
@@ -274,53 +303,53 @@
 
         function AddParamsToPDF(ObjList) {
 
-            
+
 
             $("#canvasContainer div").not('#canvasEdit').remove();
             //while (!CurrentViewport) {
 
-            
+
             CurrentFontSizeDrag = (CurrentScale / 1.7868541288718671).toString() + "em";
-           
+
             //}
 
             for (var i = 0; i < ObjList.length; i++) {
-                
+
 
                 var f2p = ObjList[i].f2p;
                 var f = ObjList[i].f;
 
-               
 
-                $("#canvasContainer").append('<div id="btnGrpFieldHelper_' + f2p.Id + '" fields2groupsid=' + f2p.Fields2GroupsId +' style="position:absolute;" class="btnGrpField btnGrpFieldHelper ui-draggable ui-draggable-handle">' + f.Name + '</div>');
+
+                $("#canvasContainer").append('<div id="btnGrpFieldHelper_' + f2p.Id + '" fields2groupsid=' + f2p.Fields2GroupsId + ' style="position:absolute;" class="btnGrpField btnGrpFieldHelper ui-draggable ui-draggable-handle">' + f.Name + '</div>');
 
                 var itemWidth = $("#btnGrpFieldHelper_" + f2p.Id).width();
                 var itemHeight = $("#btnGrpFieldHelper_" + f2p.Id).height();
 
 
-               
-                var ViewportPoints = CurrentViewport.convertToViewportPoint(f2p.PdfX, f2p.PdfY);
-                
 
-                $("#btnGrpFieldHelper_" + f2p.Id).css({ left: ViewportPoints[0]-3, top: ViewportPoints[1], fontSize: CurrentFontSizeDrag });
+                var ViewportPoints = CurrentViewport.convertToViewportPoint(f2p.PdfX, f2p.PdfY);
+
+
+                $("#btnGrpFieldHelper_" + f2p.Id).css({ left: ViewportPoints[0] - 3, top: ViewportPoints[1], fontSize: CurrentFontSizeDrag });
 
                 // for dev
                 $('#spxx').text(f2p.PdfX);
                 $('#spyy').text(f2p.PdfY);
-               
+
                 //$('#spxx').text(parseFloat(ViewportPoints[0] - itemWidth).toFixed(2));
                 //$('#spyy').text(parseFloat(ViewportPoints[1] + itemHeight).toFixed(2));
 
                 //$('#spScale').text(parseFloat(CurrentScale).toFixed(2));
-              //  $('#spWidth').text($("#canvasContainer").width());
+                //  $('#spWidth').text($("#canvasContainer").width());
                 //$('#spHeight').text($("#canvasContainer").height());
-               /* , fontSize: CurrentFontSizeDrag*/
-                
+                /* , fontSize: CurrentFontSizeDrag*/
+
 
             }
-            $(".btnGrpFieldHelper").draggable({ cursor: "pointer" });   
+            $(".btnGrpFieldHelper").draggable({ cursor: "pointer" });
 
-           
+
 
 
         }
@@ -354,23 +383,23 @@
                 drop: function (event, ui) {
 
 
-                  
-                   
+
+
                     var x = ui.offset.left - $(this).offset().left;
                     var y = ui.offset.top - $(this).offset().top;
 
-                  
-                  
-                 
+
+
+
 
 
                     var itemWidth = $(ui.helper).width();
                     var itemHeight = $(ui.helper).height();
 
-                   
-                    
-                    
-                    
+
+
+
+
                     var PdfPoints = CurrentViewport.convertToPdfPoint(x, y);
 
                     var PdfX = parseFloat(PdfPoints[0]).toFixed(2);
@@ -384,20 +413,20 @@
 
                     //$('#spxx').text(x + itemWidth);
                     //$('#spyy').text(y - (itemHeight));
-                   
+
 
                     if (!$(ui.helper).hasClass("btnGrpFieldHelper")) {
 
                         var Fields2GroupsId = $(ui.helper).attr("id").replace("btnGrpField_", "");//.replace("btnGrpFieldHelper_", "");
 
-                        $("#canvasContainer").append(ui.helper.clone(true).css({ left: x-3, top: y }).addClass("btnGrpFieldHelper"));//.removeClass("btnGrpField"));
+                        $("#canvasContainer").append(ui.helper.clone(true).css({ left: x - 3, top: y }).addClass("btnGrpFieldHelper"));//.removeClass("btnGrpField"));
 
                         $(".btnGrpFieldHelper").draggable({ cursor: "pointer" });
 
 
                         var Objects = { Id: 0, Fields2GroupsId: Fields2GroupsId, FarmPDFFilesId: CurrentPdfId, PageNumber: CurrentPage, PdfX: PdfX, PdfY: PdfY, PdfWidthX: PdfWidthX, PdfHeightY: PdfHeightY, StatusId: 1 };
 
-                        angular.element(document.getElementById('mainControllerHorse')).scope().getSetFields2PDF(2,Objects);
+                        angular.element(document.getElementById('mainControllerHorse')).scope().getSetFields2PDF(2, Objects);
 
 
                     } else {
@@ -424,7 +453,7 @@
                             var Fields2PDFId = $(ui.helper).attr("id").replace("btnGrpFieldHelper_", "");
                             $(this).remove();
 
-                         
+
                             var Objects = { Id: Fields2PDFId, Fields2GroupsId: 0, FarmPDFFilesId: 0, PageNumber: 0, PdfX: 0, PdfY: 0, StatusId: 0 };
 
                             angular.element(document.getElementById('mainControllerHorse')).scope().getSetFields2PDF(2, Objects);
@@ -519,13 +548,13 @@
 
                             <!--<div class="col-md-12">
 
-                            <div class="form-group"><br />
+                                <div class="form-group"><br />
 
-                                <br />
-                                <hr />
-                            </div>
+                                    <br />
+                                    <hr />
+                                </div>
 
-                        </div>-->
+                            </div>-->
                             <div class="col-md-12">
 
                                 <div class="form-group">
@@ -689,6 +718,7 @@
                                      pdfname="{{farmspdffile.FileName}}"
                                      pdffulllink="{{farmspdffile.FullLink}}"
                                      farmid="{{farmspdffile.FarmId}}"
+                                     seq="{{farmspdffile.Seq}}"
                                      class="ui-state-default dvSeq">
 
                                     <div class="dvfileNamePdf" title="{{farmspdffile.FileName}}">{{farmspdffile.FileName}}</div>
@@ -912,8 +942,8 @@
 
                     <span id="spxx"></span> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span id="spyy"></span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span id="spScale"></span>
                     <!--<br />
-                <span id="spx"></span> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span id="spy"></span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-                <br />W-<span id="spWidth"></span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<br />H-<span id="spHeight"></span>-->
+                    <span id="spx"></span> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span id="spy"></span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+                    <br />W-<span id="spWidth"></span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<br />H-<span id="spHeight"></span>-->
                 </div>
 
 
@@ -944,13 +974,13 @@
 
                         <div class="panel panel-primary">
                             <!--<div class="panel-heading">
-                            תצוגת קובץ PDF
+                                תצוגת קובץ PDF
 
-                            <div style="float:left;cursor:pointer" class="panelClose">
-                                <img src="../../images/_notArrive.png" width="24px" />
-                            </div>
+                                <div style="float:left;cursor:pointer" class="panelClose">
+                                    <img src="../../images/_notArrive.png" width="24px" />
+                                </div>
 
-                        </div>-->
+                            </div>-->
                             <div class="panel-body" id="panelBody">
                                 <div id="divContainerEnd"
                                      style="border:2px solid black;height:100%;overflow:auto;">
@@ -1069,7 +1099,7 @@
                     <div class="form-group">
                         <label>סוג שדה </label>
                         <select id="ddlFieldsDataTypes" class="form-control" ng-model="$ctrl.btns2grp.FieldsDataTypesId">
-                         
+
                             <option value="1">טקסט</option>
                             <option value="2">מספר</option>
                             <option value="3">תאריך</option>
@@ -1086,14 +1116,14 @@
                 </div>
             </div>
 
-                <div class="panel-footer colAlignLeft">
+            <div class="panel-footer colAlignLeft">
 
-                    <button class="btn btn-primary panelClose" ng-click="$ctrl.SaveData(4)">שמירת נתונים</button>
+                <button class="btn btn-primary panelClose" ng-click="$ctrl.SaveData(4)">שמירת נתונים</button>
 
-                    <button class="btn btn-danger panelClose">סגור</button>
+                <button class="btn btn-danger panelClose">סגור</button>
 
-                </div>
             </div>
+        </div>
     </div>
 </form>
 

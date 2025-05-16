@@ -17,7 +17,7 @@
     <link href="node_modules/angular-loading-bar/build/loading-bar.min.css" rel="stylesheet" />
     <link href="node_modules/font-awesome/css/font-awesome.min.css" rel="stylesheet" />
 
-   
+
 
     <link rel="stylesheet" href="css/style.css" />
     <link rel="stylesheet" href="css/autocomplete.css" />
@@ -76,10 +76,9 @@
     <common-operations></common-operations>
 
 
-    <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
-    <script src="https://code.jquery.com/ui/1.14.1/jquery-ui.js"></script>
 
-    <!--<script src="node_modules/jquery/dist/jquery.min.js"></script>-->
+
+    <script src="node_modules/jquery/dist/jquery.min.js"></script>
 
     <script src="node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
     <script src="node_modules/angular/angular.js"></script>
@@ -287,7 +286,7 @@
         var elemId;
         var CurrentWidth;
         var CurrentHeight;
-        function CallEditPdfJs(elementId, url, width,height) {
+        function CallEditPdfJs(elementId, url, width, height) {
             elemId = elementId;
             CurrentWidth = width;
             CurrentHeight = height;
@@ -333,7 +332,7 @@
         }
 
         function handlePages(page) {
-           
+
             // console.log('Page loaded');
 
 
@@ -349,16 +348,16 @@
             //var context = canvas.getContext('2d');
 
 
-            
+
             // נסיון
             var canvas = document.getElementById(elemId);
             var context = canvas.getContext('2d');
             var viewport = page.getViewport({ scale: 1 });
 
             var scale = CurrentWidth / viewport.width;
-           // var scaleY = CurrentHeight / viewport.height;
+            // var scaleY = CurrentHeight / viewport.height;
 
-           // var scale = Math.max(scaleX, scaleY);
+            // var scale = Math.max(scaleX, scaleY);
 
             viewport = page.getViewport({ scale: scale });
 
@@ -404,14 +403,14 @@
 
         function convertPixelsToPdfCoords(xPixel, yPixel, sssss) {
 
-            
+
             debugger
-           // var scale = 1;
+            // var scale = 1;
             var viewport = CurrentPDFPage.getViewport({ scale: CurrentScale });
 
 
             // Get viewport with scale
-          //  const viewport = pageView.viewport;
+            //  const viewport = pageView.viewport;
 
             // Translate screen pixel coordinates to PDF coordinates
             const transform = viewport.transform;
@@ -429,7 +428,7 @@
 
 
 
-      
+
 
 
 
@@ -590,6 +589,13 @@
 
         }
 
+        //$(function () {
+
+
+        //        $(".date").datepicker();
+
+        //    });
+
 
 
     </script>
@@ -604,5 +610,6 @@
 
     <div id="overlay"></div>
 </body>
-
+<script src="js/jquery-3.7.1.js"></script>
+<script src="js/jquery-ui.js"></script>
 </html>

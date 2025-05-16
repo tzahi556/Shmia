@@ -96,14 +96,14 @@
 
             });
 
-
-            $('.date').inputmask("datetime", {
-                mask: "1/2/y",
-                placeholder: "dd/mm/yyyy",
-                leapday: "-02-29",
-                separator: "/",
-                alias: "dd/mm/yyyy"
-            });
+            
+            //$('.date').inputmask("datetime", {
+            //    mask: "1/2/y",
+            //    placeholder: "dd/mm/yyyy",
+            //    leapday: "-02-29",
+            //    separator: "/",
+            //    alias: "dd/mm/yyyy"
+            //});
 
 
         
@@ -559,6 +559,7 @@
 
         function _saveWorker(type) {
 
+            debugger
            
             try {
 
@@ -570,6 +571,7 @@
 
                     if (key.indexOf("Date") != -1 && obj[key] && key != "DateRigster") {
 
+                       // debugger
                         obj[key] = thisCtrl.changeDateFormat(obj[key]);
 
 

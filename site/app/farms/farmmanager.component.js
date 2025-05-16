@@ -231,8 +231,9 @@
 
             farmsService.updateFarmsPdfFiles(4, this.farm.Id, farmspdffilestemp).then(function (farmspdffiles) {
 
-
-
+                //this.farmspdffiles = farmspdffiles;
+                const myTimeout = setTimeout(RefreshComboFiles, 300);
+               
             });
 
         }
@@ -301,7 +302,7 @@
                     (async () => {
 
                         while (!CurrentScale && self.farmspdffiles.length>0) // define the condition as you like
-                            await new Promise(resolve => setTimeout(resolve, 200));
+                            await new Promise(resolve => setTimeout(resolve, 500));
                         AddParamsToPDF(field2pdf);
                        
                       
