@@ -29,7 +29,7 @@
         // this.selfEdit = angular.fromJson(localStorage.getItem('authorizationData')).userName == this.user.Email;
         this.role = localStorage.getItem('currentRole');
         this.farmStyle = localStorage.getItem('FarmStyle');
-
+        this.farmid = localStorage.getItem('FarmId');
         
       
         this.uploadFile = _uploadFile.bind(this);
@@ -74,7 +74,13 @@
         this.init();
         function _init() {
            
+
             var obj = this.worker;
+
+
+            if (!this.worker.farmid)
+                 this.worker.farmid = this.farmid;
+
          //   this.image = this.uploadsUri + "/" + this.worker.Id + "/Signature.png";
             
             if (!this.worker.ShnatMas)
@@ -82,16 +88,11 @@
 
                  Object.keys(obj).forEach(function (key, index) {
 
-              
-
                 if (key.indexOf("Date") != -1 && obj[key] && key != "DateRigster" ) {
-
-                   
-
-                    obj[key] = moment(obj[key]).format("DD/MM/YYYY");// .startOf('day').toDate();
-
+                  
+                    obj[key] = new Date(moment(obj[key]).format("YYYY-MM-DD"));// .startOf('day').toDate();
+                    
                 }
-
                
 
             });
@@ -547,23 +548,45 @@
 
 
 
-            var dd = dateVal.substring(0, 2);
-            var mm = dateVal.substring(3, 5);
-            var yy = dateVal.substring(6, 11);
+            //var dd = dateVal.substring(0, 2);
+            //var mm = dateVal.substring(3, 5);
+            //var yy = dateVal.substring(6, 11);
 
 
 
-            return yy + "-" + mm + "-" + dd;
+            //return yy + "-" + mm + "-" + dd;
+
+
+           
+            var d = new Date(dateVal),
+                    month = '' + (d.getMonth() + 1),
+                    day = '' + d.getDate(),
+                    year = d.getFullYear();
+
+                if (month.length < 2)
+                    month = '0' + month;
+                if (day.length < 2)
+                   day = '0' + day;
+
+            if (year < 1900 || year > 2100) return false;
+
+
+                return [year, month, day].join('-');
+           
+
+
 
         }
 
         function _saveWorker(type) {
 
-            debugger
+
            
             try {
 
                 var thisCtrl = this;
+
+                var IsInvalid = false;
 
                 var obj = angular.copy(this.worker);
 
@@ -571,9 +594,21 @@
 
                     if (key.indexOf("Date") != -1 && obj[key] && key != "DateRigster") {
 
-                       // debugger
-                        obj[key] = thisCtrl.changeDateFormat(obj[key]);
+                       
 
+                        var strDate = thisCtrl.changeDateFormat(obj[key]);
+                        //var IsValid = isValidDate(strDate);
+
+                        if (strDate)
+                            obj[key] = strDate;
+                        else {
+
+                            IsInvalid = true;
+                           
+                            return;
+                          
+                            
+                        }
 
                         //  obj[key].setHours((obj[key]).getHours() + 3);
 
@@ -582,6 +617,13 @@
 
                 });
 
+
+                if (IsInvalid) {
+
+
+                    alertMessage("נא להכניס תאריך נכון בשדות תאריך!", 3);
+                    return;
+                }
               
 
                 if (type == 1) {
@@ -715,8 +757,8 @@
 
                 }
             } catch (err) {
-
-                alert(err.message);
+                alertMessage(err.message, 3);
+              
 
             }
 

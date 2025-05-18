@@ -321,7 +321,7 @@
 
 
 
-                $("#canvasContainer").append('<div id="btnGrpFieldHelper_' + f2p.Id + '" fields2groupsid=' + f2p.Fields2GroupsId + ' style="position:absolute;" class="btnGrpField btnGrpFieldHelper ui-draggable ui-draggable-handle">' + f.Name + '</div>');
+                $("#canvasContainer").append('<div id="btnGrpFieldHelper_' + f2p.Id + '" fields2groupsid=' + f2p.Fields2GroupsId +  '" fieldsid=' + f2p.FieldsId + ' style="position:absolute;" class="btnGrpField btnGrpFieldHelper ui-draggable ui-draggable-handle">' + f.Name + '</div>');
 
                 var itemWidth = $("#btnGrpFieldHelper_" + f2p.Id).width();
                 var itemHeight = $("#btnGrpFieldHelper_" + f2p.Id).height();
@@ -417,14 +417,28 @@
 
                     if (!$(ui.helper).hasClass("btnGrpFieldHelper")) {
 
+                        
+                        var FieldsId;
+
                         var Fields2GroupsId = $(ui.helper).attr("id").replace("btnGrpField_", "");//.replace("btnGrpFieldHelper_", "");
+
+                        if (Fields2GroupsId.indexOf("btnField_")>-1) {
+
+
+                            FieldsId = Fields2GroupsId.replace("btnField_", "");
+                            Fields2GroupsId = -1;
+                            
+
+                        }
+
+
 
                         $("#canvasContainer").append(ui.helper.clone(true).css({ left: x - 3, top: y }).addClass("btnGrpFieldHelper"));//.removeClass("btnGrpField"));
 
                         $(".btnGrpFieldHelper").draggable({ cursor: "pointer" });
 
 
-                        var Objects = { Id: 0, Fields2GroupsId: Fields2GroupsId, FarmPDFFilesId: CurrentPdfId, PageNumber: CurrentPage, PdfX: PdfX, PdfY: PdfY, PdfWidthX: PdfWidthX, PdfHeightY: PdfHeightY, StatusId: 1 };
+                        var Objects = { Id: 0, Fields2GroupsId: Fields2GroupsId, FarmPDFFilesId: CurrentPdfId, PageNumber: CurrentPage, PdfX: PdfX, PdfY: PdfY, PdfWidthX: PdfWidthX, PdfHeightY: PdfHeightY, FieldsId: FieldsId, StatusId: 1 };
 
                         angular.element(document.getElementById('mainControllerHorse')).scope().getSetFields2PDF(2, Objects);
 
@@ -433,9 +447,9 @@
 
                         var Fields2PDFId = $(ui.helper).attr("id").replace("btnGrpFieldHelper_", "");
                         var Fields2GroupsId = $(ui.helper).attr("fields2groupsid");
+                        var FieldsId = $(ui.helper).attr("fieldsid");
 
-
-                        var Objects = { Id: Fields2PDFId, Fields2GroupsId: Fields2GroupsId, FarmPDFFilesId: CurrentPdfId, PageNumber: CurrentPage, PdfX: PdfX, PdfY: PdfY, PdfWidthX: PdfWidthX, PdfHeightY: PdfHeightY, StatusId: 1 };
+                        var Objects = { Id: Fields2PDFId, Fields2GroupsId: Fields2GroupsId, FarmPDFFilesId: CurrentPdfId, PageNumber: CurrentPage, PdfX: PdfX, PdfY: PdfY, PdfWidthX: PdfWidthX, PdfHeightY: PdfHeightY, FieldsId: FieldsId, StatusId: 1 };
 
                         angular.element(document.getElementById('mainControllerHorse')).scope().getSetFields2PDF(2, Objects);
 
@@ -804,7 +818,23 @@
                                         <button class="btn btn-success" title="הוספת שדה " ng-click="$ctrl.actionFieldGroup(4)">הוסף שדה</button>
                                     </div>
                                     <div class="col-md-12">&nbsp;</div>
-                                    <div class="col-md-12" ng-repeat="btn in $ctrl.btns">
+
+                                    <div class="col-md-6" ng-repeat="btn in $ctrl.btns | filter:FilterOnlySign ">
+
+                                        <div id="btnField_{{btn.Id}}" class="btn btn-danger btnGrpField" title="יש לגרור לקבוצה הרצויה">
+                                            {{btn.Name}}
+                                        </div>
+
+                                    </div>
+
+                                    <div class="col-md-12">
+
+                                        <hr />
+
+                                    </div>
+
+
+                                    <div class="col-md-12" ng-repeat="btn in $ctrl.btns | filter:FilterWithoutSign">
 
                                         <div id="btnField_{{btn.Id}}" class="btn btn-primary btnField" title="יש לגרור לקבוצה הרצויה">
                                             {{btn.Name}}
@@ -818,7 +848,7 @@
 
 
                                 </div>
-                            </div>
+                                </div>
                         </div>
                     </div>
 

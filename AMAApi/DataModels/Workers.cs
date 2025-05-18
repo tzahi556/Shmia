@@ -11,6 +11,7 @@ namespace FarmsApi.DataModels
         [Key]
         public int Id { get; set; }
 
+        public int FarmId { get; set; }
         public int UserId { get; set; }
 
         [ForeignKey("UserId")]

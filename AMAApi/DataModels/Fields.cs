@@ -28,7 +28,6 @@ namespace FarmsApi.DataModels
         public int Seq { get; set; }
 
         public int CountFieldsInRow { get; set; }
-        
 
         public int StatusId { get; set; }
 
@@ -43,17 +42,13 @@ namespace FarmsApi.DataModels
 
         public int? FarmId { get; set; }
 
-
         public string Name { get; set; }
 
-      
-
-     
-
-       
+        public string WorkerTableField { get; set; }
 
         public int StatusId { get; set; }
         
+
 
     }
 
@@ -102,6 +97,8 @@ namespace FarmsApi.DataModels
 
         public double? PdfHeightY { get; set; }
 
+        public int? FieldsId { get; set; }
+        
         public int StatusId { get; set; }
 
     }

@@ -240,7 +240,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="App_Data\Schema.sql" />
+    <Content Include="App_Data\DatabaseNew.sql" />
     <Content Include="App_Data\SignatureAmuta.png" />
     <Content Include="Global.asax" />
     <Content Include="packages.config" />

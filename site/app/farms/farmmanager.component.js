@@ -349,9 +349,15 @@
         }
 
 
+        $scope.FilterOnlySign = function (item) {
+           
+            return item.WorkerTableField === '1' || item.WorkerTableField === '2';
+        };
 
+        $scope.FilterWithoutSign = function (item) {
 
-
+            return item.WorkerTableField != '1' && item.WorkerTableField != '2';
+        };
 
         function _SaveData(type) {
 
@@ -586,6 +592,10 @@
             }
 
         }
+
+
+
+
 
     }
 

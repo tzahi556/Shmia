@@ -366,7 +366,7 @@ namespace FarmsApi.Services
 
                     var Results = (from f2p in Context.Fields2PDF.Where(x => x.FarmPDFFilesId == fp.FarmPDFFilesId && x.PageNumber == fp.PageNumber).DefaultIfEmpty()
                                    from f2g in Context.Fields2Groups.Where(x => x.Id == f2p.Fields2GroupsId).DefaultIfEmpty()
-                                   from f in Context.Fields.Where(x => x.Id == f2g.FieldsId).DefaultIfEmpty()
+                                   from f in Context.Fields.Where(x => x.Id == f2g.FieldsId || x.Id == f2p.FieldsId).DefaultIfEmpty()
 
 
                                    select new
@@ -416,7 +416,7 @@ namespace FarmsApi.Services
 
                     var Results = (from f2p in Context.Fields2PDF.Where(x => x.FarmPDFFilesId == fp.FarmPDFFilesId && x.PageNumber == fp.PageNumber).DefaultIfEmpty()
                                    from f2g in Context.Fields2Groups.Where(x => x.Id == f2p.Fields2GroupsId).DefaultIfEmpty()
-                                   from f in Context.Fields.Where(x => x.Id == f2g.FieldsId).DefaultIfEmpty()
+                                   from f in Context.Fields.Where(x => x.Id == f2g.FieldsId || x.Id== f2p.FieldsId).DefaultIfEmpty()
 
 
                                    select new
