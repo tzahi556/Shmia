@@ -66,7 +66,7 @@ namespace FarmsApi.DataModels
 
         public string Title { get; set; }
 
-        public bool? IsWorkerShow { get; set; }
+        public bool? IsWorkerHide { get; set; }
 
         public string DefaultValue { get; set; }
 
@@ -105,6 +105,23 @@ namespace FarmsApi.DataModels
 
 
 
+    [Table("Fields2GroupsWorkerData")]
+    public class Fields2GroupsWorkerData
+    {
+        public int Id { get; set; }
+
+        public int WorkersId { get; set; }
+
+        public int Fields2GroupsId { get; set; }
+
+        public string Value { get; set; }
+
+        [NotMapped]
+        public int Type { get; set; }
+        [NotMapped]
+        public string SourceValue { get; set; }
+
+    }
 
 
 
@@ -119,6 +136,17 @@ namespace FarmsApi.DataModels
 
     }
 
+    
+    public class ResultObjectFields
+    {
+        public Fields2Groups f2g { get; set; }
 
+        public FieldsGroups fg { get; set; }
+
+        public Fields f { get; set; }
+
+        public Fields2GroupsWorkerData f2gwd { get; set; }
+
+    }
 
 }

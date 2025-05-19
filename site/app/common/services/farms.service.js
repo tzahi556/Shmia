@@ -22,11 +22,22 @@
 
         this.updateFarmsPdfFiles = _updateFarmsPdfFiles;
         this.actionFieldGroup = _actionFieldGroup;
-        
+        this.getSetWorkerAndCompanyData = _getSetWorkerAndCompanyData;
+
+
+        function _getSetWorkerAndCompanyData(type, workerid, objects) {
+            var deferred = $q.defer();
+            $http.post(sharedValues.apiUrl + 'fields/getSetWorkerAndCompanyData/' + type + "/" + workerid, objects).then(function (res) {
+
+                deferred.resolve(res.data);
+            });
+
+            return deferred.promise;
+        }
+
+
+
         function _actionFieldGroup(type, farmid, objects) {
-
-          
-
             var deferred = $q.defer();
             $http.post(sharedValues.apiUrl + 'fields/actionFieldGroup/' + type + "/" + farmid, objects).then(function (res) {
 

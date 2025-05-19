@@ -14,12 +14,13 @@
             cities: '<',
             banks: '<',
             banksbrunchs: '<',
-            users:'<'
+            users: '<',
+            screendata:'<'
 
         }
     });
 
-    function WorkerController(usersService, $scope, $state, sharedValues, filesService, $window, $timeout) {
+    function WorkerController(usersService, farmsService, $scope, $state, sharedValues, filesService, $window, $timeout) {
 
         this.sharedValues = sharedValues;
         this.scope = $scope;
@@ -64,7 +65,7 @@
       
         this.foldertaz = "taz";
 
-     
+        self = this;
         this.fileparud = "";
 
         // this.childs = [];
@@ -72,8 +73,49 @@
         this.ImageSignuture;
        // this.image;
         this.init();
+
+
+
+        $scope.getGroupsDetails = function (groupId) {
+
+          
+            return self.screendata.filter(x => x.f2g.FieldsGroupsId == groupId);
+
+
+            //return item.WorkerTableField === '1' || item.WorkerTableField === '2';
+        };
+
+
+
+
+
+
+
+
+
+
+
+
+
+        function uniqueBy(arr, prop, prop2, tempRes) {
+            return arr.reduce((a, d) => {
+                if (!a.includes(d[prop][prop2]))
+                {
+                    a.push(d[prop][prop2]);
+                    tempRes.push(d[prop]);
+                }
+                return a;
+            }, []);
+        }
+
         function _init() {
+            this.groupsonly = [];
            
+            uniqueBy(this.screendata, "fg", "Id", this.groupsonly);
+
+
+
+
 
             var obj = this.worker;
 
@@ -584,6 +626,30 @@
            
             try {
 
+
+                
+                
+                var fields2GroupsWorkerDataList = [];
+
+                for (var i = 0; i < this.screendata.length; i++) {
+
+                    if (this.screendata[i].f2gwd) {
+                        fields2GroupsWorkerDataList.push(this.screendata[i].f2gwd);
+
+                    }
+                }
+
+                
+                 
+                farmsService.getSetWorkerAndCompanyData(2, this.worker.Id, fields2GroupsWorkerDataList).then(function (worker) {
+                  
+
+                    alertMessage('הנתונים נשמרו בהצלחה!');
+                   
+                }.bind(this));
+
+                return;
+
                 var thisCtrl = this;
 
                 var IsInvalid = false;
@@ -597,7 +663,7 @@
                        
 
                         var strDate = thisCtrl.changeDateFormat(obj[key]);
-                        //var IsValid = isValidDate(strDate);
+                  
 
                         if (strDate)
                             obj[key] = strDate;
@@ -610,13 +676,12 @@
                             
                         }
 
-                        //  obj[key].setHours((obj[key]).getHours() + 3);
+                        
 
 
                     }
 
                 });
-
 
                 if (IsInvalid) {
 
@@ -624,7 +689,6 @@
                     alertMessage("נא להכניס תאריך נכון בשדות תאריך!", 3);
                     return;
                 }
-              
 
                 if (type == 1) {
 

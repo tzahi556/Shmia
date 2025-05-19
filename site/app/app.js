@@ -116,8 +116,8 @@
             url: '/worker/{id}/',
             views: {
                 'main': {
-                    template: '<worker users="$ctrl.users" worker="$ctrl.worker" files="$ctrl.files" childs="$ctrl.childs" cities="$ctrl.cities" banks="$ctrl.banks"  banksbrunchs="$ctrl.banksbrunchs" ></worker>',
-                    controller: function (worker, files, childs, cities, banks, banksbrunchs, users) {
+                    template: '<worker screendata="$ctrl.screendata" users="$ctrl.users" worker="$ctrl.worker" files="$ctrl.files" childs="$ctrl.childs" cities="$ctrl.cities" banks="$ctrl.banks"  banksbrunchs="$ctrl.banksbrunchs" ></worker>',
+                    controller: function (worker, files, childs, cities, banks, banksbrunchs, users, screendata) {
                         this.worker = worker;
                         this.files = files;
                         this.childs = childs;
@@ -125,6 +125,7 @@
                         this.banks = banks;
                         this.banksbrunchs = banksbrunchs;
                         this.users = users;
+                        this.screendata = screendata;
 
                     },
                     controllerAs: '$ctrl',
@@ -158,6 +159,11 @@
                         users: function (usersService) {
                             if (localStorage.getItem('currentRole')=="farmAdmin")
                                 return usersService.getUsers("instructor");
+                        },
+
+                        screendata: function (farmsService, $stateParams) {
+
+                            return farmsService.getSetWorkerAndCompanyData(1,$stateParams.id,null);
                         }
 
 

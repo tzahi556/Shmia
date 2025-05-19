@@ -1,0 +1,2317 @@
+﻿
+<style>
+    .nopadding {
+        padding: 0px !important;
+        margin: 0px !important;
+    }
+
+    .signature {
+        height: 140px;
+        border: 1px solid gray;
+        border-radius: 5px;
+    }
+
+        .signature canvas {
+            height: 100%;
+            width: 100%;
+        }
+
+    .date {
+        direction: ltr;
+        text-align: right;
+    }
+
+    input[type="file"] {
+        display: none;
+    }
+
+    .custom-file-upload {
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        background: #5bc0de;
+        display: inline-block;
+        padding: 6px 12px;
+        cursor: pointer;
+        color: white;
+    }
+</style>
+<!--<div id="loader"></div>-->
+
+<form name="workerForm">
+
+   
+       
+        <div ng-if="$ctrl.farmStyle!=1 || $ctrl.role=='farmAdmin' ||  $ctrl.role=='instructor'">
+
+            <!--פרטי מעביד - 101-->
+            <div class="col-md-12 nopadding">
+
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        פרטי מעביד - 101
+
+
+                    </div>
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>שנת מס</label>
+                                    <select class="form-control" ng-model="$ctrl.worker.ShnatMas" required>
+                                        <option value="">--בחר שנת מס--</option>
+                                        <option value="2021">2021</option>
+                                        <option value="2022">2022</option>
+                                        <option value="2023">2023</option>
+                                        <option value="2024">2024</option>
+                                        <option value="2025">2025</option>
+                                        <option value="2026">2026</option>
+                                        <option value="2027">2027</option>
+                                        <option value="2028">2028</option>
+                                        <option value="2029">2029</option>
+
+                                    </select>
+                                </div>
+
+                            </div>
+                            <div class="col-md-6">
+
+                            </div>
+
+                            <div class="col-md-3" ng-if="$ctrl.role!=null && $ctrl.role!='instructor'">
+                                <div class="form-group">
+                                    <label>מנהל אזור</label>
+                                    <select class="form-control" ng-options="user.Id as user.FullName for user in $ctrl.users" ng-model="$ctrl.worker.UserId">
+                                        <!--<option value="">--בחר מנהל אזור --</option>-->
+
+
+                                    </select>
+                                </div>
+
+                            </div>
+
+
+
+
+                        </div>
+                        <div class="row">
+
+
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>שם</label>
+                                    <input type="text" disabled class="form-control" ng-model="$ctrl.sharedValues.MavidPrati" />
+                                </div>
+
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>כתובת</label>
+                                    <input type="text" disabled class="form-control" ng-model="$ctrl.sharedValues.MavidCtovet" />
+                                </div>
+
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>מס' טלפון</label>
+                                    <input type="text" disabled class="form-control" ng-model="$ctrl.sharedValues.MavidPhone" />
+                                </div>
+
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>תיק ניכויים</label>
+                                    <input type="text" disabled class="form-control" ng-model="$ctrl.sharedValues.MavidNikuyim" />
+                                </div>
+
+                            </div>
+
+
+
+                        </div>
+
+
+
+
+                    </div>
+
+                </div>
+            </div>
+            <!--פרטי העובד\ת - 101-->
+            <div class="col-md-12 nopadding">
+
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        פרטי העובד\ת - 101
+                    </div>
+                    <div class="panel-body">
+
+                        <div class="row">
+
+
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>שם פרטי</label>
+                                    <input type="text" class="form-control" ng-model="$ctrl.worker.FirstName" ng-change="$ctrl.worker.HeskemWorkerName=$ctrl.worker.FirstName + ' ' + $ctrl.worker.LastName" required />
+                                    <label class="tp-help-below">
+                                        ע"פ הרשום בת.ז.
+                                    </label>
+                                </div>
+
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>שם משפחה</label>
+                                    <input type="text" class="form-control" ng-model="$ctrl.worker.LastName" ng-change="$ctrl.worker.HeskemWorkerName= $ctrl.worker.FirstName +' ' + $ctrl.worker.LastName" required />
+                                    <label class="tp-help-below">
+                                        ע"פ הרשום בת.ז.
+                                    </label>
+                                </div>
+
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>תעודת זהות</label>
+                                    <input type="text" class="form-control" ng-model="$ctrl.worker.Taz" ng-change="$ctrl.worker.HeskemWorkerTaz=$ctrl.worker.Taz" required />
+                                    <label class="tp-help-below">
+                                        ע"פ הרשום בת.ז.
+                                    </label>
+                                </div>
+
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>צילום תעודת זהות וספח</label><br />
+
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading">
+                                            קבצים
+                                        </div>
+                                        <table class="table">
+                                            <tbody>
+                                                <tr ng-repeat="file in $ctrl.tazfiles">
+                                                    <td>
+                                                        <a ng-href="{{$ctrl.uploadsUri+$ctrl.worker.Id + '/' + file.FileName}}" target="_blank"><span style="width:20px;overflow:hidden">{{file.FileName}}</span></a>
+                                                    </td>
+                                                    <td><div class="btn btn-xs btn-default" ng-click="$ctrl.removeFile(file.FileName,1)">הסר/י</div></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                        <div class="panel-footer" style="padding:3px !important;background:white">
+                                            <label class="custom-file-upload">
+                                                <input type="file" class="form-control" filename="" folder="'taz_' + $ctrl.worker.Taz" workerid="$ctrl.worker.Id" multiple filename-callback="$ctrl.uploadFile" />
+                                                בחירת קובץ
+                                                <i class="fa fa-cloud-upload"></i>
+                                            </label>
+
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+
+
+                        </div>
+
+                        <div class="row">
+
+
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>תאריך לידה</label>
+                                    <input type="date" class="form-control date" ng-model="$ctrl.worker.BirthDate" required />
+
+                                </div>
+
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>תאריך עליה</label>
+                                    <input type="date" name="LastName" class="form-control date" ng-model="$ctrl.worker.AliaDate" />
+
+                                </div>
+
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>מס' טלפון נייד</label>
+                                    <input type="text" name="Taz" class="form-control" ng-model="$ctrl.worker.PhoneSelular" ng-change="$ctrl.worker.HeskemWorkerPhone= $ctrl.worker.PhoneSelular" required />
+
+                                </div>
+
+                            </div>
+
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>מס' טלפון </label>
+                                    <input type="text" name="Taz" class="form-control" ng-model="$ctrl.worker.Phone" />
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                        <div class="row">
+
+
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>יישוב</label>
+
+
+
+                                    <input id="txtCity" class="form-control autocomplete" type="text" autocomplete="off" ng-model="$ctrl.worker.City" required>
+
+                                </div>
+
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>רחוב</label>
+                                    <input type="text" class="form-control" ng-model="$ctrl.worker.Street" ng-change="$ctrl.worker.HeskemWorkerStreet= $ctrl.worker.Street + ' ' + $ctrl.worker.HouseNumber" required />
+
+                                </div>
+
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>מס' בית</label>
+                                    <input type="text" class="form-control" ng-model="$ctrl.worker.HouseNumber" ng-change="$ctrl.worker.HeskemWorkerStreet= $ctrl.worker.Street + ' ' + $ctrl.worker.HouseNumber" required />
+
+                                </div>
+
+                            </div>
+
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>
+                                        מיקוד  <span class="tp-help-below">
+                                            ( ניתן להיעזר ב<a href="http://www.israelpost.co.il/zipcode.nsf/demozip" target="_blank">אתר הדואר</a>)
+                                        </span>
+                                    </label>
+                                    <input type="text" class="form-control" ng-model="$ctrl.worker.Mikud" />
+
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                        <div class="row">
+
+
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>כתובת דואר אלקטרוני</label>
+                                    <input class="form-control" type="email" ng-model="$ctrl.worker.Email" required>
+
+                                </div>
+
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>מין</label>
+                                    <select class="form-control" ng-model="$ctrl.worker.Gender" required>
+                                        <option value="">--בחר מין--</option>
+                                        <option value="1">זכר</option>
+                                        <option value="2">נקבה</option>
+                                    </select>
+                                </div>
+
+                            </div>
+
+
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>תושב ישראל </label>
+                                    <select class="form-control" ng-model="$ctrl.worker.ToshavIsrael" required>
+                                        <option value="">--תושב ישראל--</option>
+                                        <option value="1">כן</option>
+                                        <option value="2">לא</option>
+                                    </select>
+
+                                </div>
+
+                            </div>
+
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>חבר קיבוץ / מושב שיתופי</label>
+                                    <select class="form-control" ng-model="$ctrl.worker.Kibutz" required>
+                                        <option value="">--חבר קיבוץ / מושב שיתופי--</option>
+                                        <option value="1">כן</option>
+                                        <option value="2">לא</option>
+                                    </select>
+                                </div>
+
+                            </div>
+
+
+
+
+
+                        </div>
+
+                        <div class="row">
+
+
+
+
+
+
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>חבר בקופת חולים </label>
+                                    <select class="form-control" ng-model="$ctrl.worker.KupatHolim" ng-change="$ctrl.worker.Kupa=null" required>
+                                        <option value="">--חבר קופת חולים--</option>
+                                        <option value="1">כן</option>
+                                        <option value="2">לא</option>
+                                    </select>
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>קופה</label>
+                                    <select class="form-control" ng-model="$ctrl.worker.Kupa" ng-disabled="$ctrl.worker.KupatHolim!=1">
+                                        <option value="">--בחר קופה--</option>
+                                        <option value="1">כללית</option>
+                                        <option value="2">מכבי</option>
+                                        <option value="3">מאוחדת</option>
+                                        <option value="4">לאומית</option>
+
+                                    </select>
+
+
+
+                                </div>
+
+                            </div>
+
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>מצב משפחתי</label>
+                                    <select class="form-control" ng-model="$ctrl.worker.StatusFamely" required>
+                                        <option value="">--בחר מצב משפחתי--</option>
+                                        <option value="1">רווק/ה</option>
+                                        <option value="2">נשוי/אה</option>
+                                        <option value="3">גרוש/ה</option>
+                                        <option value="4">אלמן/ה</option>
+                                        <option value="5">פרוד/ה</option>
+                                    </select>
+
+
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="col-md-3">
+                                <div style="" ng-if="$ctrl.worker.StatusFamely==5">
+
+                                    <label> אישור פקיד שומה</label>
+                                    <br />
+                                    <label class="custom-file-upload">
+                                        <input type="file" class="form-control" filename="" folder="$ctrl.foldertaz" workerid="$ctrl.worker.Id" filename-callback="$ctrl.uploadFileParud" />
+
+                                        בחירת קובץ
+                                        <i class="fa fa-cloud-upload"></i>
+                                    </label>
+
+                                    <a ng-href="{{$ctrl.uploadsUri+$ctrl.worker.Id + '/' + $ctrl.fileparud}}" target="_blank"><span style="width:20px;overflow:hidden">{{$ctrl.fileparud}}</span></a>
+
+
+
+
+                                </div>
+
+
+
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <!--פרטים על ילדי שבשנת המס טרם מלאו להם 19 שנה - 101-->
+            <div class="col-md-12 nopadding">
+
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        פרטים על ילדי שבשנת המס טרם מלאו להם 19 שנה - 101
+                    </div>
+                    <div class="panel-body">
+
+                        <div class="row">
+
+                            <div class="col-md-12">
+                                <div class="panel panel-success">
+                                    <div class="panel-heading">
+                                        רשימת ילדים  , <label>מספר ילדים - </label> {{$ctrl.childs.length}}
+                                    </div>
+
+                                    <div class="table-responsive">
+
+                                        <table class="table">
+
+                                            <thead>
+                                                <tr>
+                                                    <th>שם </th>
+                                                    <th>מספר זהות</th>
+                                                    <th>תאריך לידה</th>
+                                                    <th>הילד נמצא בחזקתי</th>
+                                                    <th>אני מקבל/ת בגינו/ה קצבת ילדים מביטוח לאומי</th>
+                                                    <th></th>
+                                                </tr>
+                                            </thead>
+
+
+                                            <tbody>
+                                                <tr ng-repeat="child in $ctrl.childs">
+                                                    <td>{{child.Name}}</td>
+                                                    <td>{{child.Taz}}</td>
+                                                    <td>{{child.BirthDate | ildate: 'DD/MM/YYYY'}}</td>
+
+                                                    <td><input type="checkbox" ng-disabled="true" ng-model="child.IsInHouse" /></td>
+                                                    <td><input type="checkbox" ng-disabled="true" ng-model="child.IsBituaLeumi" /></td>
+
+                                                    <td><div class="btn btn-xs btn-danger" ng-click="$ctrl.removeChild(child)">הסר/י</div></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+
+                                    </div>
+
+                                </div>
+                            </div>
+
+
+                            <div class="col-md-12">
+                                <hr />
+                            </div>
+
+
+
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <label>שם</label>
+                                    <input type="text" class="form-control" ng-model="$ctrl.newChild.Name" />
+                                </div>
+
+                            </div>
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <label>מספר זהות</label>
+                                    <input type="text" class="form-control" ng-model="$ctrl.newChild.Taz" />
+                                </div>
+
+                            </div>
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <label>תאריך לידה</label>
+                                    <input type="date" class="form-control date" ng-model="$ctrl.newChild.BirthDate" />
+                                </div>
+
+                            </div>
+
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <label>הילד נמצא בחזקתי</label><br />
+                                    <input type="checkbox" ng-model="$ctrl.newChild.IsInHouse">
+                                </div>
+
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>אני מקבל/ת בגינו/ה קצבת ילדים מביטוח לאומי</label><br />
+                                    <input type="checkbox" ng-model="$ctrl.newChild.IsBituaLeumi">
+                                </div>
+
+                            </div>
+
+                            <div class="col-md-1">
+                                <br />
+                                <div class="btn  btn-primary" ng-click="$ctrl.addNewChild()">הוסף ילד</div>
+                            </div>
+
+
+
+
+
+                        </div>
+
+
+
+
+
+                    </div>
+
+                </div>
+            </div>
+            <!--פרטים על הכנסותי ממעביד זה - 101-->
+            <div class="col-md-12 nopadding">
+
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        פרטים על הכנסותי ממעביד זה - 101
+                    </div>
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>אני מקבל/ת </label>
+                                    <select class="form-control" ng-model="$ctrl.worker.SugMaskuret" required>
+                                        <option value="">בחר סוג הכנסה</option>
+                                        <option value="1">משכורת חודש</option>
+                                        <option value="2">שכר עבודה (עובד יומי)</option>
+                                        <option value="3">משכורת נוספת</option>
+                                        <option value="4">קצבה</option>
+                                        <option value="5">משכורת חלקית</option>
+                                        <option value="6">מלגה</option>
+
+                                    </select>
+                                </div>
+
+                            </div>
+
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>תאריך תחילת העבודה בשנת המס</label>
+                                    <input type="date" class="form-control date" ng-model="$ctrl.worker.StartWorkDate" required />
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+
+                    </div>
+
+                </div>
+            </div>
+            <!--פרטים על הכנסות אחרות - 101-->
+            <div class="col-md-12 nopadding">
+
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        פרטים על הכנסות אחרות - 101
+                    </div>
+                    <div class="panel-body">
+
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>יש לך הכנסות אחרות?</label>
+                                    <select class="form-control" ng-model="$ctrl.worker.AnotherMaskuret" required>
+                                        <option value="">--בחר האם יש הכנסה נוספת--</option>
+                                        <option value="1">אין לי הכנסות אחרות לרבות מלגות</option>
+                                        <option value="2">יש לי הכנסות נוספות כמפורט להלן</option>
+
+                                    </select>
+                                </div>
+
+                            </div>
+
+
+                        </div>
+
+                        <div class="row" ng-if="$ctrl.worker.AnotherMaskuret==2">
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>פירוט הכנסות</label>
+                                    <select class="form-control" ng-model="$ctrl.worker.AnotherSugMaskuret">
+                                        <option value="">בחר סוג הכנסה</option>
+                                        <option value="1">משכורת חודש</option>
+                                        <option value="2">שכר עבודה (עובד יומי)</option>
+                                        <option value="3">משכורת נוספת</option>
+                                        <option value="4">קצבה</option>
+                                        <option value="5">משכורת חלקית</option>
+                                        <!--<option value="6">מלגה</option>-->
+                                        <option value="7">מקור אחר</option>
+
+                                    </select>
+                                </div>
+
+                            </div>
+
+
+
+                        </div>
+                        <div class="col-md-12">
+                        </div>
+                        <div class="row" ng-if="$ctrl.worker.AnotherMaskuret==2">
+                            <div class="col-md-12">
+                                <label>נקודות זיכוי</label>
+                                <div class="col-md-12">
+                                    <div>
+
+                                        <input class="form-check-input"
+                                               type="radio"
+                                               name="Nkudutzikuy"
+                                               id="radioNoLabel1"
+                                               ng-model="$ctrl.worker.Nkudutzikuy"
+                                               value="1"
+                                               aria-label="" />
+
+                                        <label class="form-check-label" for="radioNoLabel1">אבקש לקבל נקודות זיכוי ומדרגות מס כנגד הכנסתי זו (סעיף ד). איני מקבל/ת אותם בהכנסה אחרת.</label>
+                                    </div>
+
+                                    <div>
+                                        <input class="form-check-input"
+                                               type="radio"
+                                               name="Nkudutzikuy"
+                                               id="radioNoLabel2"
+                                               ng-model="$ctrl.worker.Nkudutzikuy"
+                                               value="2"
+                                               aria-label="" />
+
+                                        <label class="form-check-label" for="radioNoLabel2">אני מקבל/ת נקודות זיכוי ומדרגות מס בהכנסה אחרת ועל כן איני זכאי/ת להם כנגד הכנסה זו.</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                            </div>
+                            <div class="col-md-12">
+                                <label>הפרשות</label>
+                                <div class="col-md-12">
+                                    <div>
+
+                                        <input class="form-check-input"
+                                               type="checkbox" ng-model="$ctrl.worker.AnotherMaskuretHafrashot1" /><label>אין מפרישים עבורי לקרן השתלמות בגין הכנסתי האחרת, או שכל הפרשות המעביד לקרן השתלמות בגין הכנסתי האחרת מצורפות להכנסתי האחרת.</label>
+                                    </div>
+
+                                    <div>
+                                        <input class="form-check-input"
+                                               type="checkbox" ng-model="$ctrl.worker.AnotherMaskuretHafrashot2" /><label>    אין מפרישים עבורי לקצבה/לביטוח אובדן כושר עבודה/פיצויים בגין הכנסתי האחרת, או שכל הפרשות המעביד לקצבה/לביטוח אובדן כושר עבודה/פיצויים בגין הכנסתי האחרת מצורפות להכנסתי האחרת.</label>
+
+
+                                    </div>
+                                </div>
+                            </div>
+
+
+
+
+
+
+
+
+                        </div>
+
+                    </div>
+                </div>
+
+
+            </div>
+            <!--פרטים על בן/בת הזוג - 101-->
+            <div class="col-md-12 nopadding">
+
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        פרטים על בן/בת הזוג - 101
+                    </div>
+                    <div class="panel-body">
+
+
+
+                        <div class="row" ng-if="$ctrl.worker.StatusFamely==2">
+
+
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>שם פרטי</label>
+                                    <input type="text" class="form-control" ng-model="$ctrl.worker.ZoogFirstName" />
+                                </div>
+
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>שם משפחה</label>
+                                    <input type="text" class="form-control" ng-model="$ctrl.worker.ZoogLastName" />
+                                </div>
+
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>תעודת זהות</label>
+                                    <input type="text" class="form-control" ng-model="$ctrl.worker.ZoogTaz" />
+                                </div>
+
+                            </div>
+
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>מס' דרכון</label>
+                                    <input type="text" class="form-control" ng-model="$ctrl.worker.ZoogDarkon" />
+                                </div>
+
+                            </div>
+
+
+
+                        </div>
+
+                        <div class="row" ng-if="$ctrl.worker.StatusFamely==2">
+
+
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>תאריך לידה</label>
+                                    <input type="date" class="form-control date" ng-model="$ctrl.worker.ZoogBirthDate" />
+                                </div>
+
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>תאריך עליה</label>
+                                    <input type="date" class="form-control date" ng-model="$ctrl.worker.ZoogAliaDate" />
+                                </div>
+
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>הכנסה</label>
+                                    <div class="col-md-12">
+                                        <div>
+
+                                            <input class="form-check-input"
+                                                   type="radio"
+                                                   name="Nkudutzikuy"
+                                                   id="radioNoLabel3"
+                                                   ng-model="$ctrl.worker.ZoogMaskuret"
+                                                   value="1"
+                                                   aria-label="" />
+
+                                            <label class="form-check-label" for="radioNoLabel3">
+                                                אין לבן/בת הזוג כל הכנסה
+                                            </label>
+                                        </div>
+
+                                        <div>
+                                            <input class="form-check-input"
+                                                   type="radio"
+                                                   name="Nkudutzikuy"
+                                                   id="radioNoLabel4"
+                                                   ng-model="$ctrl.worker.ZoogMaskuret"
+                                                   value="2"
+                                                   aria-label="" />
+
+                                            <label class="form-check-label" for="radioNoLabel4">יש לבן/בת הזוג הכנסה</label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <div class="col-md-3" ng-if="$ctrl.worker.ZoogMaskuret==2">
+                                <label>סוג הכנסה</label>
+                                <div class="col-md-12">
+                                    <div>
+
+                                        <input class="form-check-input"
+                                               type="checkbox" ng-model="$ctrl.worker.ZoogMaskuret1" /><label>עבודה/קיצבה/עסק</label>
+                                    </div>
+
+                                    <div>
+                                        <input class="form-check-input"
+                                               type="checkbox" ng-model="$ctrl.worker.ZoogMaskuret2" /><label>הכנסה אחרת </label>
+
+
+                                    </div>
+                                </div>
+                            </div>
+
+
+
+                        </div>
+
+                        <div class="row" ng-if="$ctrl.worker.StatusFamely!=2">
+                            <div class="alert alert-success" role="alert">
+                                <label>חלק זה רלוונטי רק אם הינך נשוי/אה</label>
+                            </div>
+                        </div>
+
+
+
+
+
+                    </div>
+
+                </div>
+            </div>
+
+            <!--אני מבקש/ת פטור או זיכוי ממס מהסיבות הבאות - 101-->
+            <div class="col-md-12 nopadding">
+
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        אני מבקש/ת פטור או זיכוי ממס מהסיבות הבאות - 101
+                    </div>
+                    <div class="panel-body">
+
+
+                        <div class="row">
+
+
+                            <div class="col-md-12">
+
+
+                                <div class="col-md-3">
+                                    <div class="checkbox">
+                                        <input class="form-check-input" ng-disabled="true"
+                                               type="checkbox" ng-model="$ctrl.worker.ZikuyToshavIsrael" />
+                                        <span>
+                                            1. אני תושב/ת ישראל
+                                        </span>
+                                    </div>
+                                </div>
+
+
+                            </div>
+
+                            <div class="col-md-12">
+                                <hr />
+                            </div>
+
+                            <div class="col-md-12">
+
+
+                                <div class="col-md-3 checkbox">
+
+                                    <input class="form-check-input"
+                                           type="checkbox" ng-model="$ctrl.worker.ZikuyNeke" />
+                                    <span>
+                                        2. אני נכה 100% / עיוור/ת לצמיתות
+                                    </span>
+                                </div>
+
+                                <div class="col-md-4">
+                                    <div style="" ng-if="$ctrl.worker.ZikuyNeke">
+
+                                        <span> אישור משרד הביטחון/האוצר/פקיד השומה/תעודת עיוור שהוצאה לאחר 1/1/94</span>
+
+                                        <br />
+                                        <label class="custom-file-upload">
+
+                                            <input type="file" class="form-control" filename="" folder="$ctrl.foldertaz" workerid="$ctrl.worker.Id" filename-callback="$ctrl.uploadFileZikuyNeke" />
+
+                                            בחירת קובץ
+                                            <i class="fa fa-cloud-upload"></i>
+                                        </label>
+
+                                        <a ng-href="{{$ctrl.uploadsUri+$ctrl.worker.Id + '/' + $ctrl.filezikuyneke}}" target="_blank"><span style="width:20px;overflow:hidden">{{$ctrl.filezikuyneke}}</span></a>
+
+
+                                    </div>
+                                </div>
+
+
+
+                            </div>
+                            <div class="col-md-12">
+                                <hr />
+                            </div>
+
+                            <div class="col-md-12">
+
+
+                                <div class="col-md-12">
+                                    <div class="checkbox">
+                                        <input class="form-check-input"
+                                               type="checkbox" ng-model="$ctrl.worker.ZikuyToshavMas" />
+                                        <span>
+                                            3. אני תושב/ת קבוע/ה בישוב מזכה. אני ובני משפחתי מדרגה ראשונה, מתגוררים ביישוב ואין לי "מרכז חיים" נוסף.
+                                        </span>
+
+                                    </div>
+                                </div>
+
+                                <div class="col-md-12 alert-info" ng-if="$ctrl.worker.ZikuyToshavMas">
+
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label>מתאריך</label>
+                                            <input type="date" class="form-control date" ng-model="$ctrl.worker.ZikuyYeshuvStartDate" />
+
+                                        </div>
+
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label>הישוב</label>
+                                            <input type="text" class="form-control" ng-model="$ctrl.worker.City" />
+
+                                        </div>
+
+                                    </div>
+
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label>
+
+                                                אישור של הרשות ע"ג טופס 1312א      ( ניתן להוריד ב <a href="https://taxes.gov.il/TaxesFormsList/itc1312a.pdf" target="_blank">רשות המיסים</a>)
+
+                                            </label>
+                                            <br />
+                                            <label class="custom-file-upload">
+                                                <input type="file" class="form-control" filename="" folder="$ctrl.foldertaz" workerid="$ctrl.worker.Id" filename-callback="$ctrl.uploadFileZikuyToshav" />
+
+                                                בחירת קובץ
+                                                <i class="fa fa-cloud-upload"></i>
+                                            </label>
+
+
+                                            <a ng-href="{{$ctrl.uploadsUri+$ctrl.worker.Id + '/' + $ctrl.filezikuytoshav}}" target="_blank"><span style="width:20px;overflow:hidden">{{$ctrl.filezikuytoshav}}</span></a>
+
+
+
+
+                                        </div>
+
+                                    </div>
+
+
+                                </div>
+
+                            </div>
+
+                            <div class="col-md-12">
+                                <hr />
+                            </div>
+
+                            <div class="col-md-12">
+
+
+                                <div class="col-md-12">
+                                    <div class="checkbox">
+                                        <input class="form-check-input"
+                                               type="checkbox" ng-model="$ctrl.worker.ZikuyOleHadash" />
+                                        <span>
+                                            4. אני עולה חדש/ה
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="col-md-12 alert-info" ng-if="$ctrl.worker.ZikuyOleHadash">
+
+                                    <div class="col-md-2">
+                                        <div class="form-group">
+                                            <label>מתאריך</label>
+                                            <input type="date" class="form-control date" ng-model="$ctrl.worker.ZikuyOleHadashDate" />
+
+                                        </div>
+
+                                    </div>
+
+
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+
+                                            <label>
+                                                תעודת עולה
+                                            </label>
+                                            <br />
+                                            <label class="custom-file-upload">
+                                                <input type="file" class="form-control" filename="" folder="$ctrl.foldertaz" workerid="$ctrl.worker.Id" filename-callback="$ctrl.uploadFileZikuyOleHadash" />
+
+                                                בחירת קובץ
+                                                <i class="fa fa-cloud-upload"></i>
+                                            </label>
+
+
+                                            <a ng-href="{{$ctrl.uploadsUri+$ctrl.worker.Id + '/' + $ctrl.filezikuyolehadash}}" target="_blank"><span style="width:20px;overflow:hidden">{{$ctrl.filezikuyolehadash}}</span></a>
+
+
+
+
+                                        </div>
+
+                                    </div>
+
+                                    <div class="col-md-7">
+                                        <div class="form-group">
+                                            <label>לא הייתה לי הכנסה בישראל מתחילת שנת המס הנוכחית עד תאריך</label>
+                                            <input type="text" class="form-control date" ng-model="$ctrl.worker.ZikuyOleHadashFromStartYearDate" />
+                                            <label class="tp-help-below">
+                                                מי שתקופת זכאותו (42 חודש) אינה רצופה בשל שירות חובה בצה"ל, לימודים על תיכוניים או יציאה לחו"ל יפנה לפקיד השומה.
+                                            </label>
+                                        </div>
+
+                                    </div>
+
+
+                                </div>
+
+                                <hr />
+
+                            </div>
+                            <div class="col-md-12">
+                                <hr />
+                            </div>
+
+
+                            <div class="col-md-12">
+
+
+                                <div class="col-md-12 checkbox">
+
+                                    <input class="form-check-input"
+                                           type="checkbox" ng-model="$ctrl.worker.ZikuyZoog" />
+                                    <span>
+                                        5. בגין בן/בת זוגי המתגורר/ת עימי ואין לו/לה הכנסות בשנת המס
+                                    </span>
+                                </div>
+                                <div class="col-md-12 tp-help-below">
+                                    רק אם העובד/ת או בן/בת הזוג הגיע/ה לגיל פרישה או שהוא/היא נכה או עיוור/ת עפ"י סעיף 9(5) לפקודה.
+                                </div>
+
+
+                            </div>
+
+                            <div class="col-md-12">
+                                <hr />
+                            </div>
+
+                            <div class="col-md-12">
+
+
+                                <div class="col-md-12 checkbox">
+
+                                    <input class="form-check-input"
+                                           type="checkbox" ng-model="$ctrl.worker.ZikuyHoreHayNefrad" />
+                                    <span>
+                                        6. אני הורה במשפחה חד הורית החי בנפרד
+                                    </span>
+                                </div>
+                                <div class="col-md-12 tp-help-below">
+                                    ימולא רק ע"י הורה כאמור החי בנפרד ומבקש נקודות זיכוי עבור ילדיו, הנמצאים בחזקתו ובגינם מקבל קצבת ילדים מהמוסד לביטוח לאומי (בהתאם לסעיף 7 להלן) ואינו מנהל משק בית משותף עם יחיד/ה אחר/ת.
+                                </div>
+
+
+                            </div>
+
+                            <div class="col-md-12">
+                                <hr />
+                            </div>
+
+                            <div class="col-md-12">
+
+
+                                <div class="col-md-12 checkbox">
+
+                                    <input class="form-check-input"
+                                           type="checkbox" ng-model="$ctrl.worker.ZikuyLuladBehzka" />
+                                    <span>
+                                        7. בגין ילדי שבחזקתי המפורטים בחלק ג
+                                    </span>
+                                </div>
+                                <div class="col-md-12 tp-help-below">
+                                    ימולא רק ע"י הורה במשפחה חד הורית שמקבל את קצבת הילדים בגינם, או ע"י אשה נשואה או ע"י הורה יחיד.
+                                </div>
+
+
+                                <div class="col-md-12 alert-info" ng-if="$ctrl.worker.ZikuyLuladBehzka">
+
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label>מספר ילדים שנולדו בשנת המס</label>
+                                            <input type="number" class="form-control" ng-model="$ctrl.worker.ZikuyLuladNuldoShnatMas" />
+
+                                        </div>
+
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label>
+                                                מספר ילדים שימלאו להם 1-5 שנים בשנת המס
+                                            </label>
+                                            <input type="number" class="form-control" ng-model="$ctrl.worker.ZikuyLulad_1_5" />
+
+                                        </div>
+
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label>מספר ילדים שימלאו להם 6-17 שנים בשנת המס</label>
+                                            <input type="number" class="form-control" ng-model="$ctrl.worker.ZikuyLulad_6_17" />
+
+                                        </div>
+
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label>מספר ילדים שימלאו להם 18 שנים בשנת המס</label>
+                                            <input type="number" class="form-control" ng-model="$ctrl.worker.ZikuyLulad_18" />
+
+                                        </div>
+
+                                    </div>
+
+
+
+                                </div>
+
+
+
+
+
+                            </div>
+
+                            <div class="col-md-12">
+                                <hr />
+                            </div>
+
+                            <div class="col-md-12">
+
+
+                                <div class="col-md-12 checkbox">
+
+                                    <input class="form-check-input"
+                                           type="checkbox" ng-model="$ctrl.worker.ZikuyLuladPeutim" />
+                                    <span>
+                                        8. בגין ילדי הפעוטים
+                                    </span>
+                                </div>
+                                <div class="col-md-12 tp-help-below">
+                                    ימולא ע"י הורה (למעט הורה אשר סימן בפסקה 7 לעיל), אשה לא נשואה שילדיה אינם בחזקתה וכן הורה יחיד
+                                </div>
+
+
+                                <div class="col-md-12 alert-info" ng-if="$ctrl.worker.ZikuyLuladPeutim">
+
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label>מספר ילדים שנולדו בשנת המס</label>
+                                            <input type="number" class="form-control" ng-model="$ctrl.worker.ZikuyLuladNuldoShnatMas2" />
+
+                                        </div>
+
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label>
+                                                מספר ילדים שימלאו להם 1-5 שנים בשנת המס
+                                            </label>
+                                            <input type="number" class="form-control" ng-model="$ctrl.worker.ZikuyLulad2_1_5" />
+
+                                        </div>
+
+                                    </div>
+
+
+
+                                </div>
+
+
+
+
+
+                            </div>
+
+                            <div class="col-md-12">
+                                <hr />
+                            </div>
+
+                            <div class="col-md-12">
+
+
+                                <div class="col-md-12 checkbox">
+
+                                    <input class="form-check-input"
+                                           type="checkbox" ng-model="$ctrl.worker.ZikuyHoreYahid" />
+                                    <span>
+                                        9. אני הורה יחיד לילדי שבחזקתי (המפורטים בסעיף 7 ו-8 לעיל).
+                                    </span>
+                                </div>
+
+
+                            </div>
+
+                            <div class="col-md-12">
+                                <hr />
+                            </div>
+
+
+                            <div class="col-md-12">
+
+
+                                <div class="col-md-12 checkbox">
+
+                                    <input class="form-check-input"
+                                           type="checkbox" ng-model="$ctrl.worker.ZikuyPsakDinMezonot" />
+                                    <span>
+                                        10. בגין ילדי שאינם בחזקתי המפורטים בחלק ג ואני משתתף/ת בכלכלתם.
+                                    </span>
+                                </div>
+                                <div class="col-md-12 tp-help-below">
+                                    ימולא ע"י הורה החי בנפרד, שאינו זכאי לנקודות זיכוי בגין ילדיו, אשר המציא פס"ד המחייב אותו בתשלום מזונות.
+                                </div>
+
+
+                                <div class="col-md-12 alert-info" ng-if="$ctrl.worker.ZikuyPsakDinMezonot">
+
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label>צילום פסק דין המחייב בתשלום מזונות</label>
+
+                                            <br />
+                                            <label class="custom-file-upload">
+                                                <input type="file" class="form-control" filename="" folder="$ctrl.foldertaz" workerid="$ctrl.worker.Id" filename-callback="$ctrl.uploadFileZikuyPsakDinMezonot" />
+                                                בחירת קובץ
+                                                <i class="fa fa-cloud-upload"></i>
+                                            </label>
+
+
+
+                                            <a ng-href="{{$ctrl.uploadsUri+$ctrl.worker.Id + '/' + $ctrl.filezikuypsakdinmezonot}}" target="_blank"><span style="width:20px;overflow:hidden">{{$ctrl.filezikuypsakdinmezonot}}</span></a>
+
+
+                                        </div>
+
+                                    </div>
+
+
+
+                                </div>
+
+
+
+
+
+                            </div>
+
+                            <div class="col-md-12">
+                                <hr />
+                            </div>
+
+                            <div class="col-md-12">
+
+
+                                <div class="col-md-12 checkbox">
+
+                                    <input class="form-check-input"
+                                           type="checkbox" ng-model="$ctrl.worker.ZikuyLuladMugbalut" />
+                                    <span>
+                                        11. אני הורה לילדים עם מוגבלות שטרם מלאו להם 19 שנים, בגינם אני מקבל/ת גמלת ילד נכה מהמוסד לביטוח לאומי.
+                                    </span>
+                                </div>
+                                <div class="col-md-12 tp-help-below">
+                                    בן זוגי אינו מקבל נקודות זיכוי אלה. לילדי, בגינו אני מבקש את נקודות הזיכוי, אין הכנסות בשנה הנוכחית.
+                                </div>
+
+
+                                <div class="col-md-12 alert-info" ng-if="$ctrl.worker.ZikuyLuladMugbalut">
+
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label>מספר הילדים עם מוגבלות שטרם מלאו להם 19 שנים, בגינם את/ה מקבל/ת גמלת ילד נכה מהמוסד לביטוח לאומי</label>
+                                            <input type="number" class="form-control" ng-model="$ctrl.worker.ZikuyLuladMugbalutNumber" />
+
+                                        </div>
+
+                                    </div>
+
+
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label>אישור גמלת ילד נכה מהמוסד לביטוח לאומי לשנה נוכחית</label>
+
+                                            <br />
+                                            <label class="custom-file-upload">
+
+                                                <input type="file" class="form-control" filename="" folder="$ctrl.foldertaz" workerid="$ctrl.worker.Id" filename-callback="$ctrl.uploadFileZikuyLuladMugbalut" />
+
+                                                בחירת קובץ
+                                                <i class="fa fa-cloud-upload"></i>
+                                            </label>
+
+                                            <a ng-href="{{$ctrl.uploadsUri+$ctrl.worker.Id + '/' + $ctrl.filezikuyluladmugbalut}}" target="_blank"><span style="width:20px;overflow:hidden">{{$ctrl.filezikuyluladmugbalut}}</span></a>
+
+
+                                        </div>
+
+                                    </div>
+
+
+
+                                </div>
+
+
+
+
+
+                            </div>
+
+                            <div class="col-md-12">
+                                <hr />
+                            </div>
+
+                            <div class="col-md-12">
+
+
+                                <div class="col-md-12 checkbox">
+
+                                    <input class="form-check-input"
+                                           type="checkbox" ng-model="$ctrl.worker.ZikuyTashlumMezonot" />
+                                    <span>
+                                        12. בגין מזונות לבן/בת זוגי לשעבר.
+                                    </span>
+                                </div>
+                                <div class="col-md-12 tp-help-below">
+                                    ימולא ע"י מי שנישא בשנית.
+                                </div>
+
+
+                                <div class="col-md-12 alert-info" ng-if="$ctrl.worker.ZikuyTashlumMezonot">
+
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label>צילום פסק דין המחייב בתשלום מזונות</label>
+                                            <br />
+                                            <label class="custom-file-upload">
+                                                <input type="file" class="form-control" filename="" folder="$ctrl.foldertaz" workerid="$ctrl.worker.Id" filename-callback="$ctrl.uploadFileZikuyPsakDinMezonot" />
+
+                                                בחירת קובץ
+                                                <i class="fa fa-cloud-upload"></i>
+                                            </label>
+
+                                            <a ng-href="{{$ctrl.uploadsUri+$ctrl.worker.Id + '/' + $ctrl.filezikuypsakdinmezonot}}" target="_blank"><span style="width:20px;overflow:hidden">{{$ctrl.filezikuypsakdinmezonot}}</span></a>
+
+
+                                        </div>
+
+                                    </div>
+
+
+
+                                </div>
+
+
+
+
+
+                            </div>
+
+                            <div class="col-md-12">
+                                <hr />
+                            </div>
+
+
+                            <div class="col-md-12">
+
+
+                                <div class="col-md-12 checkbox">
+
+                                    <input class="form-check-input"
+                                           type="checkbox" ng-model="$ctrl.worker.ZikuyBetween16_18" />
+                                    <span>
+                                        13. מלאו לי או לבן/בת זוגי 16 שנים וטרם מלאו לי או לבן/בת זוגי 18 שנים בשנת המס.
+                                    </span>
+                                </div>
+
+
+                            </div>
+
+                            <div class="col-md-12">
+                                <hr />
+                            </div>
+
+                            <div class="col-md-12">
+
+
+                                <div class="col-md-12">
+                                    <div class="checkbox">
+                                        <input class="form-check-input"
+                                               type="checkbox" ng-model="$ctrl.worker.ZikuyHayalEnd" />
+                                        <span>
+                                            14. אני חייל/ת משוחרר/ת / שרתתי בשירות לאומי.
+                                        </span>
+
+                                    </div>
+                                </div>
+
+                                <div class="col-md-12 alert-info" ng-if="$ctrl.worker.ZikuyHayalEnd">
+
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label>תאריך תחילת שירות</label>
+                                            <input type="date" class="form-control date" ng-model="$ctrl.worker.ZikuyHayalEndStartDate" />
+
+                                        </div>
+
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label>תאריך סיום שירות</label>
+                                            <input type="date" class="form-control date" ng-model="$ctrl.worker.ZikuyHayalEndEndDate" />
+
+                                        </div>
+
+                                    </div>
+
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label>
+
+
+                                                תעודת שחרור/ סיום שירות
+
+                                            </label>
+                                            <br />
+                                            <label class="custom-file-upload">
+                                                <input type="file" class="form-control" filename="" folder="$ctrl.foldertaz" workerid="$ctrl.worker.Id" filename-callback="$ctrl.uploadFileZikuyHayalEnd" />
+
+                                                בחירת קובץ
+                                                <i class="fa fa-cloud-upload"></i>
+                                            </label>
+                                            <a ng-href="{{$ctrl.uploadsUri+$ctrl.worker.Id + '/' + $ctrl.filezikuyhayalend}}" target="_blank"><span style="width:20px;overflow:hidden">{{$ctrl.filezikuyhayalend}}</span></a>
+
+
+
+
+                                        </div>
+
+                                    </div>
+
+
+                                </div>
+
+                            </div>
+
+                            <div class="col-md-12">
+                                <hr />
+                            </div>
+
+
+                            <div class="col-md-12">
+
+
+                                <div class="col-md-5 checkbox">
+
+                                    <input class="form-check-input"
+                                           type="checkbox" ng-model="$ctrl.worker.ZikuyToarAkdemi" />
+                                    <span>
+                                        15. בגין סיום לימודים לתואר אקדמי, סיום התמחות או סיום לימודי מקצוע.
+                                    </span>
+                                </div>
+
+                                <div class="col-md-4">
+                                    <div style="" ng-if="$ctrl.worker.ZikuyToarAkdemi">
+
+                                        <label> הצהרה בטופס 119</label>
+                                        <br />
+                                        <label class="custom-file-upload">
+                                            <input type="file" class="form-control" filename="" folder="$ctrl.foldertaz" workerid="$ctrl.worker.Id" filename-callback="$ctrl.uploadFileZikuyToarAkdemi" />
+                                            בחירת קובץ
+                                            <i class="fa fa-cloud-upload"></i>
+                                        </label>
+
+                                        <a ng-href="{{$ctrl.uploadsUri+$ctrl.worker.Id + '/' + $ctrl.filezikuytoarakdemi}}" target="_blank"><span style="width:20px;overflow:hidden">{{$ctrl.filezikuytoarakdemi}}</span></a>
+                                        <label class="tp-help-below">
+                                            ניתן להיעזר ב<a href="https://tofes101.co.il/fill-form-119/" target="_blank">טופס 119 הממוחשב</a>&nbsp;או להוריד את הטופס <a href="https://taxes.gov.il/TaxesFormsList/itc119_11.pdf" target="_blank">מאתר רשות המסים</a>.
+                                        </label>
+
+
+                                    </div>
+                                </div>
+
+
+
+                            </div>
+                            <div class="col-md-12">
+                                <hr />
+                            </div>
+
+
+
+
+                        </div>
+
+                    </div>
+                </div>
+
+
+            </div>
+
+            <!--תיאום מס - 101-->
+            <div class="col-md-12 nopadding">
+
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        תיאום מס - 101
+                    </div>
+                    <div class="panel-body">
+
+
+                        <div class="col-md-12">
+                            <div class="checkbox">
+                                <input class="form-check-input"
+                                       type="checkbox" ng-model="$ctrl.worker.TiumMas" ng-change="$ctrl.worker.TiumMasBakasha=null;
+                               $ctrl.worker.TiumMasAnotherMaskuretName=null;
+                               $ctrl.worker.TiumMasAnotherMaskuretKtuvet=null;
+                               $ctrl.worker.TiumMasAnotherMaskuretTikNikuim=null;
+                               $ctrl.worker.TiumMasAnotherMaskuretSug=null;
+                               $ctrl.worker.TiumMasAnotherMaskuretSum=null;
+
+                               $ctrl.worker.TiumMasAnotherMaskuretMas=null;
+
+
+
+                               " />
+                                <span>
+                                    צירוף/עריכת תיאום מס
+                                </span>
+
+                            </div>
+                        </div>
+                        <div class="row" ng-if="$ctrl.worker.TiumMas">
+                            <div class="col-md-12">
+                                <label>סיבת הבקשה</label>
+                                <div class="col-md-12">
+                                    <div>
+
+                                        <input class="form-check-input"
+                                               type="radio"
+                                               name="TiumMasBakasha"
+                                               id="radioNoLabel10"
+                                               ng-model="$ctrl.worker.TiumMasBakasha"
+                                               value="1"
+                                               aria-label="" />
+
+                                        <span class="form-check-label" for="radioNoLabel10">לא הייתה לי הכנסה מתחילת שנת המס הנוכחית עד לתחילת עבודתי אצל מעביד זה.</span>
+                                    </div>
+
+                                    <div>
+
+                                        <input class="form-check-input"
+                                               type="radio"
+                                               name="TiumMasBakasha"
+                                               id="radioNoLabel11"
+                                               ng-model="$ctrl.worker.TiumMasBakasha"
+                                               value="2"
+                                               aria-label="" />
+
+                                        <span class="form-check-label" for="radioNoLabel11">יש לי הכנסות נוספות ממשכורת כמפורט להלן.</span>
+                                    </div>
+
+                                    <div>
+
+                                        <input class="form-check-input"
+                                               type="radio"
+                                               name="TiumMasBakasha"
+                                               id="radioNoLabel12"
+                                               ng-model="$ctrl.worker.TiumMasBakasha"
+                                               value="3"
+                                               aria-label="" />
+
+                                        <span class="form-check-label" for="radioNoLabel12">פקיד השומה אישר תיאום לפי אישור מצורף.</span>
+                                    </div>
+
+
+                                </div>
+                            </div>
+
+                            <div class="col-md-12">
+                                <br />
+                            </div>
+
+
+
+                            <div class="col-md-12" ng-if="$ctrl.worker.TiumMasBakasha==1">
+                                <div class="form-group">
+                                    <label>
+
+
+                                        הוכחות לחוסר הכנסה
+
+                                    </label>
+
+
+
+                                    <br />
+                                    <label class="custom-file-upload">
+                                        <input type="file" class="form-control" filename="" folder="$ctrl.foldertaz" workerid="$ctrl.worker.Id" filename-callback="$ctrl.uploadFileTiumMasAproove" />
+
+                                        בחירת קובץ
+                                        <i class="fa fa-cloud-upload"></i>
+                                    </label>
+
+                                    <a ng-href="{{$ctrl.uploadsUri+$ctrl.worker.Id + '/' + $ctrl.filetiummasaproove}}" target="_blank"><span style="width:20px;overflow:hidden">{{$ctrl.filetiummasaproove}}</span></a>
+                                    <label class="tp-help-below">
+                                        כגון: אישור משטרת הגבולות בגין שהייה בחו"ל, אישור מחלה וכיו"ב. בהעדר הוכחה יש לפנות לפקיד השומה.
+                                        לתשומת לבך: דמי לידה ודמי אבטלה הינם הכנסה חייבת.
+                                    </label>
+
+
+
+
+                                </div>
+
+                            </div>
+
+                            <div class="col-md-12" ng-if="$ctrl.worker.TiumMasBakasha==2">
+
+                                <label>
+                                    פירוט הכנסות נוספות (כלומר, בנוסף להכנסה ממעסיק זה):
+                                </label>
+
+                                <div class="row">
+
+
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label>שם </label>
+                                            <input type="text" class="form-control" ng-model="$ctrl.worker.TiumMasAnotherMaskuretName" />
+                                        </div>
+
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label>כתובת</label>
+                                            <input type="text" class="form-control" ng-model="$ctrl.worker.TiumMasAnotherMaskuretKtuvet" />
+                                        </div>
+
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label>מספר תיק ניכויים</label>
+                                            <input type="text" class="form-control" ng-model="$ctrl.worker.TiumMasAnotherMaskuretTikNikuim" />
+                                        </div>
+
+                                    </div>
+
+
+
+
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label>סוג הכנסה</label>
+                                            <div class="col-md-12">
+                                                <div>
+
+                                                    <input class="form-check-input"
+                                                           type="radio"
+                                                           name="TiumMasAnotherMaskuretSug"
+                                                           id="sug1"
+                                                           ng-model="$ctrl.worker.TiumMasAnotherMaskuretSug"
+                                                           value="1"
+                                                           aria-label="" />
+
+                                                    <label class="form-check-label" for="sug1">
+                                                        עבודה
+                                                    </label>
+                                                </div>
+                                                <div>
+
+                                                    <input class="form-check-input"
+                                                           type="radio"
+                                                           name="TiumMasAnotherMaskuretSug"
+                                                           id="sug2"
+                                                           ng-model="$ctrl.worker.TiumMasAnotherMaskuretSug"
+                                                           value="2"
+                                                           aria-label="" />
+
+                                                    <label class="form-check-label" for="sug2">
+                                                        קיצבה
+                                                    </label>
+                                                </div>
+                                                <div>
+
+                                                    <input class="form-check-input"
+                                                           type="radio"
+                                                           name="TiumMasAnotherMaskuretSug"
+                                                           id="sug3"
+                                                           ng-model="$ctrl.worker.TiumMasAnotherMaskuretSug"
+                                                           value="3"
+                                                           aria-label="" />
+
+                                                    <label class="form-check-label" for="sug3">
+                                                        מילגה
+                                                    </label>
+                                                </div>
+                                                <div>
+
+                                                    <input class="form-check-input"
+                                                           type="radio"
+                                                           name="TiumMasAnotherMaskuretSug"
+                                                           id="sug4"
+                                                           ng-model="$ctrl.worker.TiumMasAnotherMaskuretSug"
+                                                           value="4"
+                                                           aria-label="" />
+
+                                                    <label class="form-check-label" for="sug4">
+                                                        אחר
+                                                    </label>
+                                                </div>
+
+
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label>הכנסה חודשית</label>
+                                            <input type="number" class="form-control" ng-model="$ctrl.worker.TiumMasAnotherMaskuretSum" />
+                                            <label class="tp-help-below">
+                                                לפי התלושים
+                                            </label>
+
+                                        </div>
+
+                                    </div>
+
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label>המס שנוכה</label>
+                                            <input type="number" class="form-control" ng-model="$ctrl.worker.TiumMasAnotherMaskuretMas" />
+                                            <label class="tp-help-below">
+                                                לפי התלושים
+                                            </label>
+
+                                        </div>
+
+                                    </div>
+
+
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label>צילום תלוש שכר</label>
+
+                                            <br />
+                                            <label class="custom-file-upload">
+                                                <input type="file" class="form-control" filename="" folder="$ctrl.foldertaz" workerid="$ctrl.worker.Id" filename-callback="$ctrl.uploadFileTiumMasTlush" />
+
+                                                בחירת קובץ
+                                                <i class="fa fa-cloud-upload"></i>
+                                            </label>
+                                            <a ng-href="{{$ctrl.uploadsUri+$ctrl.worker.Id + '/' + $ctrl.filetiummastlush}}" target="_blank"><span style="width:20px;overflow:hidden">{{$ctrl.filetiummastlush}}</span></a>
+
+
+                                        </div>
+
+                                    </div>
+
+
+
+
+
+
+
+                                </div>
+
+
+                            </div>
+
+                            <div class="col-md-12" ng-if="$ctrl.worker.TiumMasBakasha==3">
+                                <div class="form-group">
+                                    <label>
+
+
+                                        אישור תיאום מס ע"י פקיד שומה
+
+                                    </label>
+                                    <br />
+                                    <label class="custom-file-upload">
+                                        <input type="file" class="form-control" filename="" folder="$ctrl.foldertaz" workerid="$ctrl.worker.Id" filename-callback="$ctrl.uploadFileTiummas" />
+
+                                        בחירת קובץ
+                                        <i class="fa fa-cloud-upload"></i>
+                                    </label>
+
+                                    <a ng-href="{{$ctrl.uploadsUri+$ctrl.worker.Id + '/' + $ctrl.filetiummas}}" target="_blank"><span style="width:20px;overflow:hidden">{{$ctrl.filetiummas}}</span></a>
+
+
+                                </div>
+
+                            </div>
+
+
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+
+
+
+            <!--טופס הסכם-->
+            <div class="col-md-12 nopadding">
+
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        טופס הסכם אישי
+                    </div>
+                    <div class="panel-body">
+
+                        <div class="row">
+
+
+                            <div class="col-md-12 alert-info">
+                                <label>הסכם נחתם</label>
+                                <a href="../../AppData/Agree.pdf" target="_blank">צפיה בהסכם</a>
+
+                            </div>
+
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <label>ביום</label>
+                                    <input type="text" class="form-control" ng-model="$ctrl.worker.HeskemYom" />
+                                </div>
+
+                            </div>
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <label>חודש</label>
+                                    <input type="text" class="form-control" ng-model="$ctrl.worker.HeskemHodesh" />
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <label>שנה</label>
+                                    <input type="text" class="form-control" ng-model="$ctrl.worker.HeskemShana" />
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                        <!--הסכם-->
+                        <div class="row" >
+                            <div class="col-md-12 alert-info">
+                                <label>בין</label>
+                            </div>
+
+
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <label> שם עובדת</label>
+                                    <input type="text" class="form-control" ng-disabled="$ctrl.role!='farmAdmin' && $ctrl.role!='instructor'" ng-model="$ctrl.worker.HeskemWorkerName" />
+                                </div>
+
+                            </div>
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <label>ת"ז </label>
+                                    <input type="text" class="form-control" ng-disabled="$ctrl.role!='farmAdmin' && $ctrl.role!='instructor'" ng-model="$ctrl.worker.HeskemWorkerTaz" />
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <label>רחוב</label>
+                                    <input type="text" class="form-control" ng-disabled="$ctrl.role!='farmAdmin' && $ctrl.role!='instructor'" ng-model="$ctrl.worker.HeskemWorkerStreet" />
+                                </div>
+
+                            </div>
+
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <label>עיר</label>
+                                    <input type="text" class="form-control" ng-disabled="$ctrl.role!='farmAdmin' && $ctrl.role!='instructor'" ng-disabled="true" ng-model="$ctrl.worker.City" />
+                                </div>
+
+                            </div>
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <label>טלפון</label>
+                                    <input type="text" class="form-control" ng-disabled="$ctrl.role!='farmAdmin' && $ctrl.role!='instructor'" ng-model="$ctrl.worker.HeskemWorkerPhone" />
+                                </div>
+
+                            </div>
+
+
+                        </div>
+
+                        <!--תפקיד ומועד העסק-->
+                        <div class="row">
+                            <div class="col-md-12 alert-info">
+                                <label>  תפקיד ומועד העסקה</label>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <label> תפקיד</label>
+                                    <input type="text" class="form-control" ng-disabled="$ctrl.role!='farmAdmin' && $ctrl.role!='instructor'" ng-model="$ctrl.worker.HeskemTafkid" />
+                                </div>
+
+                            </div>
+
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <label>תחת סמכות (רכזת מועדונים)</label>
+                                    <input type="text" class="form-control" ng-disabled="$ctrl.role!='farmAdmin' && $ctrl.role!='instructor'" ng-model="$ctrl.worker.HeskemSamkut" />
+                                </div>
+
+                            </div>
+
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <label>מועד התחלת העסקה</label>
+                                    <input type="date" class="form-control date" ng-disabled="$ctrl.role!='farmAdmin' && $ctrl.role!='instructor'" ng-model="$ctrl.worker.HeskemStartDate" />
+                                </div>
+                            </div>
+
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <label>ימים א-ה משעה</label>
+                                    <input type="text" class="form-control" ng-disabled="$ctrl.role!='farmAdmin' && $ctrl.role!='instructor'" ng-model="$ctrl.worker.HeskemStartHour" />
+                                </div>
+
+                            </div>
+
+
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <label>עד שעה</label>
+                                    <input type="text" class="form-control" ng-disabled="$ctrl.role!='farmAdmin' && $ctrl.role!='instructor'" ng-model="$ctrl.worker.HeskemEndHour" />
+                                </div>
+
+                            </div>
+
+
+                        </div>
+
+                        <!--הצהרת בריאות-->
+                        <div class="row">
+                            <div class="col-md-12 alert-info">
+                                <label>הצהרת בריאות</label>
+                            </div>
+
+
+                            <div class="col-md-12">
+                                <div class="form-group">
+
+
+
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="col-md-12">
+                                                <div class="checkbox">
+                                                    <input class="form-check-input"
+                                                           type="checkbox" ng-model="$ctrl.worker.HeskemBriutEnKlumCheckbox" />
+                                                    <span>
+                                                        העובדת מצהירה כי אין לה מגבלות רפואיות כלש הן ומצבה הבריאותי תקין.
+                                                        במידה ותהיה מגבלה רפואית, מתחייבת העובדת לדווח על כך לעמותה בהקדם
+                                                        האפשרי.
+                                                    </span>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="col-md-2">
+                                                <div class="checkbox">
+                                                    <input class="form-check-input"
+                                                           type="checkbox" ng-model="$ctrl.worker.HeskemWorkerMigbalotCheckbox" />
+                                                    <span>
+                                                        יש לה מגבלות בריאותיות והן
+                                                    </span>
+
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+
+                                                    <input type="text" class="form-control" placeholder="פירוט מגבלות רפואיות" ng-model="$ctrl.worker.HeskemWorkerMigbalot" />
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="col-md-2">
+                                                <div class="checkbox">
+                                                    <input class="form-check-input"
+                                                           type="checkbox" ng-model="$ctrl.worker.HeskemWorkerTrufotCheckbox" />
+                                                    <span>
+                                                        לוקחת תרופות באופן קבוע
+                                                    </span>
+
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+
+                                                    <input type="text" class="form-control" placeholder="פירוט התרופות" ng-model="$ctrl.worker.HeskemWorkerTrufot" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="col-md-2">
+                                                <div class="checkbox">
+                                                    <input class="form-check-input"
+                                                           type="checkbox" ng-model="$ctrl.worker.HeskemWorkerRgishutCheckbox" />
+                                                    <span>
+                                                        רגישות
+                                                    </span>
+
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+
+                                                    <input type="text" class="form-control" placeholder="פירוט רגישויות" ng-model="$ctrl.worker.HeskemWorkerRgishut" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="col-md-2">
+                                                <div class="checkbox">
+                                                    <input class="form-check-input"
+                                                           type="checkbox" ng-model="$ctrl.worker.HeskemWorkerCronitCheckbox" />
+                                                    <span>
+                                                        מחלה כרונית
+                                                    </span>
+
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+
+                                                    <input type="text" class="form-control" placeholder="פירוט מחלות כרוניות" ng-model="$ctrl.worker.HeskemWorkerCronit" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+
+
+
+                        </div>
+
+                        <!--שכר-->
+                        <div class="row">
+
+                            <div class="col-md-12 alert-info">
+                                <label>שכר</label>
+                            </div>
+
+
+                            <div class="row">
+
+
+
+                                <div class="col-md-12">
+
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label> שכר שעתי</label>
+                                            <input type="number" class="form-control" ng-disabled="$ctrl.role!='farmAdmin' && $ctrl.role!='instructor'" ng-model="$ctrl.worker.HeskemWorkerMaskuert3" required />
+                                        </div>
+
+                                    </div>
+
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label> שכר גלובלי</label>
+                                            <input type="number" class="form-control" ng-disabled="$ctrl.role!='farmAdmin' && $ctrl.role!='instructor'" ng-model="$ctrl.worker.HeskemWorkerMaskuert4" required />
+                                        </div>
+
+                                    </div>
+
+                                    <!--<div class="col-md-4">
+                    <div class="form-group">
+                        <label>התעסקות בשעות הבוקר</label>
+                        <input type="number" class="form-control" ng-model="$ctrl.worker.HeskemWorkerMaskuert5" />
+                    </div>
+
+                </div>-->
+
+
+
+
+                                </div>
+                            </div>
+
+
+
+                        </div>
+
+                        <!--בנק-->
+                        <div class="row">
+
+                            <div class="col-md-12 alert-info">
+                                <label>פרטי הבנק</label>
+                            </div>
+
+
+                            <div class="row">
+
+
+
+                                <div class="col-md-12">
+
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label> מספר ושם הבנק</label>
+                                            <input id="txtBanks" class="form-control autocomplete" type="text" autocomplete="off" ng-change="$ctrl.changeBank()" ng-model="$ctrl.worker.BankNumName" />
+                                        </div>
+
+                                    </div>
+
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label> מספר ושם סניף</label>
+                                            <input id="txtBanksBrunchs" class="form-control autocomplete" type="text" autocomplete="off" ng-model="$ctrl.worker.BrunchNumName" />
+                                        </div>
+
+                                    </div>
+
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label> מספר חשבון</label>
+                                            <input type="text" class="form-control" ng-model="$ctrl.worker.BankAccountNumber" />
+                                        </div>
+
+                                    </div>
+
+
+                                </div>
+                            </div>
+
+
+
+                        </div>
+
+                        <!--הערות-->
+                        <div class="row">
+
+                            <div class="col-md-12 alert-info">
+                                <label>הערות</label>
+                            </div>
+
+
+                            <div class="row">
+
+
+                                <div class="col-md-12">
+
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label>הערות</label>
+                                            <textarea type="text" class="form-control" ng-disabled="$ctrl.role!='farmAdmin' && $ctrl.role!='instructor'" rows="4" ng-model="$ctrl.worker.Comments"></textarea>
+                                        </div>
+
+                                    </div>
+
+
+
+
+                                </div>
+                            </div>
+
+
+
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+
+
+
+        </div>
+        <!--הצהרה - 101-->
+        <div class="col-md-12 nopadding">
+
+
+            <!--<img id="imgWorker"  src="{{$ctrl.image}}"/>-->
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    הצהרה
+                </div>
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <label>אני מצהיר/ה כי הפרטים שמסרתי בטופס זה הינם מלאים ונכונים. ידוע לי שהשמטה או מסירת פרטים לא נכונים הינה עבירה על פקודת מס הכנסה.</label>
+                            <label>אני מתחייב/ת להודיע למעביד על כל שינוי שיחול בפרטיי האישיים ובפרטים דלעיל תוך שבוע ימים מתאריך השינוי.</label>
+                            <br /><color style="color:red">*</color><span>חתימת המבקש/ת</span>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="col-md-12">
+
+
+                                    <signature-pad dataurl="storedSignature" accept="accept" clear="clear"></signature-pad>
+                                    <!--<button ng-click="clear()">Reset</button>
+                                    <button ng-click="restore()">Clear and restore</button>-->
+                                    <!--<div id="bcPaint"></div>-->
+                                </div>
+
+                                <div class="col-md-12">
+
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label class="tp-help-below">ניתן לחתום בעזרת העכבר או עם האצבע על מסך מגע.</label>
+                                </div>
+
+                                <div class="col-md-6" style="text-align:left">
+                                    <div class="btn  btn-primary" ng-click="$ctrl.clearSignuture()">נקה חתימה</div>
+                                </div>
+
+                            </div>
+                        </div>
+
+
+
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <hr />
+                        </div>
+                        <div class="col-md-4">
+                            <div ng-if="$ctrl.farmStyle!=1 || $ctrl.role=='farmAdmin' ||  $ctrl.role=='instructor'" style="width:100%;margin-top:2px" class="btn  btn-primary" ng-click="$ctrl.saveWorker(1)">שמור נתונים</div>
+                        </div>
+                        <div class="col-md-4" style="text-align:center">
+                            <div style="width:100%;margin-top:2px" class="btn  btn-info" ng-click="$ctrl.saveWorker(2)">שמור ושלח טופס</div>
+                        </div>
+                        <div class="col-md-4" style="text-align:left">
+                            <div style="width:100%;margin-top:2px" class="btn  btn-warning" ng-click="$ctrl.saveWorker(3)">תצוגה מקדימה PDF</div>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+
+        </div>
+
+       
+
+
+</form>

@@ -88,7 +88,7 @@
 
         function _init() {
 
-
+           
             self.farm.Style = (self.farm.Style) ? self.farm.Style.toString() : "0";
 
 
@@ -562,8 +562,9 @@
                 var grp = this.grps.filter(x => x.Id == objid);
 
                 if (grp.length > 0) {
-
+                    
                     thisCtrl.grp = grp[0];
+                    thisCtrl.grp.CountFieldsInRow = grp[0].CountFieldsInRow.toString();
                     OpenDialog(1);
                 }
 

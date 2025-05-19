@@ -1065,7 +1065,18 @@
                     </div>
                     <div class="form-group">
                         <label>מס' שדות בשורה</label>
-                        <input type="text" class="form-control" ng-model="$ctrl.grp.CountFieldsInRow" />
+
+                        <select id="ddlGroups" class="form-control" ng-model="$ctrl.grp.CountFieldsInRow">
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="6">6</option>
+                        </select>
+
+
+
+                        <!--<input type="text" class="form-control" ng-model="$ctrl.grp.CountFieldsInRow" />-->
                     </div>
 
 
@@ -1110,7 +1121,7 @@
                     </div>
 
                     <div class="form-group">
-                        <label><br /><input type="checkbox" ng-model="$ctrl.btns2grp.IsWorkerShow" />  האם להציג לעובד/ת  </label>
+                        <label><br /><input type="checkbox" ng-model="$ctrl.btns2grp.IsWorkerShow" />  האם להסתיר מהעובד/ת  </label>
                     </div>
 
 
@@ -1134,7 +1145,7 @@
                             <option value="2">מספר</option>
                             <option value="3">תאריך</option>
                             <option value="4">צ'קבוקס</option>
-
+                            <option value="5">טקסט רחב</option>
                         </select>
                     </div>
 

@@ -16,6 +16,8 @@ using System.Web;
 using iTextSharp.text.xml.xmp;
 using System.Reflection;
 using Newtonsoft.Json;
+using System.Text.RegularExpressions;
+using Google.Protobuf.WellKnownTypes;
 
 namespace FarmsApi.Services
 {
@@ -397,7 +399,7 @@ namespace FarmsApi.Services
                             Context.SaveChanges();
                         }
                         //עדכון
-                        else if(fp.StatusId == 1)
+                        else if (fp.StatusId == 1)
                         {
                             Context.Entry(fp).State = System.Data.Entity.EntityState.Modified;
                             Context.SaveChanges();
@@ -416,7 +418,7 @@ namespace FarmsApi.Services
 
                     var Results = (from f2p in Context.Fields2PDF.Where(x => x.FarmPDFFilesId == fp.FarmPDFFilesId && x.PageNumber == fp.PageNumber).DefaultIfEmpty()
                                    from f2g in Context.Fields2Groups.Where(x => x.Id == f2p.Fields2GroupsId).DefaultIfEmpty()
-                                   from f in Context.Fields.Where(x => x.Id == f2g.FieldsId || x.Id== f2p.FieldsId).DefaultIfEmpty()
+                                   from f in Context.Fields.Where(x => x.Id == f2g.FieldsId || x.Id == f2p.FieldsId).DefaultIfEmpty()
 
 
                                    select new
@@ -434,6 +436,130 @@ namespace FarmsApi.Services
 
             return Ok();
         }
+
+
+        // [Authorize]
+        [Route("getSetWorkerAndCompanyData/{type}/{id}")]
+        [HttpPost]
+        public IHttpActionResult GetSetWorkerAndCompanyData(int type, string id, dynamic objs)
+        {
+            string res = id;
+
+            if (Regex.Matches(id, @"[a-zA-Z]").Count > 0)
+            {
+                id = id.Replace("@@", "+").Replace("ofekslash", "/");
+                res = UsersService.DecryptString(id);
+            }
+
+
+            int WorkerId = Convert.ToInt32(res);
+
+
+
+            using (var Context = new Context())
+            {
+                // שליפה של הנתונים
+                if (type == 1)
+                {
+
+                    var Worker = Context.Workers.Where(x => x.Id == WorkerId).FirstOrDefault();
+
+                    var CurrentFarmId = Worker.FarmId;
+
+
+                    var Results = (from fields2Groups in Context.Fields2Groups.Where(x => x.FarmId == CurrentFarmId)
+                                   from fieldsGroups in Context.FieldsGroups.Where(x => x.Id == fields2Groups.FieldsGroupsId)
+
+                                   from fields in Context.Fields.Where(x => x.Id == fields2Groups.FieldsId).DefaultIfEmpty()
+                                   from fields2GroupsWorkerData in Context.Fields2GroupsWorkerData.Where(x => x.WorkersId == WorkerId && x.Fields2GroupsId == fields2Groups.Id).DefaultIfEmpty()
+
+
+                                   select new ResultObjectFields
+                                   {
+                                       f2g = fields2Groups,
+                                       fg = fieldsGroups,
+                                       f = fields,
+                                       f2gwd = fields2GroupsWorkerData
+
+                                   }).OrderBy(x => x.fg.Seq).ThenBy(x => x.f2g.Seq).ToList();
+
+
+                    foreach (var item in Results)
+                    {
+
+                        if (item.f2gwd == null && item.f.WorkerTableField != null)
+                        {
+
+                            var WorkerTableFieldValue = Context.Entry(Worker).Property(item.f.WorkerTableField).CurrentValue;
+
+                            if (WorkerTableFieldValue != null)
+                            {
+                                Fields2GroupsWorkerData fields2GroupsWorkerData = new Fields2GroupsWorkerData();
+                                fields2GroupsWorkerData.Fields2GroupsId = item.f2g.Id;
+                                fields2GroupsWorkerData.WorkersId = WorkerId;
+                                fields2GroupsWorkerData.Value = WorkerTableFieldValue.ToString();
+                                fields2GroupsWorkerData.Type = 1;
+                                fields2GroupsWorkerData.SourceValue = WorkerTableFieldValue.ToString();
+
+                                item.f2gwd = fields2GroupsWorkerData;
+
+                            }
+
+                        }
+
+
+                        if (item.f2gwd == null && item.f2g.DefaultValue != null)
+                        {
+                            Fields2GroupsWorkerData fields2GroupsWorkerData = new Fields2GroupsWorkerData();
+                            fields2GroupsWorkerData.Fields2GroupsId = item.f2g.Id;
+                            fields2GroupsWorkerData.WorkersId = WorkerId;
+                            fields2GroupsWorkerData.Value = item.f2g.DefaultValue;
+                            fields2GroupsWorkerData.Type = 2;
+                            fields2GroupsWorkerData.SourceValue = item.f2g.DefaultValue;
+
+                            item.f2gwd = fields2GroupsWorkerData;
+
+                        }
+
+                        if (item.f2gwd == null)
+                        {
+                            Fields2GroupsWorkerData fields2GroupsWorkerData = new Fields2GroupsWorkerData();
+                            fields2GroupsWorkerData.Fields2GroupsId = item.f2g.Id;
+                            fields2GroupsWorkerData.WorkersId = WorkerId;
+                            fields2GroupsWorkerData.Value = null;
+                            fields2GroupsWorkerData.Type = 0;
+                            fields2GroupsWorkerData.SourceValue = null;
+
+                            item.f2gwd = fields2GroupsWorkerData;
+
+                        }
+
+
+
+
+
+                    }
+
+
+                    return Ok(Results);
+                }
+
+                // עדכון של הנתונים
+                if (type == 2)
+                {
+                    List<Fields2GroupsWorkerData> f2gwd = JsonConvert.DeserializeObject<List<Fields2GroupsWorkerData>>(objs.ToString());
+
+                }
+
+
+
+            }
+
+
+
+            return Ok();
+        }
+
 
 
     }
