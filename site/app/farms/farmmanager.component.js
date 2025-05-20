@@ -565,6 +565,7 @@
                     
                     thisCtrl.grp = grp[0];
                     thisCtrl.grp.CountFieldsInRow = grp[0].CountFieldsInRow.toString();
+                    thisCtrl.grp.TitleTypeId = grp[0].TitleTypeId.toString();
                     OpenDialog(1);
                 }
 

@@ -109,11 +109,26 @@
         }
 
         function _init() {
+
+            
+
             this.groupsonly = [];
            
             uniqueBy(this.screendata, "fg", "Id", this.groupsonly);
 
+            for (var i = 0; i < this.screendata.length; i++) {
 
+                if (this.screendata[i].f2g.FieldsDataTypesId == 4 && this.screendata[i].f2gwd.Value)
+                {
+                    this.screendata[i].f2gwd.Value = eval(this.screendata[i].f2gwd.Value);
+                }
+
+
+                if (this.screendata[i].f2g.FieldsDataTypesId == 3 && this.screendata[i].f2gwd.Value) {
+                    this.screendata[i].f2gwd.Value = new Date(moment(this.screendata[i].f2gwd.Value).format("YYYY-MM-DD"));
+                }
+
+            }
 
 
 
@@ -620,37 +635,41 @@
 
         }
 
+        function SaveDynamicData() {
+
+            var fields2GroupsWorkerDataList = [];
+
+          
+
+            for (var i = 0; i < self.screendata.length; i++) {
+
+                if (self.screendata[i].f2gwd) {
+
+                    if (self.screendata[i].f2g.FieldsDataTypesId == 3 && self.screendata[i].f2gwd.Value)
+                        self.screendata[i].f2gwd.Value = self.changeDateFormat(self.screendata[i].f2gwd.Value);
+
+
+                    fields2GroupsWorkerDataList.push(self.screendata[i].f2gwd);
+                }
+            }
+
+            farmsService.getSetWorkerAndCompanyData(2, self.worker.Id, fields2GroupsWorkerDataList).then(function (worker) {
+
+                //debugger
+                //alertMessage('הנתונים נשssssמרו בהצלחה!');
+
+            }.bind(self));
+
+
+        }
+
         function _saveWorker(type) {
 
-
+            var thisCtrl = this;
            
             try {
-
-
                 
-                
-                var fields2GroupsWorkerDataList = [];
-
-                for (var i = 0; i < this.screendata.length; i++) {
-
-                    if (this.screendata[i].f2gwd) {
-                        fields2GroupsWorkerDataList.push(this.screendata[i].f2gwd);
-
-                    }
-                }
-
-                
-                 
-                farmsService.getSetWorkerAndCompanyData(2, this.worker.Id, fields2GroupsWorkerDataList).then(function (worker) {
-                  
-
-                    alertMessage('הנתונים נשמרו בהצלחה!');
-                   
-                }.bind(this));
-
-                return;
-
-                var thisCtrl = this;
+              
 
                 var IsInvalid = false;
 
@@ -702,7 +721,7 @@
                          
                     }
 
-                    //$.blockUI({ css: {}, message: '<h5><div id="loader"></div><div class="tzahiStyle"> אנחנו כרגע שומרים את הנתונים  <br/>אנא המתנ/י...</div></h5>' });
+                   
 
                     var Signature = $scope.accept();
                     if (!Signature.isEmpty) {
@@ -712,22 +731,14 @@
 
                     }
 
-                    //var paintCanvas = document.getElementById('bcPaintCanvas');
-                    //var imgData = paintCanvas.toDataURL('image/png');
-                    //obj["ImgData"] = imgData;
-
-                    //// אם זה ריק אל תשלח כלום
-                    //if (imgData.indexOf("ECBAgQIEDgAQNaAJ+CzbUNAAAAAElFTkSuQmCC") != -1)
-                    //    obj["ImgData"] = "";
+                
 
                     usersService.updateWorker(obj, this.files, this.childs, type).then(function (worker) {
                         //  this.worker = worker;
 
-
-                       
+                        SaveDynamicData();
                         alertMessage('הנתונים נשמרו בהצלחה!');
-                        // $.unblockUI();
-                        //
+                       
                     }.bind(this));
 
                 }
@@ -750,29 +761,10 @@
                         } else {
                             obj["ImgData"] = "";
 
-                            //debugger
-                          
-                            //$('#imgWorker').error(function () {
-                            //    alertMessage('חובה להחתים עובד לפני שליחה למשרד!');
-                            //    return;
-                            //});
-
-                            //if ($('#imgWorker').width() < 20) {
-                            //    alertMessage('חובה להחתים עובד לפני שליחה למשרד!');
-                            //    return;
-
-                            //}
-
-                           
-
-                         
-
-                          
-
                         }
 
 
-                        $.blockUI({ css: {}, message: '<h5><div id="loader"></div><div class="tzahiStyle"> אנחנו כרגע מעבדים את הנתונים ומייצרים קובץ  PDF ושולחים אותו למשרד <br/>אנא המתנ/י...</div></h5>' });
+                       // $.blockUI({ css: {}, message: '<h5><div id="loader"></div><div class="tzahiStyle"> אנחנו כרגע מעבדים את הנתונים ומייצרים קובץ  PDF ושולחים אותו למשרד <br/>אנא המתנ/י...</div></h5>' });
 
 
 
@@ -783,8 +775,11 @@
 
 
                             $.unblockUI();
-                            if (worker.Status == "נשלח למשרד")
+                            if (worker.Status == "נשלח למשרד") {
+                                SaveDynamicData();
                                 alertMessage('הנתונים נשלחו למשרד בהצלחה!');
+                            }
+                                
                             else
                                 alertMessage(worker.Status);
 
@@ -800,7 +795,7 @@
                 }
 
                 if (type == 3) {
-                    $.blockUI({ css: {}, message: '<h5><div id="loader"></div><div class="tzahiStyle"> אנחנו כרגע מעבדים את הנתונים ומייצרים קובץ PDF  <br/>אנא המתנ/י...</div></h5>' });
+                   // $.blockUI({ css: {}, message: '<h5><div id="loader"></div><div class="tzahiStyle"> אנחנו כרגע מעבדים את הנתונים ומייצרים קובץ PDF  <br/>אנא המתנ/י...</div></h5>' });
 
                     var Signature = $scope.accept();
                     if (!Signature.isEmpty) {
@@ -813,8 +808,8 @@
 
 
                     usersService.updateWorker(obj, this.files, this.childs, type).then(function (worker) {
-
-                       $.unblockUI();
+                       SaveDynamicData();
+                       //$.unblockUI();
                        $window.open(this.uploadsUri + "/" + this.worker.Id + "/OfekAllPdf.pdf", '_blank');
 
                     }.bind(this));

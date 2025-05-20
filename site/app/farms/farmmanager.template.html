@@ -1056,6 +1056,22 @@
                 <div class="col-md-12">
 
                     <div class="form-group">
+                        <label>סגנון כותרת קבוצה</label>
+
+                        <select id="ddlTitleTypes" class="form-control" ng-model="$ctrl.grp.TitleTypeId">
+                            <option value="1">כותרת דקה</option>
+                            <option value="2">כותרת עבה(פאנל)</option>
+                            <option value="3">ללא כותרת</option>
+                       
+                        </select>
+
+
+
+                        <!--<input type="text" class="form-control" ng-model="$ctrl.grp.CountFieldsInRow" />-->
+                    </div>
+
+
+                    <div class="form-group">
                         <label>שם</label>
                         <input type="text" name="name" class="form-control" ng-model="$ctrl.grp.Name" required />
                     </div>

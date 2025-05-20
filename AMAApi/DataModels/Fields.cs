@@ -29,6 +29,8 @@ namespace FarmsApi.DataModels
 
         public int CountFieldsInRow { get; set; }
 
+        public int TitleTypeId { get; set; }
+        
         public int StatusId { get; set; }
 
     }

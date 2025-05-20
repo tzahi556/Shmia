@@ -174,6 +174,7 @@ namespace FarmsApi.Services
                     fg.FarmId = farmid;
                     fg.StatusId = 1;
                     fg.CountFieldsInRow = 3;
+                    fg.TitleTypeId = 1;
 
                     if (FieldsGroupsList.Count > 0)
                         fg.Seq = FieldsGroupsList[0].Seq + 1;
@@ -535,6 +536,12 @@ namespace FarmsApi.Services
                         }
 
 
+                        //if (item.f2g.FieldsDataTypesId == 4 && item.f2gwd.Value!=null)
+                        //{
+                        //    item.f2gwd.Value = Helper.ConvertToBool(item.f2gwd.Value);
+
+                        //}
+
 
 
 
@@ -549,6 +556,26 @@ namespace FarmsApi.Services
                 {
                     List<Fields2GroupsWorkerData> f2gwd = JsonConvert.DeserializeObject<List<Fields2GroupsWorkerData>>(objs.ToString());
 
+                    foreach (var item in f2gwd)
+                    {
+                        if (item.SourceValue != item.Value)
+                        {
+                            if(item.Id == 0)
+                            {
+                                Context.Fields2GroupsWorkerData.Add(item);
+                            }
+                            else
+                            {
+                                Context.Entry(item).State = System.Data.Entity.EntityState.Modified;
+                            }
+
+
+                        }
+
+
+                    }
+
+                    Context.SaveChanges();
                 }
 
 
