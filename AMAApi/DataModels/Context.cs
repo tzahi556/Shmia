@@ -15,6 +15,7 @@ namespace FarmsApi.DataModels
 
         public DbSet<User> Users { get; set; }
         public DbSet<Workers> Workers { get; set; }
+        
         public DbSet<Cities> Cities { get; set; }
         public DbSet<Testpdfs> Testpdfs { get; set; }
 

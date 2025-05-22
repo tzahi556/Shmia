@@ -414,23 +414,18 @@ namespace FarmsApi.Services
 
                     var WorkersList = Context.Workers.Include(x => x.UserManager).Where(x => x.IsNew == isnew && x.UserId == CurrentUserId).OrderByDescending(x => x.DateRigster).ToList();
 
+                    //.Select(x => new WorkersThin{Id =x.Id, x.FirstName,x.LastName,x.ManagerName,x.Status,x.PhoneSelular,x.DateRigster,x.IsSendSMS}).ToList();
+
                     return WorkersList;
                 }
                 else
                 {
-                    //Context.Configuration.LazyLoadingEnabled = false;
-
-                    // var Demo = Context.Workers.Include(x=>x.UserManager).ToList();
-
-                    //var movieList = Context.Workers
-                    //             .Include()   // ADD THIS INCLUDE
-                    //             .ToList();
-
+                   
 
 
                     var WorkersListToRemove = Context.Workers.Where(x => x.IsNew == isnew && x.UserManager.Farm_Id == CurrentFarmId && (string.IsNullOrEmpty(x.FirstName) && string.IsNullOrEmpty(x.LastName) && string.IsNullOrEmpty(x.Taz))).ToList();
 
-                    //  Context.Workers.RemoveRange(WorkersListToRemove);
+                   
 
                     foreach (var item in WorkersListToRemove)
                     {
@@ -492,10 +487,13 @@ namespace FarmsApi.Services
                     if (id == 0)
                     {
 
+                        User user = GetCurrentUser();
+
                         Workers newWork = new Workers();
-                        newWork.UserId = GetCurrentUser().Id;
+                        newWork.UserId = user.Id;
                         newWork.IsNew = true;
                         newWork.DateRigster = DateTime.Now;
+                        newWork.FarmId = user.Farm_Id;
                         Context.Workers.Add(newWork);
                         Context.SaveChanges();
                         id = newWork.Id;

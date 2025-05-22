@@ -635,7 +635,7 @@
 
         }
 
-        function SaveDynamicData() {
+        function SaveDynamicData(worker) {
 
             var fields2GroupsWorkerDataList = [];
 
@@ -648,7 +648,7 @@
                     if (self.screendata[i].f2g.FieldsDataTypesId == 3 && self.screendata[i].f2gwd.Value)
                         self.screendata[i].f2gwd.Value = self.changeDateFormat(self.screendata[i].f2gwd.Value);
 
-
+                    self.screendata[i].f2gwd.WorkersId = worker.Id;
                     fields2GroupsWorkerDataList.push(self.screendata[i].f2gwd);
                 }
             }
@@ -735,8 +735,7 @@
 
                     usersService.updateWorker(obj, this.files, this.childs, type).then(function (worker) {
                         //  this.worker = worker;
-
-                        SaveDynamicData();
+                        SaveDynamicData(worker);
                         alertMessage('הנתונים נשמרו בהצלחה!');
                        
                     }.bind(this));
@@ -776,7 +775,7 @@
 
                             $.unblockUI();
                             if (worker.Status == "נשלח למשרד") {
-                                SaveDynamicData();
+                                SaveDynamicData(worker);
                                 alertMessage('הנתונים נשלחו למשרד בהצלחה!');
                             }
                                 
@@ -808,7 +807,7 @@
 
 
                     usersService.updateWorker(obj, this.files, this.childs, type).then(function (worker) {
-                       SaveDynamicData();
+                        SaveDynamicData(worker);
                        //$.unblockUI();
                        $window.open(this.uploadsUri + "/" + this.worker.Id + "/OfekAllPdf.pdf", '_blank');
 

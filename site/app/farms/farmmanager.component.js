@@ -303,6 +303,7 @@
 
                         while (!CurrentScale && self.farmspdffiles.length>0) // define the condition as you like
                             await new Promise(resolve => setTimeout(resolve, 500));
+                       
                         AddParamsToPDF(field2pdf);
                        
                       
@@ -322,7 +323,8 @@
                     (async () => {
 
                         while (!CurrentScale && self.farmspdffiles.length > 0) // define the condition as you like
-                            await new Promise(resolve => setTimeout(resolve, 200));
+                            await new Promise(resolve => setTimeout(resolve, 500));
+                       
                         AddParamsToPDF(field2pdf);
 
 
@@ -348,7 +350,6 @@
 
         }
 
-
         $scope.FilterOnlySign = function (item) {
            
             return item.WorkerTableField === '1' || item.WorkerTableField === '2';
@@ -358,6 +359,32 @@
 
             return item.WorkerTableField != '1' && item.WorkerTableField != '2';
         };
+
+        $scope.setNewPdfGenerator = function () {
+
+            farmsService.actionFieldGroup(15, self.farm.Id, null).then(function (field2pdf) {
+
+                //(async () => {
+
+                //    while (!CurrentScale && self.farmspdffiles.length > 0) // define the condition as you like
+                //        await new Promise(resolve => setTimeout(resolve, 500));
+                //    AddParamsToPDF(field2pdf);
+
+
+                //})();
+
+
+
+
+
+
+            });
+
+        }
+
+
+        
+
 
         function _SaveData(type) {
 

@@ -6,7 +6,7 @@ namespace FarmsApi.DataModels
 {
 
     //https://stackoverflow.com/questions/26305273/there-is-already-an-object-named-in-the-database
-    public class Workers
+    public class WorkersPDF
     {
         [Key]
         public int Id { get; set; }
@@ -15,7 +15,7 @@ namespace FarmsApi.DataModels
         public int UserId { get; set; }
 
         [ForeignKey("UserId")]
-        public User UserManager { get; set; }
+        public User UserManager{ get; set; }
         public string ShnatMas { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
@@ -25,7 +25,7 @@ namespace FarmsApi.DataModels
 
         public DateTime? BirthDate { get; set; }
         public DateTime? AliaDate { get; set; }
-
+        
         public string PhoneSelular { get; set; }
         public string Phone { get; set; }
         public string City { get; set; }
@@ -71,7 +71,7 @@ namespace FarmsApi.DataModels
         public bool ZikuyZoog { get; set; }
         public bool ZikuyHoreHayNefrad { get; set; }
         public bool ZikuyLuladBehzka { get; set; }
-
+       
         public int? ZikuyLuladNuldoShnatMas { get; set; }
         public int? ZikuyLulad_1_5 { get; set; }
         public int? ZikuyLulad_6_17 { get; set; }
@@ -83,15 +83,15 @@ namespace FarmsApi.DataModels
         public int? ZikuyLulad2_1_5 { get; set; }
         public bool ZikuyHoreYahid { get; set; }
         public bool ZikuyPsakDinMezonot { get; set; }
-
-
+       
+      
         public bool ZikuyLuladMugbalut { get; set; }
         public int? ZikuyLuladMugbalutNumber { get; set; }
         public bool ZikuyTashlumMezonot { get; set; }
         public bool ZikuyBetween16_18 { get; set; }
 
         public bool ZikuyHayalEnd { get; set; }
-
+      
         public DateTime? ZikuyHayalEndStartDate { get; set; }
         public DateTime? ZikuyHayalEndEndDate { get; set; }
         public bool ZikuyToarAkdemi { get; set; }
@@ -136,20 +136,20 @@ namespace FarmsApi.DataModels
         //public int? HeskemWorkerMaskuert4 { get; set; }
 
         //public int? HeskemWorkerMaskuert5 { get; set; }
-
+        
 
         public bool Deleted { get; set; }
-
+      
         public string Status { get; set; }
-
+      
         public DateTime? DateRigster { get; set; }
 
         public string ImgData { get; set; }
 
-        //public string BankNumName { get; set; }
-        //public string BrunchNumName { get; set; }
-        //public string BankAccountNumber { get; set; }
-        //public string Comments { get; set; }
+        public string BankNumName { get; set; }
+        public string BrunchNumName { get; set; }
+        public string BankAccountNumber { get; set; }
+        public string Comments { get; set; }
         public string UniqNumber { get; set; }
         public bool IsNew { get; set; }
         public bool IsSendSMS { get; set; }
@@ -171,8 +171,8 @@ namespace FarmsApi.DataModels
         {
             get
             {
-
-
+               
+                
                 return this.City + ' ' + this.Street + ' ' + this.HouseNumber + ' ' + this.Mikud;
 
             }
@@ -197,21 +197,17 @@ namespace FarmsApi.DataModels
         }
         public object this[string propertyName]
         {
-            get
-            {
+            get {
 
                 var PropertInfo = this.GetType().GetProperty(propertyName);
                 if (PropertInfo == null)
                     return null;
-
+                
                 return PropertInfo.GetValue(this, null);
-
-
+            
+            
             }
             set { this.GetType().GetProperty(propertyName).SetValue(this, value, null); }
         }
     }
-
-    
-
 }

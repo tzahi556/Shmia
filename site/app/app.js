@@ -162,7 +162,7 @@
                         },
 
                         screendata: function (farmsService, $stateParams) {
-
+                           
                             return farmsService.getSetWorkerAndCompanyData(1,$stateParams.id,null);
                         }
 

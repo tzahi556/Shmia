@@ -38,7 +38,7 @@ namespace FarmsApi.Services
 
                 using (var Context = new Context())
                 {
-                    List<Fields> FieldsList = Context.Fields.Where(x => (x.FarmId == farmid || x.FarmId == null) && x.StatusId == 1).ToList();
+                    List<Fields> FieldsList = Context.Fields.Where(x => (x.FarmId == farmid || x.FarmId == null) && x.StatusId == 1).OrderBy(x => x.FarmId).ToList();
                     return Ok(FieldsList);
                 }
 
@@ -435,6 +435,32 @@ namespace FarmsApi.Services
 
             }
 
+            //שליפה של PDF
+            if (type == 15)
+            {
+                using (var Context = new Context())
+                {
+
+
+                    PdfAPI pa = new PdfAPI();
+                    pa.CreateNewCompanyPDF(farmid);
+
+                    //var FarmPDFFilesList = Context.FarmPDFFiles.Where(x => x.FarmId == farmid && x.StatusId == 1).OrderBy(x => x.Seq).ToList();
+                    //foreach (var item in FarmPDFFilesList)
+                    //{
+                    //    var root = HttpContext.Current.Server.MapPath("~/Uploads/Companies/" + farmid.ToString() + "/PDF/" + item.FileName);
+
+
+
+                    //}
+
+
+
+
+                }
+
+            }
+
             return Ok();
         }
 
@@ -465,7 +491,10 @@ namespace FarmsApi.Services
 
                     var Worker = Context.Workers.Where(x => x.Id == WorkerId).FirstOrDefault();
 
-                    var CurrentFarmId = Worker.FarmId;
+
+
+
+                    var CurrentFarmId = (Worker != null) ? Worker.FarmId : UsersService.GetCurrentUser().Farm_Id;
 
 
                     var Results = (from fields2Groups in Context.Fields2Groups.Where(x => x.FarmId == CurrentFarmId)
@@ -487,38 +516,41 @@ namespace FarmsApi.Services
 
                     foreach (var item in Results)
                     {
-
-                        if (item.f2gwd == null && item.f.WorkerTableField != null)
+                        if (Worker != null)
                         {
 
-                            var WorkerTableFieldValue = Context.Entry(Worker).Property(item.f.WorkerTableField).CurrentValue;
+                            if (item.f2gwd == null && item.f.WorkerTableField != null)
+                            {
 
-                            if (WorkerTableFieldValue != null)
+                                var WorkerTableFieldValue = Context.Entry(Worker).Property(item.f.WorkerTableField).CurrentValue;
+
+                                if (WorkerTableFieldValue != null)
+                                {
+                                    Fields2GroupsWorkerData fields2GroupsWorkerData = new Fields2GroupsWorkerData();
+                                    fields2GroupsWorkerData.Fields2GroupsId = item.f2g.Id;
+                                    fields2GroupsWorkerData.WorkersId = WorkerId;
+                                    fields2GroupsWorkerData.Value = WorkerTableFieldValue.ToString();
+                                    fields2GroupsWorkerData.Type = 1;
+                                    fields2GroupsWorkerData.SourceValue = WorkerTableFieldValue.ToString();
+
+                                    item.f2gwd = fields2GroupsWorkerData;
+
+                                }
+
+                            }
+
+                            if (item.f2gwd == null && item.f2g.DefaultValue != null)
                             {
                                 Fields2GroupsWorkerData fields2GroupsWorkerData = new Fields2GroupsWorkerData();
                                 fields2GroupsWorkerData.Fields2GroupsId = item.f2g.Id;
                                 fields2GroupsWorkerData.WorkersId = WorkerId;
-                                fields2GroupsWorkerData.Value = WorkerTableFieldValue.ToString();
-                                fields2GroupsWorkerData.Type = 1;
-                                fields2GroupsWorkerData.SourceValue = WorkerTableFieldValue.ToString();
+                                fields2GroupsWorkerData.Value = item.f2g.DefaultValue;
+                                fields2GroupsWorkerData.Type = 2;
+                                fields2GroupsWorkerData.SourceValue = item.f2g.DefaultValue;
 
                                 item.f2gwd = fields2GroupsWorkerData;
 
                             }
-
-                        }
-
-
-                        if (item.f2gwd == null && item.f2g.DefaultValue != null)
-                        {
-                            Fields2GroupsWorkerData fields2GroupsWorkerData = new Fields2GroupsWorkerData();
-                            fields2GroupsWorkerData.Fields2GroupsId = item.f2g.Id;
-                            fields2GroupsWorkerData.WorkersId = WorkerId;
-                            fields2GroupsWorkerData.Value = item.f2g.DefaultValue;
-                            fields2GroupsWorkerData.Type = 2;
-                            fields2GroupsWorkerData.SourceValue = item.f2g.DefaultValue;
-
-                            item.f2gwd = fields2GroupsWorkerData;
 
                         }
 
@@ -536,15 +568,6 @@ namespace FarmsApi.Services
                         }
 
 
-                        //if (item.f2g.FieldsDataTypesId == 4 && item.f2gwd.Value!=null)
-                        //{
-                        //    item.f2gwd.Value = Helper.ConvertToBool(item.f2gwd.Value);
-
-                        //}
-
-
-
-
                     }
 
 
@@ -560,7 +583,7 @@ namespace FarmsApi.Services
                     {
                         if (item.SourceValue != item.Value)
                         {
-                            if(item.Id == 0)
+                            if (item.Id == 0)
                             {
                                 Context.Fields2GroupsWorkerData.Add(item);
                             }

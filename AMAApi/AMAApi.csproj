@@ -284,6 +284,7 @@
     <Compile Include="DataModels\TestPdf.cs" />
     <Compile Include="DataModels\Cities.cs" />
     <Compile Include="DataModels\EsekConfiguraions.cs" />
+    <Compile Include="DataModels\WorkersPDF.cs" />
     <Compile Include="DataModels\Workers.cs" />
     <Compile Include="DataModels\UserDevices.cs" />
     <Compile Include="Global.asax.cs">
