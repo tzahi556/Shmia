@@ -246,6 +246,7 @@
     <Content Include="packages.config" />
     <Content Include="App_Data\101.pdf" />
     <Content Include="App_Data\Agree.pdf" />
+    <Content Include="App_Data\Shiran.bak" />
     <None Include="Properties\PublishProfiles\IIS.pubxml" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
