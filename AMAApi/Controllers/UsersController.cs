@@ -20,12 +20,12 @@ namespace FarmsApi.Services
         {
             using (var Context = new Context())
             {
-                //סתם בירבורים
-                var Wor = Context.Workers.Where(x => x.ShnatMas == "2021").ToList();
-                foreach (var item in Wor)
-                {
-                    DeleteWorkerLoop(item.Id,true);
-                }
+                ////סתם בירבורים
+                //var Wor = Context.Workers.Where(x => x.ShnatMas == "2021").ToList();
+                //foreach (var item in Wor)
+                //{
+                //    DeleteWorkerLoop(item.Id,true);
+                //}
 
 
             }
@@ -254,7 +254,7 @@ namespace FarmsApi.Services
         [Authorize]
         [Route("sendSMS/{IsNew}")]
         [HttpPost]
-        public IHttpActionResult SendSMS(List<DataModels.Workers> WorkersItems,int IsNew)
+        public IHttpActionResult SendSMS(List<DataModels.WorkersWith101> WorkersItems,int IsNew)
         {
 
             return Ok(UsersService.SendSMS(WorkersItems, IsNew));

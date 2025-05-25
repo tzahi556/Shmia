@@ -322,7 +322,7 @@
             var ctrl = this;
 
 
-            //debugger
+           
 
             //var selected = this.workers.filter(x => x.IsSelected && (x.IsValid || this.farmStyle != 1));
             var selected = this.workers.filter(x => x.IsSelected);
@@ -338,8 +338,8 @@
             if (selected.length > 0)
                 if (confirm('האם לשלוח SMS לכל העובדים המסומנים?')) {
 
-
-
+                    
+                    //let result = selected.map(({ w }) => w);
 
                     usersService.sendSMS(selected, 1).then(function (res) {
 

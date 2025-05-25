@@ -25,6 +25,8 @@ using System.Text;
 using ThirdParty.Json.LitJson;
 using System.Text.Json;
 using Newtonsoft.Json;
+using System.Web.Http.Results;
+using Org.BouncyCastle.Utilities.Collections;
 
 namespace FarmsApi.Services
 {
@@ -362,7 +364,7 @@ namespace FarmsApi.Services
             }
         }
 
-        public static List<Workers> GetWorkers(bool isnew)
+        public static List<WorkersWith101> GetWorkers(bool isnew)
         {
 
 
@@ -377,42 +379,57 @@ namespace FarmsApi.Services
 
                 //}
 
+                var CurrentUser = GetCurrentUser();
 
-
-                var CurrentUserId = GetCurrentUser().Id;
-                var CurrentRole = GetCurrentUser().Role;
-                var CurrentFarmId = GetCurrentUser().Farm_Id;
+                var CurrentUserId = CurrentUser.Id;
+                var CurrentRole = CurrentUser.Role;
+                var CurrentFarmId = CurrentUser.Farm_Id;
 
 
                 if (CurrentRole == "instructor")
                 {
-                    var WorkersListToRemove = Context.Workers.Where(x => x.IsNew == isnew && x.UserId == CurrentUserId && (string.IsNullOrEmpty(x.FirstName) && string.IsNullOrEmpty(x.LastName) && string.IsNullOrEmpty(x.Taz))).ToList();
+                    //var WorkersListToRemove = Context.Workers.Where(x => (string.IsNullOrEmpty(x.FirstName) && string.IsNullOrEmpty(x.LastName) && string.IsNullOrEmpty(x.Taz))).ToList();
 
-                    //  Context.Workers.RemoveRange(WorkersListToRemove);
+                    ////  Context.Workers.RemoveRange(WorkersListToRemove);
 
-                    foreach (var item in WorkersListToRemove)
-                    {
+                    //foreach (var item in WorkersListToRemove)
+                    //{
 
-                        DeleteDirectory(item.Id.ToString());
+                    //    DeleteDirectory(item.Id.ToString());
 
-                        Context.Workers.Remove(item);
+                    //    Context.Workers.Remove(item);
 
-                    }
-                    try
-                    {
-
-
-                        Context.SaveChanges();
-
-                    }
-                    catch (Exception ex)
-                    {
+                    //}
+                    //try
+                    //{
 
 
-                    }
+                    //    Context.SaveChanges();
+
+                    //}
+                    //catch (Exception ex)
+                    //{
 
 
-                    var WorkersList = Context.Workers.Include(x => x.UserManager).Where(x => x.IsNew == isnew && x.UserId == CurrentUserId).OrderByDescending(x => x.DateRigster).ToList();
+                    //}
+
+
+                    //var WorkersList = Context.Workers.Include(x => x.UserManager).Where(x => x.IsNew == isnew && x.UserId == CurrentUserId) .OrderByDescending(x => x.DateRigster).ToList();
+
+                  
+
+                    var WorkersList = (from w1 in Context.Workers.Where(x => x.FarmId == CurrentFarmId).DefaultIfEmpty()
+                                       from w1011 in Context.Workers101.Where(x => x.IsNew == isnew && x.WorkersId == w1.Id && x.UserId==CurrentUserId).DefaultIfEmpty()
+                                       from u in Context.Users.Where(x => x.Id == w1011.UserId).DefaultIfEmpty()
+                                       select new WorkersWith101
+                                       {
+                                           w=w1,
+                                           w101 = w1011,
+                                           ManagerName = u.FirstName + " " + u.LastName
+
+                                       }).OrderByDescending(x => x.w101.DateRigster).ToList();
+
+
 
                     //.Select(x => new WorkersThin{Id =x.Id, x.FirstName,x.LastName,x.ManagerName,x.Status,x.PhoneSelular,x.DateRigster,x.IsSendSMS}).ToList();
 
@@ -423,32 +440,49 @@ namespace FarmsApi.Services
                    
 
 
-                    var WorkersListToRemove = Context.Workers.Where(x => x.IsNew == isnew && x.UserManager.Farm_Id == CurrentFarmId && (string.IsNullOrEmpty(x.FirstName) && string.IsNullOrEmpty(x.LastName) && string.IsNullOrEmpty(x.Taz))).ToList();
+                    //var WorkersListToRemove = Context.Workers.Where(x => x.IsNew == isnew && x.UserManager.Farm_Id == CurrentFarmId && (string.IsNullOrEmpty(x.FirstName) && string.IsNullOrEmpty(x.LastName) && string.IsNullOrEmpty(x.Taz))).ToList();
 
                    
 
-                    foreach (var item in WorkersListToRemove)
-                    {
+                    //foreach (var item in WorkersListToRemove)
+                    //{
 
-                        DeleteDirectory(item.Id.ToString());
+                    //    DeleteDirectory(item.Id.ToString());
 
-                        Context.Workers.Remove(item);
+                    //    Context.Workers.Remove(item);
 
-                    }
-                    try
-                    {
-
-
-                        Context.SaveChanges();
-
-                    }
-                    catch (Exception ex)
-                    {
+                    //}
+                    //try
+                    //{
 
 
-                    }
+                    //    Context.SaveChanges();
 
-                    return Context.Workers.Include(x => x.UserManager).Where(x => x.IsNew == isnew && x.UserManager.Farm_Id == CurrentFarmId && (!string.IsNullOrEmpty(x.FirstName.Trim()) || !string.IsNullOrEmpty(x.LastName.Trim()) || !string.IsNullOrEmpty(x.Taz.Trim()))).OrderByDescending(x => x.DateRigster).ToList();
+                    //}
+                    //catch (Exception ex)
+                    //{
+
+
+                    //}
+
+
+
+                    var WorkersList = (from w1 in Context.Workers.Where(x => x.FarmId == CurrentFarmId && (!string.IsNullOrEmpty(x.FirstName.Trim()) || !string.IsNullOrEmpty(x.LastName.Trim()) || !string.IsNullOrEmpty(x.Taz.Trim()))).DefaultIfEmpty()
+                                       from w1011 in Context.Workers101.Where(x => x.IsNew == isnew && x.WorkersId == w1.Id).DefaultIfEmpty()
+                                       from u in Context.Users.Where(x => x.Id == w1011.UserId).DefaultIfEmpty()
+
+                                       select new WorkersWith101
+                                       {
+                                           w = w1,
+                                           w101 = w1011,
+                                           ManagerName = u.FirstName + " " + u.LastName
+
+                                       }).OrderByDescending(x => x.w101.DateRigster).ToList();
+
+
+                    return WorkersList;
+
+                    //return Context.Workers.Include(x => x.UserManager).Where(x => x.IsNew == isnew && x.UserManager.Farm_Id == CurrentFarmId && (!string.IsNullOrEmpty(x.FirstName.Trim()) || !string.IsNullOrEmpty(x.LastName.Trim()) || !string.IsNullOrEmpty(x.Taz.Trim()))).OrderByDescending(x => x.DateRigster).ToList();
 
                 }
 
@@ -475,7 +509,7 @@ namespace FarmsApi.Services
             }
         }
 
-        public static Workers GetWorker(int id)
+        public static WorkersWith101 GetWorker(int id)
         {
 
 
@@ -490,13 +524,25 @@ namespace FarmsApi.Services
                         User user = GetCurrentUser();
 
                         Workers newWork = new Workers();
-                        newWork.UserId = user.Id;
-                        newWork.IsNew = true;
-                        newWork.DateRigster = DateTime.Now;
+                        //newWork.UserId = user.Id;
+                        //newWork.IsNew = true;
+                        //newWork.DateRigster = DateTime.Now;
                         newWork.FarmId = user.Farm_Id;
                         Context.Workers.Add(newWork);
                         Context.SaveChanges();
                         id = newWork.Id;
+
+                        Workers101 W101 = new Workers101();
+                        W101.UserId = user.Id;
+                        W101.IsNew = true;
+                        W101.DateRigster = DateTime.Now;
+                        W101.WorkersId = id;
+                        //newWork.FarmId = user.Farm_Id;
+                        Context.Workers101.Add(W101);
+                        Context.SaveChanges();
+
+
+
 
                         AddToLogDB("", "", " הקמת עובדת חדשה " + id, null, "", id);
                         // return newWork;
@@ -506,7 +552,28 @@ namespace FarmsApi.Services
 
 
 
-                    var Worker = Context.Workers.Include(x => x.UserManager).Where(x => x.Id == id).FirstOrDefault();
+                    //var Worker = Context.Workers.Include(x => x.UserManager).Where(x => x.Id == id).FirstOrDefault();
+
+
+                    var Worker = (from w1 in Context.Workers.Where(x => x.Id == id).DefaultIfEmpty()
+                                       from w1011 in Context.Workers101.Where(x =>  x.WorkersId == w1.Id).DefaultIfEmpty()
+                                  from u in Context.Users.Where(x => x.Id == w1011.UserId).DefaultIfEmpty()
+                                  select new WorkersWith101
+                                       {
+                                           w = w1,
+                                           w101 = w1011,
+                                      ManagerName = u.FirstName + " " + u.LastName
+
+                                  }).OrderByDescending(x => x.w101.DateRigster).FirstOrDefault();
+
+
+
+               
+
+
+                    //.Select(x => new WorkersThin{Id =x.Id, x.FirstName,x.LastName,x.ManagerName,x.Status,x.PhoneSelular,x.DateRigster,x.IsSendSMS}).ToList();
+
+                    //return WorkersList;
 
 
 
@@ -516,7 +583,22 @@ namespace FarmsApi.Services
                 else
                 {
                     var CurrentUserId = GetCurrentUser().Id;
-                    return Context.Workers.Include(x => x.UserManager).SingleOrDefault(u => u.Id == CurrentUserId);
+
+                    var Worker = (from w1 in Context.Workers.Where(x => x.Id == CurrentUserId).DefaultIfEmpty()
+                                  from w1011 in Context.Workers101.Where(x => x.WorkersId == w1.Id).DefaultIfEmpty()
+                                  from u in Context.Users.Where(x => x.Id == w1011.UserId).DefaultIfEmpty()
+                                  select new WorkersWith101
+                                  {
+                                      w = w1,
+                                      w101 = w1011,
+                                      ManagerName = u.FirstName + " " + u.LastName
+
+                                  }).OrderByDescending(x => x.w101.DateRigster).FirstOrDefault();
+
+
+                    return Worker;
+
+                    //return Context.Workers.Include(x => x.UserManager).SingleOrDefault(u => u.Id == CurrentUserId);
 
                 }
 
@@ -526,7 +608,7 @@ namespace FarmsApi.Services
             }
         }
 
-        public static List<Workers> DeleteWorker(int Id, bool isnew)
+        public static List<WorkersWith101> DeleteWorker(int Id, bool isnew)
         {
             using (var Context = new Context())
             {
@@ -559,16 +641,16 @@ namespace FarmsApi.Services
             }
         }
 
-        public static Workers UpdateWorkerAndFiles(JArray dataObj, int type)
+        public static WorkersWith101 UpdateWorkerAndFiles(JArray dataObj, int type)
         {
 
-            Workers w = UpdateWorker(dataObj[0].ToObject<Workers>());
+            WorkersWith101 workersWith101 = UpdateWorker(dataObj[0].ToObject<WorkersWith101>());
 
             List<Files> f = dataObj[1].ToObject<List<Files>>();
-            if (f != null) UpdateFilesObject(f, w);
+            if (f != null) UpdateFilesObject(f, workersWith101.w);
 
             List<WorkerChilds> wc = dataObj[2].ToObject<List<WorkerChilds>>();
-            if (wc != null) UpdateWorkerChildsObject(wc, w);
+            if (wc != null) UpdateWorkerChildsObject(wc, workersWith101.w);
 
             try
             {
@@ -577,16 +659,16 @@ namespace FarmsApi.Services
                 {
                     PdfAPI pa = new PdfAPI();
 
-                    if (w.IsNew)
+                    if (workersWith101.w101.IsNew)
                     {
-                        if (type == 2) AddToLogDB("", "", " יצירת פדפ לעובדת חדשה  " + w.Id, null, "", w.Id);
-                        pa.CreatePDF(w);
+                        if (type == 2) AddToLogDB("", "", " יצירת פדפ לעובדת חדשה  " + workersWith101.w.Id, null, "", workersWith101.w.Id);
+                        //pa.CreatePDF(w);
                     }
 
                     else
                     {
-                        if (type == 2) AddToLogDB("", "", " יצירת פדפ לעובדת קיים  " + w.Id, null, "", w.Id);
-                        pa.CreatePDFOnly101(w);
+                        if (type == 2) AddToLogDB("", "", " יצירת פדפ לעובדת קיים  " + workersWith101.w.Id, null, "", workersWith101.w.Id);
+                        //pa.CreatePDFOnly101(w);
                     }
                 }
 
@@ -598,26 +680,26 @@ namespace FarmsApi.Services
                     {
 
 
-                        var BaseLinkSite = System.Web.HttpContext.Current.Server.MapPath("~/Uploads/" + w.Id);
+                        var BaseLinkSite = System.Web.HttpContext.Current.Server.MapPath("~/Uploads/" + workersWith101.w.Id);
 
                         if (!File.Exists(BaseLinkSite + "/Signature.png"))
                         {
-                            w.Status = "לא ניתן לשלוח ללא חתימת עובדת";
-                            return w;
+                            workersWith101.w101.Status = "לא ניתן לשלוח ללא חתימת עובדת";
+                            return workersWith101;
                         }
                         else
                         {
                             bool IsEmpty = IsBlank(BaseLinkSite + "/Signature.png");
                             if (IsEmpty)
                             {
-                                w.Status = "לא ניתן לשלוח ללא חתימת עובדת";
-                                return w;
+                                workersWith101.w101.Status = "לא ניתן לשלוח ללא חתימת עובדת";
+                                return workersWith101;
                             }
                         }
 
 
                         // אם עובדת חדש תשלח למשרד
-                        if (w.IsNew)
+                        if (workersWith101.w101.IsNew)
                         {
 
                             var CurrentUser = GetCurrentUser();
@@ -625,9 +707,9 @@ namespace FarmsApi.Services
                             string MailTo = ConfigurationSettings.AppSettings["MailTo"].ToString();
 
                             // צחי עדכן שזה יישלח לעובד עצמו במידה ויש לו מייל
-                            if (!string.IsNullOrEmpty(w.Email))
+                            if (!string.IsNullOrEmpty(workersWith101.w.Email))
                             {
-                                MailTo = MailTo + "," + w.Email;
+                                MailTo = MailTo + "," + workersWith101.w.Email;
                             }
 
 
@@ -646,7 +728,7 @@ namespace FarmsApi.Services
 
                             Body += " מנהל אזור -  " + CurrentUser.FirstName + " " + CurrentUser.LastName + "</html>";
 
-                            string Title = "עובדת חדשה - " + w.FirstName + " " + w.LastName + " - " + w.Taz;
+                            string Title = "עובדת חדשה - " + workersWith101.w.FirstName + " " + workersWith101.w.LastName + " - " + workersWith101.w.Taz;
 
                             MailMessage actMSG = new MailMessage(
                                                     "office@ofekmanage.com",
@@ -662,23 +744,23 @@ namespace FarmsApi.Services
                             actMSG.Attachments.Add(attachment);
                             client.Send(actMSG);
 
-                            w.Status = "נשלח למשרד";
+                            workersWith101.w101.Status = "נשלח למשרד";
 
-                            AddToLogDB("", "", " שליחה למשרד של עובדת חדשה  " + w.Id, null, "", w.Id);
+                            AddToLogDB("", "", " שליחה למשרד של עובדת חדשה  " + workersWith101.w.Id, null, "", workersWith101.w.Id);
                         }
                         //101 שנתי 
                         else
                         {
 
                             // string ManagerFile =
-                            var BaseLinkSite101 = System.Web.HttpContext.Current.Server.MapPath("~/Uploads/Years_" + w.ShnatMas.ToString());
+                            var BaseLinkSite101 = System.Web.HttpContext.Current.Server.MapPath("~/Uploads/Years_" + workersWith101.w101.ShnatMas.ToString());
                             if (!Directory.Exists(BaseLinkSite101))
                             {
                                 Directory.CreateDirectory(BaseLinkSite101);
 
                             }
 
-                            string WorkerPath = BaseLinkSite101 + "/" + w.UserId;
+                            string WorkerPath = BaseLinkSite101 + "/" + workersWith101.w101.UserId;
 
                             if (!Directory.Exists(WorkerPath))
                             {
@@ -688,20 +770,20 @@ namespace FarmsApi.Services
 
                             }
 
-                            File.Copy(BaseLinkSite + "/" + w.UniqNumber + ".pdf", WorkerPath + "/" + w.UniqNumber + ".pdf", true);
+                            File.Copy(BaseLinkSite + "/" + workersWith101.w101.UniqNumber + ".pdf", WorkerPath + "/" + workersWith101.w101.UniqNumber + ".pdf", true);
                             // string filePath = WorkerPath + "\\Signature.png";
 
-                            w.Status = "נשלח למשרד";
+                            workersWith101.w101.Status = "נשלח למשרד";
 
-                            AddToLogDB("", "", " שליחה למשרד של עובדת קיימת  " + w.Id, null, "", w.Id);
+                            AddToLogDB("", "", " שליחה למשרד של עובדת קיימת  " + workersWith101.w.Id, null, "", workersWith101.w.Id);
                         }
 
 
                     }
                     catch (Exception ex)
                     {
-                        w.Status = "תקלה שליחת נתונים";
-                        AddToLogDB("", "", " תקלה שליחה למשרד של עובדת  " + w.Id, null, ex.Message, w.Id);
+                        workersWith101.w101.Status = "תקלה שליחת נתונים";
+                        AddToLogDB("", "", " תקלה שליחה למשרד של עובדת  " + workersWith101.w.Id, null, ex.Message, workersWith101.w.Id);
                         // w.Status = ex.InnerException.ToString();
                     }
                     finally
@@ -709,7 +791,8 @@ namespace FarmsApi.Services
                         using (var Context = new Context())
                         {
 
-                            Context.Entry(w).State = System.Data.Entity.EntityState.Modified;
+                            Context.Entry(workersWith101.w).State = System.Data.Entity.EntityState.Modified;
+                            Context.Entry(workersWith101.w101).State = System.Data.Entity.EntityState.Modified;
                             Context.SaveChanges();
 
                         }
@@ -722,10 +805,10 @@ namespace FarmsApi.Services
             }
             catch (Exception ex)
             {
-                AddToLogDB("", "", " תקלה שליחה למשרד של עובדת  " + w.Id, null, ex.Message, w.Id);
+                AddToLogDB("", "", " תקלה שליחה למשרד של עובדת  " + workersWith101.w.Id, null, ex.Message, workersWith101.w.Id);
 
             }
-            return w;
+            return workersWith101;
         }
 
         public static bool IsBlank(string imageFileName)
@@ -901,7 +984,7 @@ namespace FarmsApi.Services
         }
 
 
-        public static Workers UpdateWorker(Workers Worker)
+        public static WorkersWith101 UpdateWorker(WorkersWith101 WorkersWith101)
         {
             //  System.Threading.Thread.Sleep(5000);
 
@@ -909,21 +992,24 @@ namespace FarmsApi.Services
             {
 
 
-                Worker.Status = "נתונים נשמרו";
+                Workers w = WorkersWith101.w;
+                Workers101 w101 = WorkersWith101.w101;
 
-                Worker.UserManager = Context.Users.Where(x => x.Id == Worker.UserId).FirstOrDefault();
+                w101.Status = "נתונים נשמרו";
 
-                Context.Entry(Worker).State = System.Data.Entity.EntityState.Modified;
+                w101.UserManager = Context.Users.Where(x => x.Id == w101.UserId).FirstOrDefault();
 
+                Context.Entry(w101).State = System.Data.Entity.EntityState.Modified;
+                Context.Entry(w).State = System.Data.Entity.EntityState.Modified;
                 Context.SaveChanges();
-                AddToLogDB("", "", " שמירת נתונים לעובדת " + Worker.Id, null, "", Worker.Id);
+                AddToLogDB("", "", " שמירת נתונים לעובדת " + w.Id, null, "", w.Id);
 
-                if (!string.IsNullOrEmpty(Worker.ImgData))
+                if (!string.IsNullOrEmpty(w101.ImgData))
                 {
 
                     string root = HttpContext.Current.Server.MapPath("~/Uploads/");
 
-                    string WorkerPath = root + Worker.Id.ToString();
+                    string WorkerPath = root + w.Id.ToString();
 
                     if (!Directory.Exists(WorkerPath))
                     {
@@ -931,19 +1017,14 @@ namespace FarmsApi.Services
 
                     }
                     string filePath = WorkerPath + "\\Signature.png";
-                    //if (File.Exists(filePath))
-                    //{
-                    //    File.Delete(filePath);
-                    //}
+                 
 
+                    File.WriteAllBytes(filePath, GetValidString(w101.ImgData));
 
-
-                    File.WriteAllBytes(filePath, GetValidString(Worker.ImgData));
-
-                    AddToLogDB("", "", " הוספת חתימה לעובדת " + Worker.Id, null, "", Worker.Id);
+                    AddToLogDB("", "", " הוספת חתימה לעובדת " + w.Id, null, "", w.Id);
                 }
 
-                return Worker;
+                return WorkersWith101;
             }
         }
 
@@ -960,7 +1041,7 @@ namespace FarmsApi.Services
         }
 
 
-        public static List<Workers> SendSMS(List<Workers> WorkersItems, int IsNew)
+        public static List<WorkersWith101> SendSMS(List<WorkersWith101> WorkersItems, int IsNew)
         {
 
             string SiteRegisterLink = ConfigurationSettings.AppSettings["SiteRegisterLink"].ToString();
@@ -970,9 +1051,9 @@ namespace FarmsApi.Services
                 foreach (var item in WorkersItems)
                 {
 
-                    var Phone = item.PhoneSelular;
-                    var Id = item.Id;
-                    var FullName = item.FullName;
+                    var Phone = item.w.PhoneSelular;
+                    var Id = item.w.Id;
+                    var FullName = item.w.FullName;
                     string EncryptId = AesOperation.EncryptString(Id.ToString());
 
                     EncryptId = EncryptId.Replace("+", "@@").Replace("/", "ofekslash");
@@ -991,7 +1072,7 @@ namespace FarmsApi.Services
 
                         if (resObj["success"] == "true")
                         {
-                            item.IsSendSMS = true;
+                            item.w101.IsSendSMS = true;
                             
                             Context.Entry(item).State = System.Data.Entity.EntityState.Modified;
 
@@ -1424,28 +1505,28 @@ namespace FarmsApi.Services
 
 
 
-            string ShnatMas = DateTime.Now.Year.ToString();
+            //string ShnatMas = DateTime.Now.Year.ToString();
 
-            DateTime CurrentDate = DateTime.Now;
+            //DateTime CurrentDate = DateTime.Now;
 
-            using (var Context = new Context())
-            {
-                var existingUniqNumber = Context.Workers.Where(x => x.UniqNumber != null && x.ShnatMas == ShnatMas).Select(x => x.UniqNumber).ToList();
+            //using (var Context = new Context())
+            //{
+            //    var existingUniqNumber = Context.Workers.Where(x => x.UniqNumber != null && x.ShnatMas == ShnatMas).Select(x => x.UniqNumber).ToList();
 
-                var nonExistWorkers = WorkersItems.Where(x => !existingUniqNumber.Contains(x.UniqNumber)).ToList();
-
-
-
-                nonExistWorkers.Select(c => { c.DateRigster = CurrentDate; return c; }).ToList();
-
-                Context.Workers.AddRange(nonExistWorkers);
-
-                Context.SaveChanges();
-
-                //  var existedIds = Context.Workers.Where(p => WorkersItems.Contains( p.UniqNumber)).Select(p => p.itemId).ToList();
+            //    var nonExistWorkers = WorkersItems.Where(x => !existingUniqNumber.Contains(x.UniqNumber)).ToList();
 
 
-            }
+
+            //    nonExistWorkers.Select(c => { c.DateRigster = CurrentDate; return c; }).ToList();
+
+            //    Context.Workers.AddRange(nonExistWorkers);
+
+            //    Context.SaveChanges();
+
+                
+
+
+            //}
         }
 
         public static List<Logs> GetLogsData(int userid, string start, string end)

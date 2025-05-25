@@ -488,11 +488,11 @@ namespace FarmsApi.Services
             string newFile = System.IO.Path.Combine(BaseLinkSite, "OfekAllTemp.pdf");
 
             // שם אותו קבוע עם נתונים 
-            string newFileDestination = System.IO.Path.Combine(BaseLinkSite, w.UniqNumber + ".pdf");
+            // string newFileDestination = System.IO.Path.Combine(BaseLinkSite, w.UniqNumber + ".pdf");
+            string newFileDestination = "";
 
 
-
-            PdfReader reader = new PdfReader(existingFile);
+             PdfReader reader = new PdfReader(existingFile);
 
 
             //Create a new stream for our output file (this could be a MemoryStream, too)

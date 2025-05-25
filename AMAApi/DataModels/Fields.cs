@@ -71,7 +71,7 @@ namespace FarmsApi.DataModels
         public bool? IsWorkerHide { get; set; }
 
         public string DefaultValue { get; set; }
-
+        public int StatusId { get; set; }
         public int Seq { get; set; }
     }
 

@@ -110,7 +110,20 @@
 
         function _init() {
 
-            
+            function setDateForArray(obj) {
+
+                Object.keys(obj).forEach(function (key, index) {
+
+                    if (key.indexOf("Date") != -1 && obj[key] && key != "DateRigster") {
+
+                        obj[key] = new Date(moment(obj[key]).format("YYYY-MM-DD"));// .startOf('day').toDate();
+
+                    }
+
+
+                });
+
+            }
 
             this.groupsonly = [];
            
@@ -131,30 +144,21 @@
             }
 
 
+            //debugger
+           // var obj = this.worker;
 
-            var obj = this.worker;
 
-
-            if (!this.worker.farmid)
+            if (!this.worker.w.FarmId)
                  this.worker.farmid = this.farmid;
 
          //   this.image = this.uploadsUri + "/" + this.worker.Id + "/Signature.png";
             
-            if (!this.worker.ShnatMas)
-                this.worker.ShnatMas = moment().format('YYYY');
+            if ((this.worker.w101 && !this.worker.w101.ShnatMas))
+                this.worker.w101.ShnatMas = moment().format('YYYY');
 
-                 Object.keys(obj).forEach(function (key, index) {
-
-                if (key.indexOf("Date") != -1 && obj[key] && key != "DateRigster" ) {
-                  
-                    obj[key] = new Date(moment(obj[key]).format("YYYY-MM-DD"));// .startOf('day').toDate();
-                    
-                }
                
-
-            });
-
-            
+            if (this.worker.w) setDateForArray(this.worker.w);
+            if (this.worker.w101) setDateForArray(this.worker.w101);
             //$('.date').inputmask("datetime", {
             //    mask: "1/2/y",
             //    placeholder: "dd/mm/yyyy",

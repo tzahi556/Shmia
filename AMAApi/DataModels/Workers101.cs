@@ -6,34 +6,21 @@ namespace FarmsApi.DataModels
 {
 
     //https://stackoverflow.com/questions/26305273/there-is-already-an-object-named-in-the-database
-    public class WorkersPDF
+    public class Workers101
     {
         [Key]
         public int Id { get; set; }
 
-        public int FarmId { get; set; }
+        public int WorkersId { get; set; }
         public int UserId { get; set; }
 
         [ForeignKey("UserId")]
         public User UserManager{ get; set; }
         public string ShnatMas { get; set; }
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
-        public string Taz { get; set; }
-
-        public string Darkon { get; set; }
-
-        public DateTime? BirthDate { get; set; }
+   
         public DateTime? AliaDate { get; set; }
         
-        public string PhoneSelular { get; set; }
-        public string Phone { get; set; }
-        public string City { get; set; }
-        public string Street { get; set; }
-        public string HouseNumber { get; set; }
-        public string Mikud { get; set; }
-        public string Email { get; set; }
-        public string Gender { get; set; }
+      
         public string ToshavIsrael { get; set; }
         public string Kibutz { get; set; }
 
@@ -105,38 +92,7 @@ namespace FarmsApi.DataModels
         public string TiumMasAnotherMaskuretSug { get; set; }
         public int? TiumMasAnotherMaskuretSum { get; set; }
         public int? TiumMasAnotherMaskuretMas { get; set; }
-        //public string HeskemYom { get; set; }
-        //public string HeskemHodesh { get; set; }
-        //public string HeskemShana { get; set; }
-        //public string HeskemWorkerName { get; set; }
-
-        //public string HeskemWorkerTaz { get; set; }
-        //public string HeskemWorkerStreet { get; set; }
-        //public string HeskemWorkerPhone { get; set; }
-        //public string HeskemTafkid { get; set; }
-
-        //public string HeskemSamkut { get; set; }
-        //public DateTime? HeskemStartDate { get; set; }
-        //public string HeskemStartHour { get; set; }
-        //public string HeskemEndHour { get; set; }
-
-        //public bool HeskemBriutEnKlumCheckbox { get; set; }
-        //public bool HeskemWorkerMigbalotCheckbox { get; set; }
-        //public string HeskemWorkerMigbalot { get; set; }
-        //public bool HeskemWorkerTrufotCheckbox { get; set; }
-        //public string HeskemWorkerTrufot { get; set; }
-
-
-        //public bool HeskemWorkerRgishutCheckbox { get; set; }
-        //public string HeskemWorkerRgishut { get; set; }
-        //public bool HeskemWorkerCronitCheckbox { get; set; }
-        //public string HeskemWorkerCronit { get; set; }
-        //public int? HeskemWorkerMaskuert3 { get; set; }
-
-        //public int? HeskemWorkerMaskuert4 { get; set; }
-
-        //public int? HeskemWorkerMaskuert5 { get; set; }
-        
+     
 
         public bool Deleted { get; set; }
       
@@ -156,28 +112,7 @@ namespace FarmsApi.DataModels
 
         public bool IsValid { get; set; }
 
-        public string FullName
-        {
-            get
-            {
-
-
-                return this.LastName + ' ' + this.FirstName;
-
-            }
-        }
-
-        public string FullAddress
-        {
-            get
-            {
-               
-                
-                return this.City + ' ' + this.Street + ' ' + this.HouseNumber + ' ' + this.Mikud;
-
-            }
-        }
-
+      
         public string ManagerName
         {
             get
@@ -209,5 +144,14 @@ namespace FarmsApi.DataModels
             }
             set { this.GetType().GetProperty(propertyName).SetValue(this, value, null); }
         }
+    }
+
+    public class WorkersWith101
+    {
+        public Workers w { get; set; }
+
+        public Workers101 w101 { get; set; }
+
+        public string ManagerName { get; set; }
     }
 }

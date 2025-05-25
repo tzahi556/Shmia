@@ -57,7 +57,7 @@
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label>שנת מס</label>
-                                <select class="form-control" ng-model="$ctrl.worker.ShnatMas" required>
+                                <select class="form-control" ng-model="$ctrl.worker.w101.ShnatMas" required>
                                     <option value="">--בחר שנת מס--</option>
                                     <option value="2021">2021</option>
                                     <option value="2022">2022</option>
@@ -151,7 +151,7 @@
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label>שם פרטי</label>
-                                <input type="text" class="form-control" ng-model="$ctrl.worker.FirstName" ng-change="$ctrl.worker.HeskemWorkerName=$ctrl.worker.FirstName + ' ' + $ctrl.worker.LastName" required />
+                                <input type="text" class="form-control" ng-model="$ctrl.worker.w.FirstName" required /> <!--ng-change="$ctrl.worker.HeskemWorkerName=$ctrl.worker.FirstName + ' ' + $ctrl.worker.LastName"-->
                                 <label class="tp-help-below">
                                     ע"פ הרשום בת.ז.
                                 </label>
@@ -161,7 +161,7 @@
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label>שם משפחה</label>
-                                <input type="text" class="form-control" ng-model="$ctrl.worker.LastName" ng-change="$ctrl.worker.HeskemWorkerName= $ctrl.worker.FirstName +' ' + $ctrl.worker.LastName" required />
+                                <input type="text" class="form-control" ng-model="$ctrl.worker.w.LastName"  required />
                                 <label class="tp-help-below">
                                     ע"פ הרשום בת.ז.
                                 </label>
@@ -171,7 +171,7 @@
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label>תעודת זהות</label>
-                                <input type="text" class="form-control" ng-model="$ctrl.worker.Taz" ng-change="$ctrl.worker.HeskemWorkerTaz=$ctrl.worker.Taz" required />
+                                <input type="text" class="form-control" ng-model="$ctrl.worker.w.Taz"  required />
                                 <label class="tp-help-below">
                                     ע"פ הרשום בת.ז.
                                 </label>
@@ -198,7 +198,7 @@
                                     </table>
                                     <div class="panel-footer" style="padding:3px !important;background:white">
                                         <label class="custom-file-upload">
-                                            <input type="file" class="form-control" filename="" folder="'taz_' + $ctrl.worker.Taz" workerid="$ctrl.worker.Id" multiple filename-callback="$ctrl.uploadFile" />
+                                            <input type="file" class="form-control" filename="" folder="'taz_' + $ctrl.worker.w.Taz" workerid="$ctrl.worker.w.Id" multiple filename-callback="$ctrl.uploadFile" />
                                             בחירת קובץ
                                             <i class="fa fa-cloud-upload"></i>
                                         </label>
@@ -220,7 +220,7 @@
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label>תאריך לידה</label>
-                                <input type="date" class="form-control date" ng-model="$ctrl.worker.BirthDate" required />
+                                <input type="date" class="form-control date" ng-model="$ctrl.worker.w.BirthDate" required />
 
                             </div>
 
@@ -228,7 +228,7 @@
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label>תאריך עליה</label>
-                                <input type="date" name="LastName" class="form-control date" ng-model="$ctrl.worker.AliaDate" />
+                                <input type="date" name="LastName" class="form-control date" ng-model="$ctrl.worker.w101.AliaDate" />
 
                             </div>
 
@@ -236,7 +236,7 @@
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label>מס' טלפון נייד</label>
-                                <input type="text" name="Taz" class="form-control" ng-model="$ctrl.worker.PhoneSelular" ng-change="$ctrl.worker.HeskemWorkerPhone= $ctrl.worker.PhoneSelular" required />
+                                <input type="text" name="Taz" class="form-control" ng-model="$ctrl.worker.w.PhoneSelular"  required />
 
                             </div>
 
@@ -245,7 +245,7 @@
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label>מס' טלפון </label>
-                                <input type="text" name="Taz" class="form-control" ng-model="$ctrl.worker.Phone" />
+                                <input type="text" name="Taz" class="form-control" ng-model="$ctrl.worker.w.Phone" />
 
                             </div>
 
@@ -262,7 +262,7 @@
 
 
 
-                                <input id="txtCity" class="form-control autocomplete" type="text" autocomplete="off" ng-model="$ctrl.worker.City" required>
+                                <input id="txtCity" class="form-control autocomplete" type="text" autocomplete="off" ng-model="$ctrl.worker.w.City" required>
 
                             </div>
 
@@ -270,7 +270,7 @@
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label>רחוב</label>
-                                <input type="text" class="form-control" ng-model="$ctrl.worker.Street" ng-change="$ctrl.worker.HeskemWorkerStreet= $ctrl.worker.Street + ' ' + $ctrl.worker.HouseNumber" required />
+                                <input type="text" class="form-control" ng-model="$ctrl.worker.w.Street"  required />
 
                             </div>
 
@@ -278,7 +278,7 @@
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label>מס' בית</label>
-                                <input type="text" class="form-control" ng-model="$ctrl.worker.HouseNumber" ng-change="$ctrl.worker.HeskemWorkerStreet= $ctrl.worker.Street + ' ' + $ctrl.worker.HouseNumber" required />
+                                <input type="text" class="form-control" ng-model="$ctrl.worker.w.HouseNumber"  required />
 
                             </div>
 
@@ -291,7 +291,7 @@
                                         ( ניתן להיעזר ב<a href="http://www.israelpost.co.il/zipcode.nsf/demozip" target="_blank">אתר הדואר</a>)
                                     </span>
                                 </label>
-                                <input type="text" class="form-control" ng-model="$ctrl.worker.Mikud" />
+                                <input type="text" class="form-control" ng-model="$ctrl.worker.w.Mikud" />
 
 
                             </div>
@@ -306,7 +306,7 @@
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label>כתובת דואר אלקטרוני</label>
-                                <input class="form-control" type="email" ng-model="$ctrl.worker.Email" required>
+                                <input class="form-control" type="email" ng-model="$ctrl.worker.w.Email" required>
 
                             </div>
 
@@ -314,7 +314,7 @@
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label>מין</label>
-                                <select class="form-control" ng-model="$ctrl.worker.Gender" required>
+                                <select class="form-control" ng-model="$ctrl.worker.w.Gender" required>
                                     <option value="">--בחר מין--</option>
                                     <option value="1">זכר</option>
                                     <option value="2">נקבה</option>
@@ -327,7 +327,7 @@
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label>תושב ישראל </label>
-                                <select class="form-control" ng-model="$ctrl.worker.ToshavIsrael" required>
+                                <select class="form-control" ng-model="$ctrl.worker.w101.ToshavIsrael" required>
                                     <option value="">--תושב ישראל--</option>
                                     <option value="1">כן</option>
                                     <option value="2">לא</option>
@@ -340,7 +340,7 @@
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label>חבר קיבוץ / מושב שיתופי</label>
-                                <select class="form-control" ng-model="$ctrl.worker.Kibutz" required>
+                                <select class="form-control" ng-model="$ctrl.worker.w101.Kibutz" required>
                                     <option value="">--חבר קיבוץ / מושב שיתופי--</option>
                                     <option value="1">כן</option>
                                     <option value="2">לא</option>
@@ -365,7 +365,7 @@
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label>חבר בקופת חולים </label>
-                                <select class="form-control" ng-model="$ctrl.worker.KupatHolim" ng-change="$ctrl.worker.Kupa=null" required>
+                                <select class="form-control" ng-model="$ctrl.worker.w101.KupatHolim" ng-change="$ctrl.worker.w101.Kupa=null" required>
                                     <option value="">--חבר קופת חולים--</option>
                                     <option value="1">כן</option>
                                     <option value="2">לא</option>
@@ -379,7 +379,7 @@
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label>קופה</label>
-                                <select class="form-control" ng-model="$ctrl.worker.Kupa" ng-disabled="$ctrl.worker.KupatHolim!=1">
+                                <select class="form-control" ng-model="$ctrl.worker.w101.Kupa" ng-disabled="$ctrl.worker.w101.KupatHolim!=1">
                                     <option value="">--בחר קופה--</option>
                                     <option value="1">כללית</option>
                                     <option value="2">מכבי</option>
@@ -397,7 +397,7 @@
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label>מצב משפחתי</label>
-                                <select class="form-control" ng-model="$ctrl.worker.StatusFamely" required>
+                                <select class="form-control" ng-model="$ctrl.worker.w101.StatusFamely" required>
                                     <option value="">--בחר מצב משפחתי--</option>
                                     <option value="1">רווק/ה</option>
                                     <option value="2">נשוי/אה</option>
@@ -414,18 +414,18 @@
 
 
                         <div class="col-md-3">
-                            <div style="" ng-if="$ctrl.worker.StatusFamely==5">
+                            <div style="" ng-if="$ctrl.worker.w101.StatusFamely==5">
 
                                 <label> אישור פקיד שומה</label>
                                 <br />
                                 <label class="custom-file-upload">
-                                    <input type="file" class="form-control" filename="" folder="$ctrl.foldertaz" workerid="$ctrl.worker.Id" filename-callback="$ctrl.uploadFileParud" />
+                                    <input type="file" class="form-control" filename="" folder="$ctrl.foldertaz" workerid="$ctrl.worker.w.Id" filename-callback="$ctrl.uploadFileParud" />
 
                                     בחירת קובץ
                                     <i class="fa fa-cloud-upload"></i>
                                 </label>
 
-                                <a ng-href="{{$ctrl.uploadsUri+$ctrl.worker.Id + '/' + $ctrl.fileparud}}" target="_blank"><span style="width:20px;overflow:hidden">{{$ctrl.fileparud}}</span></a>
+                                <a ng-href="{{$ctrl.uploadsUri+$ctrl.worker.w.Id + '/' + $ctrl.fileparud}}" target="_blank"><span style="width:20px;overflow:hidden">{{$ctrl.fileparud}}</span></a>
 
 
 
@@ -569,7 +569,7 @@
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label>אני מקבל/ת </label>
-                                <select class="form-control" ng-model="$ctrl.worker.SugMaskuret" required>
+                                <select class="form-control" ng-model="$ctrl.worker.w101.SugMaskuret" required>
                                     <option value="">בחר סוג הכנסה</option>
                                     <option value="1">משכורת חודש</option>
                                     <option value="2">שכר עבודה (עובד יומי)</option>
@@ -586,7 +586,7 @@
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label>תאריך תחילת העבודה בשנת המס</label>
-                                <input type="date" class="form-control date" ng-model="$ctrl.worker.StartWorkDate" required />
+                                <input type="date" class="form-control date" ng-model="$ctrl.worker.w101.StartWorkDate" required />
                             </div>
 
                         </div>
@@ -612,7 +612,7 @@
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label>יש לך הכנסות אחרות?</label>
-                                <select class="form-control" ng-model="$ctrl.worker.AnotherMaskuret" required>
+                                <select class="form-control" ng-model="$ctrl.worker.w101.AnotherMaskuret" required>
                                     <option value="">--בחר האם יש הכנסה נוספת--</option>
                                     <option value="1">אין לי הכנסות אחרות לרבות מלגות</option>
                                     <option value="2">יש לי הכנסות נוספות כמפורט להלן</option>
@@ -625,11 +625,11 @@
 
                     </div>
 
-                    <div class="row" ng-if="$ctrl.worker.AnotherMaskuret==2">
+                    <div class="row" ng-if="$ctrl.worker.w101.AnotherMaskuret==2">
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label>פירוט הכנסות</label>
-                                <select class="form-control" ng-model="$ctrl.worker.AnotherSugMaskuret">
+                                <select class="form-control" ng-model="$ctrl.worker.w101.AnotherSugMaskuret">
                                     <option value="">בחר סוג הכנסה</option>
                                     <option value="1">משכורת חודש</option>
                                     <option value="2">שכר עבודה (עובד יומי)</option>
@@ -649,7 +649,7 @@
                     </div>
                     <div class="col-md-12">
                     </div>
-                    <div class="row" ng-if="$ctrl.worker.AnotherMaskuret==2">
+                    <div class="row" ng-if="$ctrl.worker.w101.AnotherMaskuret==2">
                         <div class="col-md-12">
                             <label>נקודות זיכוי</label>
                             <div class="col-md-12">
@@ -659,7 +659,7 @@
                                            type="radio"
                                            name="Nkudutzikuy"
                                            id="radioNoLabel1"
-                                           ng-model="$ctrl.worker.Nkudutzikuy"
+                                           ng-model="$ctrl.worker.w101.Nkudutzikuy"
                                            value="1"
                                            aria-label="" />
 
@@ -671,7 +671,7 @@
                                            type="radio"
                                            name="Nkudutzikuy"
                                            id="radioNoLabel2"
-                                           ng-model="$ctrl.worker.Nkudutzikuy"
+                                           ng-model="$ctrl.worker.w101.Nkudutzikuy"
                                            value="2"
                                            aria-label="" />
 
@@ -687,12 +687,12 @@
                                 <div>
 
                                     <input class="form-check-input"
-                                           type="checkbox" ng-model="$ctrl.worker.AnotherMaskuretHafrashot1" /><label>אין מפרישים עבורי לקרן השתלמות בגין הכנסתי האחרת, או שכל הפרשות המעביד לקרן השתלמות בגין הכנסתי האחרת מצורפות להכנסתי האחרת.</label>
+                                           type="checkbox" ng-model="$ctrl.worker.w101.AnotherMaskuretHafrashot1" /><label>אין מפרישים עבורי לקרן השתלמות בגין הכנסתי האחרת, או שכל הפרשות המעביד לקרן השתלמות בגין הכנסתי האחרת מצורפות להכנסתי האחרת.</label>
                                 </div>
 
                                 <div>
                                     <input class="form-check-input"
-                                           type="checkbox" ng-model="$ctrl.worker.AnotherMaskuretHafrashot2" /><label>    אין מפרישים עבורי לקצבה/לביטוח אובדן כושר עבודה/פיצויים בגין הכנסתי האחרת, או שכל הפרשות המעביד לקצבה/לביטוח אובדן כושר עבודה/פיצויים בגין הכנסתי האחרת מצורפות להכנסתי האחרת.</label>
+                                           type="checkbox" ng-model="$ctrl.worker.w101.AnotherMaskuretHafrashot2" /><label>    אין מפרישים עבורי לקצבה/לביטוח אובדן כושר עבודה/פיצויים בגין הכנסתי האחרת, או שכל הפרשות המעביד לקצבה/לביטוח אובדן כושר עבודה/פיצויים בגין הכנסתי האחרת מצורפות להכנסתי האחרת.</label>
 
 
                                 </div>
@@ -724,27 +724,27 @@
 
 
 
-                    <div class="row" ng-if="$ctrl.worker.StatusFamely==2">
+                    <div class="row" ng-if="$ctrl.worker.w101.StatusFamely==2">
 
 
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label>שם פרטי</label>
-                                <input type="text" class="form-control" ng-model="$ctrl.worker.ZoogFirstName" />
+                                <input type="text" class="form-control" ng-model="$ctrl.worker.w101.ZoogFirstName" />
                             </div>
 
                         </div>
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label>שם משפחה</label>
-                                <input type="text" class="form-control" ng-model="$ctrl.worker.ZoogLastName" />
+                                <input type="text" class="form-control" ng-model="$ctrl.worker.w101.ZoogLastName" />
                             </div>
 
                         </div>
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label>תעודת זהות</label>
-                                <input type="text" class="form-control" ng-model="$ctrl.worker.ZoogTaz" />
+                                <input type="text" class="form-control" ng-model="$ctrl.worker.w101.ZoogTaz" />
                             </div>
 
                         </div>
@@ -752,7 +752,7 @@
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label>מס' דרכון</label>
-                                <input type="text" class="form-control" ng-model="$ctrl.worker.ZoogDarkon" />
+                                <input type="text" class="form-control" ng-model="$ctrl.worker.w101.ZoogDarkon" />
                             </div>
 
                         </div>
@@ -761,20 +761,20 @@
 
                     </div>
 
-                    <div class="row" ng-if="$ctrl.worker.StatusFamely==2">
+                    <div class="row" ng-if="$ctrl.worker.w101.StatusFamely==2">
 
 
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label>תאריך לידה</label>
-                                <input type="date" class="form-control date" ng-model="$ctrl.worker.ZoogBirthDate" />
+                                <input type="date" class="form-control date" ng-model="$ctrl.worker.w101.ZoogBirthDate" />
                             </div>
 
                         </div>
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label>תאריך עליה</label>
-                                <input type="date" class="form-control date" ng-model="$ctrl.worker.ZoogAliaDate" />
+                                <input type="date" class="form-control date" ng-model="$ctrl.worker.w101.ZoogAliaDate" />
                             </div>
 
                         </div>
@@ -788,7 +788,7 @@
                                                type="radio"
                                                name="Nkudutzikuy"
                                                id="radioNoLabel3"
-                                               ng-model="$ctrl.worker.ZoogMaskuret"
+                                               ng-model="$ctrl.worker.w101.ZoogMaskuret"
                                                value="1"
                                                aria-label="" />
 
@@ -802,7 +802,7 @@
                                                type="radio"
                                                name="Nkudutzikuy"
                                                id="radioNoLabel4"
-                                               ng-model="$ctrl.worker.ZoogMaskuret"
+                                               ng-model="$ctrl.worker.w101.ZoogMaskuret"
                                                value="2"
                                                aria-label="" />
 
@@ -813,18 +813,18 @@
 
                         </div>
 
-                        <div class="col-md-3" ng-if="$ctrl.worker.ZoogMaskuret==2">
+                        <div class="col-md-3" ng-if="$ctrl.worker.w101.ZoogMaskuret==2">
                             <label>סוג הכנסה</label>
                             <div class="col-md-12">
                                 <div>
 
                                     <input class="form-check-input"
-                                           type="checkbox" ng-model="$ctrl.worker.ZoogMaskuret1" /><label>עבודה/קיצבה/עסק</label>
+                                           type="checkbox" ng-model="$ctrl.worker.w101.ZoogMaskuret1" /><label>עבודה/קיצבה/עסק</label>
                                 </div>
 
                                 <div>
                                     <input class="form-check-input"
-                                           type="checkbox" ng-model="$ctrl.worker.ZoogMaskuret2" /><label>הכנסה אחרת </label>
+                                           type="checkbox" ng-model="$ctrl.worker.w101.ZoogMaskuret2" /><label>הכנסה אחרת </label>
 
 
                                 </div>
@@ -835,7 +835,7 @@
 
                     </div>
 
-                    <div class="row" ng-if="$ctrl.worker.StatusFamely!=2">
+                    <div class="row" ng-if="$ctrl.worker.w101.StatusFamely!=2">
                         <div class="alert alert-success" role="alert">
                             <label>חלק זה רלוונטי רק אם הינך נשוי/אה</label>
                         </div>
@@ -869,7 +869,7 @@
                             <div class="col-md-3">
                                 <div class="checkbox">
                                     <input class="form-check-input" ng-disabled="true"
-                                           type="checkbox" ng-model="$ctrl.worker.ZikuyToshavIsrael" />
+                                           type="checkbox" ng-model="$ctrl.worker.w101.ZikuyToshavIsrael" />
                                     <span>
                                         1. אני תושב/ת ישראל
                                     </span>
@@ -889,27 +889,27 @@
                             <div class="col-md-3 checkbox">
 
                                 <input class="form-check-input"
-                                       type="checkbox" ng-model="$ctrl.worker.ZikuyNeke" />
+                                       type="checkbox" ng-model="$ctrl.worker.w101.ZikuyNeke" />
                                 <span>
                                     2. אני נכה 100% / עיוור/ת לצמיתות
                                 </span>
                             </div>
 
                             <div class="col-md-4">
-                                <div style="" ng-if="$ctrl.worker.ZikuyNeke">
+                                <div style="" ng-if="$ctrl.worker.w101.ZikuyNeke">
 
                                     <span> אישור משרד הביטחון/האוצר/פקיד השומה/תעודת עיוור שהוצאה לאחר 1/1/94</span>
 
                                     <br />
                                     <label class="custom-file-upload">
 
-                                        <input type="file" class="form-control" filename="" folder="$ctrl.foldertaz" workerid="$ctrl.worker.Id" filename-callback="$ctrl.uploadFileZikuyNeke" />
+                                        <input type="file" class="form-control" filename="" folder="$ctrl.foldertaz" workerid="$ctrl.worker.w.Id" filename-callback="$ctrl.uploadFileZikuyNeke" />
 
                                         בחירת קובץ
                                         <i class="fa fa-cloud-upload"></i>
                                     </label>
 
-                                    <a ng-href="{{$ctrl.uploadsUri+$ctrl.worker.Id + '/' + $ctrl.filezikuyneke}}" target="_blank"><span style="width:20px;overflow:hidden">{{$ctrl.filezikuyneke}}</span></a>
+                                    <a ng-href="{{$ctrl.uploadsUri+$ctrl.worker.w.Id + '/' + $ctrl.filezikuyneke}}" target="_blank"><span style="width:20px;overflow:hidden">{{$ctrl.filezikuyneke}}</span></a>
 
 
                                 </div>
@@ -928,7 +928,7 @@
                             <div class="col-md-12">
                                 <div class="checkbox">
                                     <input class="form-check-input"
-                                           type="checkbox" ng-model="$ctrl.worker.ZikuyToshavMas" />
+                                           type="checkbox" ng-model="$ctrl.worker.w101.ZikuyToshavMas" />
                                     <span>
                                         3. אני תושב/ת קבוע/ה בישוב מזכה. אני ובני משפחתי מדרגה ראשונה, מתגוררים ביישוב ואין לי "מרכז חיים" נוסף.
                                     </span>
@@ -936,12 +936,12 @@
                                 </div>
                             </div>
 
-                            <div class="col-md-12 alert-info" ng-if="$ctrl.worker.ZikuyToshavMas">
+                            <div class="col-md-12 alert-info" ng-if="$ctrl.worker.w101.ZikuyToshavMas">
 
                                 <div class="col-md-3">
                                     <div class="form-group">
                                         <label>מתאריך</label>
-                                        <input type="date" class="form-control date" ng-model="$ctrl.worker.ZikuyYeshuvStartDate" />
+                                        <input type="date" class="form-control date" ng-model="$ctrl.worker.w101.ZikuyYeshuvStartDate" />
 
                                     </div>
 
@@ -949,7 +949,7 @@
                                 <div class="col-md-3">
                                     <div class="form-group">
                                         <label>הישוב</label>
-                                        <input type="text" class="form-control" ng-model="$ctrl.worker.City" />
+                                        <input type="text" class="form-control" ng-model="$ctrl.worker.w.City" />
 
                                     </div>
 
@@ -964,14 +964,14 @@
                                         </label>
                                         <br />
                                         <label class="custom-file-upload">
-                                            <input type="file" class="form-control" filename="" folder="$ctrl.foldertaz" workerid="$ctrl.worker.Id" filename-callback="$ctrl.uploadFileZikuyToshav" />
+                                            <input type="file" class="form-control" filename="" folder="$ctrl.foldertaz" workerid="$ctrl.worker.w.Id" filename-callback="$ctrl.uploadFileZikuyToshav" />
 
                                             בחירת קובץ
                                             <i class="fa fa-cloud-upload"></i>
                                         </label>
 
 
-                                        <a ng-href="{{$ctrl.uploadsUri+$ctrl.worker.Id + '/' + $ctrl.filezikuytoshav}}" target="_blank"><span style="width:20px;overflow:hidden">{{$ctrl.filezikuytoshav}}</span></a>
+                                        <a ng-href="{{$ctrl.uploadsUri+$ctrl.worker.w.Id + '/' + $ctrl.filezikuytoshav}}" target="_blank"><span style="width:20px;overflow:hidden">{{$ctrl.filezikuytoshav}}</span></a>
 
 
 
@@ -995,18 +995,18 @@
                             <div class="col-md-12">
                                 <div class="checkbox">
                                     <input class="form-check-input"
-                                           type="checkbox" ng-model="$ctrl.worker.ZikuyOleHadash" />
+                                           type="checkbox" ng-model="$ctrl.worker.w101.ZikuyOleHadash" />
                                     <span>
                                         4. אני עולה חדש/ה
                                     </span>
                                 </div>
                             </div>
-                            <div class="col-md-12 alert-info" ng-if="$ctrl.worker.ZikuyOleHadash">
+                            <div class="col-md-12 alert-info" ng-if="$ctrl.worker.w101.ZikuyOleHadash">
 
                                 <div class="col-md-2">
                                     <div class="form-group">
                                         <label>מתאריך</label>
-                                        <input type="date" class="form-control date" ng-model="$ctrl.worker.ZikuyOleHadashDate" />
+                                        <input type="date" class="form-control date" ng-model="$ctrl.worker.w101.ZikuyOleHadashDate" />
 
                                     </div>
 
@@ -1021,14 +1021,14 @@
                                         </label>
                                         <br />
                                         <label class="custom-file-upload">
-                                            <input type="file" class="form-control" filename="" folder="$ctrl.foldertaz" workerid="$ctrl.worker.Id" filename-callback="$ctrl.uploadFileZikuyOleHadash" />
+                                            <input type="file" class="form-control" filename="" folder="$ctrl.foldertaz" workerid="$ctrl.worker.w.Id" filename-callback="$ctrl.uploadFileZikuyOleHadash" />
 
                                             בחירת קובץ
                                             <i class="fa fa-cloud-upload"></i>
                                         </label>
 
 
-                                        <a ng-href="{{$ctrl.uploadsUri+$ctrl.worker.Id + '/' + $ctrl.filezikuyolehadash}}" target="_blank"><span style="width:20px;overflow:hidden">{{$ctrl.filezikuyolehadash}}</span></a>
+                                        <a ng-href="{{$ctrl.uploadsUri+$ctrl.worker.w.Id + '/' + $ctrl.filezikuyolehadash}}" target="_blank"><span style="width:20px;overflow:hidden">{{$ctrl.filezikuyolehadash}}</span></a>
 
 
 
@@ -1040,7 +1040,7 @@
                                 <div class="col-md-7">
                                     <div class="form-group">
                                         <label>לא הייתה לי הכנסה בישראל מתחילת שנת המס הנוכחית עד תאריך</label>
-                                        <input type="text" class="form-control date" ng-model="$ctrl.worker.ZikuyOleHadashFromStartYearDate" />
+                                        <input type="text" class="form-control date" ng-model="$ctrl.worker.w101.ZikuyOleHadashFromStartYearDate" />
                                         <label class="tp-help-below">
                                             מי שתקופת זכאותו (42 חודש) אינה רצופה בשל שירות חובה בצה"ל, לימודים על תיכוניים או יציאה לחו"ל יפנה לפקיד השומה.
                                         </label>
@@ -1065,7 +1065,7 @@
                             <div class="col-md-12 checkbox">
 
                                 <input class="form-check-input"
-                                       type="checkbox" ng-model="$ctrl.worker.ZikuyZoog" />
+                                       type="checkbox" ng-model="$ctrl.worker.w101.ZikuyZoog" />
                                 <span>
                                     5. בגין בן/בת זוגי המתגורר/ת עימי ואין לו/לה הכנסות בשנת המס
                                 </span>
@@ -1087,7 +1087,7 @@
                             <div class="col-md-12 checkbox">
 
                                 <input class="form-check-input"
-                                       type="checkbox" ng-model="$ctrl.worker.ZikuyHoreHayNefrad" />
+                                       type="checkbox" ng-model="$ctrl.worker.w101.ZikuyHoreHayNefrad" />
                                 <span>
                                     6. אני הורה במשפחה חד הורית החי בנפרד
                                 </span>
@@ -1109,7 +1109,7 @@
                             <div class="col-md-12 checkbox">
 
                                 <input class="form-check-input"
-                                       type="checkbox" ng-model="$ctrl.worker.ZikuyLuladBehzka" />
+                                       type="checkbox" ng-model="$ctrl.worker.w101.ZikuyLuladBehzka" />
                                 <span>
                                     7. בגין ילדי שבחזקתי המפורטים בחלק ג
                                 </span>
@@ -1119,12 +1119,12 @@
                             </div>
 
 
-                            <div class="col-md-12 alert-info" ng-if="$ctrl.worker.ZikuyLuladBehzka">
+                            <div class="col-md-12 alert-info" ng-if="$ctrl.worker.w101.ZikuyLuladBehzka">
 
                                 <div class="col-md-3">
                                     <div class="form-group">
                                         <label>מספר ילדים שנולדו בשנת המס</label>
-                                        <input type="number" class="form-control" ng-model="$ctrl.worker.ZikuyLuladNuldoShnatMas" />
+                                        <input type="number" class="form-control" ng-model="$ctrl.worker.w101.ZikuyLuladNuldoShnatMas" />
 
                                     </div>
 
@@ -1134,7 +1134,7 @@
                                         <label>
                                             מספר ילדים שימלאו להם 1-5 שנים בשנת המס
                                         </label>
-                                        <input type="number" class="form-control" ng-model="$ctrl.worker.ZikuyLulad_1_5" />
+                                        <input type="number" class="form-control" ng-model="$ctrl.worker.w101.ZikuyLulad_1_5" />
 
                                     </div>
 
@@ -1142,7 +1142,7 @@
                                 <div class="col-md-3">
                                     <div class="form-group">
                                         <label>מספר ילדים שימלאו להם 6-17 שנים בשנת המס</label>
-                                        <input type="number" class="form-control" ng-model="$ctrl.worker.ZikuyLulad_6_17" />
+                                        <input type="number" class="form-control" ng-model="$ctrl.worker.w101.ZikuyLulad_6_17" />
 
                                     </div>
 
@@ -1150,7 +1150,7 @@
                                 <div class="col-md-3">
                                     <div class="form-group">
                                         <label>מספר ילדים שימלאו להם 18 שנים בשנת המס</label>
-                                        <input type="number" class="form-control" ng-model="$ctrl.worker.ZikuyLulad_18" />
+                                        <input type="number" class="form-control" ng-model="$ctrl.worker.w101.ZikuyLulad_18" />
 
                                     </div>
 
@@ -1176,7 +1176,7 @@
                             <div class="col-md-12 checkbox">
 
                                 <input class="form-check-input"
-                                       type="checkbox" ng-model="$ctrl.worker.ZikuyLuladPeutim" />
+                                       type="checkbox" ng-model="$ctrl.worker.w101.ZikuyLuladPeutim" />
                                 <span>
                                     8. בגין ילדי הפעוטים
                                 </span>
@@ -1186,12 +1186,12 @@
                             </div>
 
 
-                            <div class="col-md-12 alert-info" ng-if="$ctrl.worker.ZikuyLuladPeutim">
+                            <div class="col-md-12 alert-info" ng-if="$ctrl.worker.w101.ZikuyLuladPeutim">
 
                                 <div class="col-md-3">
                                     <div class="form-group">
                                         <label>מספר ילדים שנולדו בשנת המס</label>
-                                        <input type="number" class="form-control" ng-model="$ctrl.worker.ZikuyLuladNuldoShnatMas2" />
+                                        <input type="number" class="form-control" ng-model="$ctrl.worker.w101.ZikuyLuladNuldoShnatMas2" />
 
                                     </div>
 
@@ -1201,7 +1201,7 @@
                                         <label>
                                             מספר ילדים שימלאו להם 1-5 שנים בשנת המס
                                         </label>
-                                        <input type="number" class="form-control" ng-model="$ctrl.worker.ZikuyLulad2_1_5" />
+                                        <input type="number" class="form-control" ng-model="$ctrl.worker.w101.ZikuyLulad2_1_5" />
 
                                     </div>
 
@@ -1227,7 +1227,7 @@
                             <div class="col-md-12 checkbox">
 
                                 <input class="form-check-input"
-                                       type="checkbox" ng-model="$ctrl.worker.ZikuyHoreYahid" />
+                                       type="checkbox" ng-model="$ctrl.worker.w101.ZikuyHoreYahid" />
                                 <span>
                                     9. אני הורה יחיד לילדי שבחזקתי (המפורטים בסעיף 7 ו-8 לעיל).
                                 </span>
@@ -1247,7 +1247,7 @@
                             <div class="col-md-12 checkbox">
 
                                 <input class="form-check-input"
-                                       type="checkbox" ng-model="$ctrl.worker.ZikuyPsakDinMezonot" />
+                                       type="checkbox" ng-model="$ctrl.worker.w101.ZikuyPsakDinMezonot" />
                                 <span>
                                     10. בגין ילדי שאינם בחזקתי המפורטים בחלק ג ואני משתתף/ת בכלכלתם.
                                 </span>
@@ -1257,7 +1257,7 @@
                             </div>
 
 
-                            <div class="col-md-12 alert-info" ng-if="$ctrl.worker.ZikuyPsakDinMezonot">
+                            <div class="col-md-12 alert-info" ng-if="$ctrl.worker.w101.ZikuyPsakDinMezonot">
 
                                 <div class="col-md-3">
                                     <div class="form-group">
@@ -1265,14 +1265,14 @@
 
                                         <br />
                                         <label class="custom-file-upload">
-                                            <input type="file" class="form-control" filename="" folder="$ctrl.foldertaz" workerid="$ctrl.worker.Id" filename-callback="$ctrl.uploadFileZikuyPsakDinMezonot" />
+                                            <input type="file" class="form-control" filename="" folder="$ctrl.foldertaz" workerid="$ctrl.worker.w.Id" filename-callback="$ctrl.uploadFileZikuyPsakDinMezonot" />
                                             בחירת קובץ
                                             <i class="fa fa-cloud-upload"></i>
                                         </label>
 
 
 
-                                        <a ng-href="{{$ctrl.uploadsUri+$ctrl.worker.Id + '/' + $ctrl.filezikuypsakdinmezonot}}" target="_blank"><span style="width:20px;overflow:hidden">{{$ctrl.filezikuypsakdinmezonot}}</span></a>
+                                        <a ng-href="{{$ctrl.uploadsUri+$ctrl.worker.w.Id + '/' + $ctrl.filezikuypsakdinmezonot}}" target="_blank"><span style="width:20px;overflow:hidden">{{$ctrl.filezikuypsakdinmezonot}}</span></a>
 
 
                                     </div>
@@ -1299,7 +1299,7 @@
                             <div class="col-md-12 checkbox">
 
                                 <input class="form-check-input"
-                                       type="checkbox" ng-model="$ctrl.worker.ZikuyLuladMugbalut" />
+                                       type="checkbox" ng-model="$ctrl.worker.w101.ZikuyLuladMugbalut" />
                                 <span>
                                     11. אני הורה לילדים עם מוגבלות שטרם מלאו להם 19 שנים, בגינם אני מקבל/ת גמלת ילד נכה מהמוסד לביטוח לאומי.
                                 </span>
@@ -1309,12 +1309,12 @@
                             </div>
 
 
-                            <div class="col-md-12 alert-info" ng-if="$ctrl.worker.ZikuyLuladMugbalut">
+                            <div class="col-md-12 alert-info" ng-if="$ctrl.worker.w101.ZikuyLuladMugbalut">
 
                                 <div class="col-md-12">
                                     <div class="form-group">
                                         <label>מספר הילדים עם מוגבלות שטרם מלאו להם 19 שנים, בגינם את/ה מקבל/ת גמלת ילד נכה מהמוסד לביטוח לאומי</label>
-                                        <input type="number" class="form-control" ng-model="$ctrl.worker.ZikuyLuladMugbalutNumber" />
+                                        <input type="number" class="form-control" ng-model="$ctrl.worker.w101.ZikuyLuladMugbalutNumber" />
 
                                     </div>
 
@@ -1328,13 +1328,13 @@
                                         <br />
                                         <label class="custom-file-upload">
 
-                                            <input type="file" class="form-control" filename="" folder="$ctrl.foldertaz" workerid="$ctrl.worker.Id" filename-callback="$ctrl.uploadFileZikuyLuladMugbalut" />
+                                            <input type="file" class="form-control" filename="" folder="$ctrl.foldertaz" workerid="$ctrl.worker.w.Id" filename-callback="$ctrl.uploadFileZikuyLuladMugbalut" />
 
                                             בחירת קובץ
                                             <i class="fa fa-cloud-upload"></i>
                                         </label>
 
-                                        <a ng-href="{{$ctrl.uploadsUri+$ctrl.worker.Id + '/' + $ctrl.filezikuyluladmugbalut}}" target="_blank"><span style="width:20px;overflow:hidden">{{$ctrl.filezikuyluladmugbalut}}</span></a>
+                                        <a ng-href="{{$ctrl.uploadsUri+$ctrl.worker.w.Id + '/' + $ctrl.filezikuyluladmugbalut}}" target="_blank"><span style="width:20px;overflow:hidden">{{$ctrl.filezikuyluladmugbalut}}</span></a>
 
 
                                     </div>
@@ -1361,7 +1361,7 @@
                             <div class="col-md-12 checkbox">
 
                                 <input class="form-check-input"
-                                       type="checkbox" ng-model="$ctrl.worker.ZikuyTashlumMezonot" />
+                                       type="checkbox" ng-model="$ctrl.worker.w101.ZikuyTashlumMezonot" />
                                 <span>
                                     12. בגין מזונות לבן/בת זוגי לשעבר.
                                 </span>
@@ -1371,20 +1371,20 @@
                             </div>
 
 
-                            <div class="col-md-12 alert-info" ng-if="$ctrl.worker.ZikuyTashlumMezonot">
+                            <div class="col-md-12 alert-info" ng-if="$ctrl.worker.w101.ZikuyTashlumMezonot">
 
                                 <div class="col-md-3">
                                     <div class="form-group">
                                         <label>צילום פסק דין המחייב בתשלום מזונות</label>
                                         <br />
                                         <label class="custom-file-upload">
-                                            <input type="file" class="form-control" filename="" folder="$ctrl.foldertaz" workerid="$ctrl.worker.Id" filename-callback="$ctrl.uploadFileZikuyPsakDinMezonot" />
+                                            <input type="file" class="form-control" filename="" folder="$ctrl.foldertaz" workerid="$ctrl.worker.w.Id" filename-callback="$ctrl.uploadFileZikuyPsakDinMezonot" />
 
                                             בחירת קובץ
                                             <i class="fa fa-cloud-upload"></i>
                                         </label>
 
-                                        <a ng-href="{{$ctrl.uploadsUri+$ctrl.worker.Id + '/' + $ctrl.filezikuypsakdinmezonot}}" target="_blank"><span style="width:20px;overflow:hidden">{{$ctrl.filezikuypsakdinmezonot}}</span></a>
+                                        <a ng-href="{{$ctrl.uploadsUri+$ctrl.worker.w.Id + '/' + $ctrl.filezikuypsakdinmezonot}}" target="_blank"><span style="width:20px;overflow:hidden">{{$ctrl.filezikuypsakdinmezonot}}</span></a>
 
 
                                     </div>
@@ -1412,7 +1412,7 @@
                             <div class="col-md-12 checkbox">
 
                                 <input class="form-check-input"
-                                       type="checkbox" ng-model="$ctrl.worker.ZikuyBetween16_18" />
+                                       type="checkbox" ng-model="$ctrl.worker.w101.ZikuyBetween16_18" />
                                 <span>
                                     13. מלאו לי או לבן/בת זוגי 16 שנים וטרם מלאו לי או לבן/בת זוגי 18 שנים בשנת המס.
                                 </span>
@@ -1431,7 +1431,7 @@
                             <div class="col-md-12">
                                 <div class="checkbox">
                                     <input class="form-check-input"
-                                           type="checkbox" ng-model="$ctrl.worker.ZikuyHayalEnd" />
+                                           type="checkbox" ng-model="$ctrl.worker.w101.ZikuyHayalEnd" />
                                     <span>
                                         14. אני חייל/ת משוחרר/ת / שרתתי בשירות לאומי.
                                     </span>
@@ -1439,12 +1439,12 @@
                                 </div>
                             </div>
 
-                            <div class="col-md-12 alert-info" ng-if="$ctrl.worker.ZikuyHayalEnd">
+                            <div class="col-md-12 alert-info" ng-if="$ctrl.worker.w101.ZikuyHayalEnd">
 
                                 <div class="col-md-3">
                                     <div class="form-group">
                                         <label>תאריך תחילת שירות</label>
-                                        <input type="date" class="form-control date" ng-model="$ctrl.worker.ZikuyHayalEndStartDate" />
+                                        <input type="date" class="form-control date" ng-model="$ctrl.worker.w101.ZikuyHayalEndStartDate" />
 
                                     </div>
 
@@ -1452,7 +1452,7 @@
                                 <div class="col-md-3">
                                     <div class="form-group">
                                         <label>תאריך סיום שירות</label>
-                                        <input type="date" class="form-control date" ng-model="$ctrl.worker.ZikuyHayalEndEndDate" />
+                                        <input type="date" class="form-control date" ng-model="$ctrl.worker.w101.ZikuyHayalEndEndDate" />
 
                                     </div>
 
@@ -1468,12 +1468,12 @@
                                         </label>
                                         <br />
                                         <label class="custom-file-upload">
-                                            <input type="file" class="form-control" filename="" folder="$ctrl.foldertaz" workerid="$ctrl.worker.Id" filename-callback="$ctrl.uploadFileZikuyHayalEnd" />
+                                            <input type="file" class="form-control" filename="" folder="$ctrl.foldertaz" workerid="$ctrl.worker.w.Id" filename-callback="$ctrl.uploadFileZikuyHayalEnd" />
 
                                             בחירת קובץ
                                             <i class="fa fa-cloud-upload"></i>
                                         </label>
-                                        <a ng-href="{{$ctrl.uploadsUri+$ctrl.worker.Id + '/' + $ctrl.filezikuyhayalend}}" target="_blank"><span style="width:20px;overflow:hidden">{{$ctrl.filezikuyhayalend}}</span></a>
+                                        <a ng-href="{{$ctrl.uploadsUri+$ctrl.worker.w.Id + '/' + $ctrl.filezikuyhayalend}}" target="_blank"><span style="width:20px;overflow:hidden">{{$ctrl.filezikuyhayalend}}</span></a>
 
 
 
@@ -1498,24 +1498,24 @@
                             <div class="col-md-5 checkbox">
 
                                 <input class="form-check-input"
-                                       type="checkbox" ng-model="$ctrl.worker.ZikuyToarAkdemi" />
+                                       type="checkbox" ng-model="$ctrl.worker.w101.ZikuyToarAkdemi" />
                                 <span>
                                     15. בגין סיום לימודים לתואר אקדמי, סיום התמחות או סיום לימודי מקצוע.
                                 </span>
                             </div>
 
                             <div class="col-md-4">
-                                <div style="" ng-if="$ctrl.worker.ZikuyToarAkdemi">
+                                <div style="" ng-if="$ctrl.worker.w101.ZikuyToarAkdemi">
 
                                     <label> הצהרה בטופס 119</label>
                                     <br />
                                     <label class="custom-file-upload">
-                                        <input type="file" class="form-control" filename="" folder="$ctrl.foldertaz" workerid="$ctrl.worker.Id" filename-callback="$ctrl.uploadFileZikuyToarAkdemi" />
+                                        <input type="file" class="form-control" filename="" folder="$ctrl.foldertaz" workerid="$ctrl.worker.w.Id" filename-callback="$ctrl.uploadFileZikuyToarAkdemi" />
                                         בחירת קובץ
                                         <i class="fa fa-cloud-upload"></i>
                                     </label>
 
-                                    <a ng-href="{{$ctrl.uploadsUri+$ctrl.worker.Id + '/' + $ctrl.filezikuytoarakdemi}}" target="_blank"><span style="width:20px;overflow:hidden">{{$ctrl.filezikuytoarakdemi}}</span></a>
+                                    <a ng-href="{{$ctrl.uploadsUri+$ctrl.worker.w.Id + '/' + $ctrl.filezikuytoarakdemi}}" target="_blank"><span style="width:20px;overflow:hidden">{{$ctrl.filezikuytoarakdemi}}</span></a>
                                     <label class="tp-help-below">
                                         ניתן להיעזר ב<a href="https://tofes101.co.il/fill-form-119/" target="_blank">טופס 119 הממוחשב</a>&nbsp;או להוריד את הטופס <a href="https://taxes.gov.il/TaxesFormsList/itc119_11.pdf" target="_blank">מאתר רשות המסים</a>.
                                     </label>
@@ -1555,14 +1555,14 @@
                     <div class="col-md-12">
                         <div class="checkbox">
                             <input class="form-check-input"
-                                   type="checkbox" ng-model="$ctrl.worker.TiumMas" ng-change="$ctrl.worker.TiumMasBakasha=null;
-                               $ctrl.worker.TiumMasAnotherMaskuretName=null;
-                               $ctrl.worker.TiumMasAnotherMaskuretKtuvet=null;
-                               $ctrl.worker.TiumMasAnotherMaskuretTikNikuim=null;
-                               $ctrl.worker.TiumMasAnotherMaskuretSug=null;
-                               $ctrl.worker.TiumMasAnotherMaskuretSum=null;
+                                   type="checkbox" ng-model="$ctrl.worker.w101.TiumMas" ng-change="$ctrl.worker.w101.TiumMasBakasha=null;
+                               $ctrl.worker.w101.TiumMasAnotherMaskuretName=null;
+                               $ctrl.worker.w101.TiumMasAnotherMaskuretKtuvet=null;
+                               $ctrl.worker.w101.TiumMasAnotherMaskuretTikNikuim=null;
+                               $ctrl.worker.w101.TiumMasAnotherMaskuretSug=null;
+                               $ctrl.worker.w101.TiumMasAnotherMaskuretSum=null;
 
-                               $ctrl.worker.TiumMasAnotherMaskuretMas=null;
+                               $ctrl.worker.w101.TiumMasAnotherMaskuretMas=null;
 
 
 
@@ -1573,7 +1573,7 @@
 
                         </div>
                     </div>
-                    <div class="row" ng-if="$ctrl.worker.TiumMas">
+                    <div class="row" ng-if="$ctrl.worker.w101.TiumMas">
                         <div class="col-md-12">
                             <label>סיבת הבקשה</label>
                             <div class="col-md-12">
@@ -1583,7 +1583,7 @@
                                            type="radio"
                                            name="TiumMasBakasha"
                                            id="radioNoLabel10"
-                                           ng-model="$ctrl.worker.TiumMasBakasha"
+                                           ng-model="$ctrl.worker.w101.TiumMasBakasha"
                                            value="1"
                                            aria-label="" />
 
@@ -1596,7 +1596,7 @@
                                            type="radio"
                                            name="TiumMasBakasha"
                                            id="radioNoLabel11"
-                                           ng-model="$ctrl.worker.TiumMasBakasha"
+                                           ng-model="$ctrl.worker.w101.TiumMasBakasha"
                                            value="2"
                                            aria-label="" />
 
@@ -1609,7 +1609,7 @@
                                            type="radio"
                                            name="TiumMasBakasha"
                                            id="radioNoLabel12"
-                                           ng-model="$ctrl.worker.TiumMasBakasha"
+                                           ng-model="$ctrl.worker.w101.TiumMasBakasha"
                                            value="3"
                                            aria-label="" />
 
@@ -1626,7 +1626,7 @@
 
 
 
-                        <div class="col-md-12" ng-if="$ctrl.worker.TiumMasBakasha==1">
+                        <div class="col-md-12" ng-if="$ctrl.worker.w101.TiumMasBakasha==1">
                             <div class="form-group">
                                 <label>
 
@@ -1639,13 +1639,13 @@
 
                                 <br />
                                 <label class="custom-file-upload">
-                                    <input type="file" class="form-control" filename="" folder="$ctrl.foldertaz" workerid="$ctrl.worker.Id" filename-callback="$ctrl.uploadFileTiumMasAproove" />
+                                    <input type="file" class="form-control" filename="" folder="$ctrl.foldertaz" workerid="$ctrl.worker.w.Id" filename-callback="$ctrl.uploadFileTiumMasAproove" />
 
                                     בחירת קובץ
                                     <i class="fa fa-cloud-upload"></i>
                                 </label>
 
-                                <a ng-href="{{$ctrl.uploadsUri+$ctrl.worker.Id + '/' + $ctrl.filetiummasaproove}}" target="_blank"><span style="width:20px;overflow:hidden">{{$ctrl.filetiummasaproove}}</span></a>
+                                <a ng-href="{{$ctrl.uploadsUri+$ctrl.worker.w.Id + '/' + $ctrl.filetiummasaproove}}" target="_blank"><span style="width:20px;overflow:hidden">{{$ctrl.filetiummasaproove}}</span></a>
                                 <label class="tp-help-below">
                                     כגון: אישור משטרת הגבולות בגין שהייה בחו"ל, אישור מחלה וכיו"ב. בהעדר הוכחה יש לפנות לפקיד השומה.
                                     לתשומת לבך: דמי לידה ודמי אבטלה הינם הכנסה חייבת.
@@ -1658,7 +1658,7 @@
 
                         </div>
 
-                        <div class="col-md-12" ng-if="$ctrl.worker.TiumMasBakasha==2">
+                        <div class="col-md-12" ng-if="$ctrl.worker.w101.TiumMasBakasha==2">
 
                             <label>
                                 פירוט הכנסות נוספות (כלומר, בנוסף להכנסה ממעסיק זה):
@@ -1670,21 +1670,21 @@
                                 <div class="col-md-3">
                                     <div class="form-group">
                                         <label>שם </label>
-                                        <input type="text" class="form-control" ng-model="$ctrl.worker.TiumMasAnotherMaskuretName" />
+                                        <input type="text" class="form-control" ng-model="$ctrl.worker.w101.TiumMasAnotherMaskuretName" />
                                     </div>
 
                                 </div>
                                 <div class="col-md-3">
                                     <div class="form-group">
                                         <label>כתובת</label>
-                                        <input type="text" class="form-control" ng-model="$ctrl.worker.TiumMasAnotherMaskuretKtuvet" />
+                                        <input type="text" class="form-control" ng-model="$ctrl.worker.w101.TiumMasAnotherMaskuretKtuvet" />
                                     </div>
 
                                 </div>
                                 <div class="col-md-3">
                                     <div class="form-group">
                                         <label>מספר תיק ניכויים</label>
-                                        <input type="text" class="form-control" ng-model="$ctrl.worker.TiumMasAnotherMaskuretTikNikuim" />
+                                        <input type="text" class="form-control" ng-model="$ctrl.worker.w101.TiumMasAnotherMaskuretTikNikuim" />
                                     </div>
 
                                 </div>
@@ -1705,7 +1705,7 @@
                                                        type="radio"
                                                        name="TiumMasAnotherMaskuretSug"
                                                        id="sug1"
-                                                       ng-model="$ctrl.worker.TiumMasAnotherMaskuretSug"
+                                                       ng-model="$ctrl.worker.w101.TiumMasAnotherMaskuretSug"
                                                        value="1"
                                                        aria-label="" />
 
@@ -1719,7 +1719,7 @@
                                                        type="radio"
                                                        name="TiumMasAnotherMaskuretSug"
                                                        id="sug2"
-                                                       ng-model="$ctrl.worker.TiumMasAnotherMaskuretSug"
+                                                       ng-model="$ctrl.worker.w101.TiumMasAnotherMaskuretSug"
                                                        value="2"
                                                        aria-label="" />
 
@@ -1733,7 +1733,7 @@
                                                        type="radio"
                                                        name="TiumMasAnotherMaskuretSug"
                                                        id="sug3"
-                                                       ng-model="$ctrl.worker.TiumMasAnotherMaskuretSug"
+                                                       ng-model="$ctrl.worker.w101.TiumMasAnotherMaskuretSug"
                                                        value="3"
                                                        aria-label="" />
 
@@ -1747,7 +1747,7 @@
                                                        type="radio"
                                                        name="TiumMasAnotherMaskuretSug"
                                                        id="sug4"
-                                                       ng-model="$ctrl.worker.TiumMasAnotherMaskuretSug"
+                                                       ng-model="$ctrl.worker.w101.TiumMasAnotherMaskuretSug"
                                                        value="4"
                                                        aria-label="" />
 
@@ -1766,7 +1766,7 @@
                                 <div class="col-md-3">
                                     <div class="form-group">
                                         <label>הכנסה חודשית</label>
-                                        <input type="number" class="form-control" ng-model="$ctrl.worker.TiumMasAnotherMaskuretSum" />
+                                        <input type="number" class="form-control" ng-model="$ctrl.worker.w101.TiumMasAnotherMaskuretSum" />
                                         <label class="tp-help-below">
                                             לפי התלושים
                                         </label>
@@ -1778,7 +1778,7 @@
                                 <div class="col-md-3">
                                     <div class="form-group">
                                         <label>המס שנוכה</label>
-                                        <input type="number" class="form-control" ng-model="$ctrl.worker.TiumMasAnotherMaskuretMas" />
+                                        <input type="number" class="form-control" ng-model="$ctrl.worker.w101.TiumMasAnotherMaskuretMas" />
                                         <label class="tp-help-below">
                                             לפי התלושים
                                         </label>
@@ -1794,12 +1794,12 @@
 
                                         <br />
                                         <label class="custom-file-upload">
-                                            <input type="file" class="form-control" filename="" folder="$ctrl.foldertaz" workerid="$ctrl.worker.Id" filename-callback="$ctrl.uploadFileTiumMasTlush" />
+                                            <input type="file" class="form-control" filename="" folder="$ctrl.foldertaz" workerid="$ctrl.worker.w.Id" filename-callback="$ctrl.uploadFileTiumMasTlush" />
 
                                             בחירת קובץ
                                             <i class="fa fa-cloud-upload"></i>
                                         </label>
-                                        <a ng-href="{{$ctrl.uploadsUri+$ctrl.worker.Id + '/' + $ctrl.filetiummastlush}}" target="_blank"><span style="width:20px;overflow:hidden">{{$ctrl.filetiummastlush}}</span></a>
+                                        <a ng-href="{{$ctrl.uploadsUri+$ctrl.worker.w.Id + '/' + $ctrl.filetiummastlush}}" target="_blank"><span style="width:20px;overflow:hidden">{{$ctrl.filetiummastlush}}</span></a>
 
 
                                     </div>
@@ -1817,7 +1817,7 @@
 
                         </div>
 
-                        <div class="col-md-12" ng-if="$ctrl.worker.TiumMasBakasha==3">
+                        <div class="col-md-12" ng-if="$ctrl.worker.w101.TiumMasBakasha==3">
                             <div class="form-group">
                                 <label>
 
@@ -1827,13 +1827,13 @@
                                 </label>
                                 <br />
                                 <label class="custom-file-upload">
-                                    <input type="file" class="form-control" filename="" folder="$ctrl.foldertaz" workerid="$ctrl.worker.Id" filename-callback="$ctrl.uploadFileTiummas" />
+                                    <input type="file" class="form-control" filename="" folder="$ctrl.foldertaz" workerid="$ctrl.worker.w.Id" filename-callback="$ctrl.uploadFileTiummas" />
 
                                     בחירת קובץ
                                     <i class="fa fa-cloud-upload"></i>
                                 </label>
 
-                                <a ng-href="{{$ctrl.uploadsUri+$ctrl.worker.Id + '/' + $ctrl.filetiummas}}" target="_blank"><span style="width:20px;overflow:hidden">{{$ctrl.filetiummas}}</span></a>
+                                <a ng-href="{{$ctrl.uploadsUri+$ctrl.worker.w.Id + '/' + $ctrl.filetiummas}}" target="_blank"><span style="width:20px;overflow:hidden">{{$ctrl.filetiummas}}</span></a>
 
 
                             </div>

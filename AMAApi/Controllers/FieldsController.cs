@@ -68,7 +68,7 @@ namespace FarmsApi.Services
                 {
 
 
-                    var Results = (from f2g in Context.Fields2Groups.Where(x => x.FarmId == farmid).DefaultIfEmpty()
+                    var Results = (from f2g in Context.Fields2Groups.Where(x => x.FarmId == farmid && x.StatusId==1).DefaultIfEmpty()
                                    from f in Context.Fields.Where(x => x.Id == f2g.FieldsId).DefaultIfEmpty()
 
 
@@ -113,7 +113,7 @@ namespace FarmsApi.Services
                         Context.Fields.Add(f);
                         Context.SaveChanges();
 
-                        List<Fields> FieldsList = Context.Fields.Where(x => (x.FarmId == farmid || x.FarmId == null) && x.StatusId == 1).ToList();
+                        List<Fields> FieldsList = Context.Fields.Where(x => (x.FarmId == farmid || x.FarmId == null) && x.StatusId == 1).OrderBy(x => x.FarmId).ToList();
                         return Ok(FieldsList);
 
 
@@ -141,10 +141,12 @@ namespace FarmsApi.Services
                     string FieldId = objs["Obj"].ToString();
 
                     Fields FieldsObj = Context.Fields.Where(x => x.Id.ToString() == FieldId).FirstOrDefault();
-                    Context.Fields.Remove(FieldsObj);
+                    FieldsObj.StatusId = 0;
+                    Context.Entry(FieldsObj).State = System.Data.Entity.EntityState.Modified;
+                    //Context.Fields.Remove(FieldsObj);
                     Context.SaveChanges();
 
-                    List<Fields> FieldsList = Context.Fields.Where(x => (x.FarmId == farmid || x.FarmId == null) && x.StatusId == 1).ToList();
+                    List<Fields> FieldsList = Context.Fields.Where(x => (x.FarmId == farmid || x.FarmId == null) && x.StatusId == 1).OrderBy(x => x.FarmId).ToList();
                     return Ok(FieldsList);
 
                 }
@@ -204,7 +206,10 @@ namespace FarmsApi.Services
                     string FieldsGroupsId = objs["Obj"].ToString();
 
                     FieldsGroups FieldsGroupsObj = Context.FieldsGroups.Where(x => x.Id.ToString() == FieldsGroupsId).FirstOrDefault();
-                    Context.FieldsGroups.Remove(FieldsGroupsObj);
+
+                    FieldsGroupsObj.StatusId = 0;
+                    Context.Entry(FieldsGroupsObj).State = System.Data.Entity.EntityState.Modified;
+                    //Context.FieldsGroups.Remove(FieldsGroupsObj);
                     Context.SaveChanges();
 
                     List<FieldsGroups> FieldsGroupsList = Context.FieldsGroups.Where(x => x.FarmId == farmid && x.StatusId == 1).ToList();
@@ -262,7 +267,7 @@ namespace FarmsApi.Services
                     f2group.FarmId = farmid;
                     f2group.FieldsId = f2g.FieldsId;
                     f2group.FieldsDataTypesId = 1;
-
+                    f2group.StatusId = 1;
 
                     if (Fields2GroupsList.Count > 0)
                         f2group.Seq = Fields2GroupsList[0].Seq + 1;
@@ -288,7 +293,9 @@ namespace FarmsApi.Services
                     string Fields2GroupsId = objs["Obj"].ToString();
 
                     Fields2Groups Fields2GroupsObj = Context.Fields2Groups.Where(x => x.Id.ToString() == Fields2GroupsId).FirstOrDefault();
-                    Context.Fields2Groups.Remove(Fields2GroupsObj);
+                    Fields2GroupsObj.StatusId = 0;
+                    Context.Entry(Fields2GroupsObj).State = System.Data.Entity.EntityState.Modified;
+                    //Context.Fields2Groups.Remove(Fields2GroupsObj);
                     Context.SaveChanges();
 
                     //מחזירים את הזה שלנו החדש
