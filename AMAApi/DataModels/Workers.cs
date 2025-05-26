@@ -34,6 +34,9 @@ namespace FarmsApi.DataModels
         public string Mikud { get; set; }
         public string Email { get; set; }
         public string Gender { get; set; }
+
+        public int StatusId { get; set; }
+        
         //public string ToshavIsrael { get; set; }
         //public string Kibutz { get; set; }
 

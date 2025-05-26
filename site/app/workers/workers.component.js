@@ -280,40 +280,50 @@
 
         function _deleteAll() {
 
-            if (confirm('האם למחוק את כל העובדים המסומנים?')) {
+          //if (confirm('האם למחוק את כל העובדים המסומנים?')) {
+               var selected = this.workers.filter(x => x.IsSelected);
+
+               
+
+                if (selected.length>0)
+                var confirmBox = alertMessage("האם למחוק את כל העובדים המסומנים?", 4);
+                confirmBox.click(function () {
 
 
-                var selected = this.workers.filter(x => x.IsSelected);
+                   
 
-                for (var i in selected) {
-                    var ctrl = this;
-                    usersService.deleteWorker(selected[i].Id, true).then(function (res) {
-
-
-                        ctrl.workers = res;
-
-                    });
-
-                }
+                    for (var i in selected) {
+                        var ctrl = this;
+                        usersService.deleteWorker(selected[i].Id, true).then(function (res) {
 
 
-            }
+                            ctrl.workers = res;
+
+                        });
+
+                    }
+
+
+                });
 
         }
 
         function _delete(workerid) {
-            if (confirm('האם למחוק את העובד?')) {
 
-                var ctrl = this;
+            var ctrl = this;
+            var confirmBox = alertMessage("האם למחוק את העובד?", 4);
+            confirmBox.click(function () {
+               
                 usersService.deleteWorker(workerid, true).then(function (res) {
 
 
                     ctrl.workers = res;
-                    // $state.go('workers');
-                    //ctrl.user.Deleted = true;
-                    //$state.go('students');
+                 
                 });
-            }
+
+            })
+
+          
         }
 
         function _sendSMS() {
@@ -322,7 +332,7 @@
             var ctrl = this;
 
 
-           
+
 
             //var selected = this.workers.filter(x => x.IsSelected && (x.IsValid || this.farmStyle != 1));
             var selected = this.workers.filter(x => x.IsSelected);
@@ -335,12 +345,9 @@
                 selected[i].IsSelected = true;
             }
 
-            if (selected.length > 0)
-                if (confirm('האם לשלוח SMS לכל העובדים המסומנים?')) {
-
-                    
-                    //let result = selected.map(({ w }) => w);
-
+            if (selected.length > 0) {
+                var confirmBox = alertMessage("האם לשלוח SMS לכל העובדים המסומנים?", 4);
+                confirmBox.click(function () {
                     usersService.sendSMS(selected, 1).then(function (res) {
 
 
@@ -348,11 +355,10 @@
                         ctrl.checkAllc = false;
                         ctrl.checkAll();
                     });
+                });
+            }
 
 
-
-
-                }
 
         }
     }

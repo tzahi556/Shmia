@@ -418,14 +418,14 @@ namespace FarmsApi.Services
 
                   
 
-                    var WorkersList = (from w1 in Context.Workers.Where(x => x.FarmId == CurrentFarmId).DefaultIfEmpty()
+                    var WorkersList = (from w1 in Context.Workers.Where(x => x.FarmId == CurrentFarmId && x.StatusId==1 && (!string.IsNullOrEmpty(x.FirstName.Trim()) || !string.IsNullOrEmpty(x.LastName.Trim()) || !string.IsNullOrEmpty(x.Taz.Trim()))).DefaultIfEmpty()
                                        from w1011 in Context.Workers101.Where(x => x.IsNew == isnew && x.WorkersId == w1.Id && x.UserId==CurrentUserId).DefaultIfEmpty()
                                        from u in Context.Users.Where(x => x.Id == w1011.UserId).DefaultIfEmpty()
                                        select new WorkersWith101
                                        {
                                            w=w1,
                                            w101 = w1011,
-                                           ManagerName = u.FirstName + " " + u.LastName
+                                           ManagerName = (u != null) ? (u.FirstName + " " + u.LastName) : null
 
                                        }).OrderByDescending(x => x.w101.DateRigster).ToList();
 
@@ -433,16 +433,16 @@ namespace FarmsApi.Services
 
                     //.Select(x => new WorkersThin{Id =x.Id, x.FirstName,x.LastName,x.ManagerName,x.Status,x.PhoneSelular,x.DateRigster,x.IsSendSMS}).ToList();
 
-                    return WorkersList;
+                    return WorkersList.Where(x => x.w != null).ToList();
                 }
                 else
                 {
-                   
+
 
 
                     //var WorkersListToRemove = Context.Workers.Where(x => x.IsNew == isnew && x.UserManager.Farm_Id == CurrentFarmId && (string.IsNullOrEmpty(x.FirstName) && string.IsNullOrEmpty(x.LastName) && string.IsNullOrEmpty(x.Taz))).ToList();
 
-                   
+
 
                     //foreach (var item in WorkersListToRemove)
                     //{
@@ -467,7 +467,7 @@ namespace FarmsApi.Services
 
 
 
-                    var WorkersList = (from w1 in Context.Workers.Where(x => x.FarmId == CurrentFarmId && (!string.IsNullOrEmpty(x.FirstName.Trim()) || !string.IsNullOrEmpty(x.LastName.Trim()) || !string.IsNullOrEmpty(x.Taz.Trim()))).DefaultIfEmpty()
+                    var WorkersList = (from w1 in Context.Workers.Where(x => x.FarmId == CurrentFarmId && x.StatusId == 1 && (!string.IsNullOrEmpty(x.FirstName.Trim()) || !string.IsNullOrEmpty(x.LastName.Trim()) || !string.IsNullOrEmpty(x.Taz.Trim()))).DefaultIfEmpty()
                                        from w1011 in Context.Workers101.Where(x => x.IsNew == isnew && x.WorkersId == w1.Id).DefaultIfEmpty()
                                        from u in Context.Users.Where(x => x.Id == w1011.UserId).DefaultIfEmpty()
 
@@ -475,12 +475,12 @@ namespace FarmsApi.Services
                                        {
                                            w = w1,
                                            w101 = w1011,
-                                           ManagerName = u.FirstName + " " + u.LastName
+                                           ManagerName = (u != null) ? (u.FirstName + " " + u.LastName) : null
 
                                        }).OrderByDescending(x => x.w101.DateRigster).ToList();
 
 
-                    return WorkersList;
+                    return WorkersList.Where(x=>x.w!=null).ToList();
 
                     //return Context.Workers.Include(x => x.UserManager).Where(x => x.IsNew == isnew && x.UserManager.Farm_Id == CurrentFarmId && (!string.IsNullOrEmpty(x.FirstName.Trim()) || !string.IsNullOrEmpty(x.LastName.Trim()) || !string.IsNullOrEmpty(x.Taz.Trim()))).OrderByDescending(x => x.DateRigster).ToList();
 
@@ -528,6 +528,7 @@ namespace FarmsApi.Services
                         //newWork.IsNew = true;
                         //newWork.DateRigster = DateTime.Now;
                         newWork.FarmId = user.Farm_Id;
+                        newWork.StatusId = 1;
                         Context.Workers.Add(newWork);
                         Context.SaveChanges();
                         id = newWork.Id;
@@ -537,6 +538,7 @@ namespace FarmsApi.Services
                         W101.IsNew = true;
                         W101.DateRigster = DateTime.Now;
                         W101.WorkersId = id;
+                        W101.UniqNumber = id.ToString();
                         //newWork.FarmId = user.Farm_Id;
                         Context.Workers101.Add(W101);
                         Context.SaveChanges();
@@ -662,13 +664,13 @@ namespace FarmsApi.Services
                     if (workersWith101.w101.IsNew)
                     {
                         if (type == 2) AddToLogDB("", "", " יצירת פדפ לעובדת חדשה  " + workersWith101.w.Id, null, "", workersWith101.w.Id);
-                        //pa.CreatePDF(w);
+                        pa.CreatePDF(workersWith101);
                     }
 
                     else
                     {
                         if (type == 2) AddToLogDB("", "", " יצירת פדפ לעובדת קיים  " + workersWith101.w.Id, null, "", workersWith101.w.Id);
-                        //pa.CreatePDFOnly101(w);
+                        pa.CreatePDFOnly101(workersWith101);
                     }
                 }
 

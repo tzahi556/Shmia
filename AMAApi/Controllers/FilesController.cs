@@ -59,37 +59,37 @@ namespace FarmsApi.Controllers
 
             if (folder.Contains("taz_"))
             {
-                string credential_path = tempRoot + "CrediJson/cerdi.json";   //HttpContext.Current.Server.MapPath("~/Uploads/CrediJson/cerdi.json");
-                //// יצירת סרביס אקאונט ואז יצירת מפתח ולהוריד את הגייסון
-                /// כשלא עובד להלן הסבר עם לינק פשוט ליצור אחד חדש
-                ///https://stackoverflow.com/questions/72198894/how-to-download-the-default-service-account-json-key
-                System.Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", credential_path);
+                //string credential_path = tempRoot + "CrediJson/cerdi.json";   //HttpContext.Current.Server.MapPath("~/Uploads/CrediJson/cerdi.json");
+                ////// יצירת סרביס אקאונט ואז יצירת מפתח ולהוריד את הגייסון
+                ///// כשלא עובד להלן הסבר עם לינק פשוט ליצור אחד חדש
+                /////https://stackoverflow.com/questions/72198894/how-to-download-the-default-service-account-json-key
+                //System.Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", credential_path);
 
 
                 bool IsImageTazOk = false;
+                IsImageTazOk = true;
+                //for (int i = 0; i < file.FileData.Count; i++)
+                //{
+                //    var source = file.FileData[i].LocalFileName;
 
-                for (int i = 0; i < file.FileData.Count; i++)
-                {
-                    var source = file.FileData[i].LocalFileName;
+                //    var client = ImageAnnotatorClient.Create();
+                //    var image = Image.FromFile(source); //FromUri("https://ofekmanage.com/api/uploads/5397/%D7%9E%D7%99%D7%A8%D7%91%20%D7%9E%D7%98%D7%A8%D7%99%20%D7%AA.%D7%96.jpg");
+                //    var labels = client.DetectText(image);
 
-                    var client = ImageAnnotatorClient.Create();
-                    var image = Image.FromFile(source); //FromUri("https://ofekmanage.com/api/uploads/5397/%D7%9E%D7%99%D7%A8%D7%91%20%D7%9E%D7%98%D7%A8%D7%99%20%D7%AA.%D7%96.jpg");
-                    var labels = client.DetectText(image);
+                //    string Taz = folder.Replace("taz_", "");
 
-                    string Taz = folder.Replace("taz_", "");
-
-                    if (string.IsNullOrEmpty(Taz) || Taz == "null") return Ok("NoTaz");
+                //    if (string.IsNullOrEmpty(Taz) || Taz == "null") return Ok("NoTaz");
 
 
 
-                    var LabelContainsTaz = labels.Where(x => x.Description.Length >= 7 && Taz.Contains(x.Description)).ToList();
+                //    var LabelContainsTaz = labels.Where(x => x.Description.Length >= 7 && Taz.Contains(x.Description)).ToList();
 
-                    if (LabelContainsTaz.Count > 0)
-                    {
-                        IsImageTazOk = true;
-                    }
+                //    if (LabelContainsTaz.Count > 0)
+                //    {
+                //        IsImageTazOk = true;
+                //    }
 
-                }
+                //}
 
                 if (!IsImageTazOk)
                 {

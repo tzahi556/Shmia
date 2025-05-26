@@ -23,6 +23,22 @@ namespace FarmsApi.DataModels
         }
 
 
+        public static int ConvertToInt(string value)
+        {
+
+            int myInt;
+
+            if (Int32.TryParse(value, out myInt))
+            {
+                return myInt;
+            }
+
+            return 0;
+
+
+        }
+
+
 
     }
 }

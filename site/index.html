@@ -288,6 +288,10 @@
         var CurrentHeight;
         function CallEditPdfJs(elementId, url, width, height) {
             elemId = elementId;
+
+
+            //$("#canvasContainer div").not('#' + elemId).remove();
+
             CurrentWidth = width;
             CurrentHeight = height;
             var url = url;
@@ -337,7 +341,7 @@
 
 
             // for clean all pages
-            //$("#canvasContainer div").not('#' + elemId).remove();
+         
 
 
             //var scale = 1.5;
@@ -404,7 +408,7 @@
         function convertPixelsToPdfCoords(xPixel, yPixel, sssss) {
 
 
-            debugger
+         
             // var scale = 1;
             var viewport = CurrentPDFPage.getViewport({ scale: CurrentScale });
 

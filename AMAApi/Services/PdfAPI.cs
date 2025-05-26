@@ -21,6 +21,7 @@ using System.Text;
 using System.Web;
 using System.Web.Hosting;
 using System.Web.UI.WebControls;
+using static System.Net.Mime.MediaTypeNames;
 using Image = iTextSharp.text.Image;
 
 namespace FarmsApi.Services
@@ -42,12 +43,33 @@ namespace FarmsApi.Services
         }
 
 
-        public int CreateNewCompanyPDF(int FarmId)
+        public string CreateNewCompanyPDF(int FarmId, WorkersWith101 workersWith101 = null)
         {
 
             using (var Context = new Context())
             {
 
+
+                var BaseLink = System.Web.HttpContext.Current.Server.MapPath("~/Uploads/Companies/" + FarmId.ToString() + "/PDFS/");
+                var BaseLinkSite = System.Web.HttpContext.Current.Server.MapPath("~/Uploads/Companies/" + FarmId.ToString() + "/PDFSAllTemplate/");
+
+                if (!Directory.Exists(BaseLinkSite))
+                {
+                    Directory.CreateDirectory(BaseLinkSite);
+                }
+
+                System.IO.DirectoryInfo di = new DirectoryInfo(BaseLinkSite);
+
+                foreach (FileInfo file in di.GetFiles())
+                {
+
+                    try
+                    {
+                       
+                        file.Delete();
+                    }
+                    catch { }
+                }
 
                 var FarmPDFFilesList = Context.FarmPDFFiles.Where(x => x.FarmId == FarmId && x.StatusId == 1).OrderBy(x => x.Seq).ToList();
 
@@ -58,21 +80,14 @@ namespace FarmsApi.Services
 
                     Counter++;
 
-                    if (!FarmPDFFile.Is101) continue;
+                    // if (!FarmPDFFile.Is101) continue;
 
 
 
-                    Workers w = new Workers();
+                    // WorkersWith101 workersWith101 = new WorkersWith101();
 
                     Document document = new Document();
 
-                    var BaseLink = System.Web.HttpContext.Current.Server.MapPath("~/Uploads/Companies/" + FarmId.ToString() + "/PDFS/");
-                    var BaseLinkSite = System.Web.HttpContext.Current.Server.MapPath("~/Uploads/Companies/" + FarmId.ToString() + "/PDFSAllTemplate/");
-                   
-                    if (!Directory.Exists(BaseLinkSite))
-                    {
-                        Directory.CreateDirectory(BaseLinkSite);
-                    }
 
 
                     // var existingFile = HttpContext.Current.Server.MapPath("~/Uploads/Companies/" + FarmId.ToString() + "/PDF/" + FarmPDFFile.FileName);
@@ -88,11 +103,11 @@ namespace FarmsApi.Services
 
 
 
-                        // שם אותו זמני 
+                    // שם אותו זמני 
                     string newFile = System.IO.Path.Combine(BaseLinkSite, "PDFAllTemplate.pdf");
 
                     // שם אותו קבוע עם נתונים 
-                    string newFileDestination = System.IO.Path.Combine(BaseLinkSite, "PDFAllTemplateEnd_"+Counter+".pdf");
+                    string newFileDestination = System.IO.Path.Combine(BaseLinkSite, "PDFAllTemplateEnd_" + Counter + ".pdf");
 
                     PdfReader reader = new PdfReader(existingFile);
 
@@ -109,14 +124,21 @@ namespace FarmsApi.Services
                             {
                                 PdfContentByte cb = stamper.GetOverContent(m);
 
-                                var TestList = Context.Testpdfs.Where(x => x.PageNumber == m+1).ToList();
-                                if (w.Id != 0)
-                                    TestList = GetDataFromObject(w, TestList, Context);
+                                List<Fields2PDF_101> Fields2PDF_101List = GetFields2PDF_101(FarmPDFFile, m);// Context.Fields2PDF_101.Where(x => x.PageNumber == m).ToList();
+
+
+                                //if (workersWith101 != null)
+                                //    Fields2PDF_101List = GetDataFromObject101(workersWith101, Fields2PDF_101List, Context);
 
                                 BaseFont bf = BaseFont.CreateFont("c:/windows/fonts/arial.ttf", BaseFont.IDENTITY_H, true);
-                                foreach (var item in TestList)
+                                foreach (var item in Fields2PDF_101List)
                                 {
 
+
+                                    float llx = (float)item.llx;
+                                    float lly = (float)item.lly;
+                                    float urx = (float)item.urx;
+                                    float ury = (float)item.ury;
 
                                     if (item.Comment == "SignutureAmuta")
                                     {
@@ -133,7 +155,7 @@ namespace FarmsApi.Services
 
                                         ColumnText ct = new ColumnText(cb);
 
-                                        ct.SetSimpleColumn(item.llx, item.lly, item.urx, item.ury);
+                                        ct.SetSimpleColumn(llx, lly, urx, ury);
 
                                         Font font = new Font(bf, float.Parse(item.Font.ToString()));
 
@@ -168,7 +190,7 @@ namespace FarmsApi.Services
 
                                         ColumnText ct = new ColumnText(cb);
 
-                                        ct.SetSimpleColumn(item.llx, item.lly, item.urx, item.ury);
+                                        ct.SetSimpleColumn(llx, lly, urx, ury);
 
                                         Font font = new Font(bf, float.Parse(item.Font.ToString()));
 
@@ -190,7 +212,7 @@ namespace FarmsApi.Services
                                     {
                                         ColumnText ct = new ColumnText(cb);
 
-                                        ct.SetSimpleColumn(item.llx, item.lly, item.urx, item.ury);
+                                        ct.SetSimpleColumn(llx, lly, urx, ury);
 
                                         Font font = new Font(bf, float.Parse(item.Font.ToString()));
 
@@ -210,7 +232,7 @@ namespace FarmsApi.Services
                                         {
                                             ColumnText ct = new ColumnText(cb);
 
-                                            ct.SetSimpleColumn(item.llx, item.lly, item.urx - (i * Space), item.ury);
+                                            ct.SetSimpleColumn(llx,lly, urx - (i * Space), ury);
 
                                             Font font = new Font(bf, float.Parse(item.Font.ToString()));
 
@@ -250,22 +272,129 @@ namespace FarmsApi.Services
 
                 }
 
+
+
+                string sourceDir = BaseLinkSite;
+                string targetPDF = BaseLinkSite + "AllPdfTemp.pdf";
+               // string OutputFileDestination = BaseLinkSite + "AllPdf.pdf";
+
+                using (FileStream stream = new FileStream(targetPDF, FileMode.Create))
+                {
+                    Document pdfDoc = new Document();
+                    PdfCopy pdf = new PdfCopy(pdfDoc, stream);
+                    pdfDoc.Open();
+                    var files = Directory.GetFiles(sourceDir);
+                    //Console.WriteLine("Merging files count: " + files.Length);
+                    int i = 1;
+
+                    foreach (string file in files)
+                    {
+                        if (file.ToLower().Contains(".pdf") && !file.Contains("AllPdfTemp"))
+                        {
+                            PdfReader pdfFile = new PdfReader(file);
+                            pdf.AddDocument(pdfFile);
+                            pdfFile.Dispose();
+
+                            File.Delete(file);
+
+                        }
+
+                        i++;
+                    }
+
+
+                    if (pdfDoc != null)
+                    {
+
+                        pdfDoc.Close();
+                        pdfDoc.Dispose();
+                    }
+
+
+                    //File.Copy(targetPDF, OutputFileDestination, true);
+
+                    //if (File.Exists(targetPDF))
+                    //{
+                    //    File.Delete(targetPDF);
+                    //}
+
+
+
+
+                }
+
+              //  return OutputFileDestination;
             }
 
 
-         
+      
 
 
-           
 
-            return 1;
+
+            return "1";
         }
 
+        private List<Fields2PDF_101> GetFields2PDF_101(FarmPDFFiles FarmPDFFiles, int m)
+        {
+            using (var Context = new Context())
+            {
 
 
 
+                List<Fields2PDF_101> Fields2PDF_101List = new List<Fields2PDF_101>();
+                if (FarmPDFFiles.Is101)
+                {
 
-        public int CreatePDF(Workers w)
+                    Fields2PDF_101List = Context.Fields2PDF_101.Where(x => x.PageNumber == m).ToList();
+
+                    
+
+                    return Fields2PDF_101List;
+                }
+                    
+                else
+                {
+                    var Results = (from f2p in Context.Fields2PDF.Where(x => x.FarmPDFFilesId == FarmPDFFiles.Id && x.PageNumber == m).DefaultIfEmpty()
+                                   from f2g in Context.Fields2Groups.Where(x => x.Id == f2p.Fields2GroupsId).DefaultIfEmpty()
+                                   from f in Context.Fields.Where(x => x.Id == f2g.FieldsId || x.Id == f2p.FieldsId).DefaultIfEmpty()
+
+
+                                   select new
+                                   {
+                                       f2p,
+                                       f
+
+                                   }).Where(x=>x.f2p!=null).ToList();
+
+
+                  // List<Fields2PDF_101> Fields2PDF_101List=new List<Fields2PDF_101>();  
+
+                    foreach (var item in Results)
+                    {
+                        Fields2PDF_101 fields2PDF_101= new Fields2PDF_101();
+
+                        fields2PDF_101.Space = 1;
+                        fields2PDF_101.PageNumber = m;
+                        fields2PDF_101.Font = 11;
+                        fields2PDF_101.Word = item.f.Name;
+                        fields2PDF_101.Comment = item.f.Name;
+                        fields2PDF_101.llx = 0;
+                        fields2PDF_101.urx = item.f2p.PdfWidthX;
+                        fields2PDF_101.lly = item.f2p.PdfHeightY-2;
+                        fields2PDF_101.ury = 0;
+                        Fields2PDF_101List.Add(fields2PDF_101);
+
+                    }
+
+                    return Fields2PDF_101List;
+
+                }
+            }
+            
+        }
+
+        public int CreatePDF(WorkersWith101 workersWith101)
         {
 
 
@@ -274,7 +403,7 @@ namespace FarmsApi.Services
             Document document = new Document();
 
             var BaseLink = System.Web.HttpContext.Current.Server.MapPath("~/App_Data/");
-            var BaseLinkSite = System.Web.HttpContext.Current.Server.MapPath("~/Uploads/" + w.Id);
+            var BaseLinkSite = System.Web.HttpContext.Current.Server.MapPath("~/Uploads/" + workersWith101.w.Id);
 
             if (!Directory.Exists(BaseLinkSite))
             {
@@ -309,8 +438,8 @@ namespace FarmsApi.Services
                             PdfContentByte cb = stamper.GetOverContent(m);
                             var TestList = Context.Testpdfs.Where(x => x.PageNumber == m).ToList();
 
-                           
-                            TestList = GetDataFromObject(w, TestList, Context);
+
+                            TestList = GetDataFromObject(workersWith101, TestList, Context);
 
                             BaseFont bf = BaseFont.CreateFont("c:/windows/fonts/arial.ttf", BaseFont.IDENTITY_H, true);
                             foreach (var item in TestList)
@@ -449,7 +578,7 @@ namespace FarmsApi.Services
 
 
             //מעתיק את כל המסמכים הפידףים המצורפים
-            var BaseLinkSite2 = System.Web.HttpContext.Current.Server.MapPath("~/Uploads/" + w.Id);
+            var BaseLinkSite2 = System.Web.HttpContext.Current.Server.MapPath("~/Uploads/" + workersWith101.w.Id);
             string sourceDir = BaseLinkSite2;
             string OutputFile = BaseLinkSite2 + "/OfekAllPdfTemp.pdf";
             string OutputFileDestination = BaseLinkSite2 + "/OfekAllPdf.pdf";
@@ -462,7 +591,7 @@ namespace FarmsApi.Services
 
         }
 
-        public int CreatePDFOnly101(Workers w)
+        public int CreatePDFOnly101(WorkersWith101 workersWith101)
         {
 
 
@@ -474,7 +603,7 @@ namespace FarmsApi.Services
 
 
             var BaseLink = System.Web.HttpContext.Current.Server.MapPath("~/App_Data/");
-            var BaseLinkSite = System.Web.HttpContext.Current.Server.MapPath("~/Uploads/" + w.Id);
+            var BaseLinkSite = System.Web.HttpContext.Current.Server.MapPath("~/Uploads/" + workersWith101.w.Id);
 
             if (!Directory.Exists(BaseLinkSite))
             {
@@ -488,11 +617,11 @@ namespace FarmsApi.Services
             string newFile = System.IO.Path.Combine(BaseLinkSite, "OfekAllTemp.pdf");
 
             // שם אותו קבוע עם נתונים 
-            // string newFileDestination = System.IO.Path.Combine(BaseLinkSite, w.UniqNumber + ".pdf");
-            string newFileDestination = "";
+            string newFileDestination = System.IO.Path.Combine(BaseLinkSite, workersWith101.w101.UniqNumber + ".pdf");
+            // string newFileDestination = "";
 
 
-             PdfReader reader = new PdfReader(existingFile);
+            PdfReader reader = new PdfReader(existingFile);
 
 
             //Create a new stream for our output file (this could be a MemoryStream, too)
@@ -510,7 +639,7 @@ namespace FarmsApi.Services
                             PdfContentByte cb = stamper.GetOverContent(m);
                             var TestList = Context.Testpdfs.Where(x => x.PageNumber == m + 1).ToList();
 
-                            TestList = GetDataFromObject(w, TestList, Context);
+                            TestList = GetDataFromObject(workersWith101, TestList, Context);
 
                             BaseFont bf = BaseFont.CreateFont("c:/windows/fonts/arial.ttf", BaseFont.IDENTITY_H, true);
                             foreach (var item in TestList)
@@ -668,11 +797,13 @@ namespace FarmsApi.Services
             return 1;
 
         }
-        private List<Testpdfs> GetDataFromObject(Workers w, List<Testpdfs> TestLists, Context Context)
-        {
-            List<Testpdfs> tp = new List<Testpdfs>();
 
-            foreach (var item in TestLists)
+
+        private List<Fields2PDF_101> GetDataFromObject101(WorkersWith101 workersWith101, List<Fields2PDF_101> Fields2PDF_101Lists, Context Context)
+        {
+            List<Fields2PDF_101> tp = new List<Fields2PDF_101>();
+
+            foreach (var item in Fields2PDF_101Lists)
             {
                 var PropertyName = item.Comment;
                 var PropertyValue = item.Value;
@@ -698,9 +829,15 @@ namespace FarmsApi.Services
 
 
 
-                var res = w[PropertyName];
+                var res = workersWith101.w[PropertyName];
 
-                //  if (res == null) continue;
+                if (res == null)
+                {
+
+                    res = workersWith101.w101[PropertyName];
+
+
+                }
 
 
 
@@ -733,7 +870,238 @@ namespace FarmsApi.Services
                 else if (PropertyValue == "child")
                 {
 
-                    var WorkerChilds = Context.WorkerChilds.Where(x => x.WorkerId == w.Id).ToList();
+                    var WorkerChilds = Context.WorkerChilds.Where(x => x.WorkerId == workersWith101.w.Id).ToList();
+
+                    for (int i = 0; i < WorkerChilds.Count; i++)
+                    {
+                        var lly = item.lly - (i * 22);
+
+                        var resChild = WorkerChilds[i][PropertyName];
+
+
+
+                        if (PropertyName == "BirthDate" && resChild != null)
+                        {
+                            resChild = Convert.ToDateTime(resChild).ToString("ddMMyyyy");
+
+                        }
+
+
+
+
+                        Fields2PDF_101 newChild = new Fields2PDF_101();
+
+                        newChild.Word = item.Word;
+                        newChild.Value = item.Value;
+                        newChild.ury = item.ury;
+                        newChild.urx = item.urx;
+                        newChild.Space = item.Space;
+                        newChild.PageNumber = item.Space;
+                        newChild.lly = lly;
+                        newChild.llx = item.llx;
+                        newChild.Id = item.Id;
+                        newChild.Font = item.Font;
+                        newChild.Comment = item.Comment;
+
+
+
+
+
+                        if (item.Word.Contains("x") && resChild.ToString() == "True")
+                            newChild.Word = "x";
+                        else
+                          if (resChild.ToString() == "False") { newChild.Word = ""; } else if (resChild != null) { newChild.Word = resChild.ToString(); }
+
+
+
+                        tp.Add(newChild);
+
+
+
+
+                    }
+
+
+
+                    // item.Word = Convert.ToDateTime(res).ToString("ddMMyyyy");
+                    //  tp.Add(item);
+
+                }
+
+
+
+
+
+
+                else if (res != null && PropertyName == "TiumMasAnotherMaskuretSug")
+                {
+
+                    item.Word = GetSugAnother(res.ToString());
+                    tp.Add(item);
+
+                }
+
+                else if (PropertyName == "CurrentDate")
+                {
+
+                    item.Word = DateTime.Now.ToString("dd.MM.yyyy");
+                    tp.Add(item);
+
+                }
+
+
+                else if (PropertyName == "MavidPrati")
+                {
+
+                    item.Word = MavidPrati;
+                    tp.Add(item);
+
+                }
+
+
+                else if (PropertyName == "MavidCtovet")
+                {
+
+                    item.Word = MavidCtovet;
+                    tp.Add(item);
+
+                }
+
+                else if (PropertyName == "MavidPhone")
+                {
+
+                    item.Word = MavidPhone;
+                    tp.Add(item);
+
+                }
+
+                else if (PropertyName == "MavidNikuyim")
+                {
+
+                    item.Word = MavidNikuyim;
+                    tp.Add(item);
+
+                }
+
+
+
+                else if (res != null && PropertyName == "Kupa")
+                {
+
+                    item.Word = GetKupaName(res.ToString());
+                    tp.Add(item);
+
+                }
+
+
+                else if (res != null && PropertyValue == "Date")
+                {
+                    item.Word = Convert.ToDateTime(res).ToString("ddMMyyyy");
+                    tp.Add(item);
+
+                }
+
+                else if (res != null && PropertyValue == "DateDot")
+                {
+                    item.Word = Convert.ToDateTime(res).ToString("dd.MM.yyyy");
+                    tp.Add(item);
+
+                }
+
+                else if (res != null && ((PropertyValue == null) || PropertyValue == res.ToString() || res.ToString() == "True") && res.ToString() != "False")
+                {
+                    if (item.Word.Contains("x"))
+                        item.Word = "x";
+                    else
+                        item.Word = res.ToString();
+
+                    tp.Add(item);
+                }
+            }
+
+
+            //foreach (var property in typeof(Workers).GetProperties())
+            //{
+
+            //    var res = w.GetType().GetProperty(property.Name).GetValue(w, null);
+
+            //}
+
+            return tp;
+        }
+
+        private List<Testpdfs> GetDataFromObject(WorkersWith101 workersWith101, List<Testpdfs> TestLists, Context Context)
+        {
+            List<Testpdfs> tp = new List<Testpdfs>();
+
+            foreach (var item in TestLists)
+            {
+                var PropertyName = item.Comment;
+                var PropertyValue = item.Value;
+
+                if (PropertyName == null) continue;
+
+
+                if (PropertyValue == "child2") continue;
+                if (PropertyValue == "radioInput") continue;
+                if (PropertyValue == "Signuture" || PropertyValue == "SignutureAmuta")
+                {
+
+                    tp.Add(item);
+                    continue;
+                }
+
+
+
+
+
+
+
+
+
+
+                var res = workersWith101.w[PropertyName];
+
+                if (res == null)
+                {
+
+                    res = workersWith101.w101[PropertyName];
+
+
+                }
+
+
+
+                if (PropertyValue == "1Brunch" && res != null)
+                {
+
+                    string[] resSplit = res.ToString().Split('-');
+
+                    item.Word = resSplit[0].Trim();
+                    tp.Add(item);
+
+                }
+
+
+
+                else if (PropertyValue == "2Brunch" && res != null)
+                {
+                    string[] resSplit = res.ToString().Split('-');
+
+                    if (resSplit.Length > 1)
+                        item.Word = resSplit[1].Trim();
+                    else
+                        item.Word = "";
+                    tp.Add(item);
+
+                }
+
+
+
+                else if (PropertyValue == "child")
+                {
+
+                    var WorkerChilds = Context.WorkerChilds.Where(x => x.WorkerId == workersWith101.w.Id).ToList();
 
                     for (int i = 0; i < WorkerChilds.Count; i++)
                     {

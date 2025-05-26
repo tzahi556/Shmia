@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace FarmsApi.DataModels
 {
@@ -124,6 +125,29 @@ namespace FarmsApi.DataModels
         public string SourceValue { get; set; }
 
     }
+
+    [Table("Fields2PDF_101")]
+    public class Fields2PDF_101
+    {
+        [Key]
+        public int Id { get; set; }
+        public double? llx { get; set; }
+        public double? lly { get; set; }
+        public double? urx { get; set; }
+        public double? ury { get; set; }
+        public int Space { get; set; }
+        public int? Font { get; set; }
+        public string Word { get; set; }
+        public string Comment { get; set; }
+
+        public string Value { get; set; }
+
+        public int PageNumber { get; set; }
+
+
+
+    }
+
 
 
 

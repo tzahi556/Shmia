@@ -38,6 +38,8 @@ namespace FarmsApi.DataModels
         public DbSet<Fields2Groups> Fields2Groups { get; set; }
         public DbSet<FieldsDDL> FieldsDDL { get; set; }
         public DbSet<Fields2PDF> Fields2PDF { get; set; }
+        public DbSet<Fields2PDF_101> Fields2PDF_101 { get; set; }
+        
 
         public DbSet<Fields2GroupsWorkerData> Fields2GroupsWorkerData { get; set; }
         

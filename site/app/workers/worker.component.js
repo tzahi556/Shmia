@@ -301,6 +301,7 @@
 
         function _uploadFile(file) {
 
+
            
             if (file == "NoTaz") {
 
@@ -670,41 +671,45 @@
         function _saveWorker(type) {
 
             var thisCtrl = this;
-           
-            try {
-                
-              
 
-                var IsInvalid = false;
+            var IsInvalid = false;
 
-                var obj = angular.copy(this.worker);
+            function setRightDate(obj) {
 
                 Object.keys(obj).forEach(function (key, index) {
 
                     if (key.indexOf("Date") != -1 && obj[key] && key != "DateRigster") {
 
-                       
-
                         var strDate = thisCtrl.changeDateFormat(obj[key]);
-                  
-
                         if (strDate)
                             obj[key] = strDate;
                         else {
-
                             IsInvalid = true;
-                           
                             return;
-                          
-                            
                         }
-
-                        
-
-
                     }
 
                 });
+
+
+            }
+
+
+           
+           
+            try {
+
+                
+
+              
+
+                var obj = this.worker.w; //angular.copy(this.worker.w);
+
+                setRightDate(obj);
+
+                var obj101 = this.worker.w101;//angular.copy(this.worker.w101);
+
+                setRightDate(obj101);
 
                 if (IsInvalid) {
 
@@ -717,11 +722,11 @@
 
                     if (this.scope.workerForm.$valid && this.tazfiles.length > 0) {
 
-                        obj["IsValid"] = true;
+                        obj101["IsValid"] = true;
 
 
                     } else {
-                        obj["IsValid"] = false;
+                        obj101["IsValid"] = false;
                          
                     }
 
@@ -729,15 +734,15 @@
 
                     var Signature = $scope.accept();
                     if (!Signature.isEmpty) {
-                        obj["ImgData"] = Signature.dataUrl;
+                        obj101["ImgData"] = Signature.dataUrl;
                     } else {
-                        obj["ImgData"] = "";
+                        obj101["ImgData"] = "";
 
                     }
 
                 
 
-                    usersService.updateWorker(obj, this.files, this.childs, type).then(function (worker) {
+                    usersService.updateWorker(this.worker, this.files, this.childs, type).then(function (worker) {
                         //  this.worker = worker;
                         SaveDynamicData(worker);
                         alertMessage('הנתונים נשמרו בהצלחה!');
@@ -760,9 +765,9 @@
                       
                         var Signature = $scope.accept();
                         if (!Signature.isEmpty) {
-                            obj["ImgData"] = Signature.dataUrl;
+                            obj101["ImgData"] = Signature.dataUrl;
                         } else {
-                            obj["ImgData"] = "";
+                            obj101["ImgData"] = "";
 
                         }
 
@@ -773,7 +778,7 @@
 
                        
 
-                        usersService.updateWorker(obj, this.files, this.childs, type).then(function (worker) {
+                        usersService.updateWorker(this.worker, this.files, this.childs, type).then(function (worker) {
 
 
 
@@ -802,18 +807,18 @@
 
                     var Signature = $scope.accept();
                     if (!Signature.isEmpty) {
-                        obj["ImgData"] = Signature.dataUrl;
+                        obj101["ImgData"] = Signature.dataUrl;
                     } else {
-                        obj["ImgData"] = "";
+                        obj101["ImgData"] = "";
 
                     }
 
 
 
-                    usersService.updateWorker(obj, this.files, this.childs, type).then(function (worker) {
+                    usersService.updateWorker(this.worker, this.files, this.childs, type).then(function (worker) {
                         SaveDynamicData(worker);
                        //$.unblockUI();
-                       $window.open(this.uploadsUri + "/" + this.worker.Id + "/OfekAllPdf.pdf", '_blank');
+                       $window.open(this.uploadsUri + "/" + this.worker.w.Id + "/OfekAllPdf.pdf", '_blank');
 
                     }.bind(this));
 

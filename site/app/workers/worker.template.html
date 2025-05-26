@@ -190,7 +190,7 @@
                                         <tbody>
                                             <tr ng-repeat="file in $ctrl.tazfiles">
                                                 <td>
-                                                    <a ng-href="{{$ctrl.uploadsUri+$ctrl.worker.Id + '/' + file.FileName}}" target="_blank"><span style="width:20px;overflow:hidden">{{file.FileName}}</span></a>
+                                                    <a ng-href="{{$ctrl.uploadsUri+$ctrl.worker.w.Id + '/' + file.FileName}}" target="_blank"><span style="width:20px;overflow:hidden">{{file.FileName}}</span></a>
                                                 </td>
                                                 <td><div class="btn btn-xs btn-default" ng-click="$ctrl.removeFile(file.FileName,1)">הסר/י</div></td>
                                             </tr>

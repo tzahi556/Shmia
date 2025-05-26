@@ -450,19 +450,11 @@ namespace FarmsApi.Services
 
 
                     PdfAPI pa = new PdfAPI();
-                    pa.CreateNewCompanyPDF(farmid);
-
-                    //var FarmPDFFilesList = Context.FarmPDFFiles.Where(x => x.FarmId == farmid && x.StatusId == 1).OrderBy(x => x.Seq).ToList();
-                    //foreach (var item in FarmPDFFilesList)
-                    //{
-                    //    var root = HttpContext.Current.Server.MapPath("~/Uploads/Companies/" + farmid.ToString() + "/PDF/" + item.FileName);
+                    string Link= pa.CreateNewCompanyPDF(farmid);
 
 
 
-                    //}
-
-
-
+                    return Ok(Link);
 
                 }
 

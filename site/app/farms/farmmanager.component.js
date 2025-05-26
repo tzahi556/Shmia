@@ -303,7 +303,9 @@
 
                         while (!CurrentScale && self.farmspdffiles.length>0) // define the condition as you like
                             await new Promise(resolve => setTimeout(resolve, 500));
-                       
+
+                         
+
                         AddParamsToPDF(field2pdf);
                        
                       
@@ -362,16 +364,18 @@
 
         $scope.setNewPdfGenerator = function () {
 
-            farmsService.actionFieldGroup(15, self.farm.Id, null).then(function (field2pdf) {
+            farmsService.actionFieldGroup(15, self.farm.Id, null).then(function (link) {
+              
+               
+               
+                (async () => {
 
-                //(async () => {
+                   // while (!CurrentScale && self.farmspdffiles.length > 0) // define the condition as you like
+                        await new Promise(resolve => setTimeout(resolve, 500));
+                   
+                    $("#objPdfEnd").attr('data', sharedValues.apiUrl + "/Uploads/Companies/" + self.farm.Id + "/PDFSAllTemplate/AllPdfTemp.pdf");
 
-                //    while (!CurrentScale && self.farmspdffiles.length > 0) // define the condition as you like
-                //        await new Promise(resolve => setTimeout(resolve, 500));
-                //    AddParamsToPDF(field2pdf);
-
-
-                //})();
+                })();
 
 
 
