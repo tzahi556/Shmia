@@ -261,6 +261,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="TODO.txt" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>

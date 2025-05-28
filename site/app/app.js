@@ -116,8 +116,8 @@
             url: '/worker/{id}/',
             views: {
                 'main': {
-                    template: '<worker screendata="$ctrl.screendata" users="$ctrl.users" worker="$ctrl.worker" files="$ctrl.files" childs="$ctrl.childs" cities="$ctrl.cities" banks="$ctrl.banks"  banksbrunchs="$ctrl.banksbrunchs" ></worker>',
-                    controller: function (worker, files, childs, cities, banks, banksbrunchs, users, screendata) {
+                    template: '<worker farm="$ctrl.farm" screendata="$ctrl.screendata" users="$ctrl.users" worker="$ctrl.worker" files="$ctrl.files" childs="$ctrl.childs" cities="$ctrl.cities" banks="$ctrl.banks"  banksbrunchs="$ctrl.banksbrunchs" ></worker>',
+                    controller: function (worker, files, childs, cities, banks, banksbrunchs, users, screendata,farm) {
                         this.worker = worker;
                         this.files = files;
                         this.childs = childs;
@@ -126,6 +126,7 @@
                         this.banksbrunchs = banksbrunchs;
                         this.users = users;
                         this.screendata = screendata;
+                        this.farm = farm;
 
                     },
                     controllerAs: '$ctrl',
@@ -164,13 +165,12 @@
                         screendata: function (farmsService, $stateParams) {
                            
                             return farmsService.getSetWorkerAndCompanyData(1,$stateParams.id,null);
+                        },
+
+                        farm: function (farmsService, $stateParams) {
+
+                            return farmsService.getSetWorkerAndCompanyData(3,$stateParams.id, null);
                         }
-
-
-
-
-
-
 
                     }
                 }

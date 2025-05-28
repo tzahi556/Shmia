@@ -80,7 +80,7 @@
                         <div class="col-md-3" ng-if="$ctrl.role!=null && $ctrl.role!='instructor'">
                             <div class="form-group">
                                 <label>מנהל אזור</label>
-                                <select class="form-control" ng-options="user.Id as user.FullName for user in $ctrl.users" ng-model="$ctrl.worker.UserId">
+                                <select class="form-control" ng-options="user.Id as user.FullName for user in $ctrl.users" ng-model="$ctrl.worker.w101.UserId">
                                     <!--<option value="">--בחר מנהל אזור --</option>-->
 
 
@@ -99,28 +99,28 @@
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label>שם</label>
-                                <input type="text" disabled class="form-control" ng-model="$ctrl.sharedValues.MavidPrati" />
+                                <input type="text" disabled class="form-control" ng-model="$ctrl.farm.Name" />
                             </div>
 
                         </div>
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label>כתובת</label>
-                                <input type="text" disabled class="form-control" ng-model="$ctrl.sharedValues.MavidCtovet" />
+                                <input type="text" disabled class="form-control" ng-model="$ctrl.farm.Address" />
                             </div>
 
                         </div>
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label>מס' טלפון</label>
-                                <input type="text" disabled class="form-control" ng-model="$ctrl.sharedValues.MavidPhone" />
+                                <input type="text" disabled class="form-control" ng-model="$ctrl.farm.OfficeNumber" />
                             </div>
 
                         </div>
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label>תיק ניכויים</label>
-                                <input type="text" disabled class="form-control" ng-model="$ctrl.sharedValues.MavidNikuyim" />
+                                <input type="text" disabled class="form-control" ng-model="$ctrl.farm.TikNikuim" />
                             </div>
 
                         </div>

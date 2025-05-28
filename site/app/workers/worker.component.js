@@ -15,7 +15,8 @@
             banks: '<',
             banksbrunchs: '<',
             users: '<',
-            screendata:'<'
+            screendata: '<',
+            farm: '<'
 
         }
     });
@@ -115,9 +116,10 @@
                 Object.keys(obj).forEach(function (key, index) {
 
                     if (key.indexOf("Date") != -1 && obj[key] && key != "DateRigster") {
-
+                        
                         obj[key] = new Date(moment(obj[key]).format("YYYY-MM-DD"));// .startOf('day').toDate();
 
+                       
                     }
 
 
@@ -138,7 +140,10 @@
 
 
                 if (this.screendata[i].f2g.FieldsDataTypesId == 3 && this.screendata[i].f2gwd.Value) {
+                    
                     this.screendata[i].f2gwd.Value = new Date(moment(this.screendata[i].f2gwd.Value).format("YYYY-MM-DD"));
+
+                    
                 }
 
             }
@@ -650,17 +655,26 @@
 
                 if (self.screendata[i].f2gwd) {
 
+                   
                     if (self.screendata[i].f2g.FieldsDataTypesId == 3 && self.screendata[i].f2gwd.Value)
                         self.screendata[i].f2gwd.Value = self.changeDateFormat(self.screendata[i].f2gwd.Value);
 
-                    self.screendata[i].f2gwd.WorkersId = worker.Id;
+                    self.screendata[i].f2gwd.WorkersId = worker.w.Id;
+
+
                     fields2GroupsWorkerDataList.push(self.screendata[i].f2gwd);
                 }
             }
 
-            farmsService.getSetWorkerAndCompanyData(2, self.worker.Id, fields2GroupsWorkerDataList).then(function (worker) {
 
-                //debugger
+            
+            farmsService.getSetWorkerAndCompanyData(2, self.worker.w.Id, fields2GroupsWorkerDataList).then(function (screendata) {
+
+               self.screendata = screendata;
+
+               self.init();
+
+               //debugger
                 //alertMessage('הנתונים נשssssמרו בהצלחה!');
 
             }.bind(self));
@@ -818,8 +832,8 @@
                     usersService.updateWorker(this.worker, this.files, this.childs, type).then(function (worker) {
                         SaveDynamicData(worker);
                        //$.unblockUI();
-                       $window.open(this.uploadsUri + "/" + this.worker.w.Id + "/OfekAllPdf.pdf", '_blank');
-
+                       // $window.open(this.uploadsUri + "/" + this.worker.w.Id + "/OfekAllPdf.pdf", '_blank');
+                        $window.open(this.uploadsUri + "Workers/2/AllPdfTemp.pdf", '_blank');
                     }.bind(this));
 
                 }

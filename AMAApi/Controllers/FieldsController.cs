@@ -484,22 +484,27 @@ namespace FarmsApi.Services
 
             using (var Context = new Context())
             {
+
+
+
                 // שליפה של הנתונים
                 if (type == 1)
                 {
 
                     var Worker = Context.Workers.Where(x => x.Id == WorkerId).FirstOrDefault();
 
-
-
-
                     var CurrentFarmId = (Worker != null) ? Worker.FarmId : UsersService.GetCurrentUser().Farm_Id;
 
 
-                    var Results = (from fields2Groups in Context.Fields2Groups.Where(x => x.FarmId == CurrentFarmId)
-                                   from fieldsGroups in Context.FieldsGroups.Where(x => x.Id == fields2Groups.FieldsGroupsId)
 
-                                   from fields in Context.Fields.Where(x => x.Id == fields2Groups.FieldsId).DefaultIfEmpty()
+
+
+
+
+                    var Results = (from fields2Groups in Context.Fields2Groups.Where(x => x.FarmId == CurrentFarmId && x.StatusId==1)
+                                   from fieldsGroups in Context.FieldsGroups.Where(x => x.Id == fields2Groups.FieldsGroupsId && x.StatusId == 1)
+
+                                   from fields in Context.Fields.Where(x => x.Id == fields2Groups.FieldsId && x.StatusId == 1).DefaultIfEmpty()
                                    from fields2GroupsWorkerData in Context.Fields2GroupsWorkerData.Where(x => x.WorkersId == WorkerId && x.Fields2GroupsId == fields2Groups.Id).DefaultIfEmpty()
 
 
@@ -528,7 +533,12 @@ namespace FarmsApi.Services
                                     Fields2GroupsWorkerData fields2GroupsWorkerData = new Fields2GroupsWorkerData();
                                     fields2GroupsWorkerData.Fields2GroupsId = item.f2g.Id;
                                     fields2GroupsWorkerData.WorkersId = WorkerId;
-                                    fields2GroupsWorkerData.Value = WorkerTableFieldValue.ToString();
+
+                                    if(item.f2g.FieldsDataTypesId==3)
+                                        fields2GroupsWorkerData.Value = Convert.ToDateTime(WorkerTableFieldValue).ToString("yyyy-MM-dd");
+                                    else 
+                                        fields2GroupsWorkerData.Value = WorkerTableFieldValue.ToString();
+                                    
                                     fields2GroupsWorkerData.Type = 1;
                                     fields2GroupsWorkerData.SourceValue = WorkerTableFieldValue.ToString();
 
@@ -580,8 +590,10 @@ namespace FarmsApi.Services
 
                     foreach (var item in f2gwd)
                     {
-                        if (item.SourceValue != item.Value)
-                        {
+                        
+
+                        //if (item.SourceValue != item.Value)
+                        //{
                             if (item.Id == 0)
                             {
                                 Context.Fields2GroupsWorkerData.Add(item);
@@ -592,15 +604,29 @@ namespace FarmsApi.Services
                             }
 
 
-                        }
+                       // }
 
 
                     }
 
                     Context.SaveChanges();
+
+                    return GetSetWorkerAndCompanyData(1, id, objs);
+
                 }
 
+                // שליפה של הנתונים
+                if (type == 3)
+                {
+                    var Worker = Context.Workers.Where(x => x.Id == WorkerId).FirstOrDefault();
 
+                    var CurrentFarmId = (Worker != null) ? Worker.FarmId : UsersService.GetCurrentUser().Farm_Id;
+
+                    var Farm = Context.Farms.Where(x => x.Id == CurrentFarmId).FirstOrDefault();
+
+                    return Ok(Farm);
+
+                }
 
             }
 

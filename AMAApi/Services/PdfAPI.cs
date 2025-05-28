@@ -37,8 +37,10 @@ namespace FarmsApi.Services
         public string MavidPhone = ConfigurationSettings.AppSettings["MavidPhone"].ToString();
         public string MavidNikuyim = ConfigurationSettings.AppSettings["MavidNikuyim"].ToString();
 
+        public int WorkerId = 0;
         public PdfAPI()
         {
+
 
         }
 
@@ -49,26 +51,45 @@ namespace FarmsApi.Services
             using (var Context = new Context())
             {
 
+                
+
 
                 var BaseLink = System.Web.HttpContext.Current.Server.MapPath("~/Uploads/Companies/" + FarmId.ToString() + "/PDFS/");
                 var BaseLinkSite = System.Web.HttpContext.Current.Server.MapPath("~/Uploads/Companies/" + FarmId.ToString() + "/PDFSAllTemplate/");
+
+                if (workersWith101 != null)
+                {
+                     WorkerId = workersWith101.w.Id;
+
+                     //BaseLink = System.Web.HttpContext.Current.Server.MapPath("~/Uploads/Companies/" + FarmId.ToString() + "/PDFS/");
+                     BaseLinkSite = System.Web.HttpContext.Current.Server.MapPath("~/Uploads/Workers/" + WorkerId.ToString() + "/");
+
+                }
+                   
+
+
+
 
                 if (!Directory.Exists(BaseLinkSite))
                 {
                     Directory.CreateDirectory(BaseLinkSite);
                 }
 
-                System.IO.DirectoryInfo di = new DirectoryInfo(BaseLinkSite);
 
-                foreach (FileInfo file in di.GetFiles())
+
+
+                if (workersWith101 == null)
                 {
+                    System.IO.DirectoryInfo di = new DirectoryInfo(BaseLinkSite);
 
-                    try
+                    foreach (FileInfo file in di.GetFiles())
                     {
-                       
-                        file.Delete();
+                        try
+                        {
+                            file.Delete();
+                        }
+                        catch { }
                     }
-                    catch { }
                 }
 
                 var FarmPDFFilesList = Context.FarmPDFFiles.Where(x => x.FarmId == FarmId && x.StatusId == 1).OrderBy(x => x.Seq).ToList();
@@ -127,8 +148,8 @@ namespace FarmsApi.Services
                                 List<Fields2PDF_101> Fields2PDF_101List = GetFields2PDF_101(FarmPDFFile, m);// Context.Fields2PDF_101.Where(x => x.PageNumber == m).ToList();
 
 
-                                //if (workersWith101 != null)
-                                //    Fields2PDF_101List = GetDataFromObject101(workersWith101, Fields2PDF_101List, Context);
+                                if (workersWith101 != null)
+                                    Fields2PDF_101List = GetDataFromObject101(workersWith101, Fields2PDF_101List, Context);
 
                                 BaseFont bf = BaseFont.CreateFont("c:/windows/fonts/arial.ttf", BaseFont.IDENTITY_H, true);
                                 foreach (var item in Fields2PDF_101List)
@@ -142,6 +163,8 @@ namespace FarmsApi.Services
 
                                     if (item.Comment == "SignutureAmuta")
                                     {
+                                    
+                                        
 
                                         Image Signature = Image.GetInstance(BaseLink + "/SignatureAmuta.png");
 
@@ -179,7 +202,7 @@ namespace FarmsApi.Services
                                         if (!File.Exists(BaseLinkSite + "/Signature.png")) continue;
 
                                         Image Signature = Image.GetInstance(BaseLinkSite + "/Signature.png");
-                                        //logo.ScaleAbsolute(500, 300);
+
 
 
                                         Signature.ScaleAbsolute(float.Parse(((int)item.Font).ToString()), float.Parse(((int)item.Space).ToString()));
@@ -232,7 +255,7 @@ namespace FarmsApi.Services
                                         {
                                             ColumnText ct = new ColumnText(cb);
 
-                                            ct.SetSimpleColumn(llx,lly, urx - (i * Space), ury);
+                                            ct.SetSimpleColumn(llx, lly, urx - (i * Space), ury);
 
                                             Font font = new Font(bf, float.Parse(item.Font.ToString()));
 
@@ -276,7 +299,7 @@ namespace FarmsApi.Services
 
                 string sourceDir = BaseLinkSite;
                 string targetPDF = BaseLinkSite + "AllPdfTemp.pdf";
-               // string OutputFileDestination = BaseLinkSite + "AllPdf.pdf";
+                // string OutputFileDestination = BaseLinkSite + "AllPdf.pdf";
 
                 using (FileStream stream = new FileStream(targetPDF, FileMode.Create))
                 {
@@ -323,11 +346,11 @@ namespace FarmsApi.Services
 
                 }
 
-              //  return OutputFileDestination;
+                //  return OutputFileDestination;
             }
 
 
-      
+
 
 
 
@@ -348,41 +371,66 @@ namespace FarmsApi.Services
 
                     Fields2PDF_101List = Context.Fields2PDF_101.Where(x => x.PageNumber == m).ToList();
 
-                    
+
+                    //var ShnatMas = Fields2PDF_101List.Where(x=>x.Comment== "ShnatMas").FirstOrDefault();
 
                     return Fields2PDF_101List;
                 }
-                    
+
                 else
                 {
                     var Results = (from f2p in Context.Fields2PDF.Where(x => x.FarmPDFFilesId == FarmPDFFiles.Id && x.PageNumber == m).DefaultIfEmpty()
                                    from f2g in Context.Fields2Groups.Where(x => x.Id == f2p.Fields2GroupsId).DefaultIfEmpty()
                                    from f in Context.Fields.Where(x => x.Id == f2g.FieldsId || x.Id == f2p.FieldsId).DefaultIfEmpty()
-
+                                   from f2gwd in Context.Fields2GroupsWorkerData.Where(x => x.Fields2GroupsId == f2p.Fields2GroupsId && x.WorkersId == WorkerId).DefaultIfEmpty()
 
                                    select new
                                    {
                                        f2p,
-                                       f
+                                       f,
+                                       f2g,
+                                       f2gwd
 
-                                   }).Where(x=>x.f2p!=null).ToList();
+                                   }).Where(x => x.f2p != null).ToList();
 
 
-                  // List<Fields2PDF_101> Fields2PDF_101List=new List<Fields2PDF_101>();  
+                    // List<Fields2PDF_101> Fields2PDF_101List=new List<Fields2PDF_101>();  
 
                     foreach (var item in Results)
                     {
-                        Fields2PDF_101 fields2PDF_101= new Fields2PDF_101();
+                        Fields2PDF_101 fields2PDF_101 = new Fields2PDF_101();
 
                         fields2PDF_101.Space = 1;
                         fields2PDF_101.PageNumber = m;
                         fields2PDF_101.Font = 11;
                         fields2PDF_101.Word = item.f.Name;
                         fields2PDF_101.Comment = item.f.Name;
+
+
+                        if(item.f.WorkerTableField == "1")
+                        {
+                            fields2PDF_101.Value = "Signuture";
+                            fields2PDF_101.Comment = "Signuture";
+                            fields2PDF_101.Font = 100;
+                            fields2PDF_101.Space = 20;
+                        }
+                           
+                        if (item.f.WorkerTableField == "2")
+                        {
+                            fields2PDF_101.Value = "SignutureAmuta";
+                            fields2PDF_101.Comment = "SignutureAmuta";
+                            fields2PDF_101.Font = 100;
+                            fields2PDF_101.Space = 20;
+                        }
+                            
+
                         fields2PDF_101.llx = 0;
                         fields2PDF_101.urx = item.f2p.PdfWidthX;
-                        fields2PDF_101.lly = item.f2p.PdfHeightY-2;
+                        fields2PDF_101.lly = item.f2p.PdfHeightY - 2;
                         fields2PDF_101.ury = 0;
+
+                        fields2PDF_101.FieldsDataTypesId = (item.f2g != null) ? item.f2g.FieldsDataTypesId : 0;
+                        fields2PDF_101.Fields2GroupsWorkerDataValue = (item.f2gwd != null) ? item.f2gwd.Value : null;
                         Fields2PDF_101List.Add(fields2PDF_101);
 
                     }
@@ -391,8 +439,465 @@ namespace FarmsApi.Services
 
                 }
             }
-            
+
         }
+
+        private List<Fields2PDF_101> GetDataFromObject101(WorkersWith101 workersWith101, List<Fields2PDF_101> Fields2PDF_101Lists, Context Context)
+        {
+            List<Fields2PDF_101> tp = new List<Fields2PDF_101>();
+
+            foreach (var item in Fields2PDF_101Lists)
+            {
+
+
+
+
+                var PropertyName = item.Comment;
+                var PropertyValue = item.Value;
+
+                if (PropertyName == null) continue;
+
+
+                if (PropertyValue == "child2") continue;
+                if (PropertyValue == "radioInput") continue;
+                if (PropertyValue == "Signuture" || PropertyValue == "SignutureAmuta")
+                {
+
+                    tp.Add(item);
+                    continue;
+                }
+
+
+
+
+
+
+
+
+
+
+                var res = workersWith101.w[PropertyName];
+
+                if (res == null)
+                {
+                    res = workersWith101.w101[PropertyName];
+                }
+
+
+                if (res == null && item.Fields2GroupsWorkerDataValue != null)
+                {
+                    res = item.Fields2GroupsWorkerDataValue;
+
+                    if (item.FieldsDataTypesId == 3)
+                    {
+                        res = Convert.ToDateTime(res).ToString("dd/MM/yyyy");
+                    }
+
+                    if (item.FieldsDataTypesId == 4)
+                    {
+                        if (res == "true")
+                            res = "True";
+                        else
+                            res = "False";
+                    }
+
+
+                }
+
+
+                if (PropertyValue == "1Brunch" && res != null)
+                {
+
+                    string[] resSplit = res.ToString().Split('-');
+
+                    item.Word = resSplit[0].Trim();
+                    tp.Add(item);
+
+                }
+
+                else if (PropertyValue == "2Brunch" && res != null)
+                {
+                    string[] resSplit = res.ToString().Split('-');
+
+                    if (resSplit.Length > 1)
+                        item.Word = resSplit[1].Trim();
+                    else
+                        item.Word = "";
+                    tp.Add(item);
+
+                }
+
+                else if (PropertyValue == "child")
+                {
+
+                    var WorkerChilds = Context.WorkerChilds.Where(x => x.WorkerId == workersWith101.w.Id).ToList();
+
+                    for (int i = 0; i < WorkerChilds.Count; i++)
+                    {
+                        var lly = item.lly - (i * 22);
+
+                        var resChild = WorkerChilds[i][PropertyName];
+
+
+
+                        if (PropertyName == "BirthDate" && resChild != null)
+                        {
+                            resChild = Convert.ToDateTime(resChild).ToString("ddMMyyyy");
+
+                        }
+
+
+
+
+                        Fields2PDF_101 newChild = new Fields2PDF_101();
+
+                        newChild.Word = item.Word;
+                        newChild.Value = item.Value;
+                        newChild.ury = item.ury;
+                        newChild.urx = item.urx;
+                        newChild.Space = item.Space;
+                        newChild.PageNumber = item.Space;
+                        newChild.lly = lly;
+                        newChild.llx = item.llx;
+                        newChild.Id = item.Id;
+                        newChild.Font = item.Font;
+                        newChild.Comment = item.Comment;
+
+
+
+
+
+                        if (item.Word.Contains("x") && resChild.ToString() == "True")
+                            newChild.Word = "x";
+                        else
+                          if (resChild.ToString() == "False") { newChild.Word = ""; } else if (resChild != null) { newChild.Word = resChild.ToString(); }
+
+
+
+                        tp.Add(newChild);
+
+
+
+
+                    }
+
+
+
+                    // item.Word = Convert.ToDateTime(res).ToString("ddMMyyyy");
+                    //  tp.Add(item);
+
+                }
+
+                else if (res != null && PropertyName == "TiumMasAnotherMaskuretSug")
+                {
+
+                    item.Word = GetSugAnother(res.ToString());
+                    tp.Add(item);
+
+                }
+
+                else if (PropertyName == "CurrentDate")
+                {
+
+                    item.Word = DateTime.Now.ToString("dd.MM.yyyy");
+                    tp.Add(item);
+
+                }
+
+                else if (PropertyName == "MavidPrati")
+                {
+
+                    item.Word = MavidPrati;
+                    tp.Add(item);
+
+                }
+
+                else if (PropertyName == "MavidCtovet")
+                {
+
+                    item.Word = MavidCtovet;
+                    tp.Add(item);
+
+                }
+
+                else if (PropertyName == "MavidPhone")
+                {
+
+                    item.Word = MavidPhone;
+                    tp.Add(item);
+
+                }
+
+                else if (PropertyName == "MavidNikuyim")
+                {
+
+                    item.Word = MavidNikuyim;
+                    tp.Add(item);
+
+                }
+
+                else if (res != null && PropertyName == "Kupa")
+                {
+
+                    item.Word = GetKupaName(res.ToString());
+                    tp.Add(item);
+
+                }
+
+                else if (res != null && PropertyValue == "Date")
+                {
+                    item.Word = Convert.ToDateTime(res).ToString("ddMMyyyy");
+                    tp.Add(item);
+
+                }
+
+                else if (res != null && PropertyValue == "DateDot")
+                {
+                    item.Word = Convert.ToDateTime(res).ToString("dd.MM.yyyy");
+                    tp.Add(item);
+
+                }
+
+                else if (res != null && ((PropertyValue == null) || PropertyValue == res.ToString() || res.ToString() == "True") && res.ToString() != "False")
+                {
+                    if (item.Word.Contains("x"))
+                        item.Word = "x";
+                    else
+                        item.Word = res.ToString();
+
+                    tp.Add(item);
+                }
+            }
+
+
+
+
+            return tp;
+        }
+
+
+
+
+
+
+        private List<Fields2PDF_101> GetDataFromObject_GenericData(WorkersWith101 workersWith101, List<Fields2PDF_101> Fields2PDF_101Lists, Context Context)
+        {
+            List<Fields2PDF_101> tp = new List<Fields2PDF_101>();
+
+            foreach (var item in Fields2PDF_101Lists)
+            {
+
+
+
+
+                var PropertyName = item.Comment;
+                var PropertyValue = item.Value;
+
+                if (PropertyName == null) continue;
+
+
+                if (PropertyValue == "child2") continue;
+                if (PropertyValue == "radioInput") continue;
+                if (PropertyValue == "Signuture" || PropertyValue == "SignutureAmuta")
+                {
+
+                    tp.Add(item);
+                    continue;
+                }
+
+
+
+
+
+
+
+
+
+
+                var res = workersWith101.w[PropertyName];
+
+                if (res == null)
+                {
+                    res = workersWith101.w101[PropertyName];
+                }
+
+
+
+                if (PropertyValue == "1Brunch" && res != null)
+                {
+
+                    string[] resSplit = res.ToString().Split('-');
+
+                    item.Word = resSplit[0].Trim();
+                    tp.Add(item);
+
+                }
+
+                else if (PropertyValue == "2Brunch" && res != null)
+                {
+                    string[] resSplit = res.ToString().Split('-');
+
+                    if (resSplit.Length > 1)
+                        item.Word = resSplit[1].Trim();
+                    else
+                        item.Word = "";
+                    tp.Add(item);
+
+                }
+
+                else if (PropertyValue == "child")
+                {
+
+                    var WorkerChilds = Context.WorkerChilds.Where(x => x.WorkerId == workersWith101.w.Id).ToList();
+
+                    for (int i = 0; i < WorkerChilds.Count; i++)
+                    {
+                        var lly = item.lly - (i * 22);
+
+                        var resChild = WorkerChilds[i][PropertyName];
+
+
+
+                        if (PropertyName == "BirthDate" && resChild != null)
+                        {
+                            resChild = Convert.ToDateTime(resChild).ToString("ddMMyyyy");
+
+                        }
+
+
+
+
+                        Fields2PDF_101 newChild = new Fields2PDF_101();
+
+                        newChild.Word = item.Word;
+                        newChild.Value = item.Value;
+                        newChild.ury = item.ury;
+                        newChild.urx = item.urx;
+                        newChild.Space = item.Space;
+                        newChild.PageNumber = item.Space;
+                        newChild.lly = lly;
+                        newChild.llx = item.llx;
+                        newChild.Id = item.Id;
+                        newChild.Font = item.Font;
+                        newChild.Comment = item.Comment;
+
+
+
+
+
+                        if (item.Word.Contains("x") && resChild.ToString() == "True")
+                            newChild.Word = "x";
+                        else
+                          if (resChild.ToString() == "False") { newChild.Word = ""; } else if (resChild != null) { newChild.Word = resChild.ToString(); }
+
+
+
+                        tp.Add(newChild);
+
+
+
+
+                    }
+
+
+
+                    // item.Word = Convert.ToDateTime(res).ToString("ddMMyyyy");
+                    //  tp.Add(item);
+
+                }
+
+                else if (res != null && PropertyName == "TiumMasAnotherMaskuretSug")
+                {
+
+                    item.Word = GetSugAnother(res.ToString());
+                    tp.Add(item);
+
+                }
+
+                else if (PropertyName == "CurrentDate")
+                {
+
+                    item.Word = DateTime.Now.ToString("dd.MM.yyyy");
+                    tp.Add(item);
+
+                }
+
+                else if (PropertyName == "MavidPrati")
+                {
+
+                    item.Word = MavidPrati;
+                    tp.Add(item);
+
+                }
+
+                else if (PropertyName == "MavidCtovet")
+                {
+
+                    item.Word = MavidCtovet;
+                    tp.Add(item);
+
+                }
+
+                else if (PropertyName == "MavidPhone")
+                {
+
+                    item.Word = MavidPhone;
+                    tp.Add(item);
+
+                }
+
+                else if (PropertyName == "MavidNikuyim")
+                {
+
+                    item.Word = MavidNikuyim;
+                    tp.Add(item);
+
+                }
+
+                else if (res != null && PropertyName == "Kupa")
+                {
+
+                    item.Word = GetKupaName(res.ToString());
+                    tp.Add(item);
+
+                }
+
+                else if (res != null && PropertyValue == "Date")
+                {
+                    item.Word = Convert.ToDateTime(res).ToString("ddMMyyyy");
+                    tp.Add(item);
+
+                }
+
+                else if (res != null && PropertyValue == "DateDot")
+                {
+                    item.Word = Convert.ToDateTime(res).ToString("dd.MM.yyyy");
+                    tp.Add(item);
+
+                }
+
+                else if (res != null && ((PropertyValue == null) || PropertyValue == res.ToString() || res.ToString() == "True") && res.ToString() != "False")
+                {
+                    if (item.Word.Contains("x"))
+                        item.Word = "x";
+                    else
+                        item.Word = res.ToString();
+
+                    tp.Add(item);
+                }
+            }
+
+
+            //foreach (var property in typeof(Workers).GetProperties())
+            //{
+
+            //    var res = w.GetType().GetProperty(property.Name).GetValue(w, null);
+
+            //}
+
+            return tp;
+        }
+
 
         public int CreatePDF(WorkersWith101 workersWith101)
         {
@@ -799,236 +1304,6 @@ namespace FarmsApi.Services
         }
 
 
-        private List<Fields2PDF_101> GetDataFromObject101(WorkersWith101 workersWith101, List<Fields2PDF_101> Fields2PDF_101Lists, Context Context)
-        {
-            List<Fields2PDF_101> tp = new List<Fields2PDF_101>();
-
-            foreach (var item in Fields2PDF_101Lists)
-            {
-                var PropertyName = item.Comment;
-                var PropertyValue = item.Value;
-
-                if (PropertyName == null) continue;
-
-
-                if (PropertyValue == "child2") continue;
-                if (PropertyValue == "radioInput") continue;
-                if (PropertyValue == "Signuture" || PropertyValue == "SignutureAmuta")
-                {
-
-                    tp.Add(item);
-                    continue;
-                }
-
-
-
-
-
-
-
-
-
-
-                var res = workersWith101.w[PropertyName];
-
-                if (res == null)
-                {
-
-                    res = workersWith101.w101[PropertyName];
-
-
-                }
-
-
-
-                if (PropertyValue == "1Brunch" && res != null)
-                {
-
-                    string[] resSplit = res.ToString().Split('-');
-
-                    item.Word = resSplit[0].Trim();
-                    tp.Add(item);
-
-                }
-
-
-
-                else if (PropertyValue == "2Brunch" && res != null)
-                {
-                    string[] resSplit = res.ToString().Split('-');
-
-                    if (resSplit.Length > 1)
-                        item.Word = resSplit[1].Trim();
-                    else
-                        item.Word = "";
-                    tp.Add(item);
-
-                }
-
-
-
-                else if (PropertyValue == "child")
-                {
-
-                    var WorkerChilds = Context.WorkerChilds.Where(x => x.WorkerId == workersWith101.w.Id).ToList();
-
-                    for (int i = 0; i < WorkerChilds.Count; i++)
-                    {
-                        var lly = item.lly - (i * 22);
-
-                        var resChild = WorkerChilds[i][PropertyName];
-
-
-
-                        if (PropertyName == "BirthDate" && resChild != null)
-                        {
-                            resChild = Convert.ToDateTime(resChild).ToString("ddMMyyyy");
-
-                        }
-
-
-
-
-                        Fields2PDF_101 newChild = new Fields2PDF_101();
-
-                        newChild.Word = item.Word;
-                        newChild.Value = item.Value;
-                        newChild.ury = item.ury;
-                        newChild.urx = item.urx;
-                        newChild.Space = item.Space;
-                        newChild.PageNumber = item.Space;
-                        newChild.lly = lly;
-                        newChild.llx = item.llx;
-                        newChild.Id = item.Id;
-                        newChild.Font = item.Font;
-                        newChild.Comment = item.Comment;
-
-
-
-
-
-                        if (item.Word.Contains("x") && resChild.ToString() == "True")
-                            newChild.Word = "x";
-                        else
-                          if (resChild.ToString() == "False") { newChild.Word = ""; } else if (resChild != null) { newChild.Word = resChild.ToString(); }
-
-
-
-                        tp.Add(newChild);
-
-
-
-
-                    }
-
-
-
-                    // item.Word = Convert.ToDateTime(res).ToString("ddMMyyyy");
-                    //  tp.Add(item);
-
-                }
-
-
-
-
-
-
-                else if (res != null && PropertyName == "TiumMasAnotherMaskuretSug")
-                {
-
-                    item.Word = GetSugAnother(res.ToString());
-                    tp.Add(item);
-
-                }
-
-                else if (PropertyName == "CurrentDate")
-                {
-
-                    item.Word = DateTime.Now.ToString("dd.MM.yyyy");
-                    tp.Add(item);
-
-                }
-
-
-                else if (PropertyName == "MavidPrati")
-                {
-
-                    item.Word = MavidPrati;
-                    tp.Add(item);
-
-                }
-
-
-                else if (PropertyName == "MavidCtovet")
-                {
-
-                    item.Word = MavidCtovet;
-                    tp.Add(item);
-
-                }
-
-                else if (PropertyName == "MavidPhone")
-                {
-
-                    item.Word = MavidPhone;
-                    tp.Add(item);
-
-                }
-
-                else if (PropertyName == "MavidNikuyim")
-                {
-
-                    item.Word = MavidNikuyim;
-                    tp.Add(item);
-
-                }
-
-
-
-                else if (res != null && PropertyName == "Kupa")
-                {
-
-                    item.Word = GetKupaName(res.ToString());
-                    tp.Add(item);
-
-                }
-
-
-                else if (res != null && PropertyValue == "Date")
-                {
-                    item.Word = Convert.ToDateTime(res).ToString("ddMMyyyy");
-                    tp.Add(item);
-
-                }
-
-                else if (res != null && PropertyValue == "DateDot")
-                {
-                    item.Word = Convert.ToDateTime(res).ToString("dd.MM.yyyy");
-                    tp.Add(item);
-
-                }
-
-                else if (res != null && ((PropertyValue == null) || PropertyValue == res.ToString() || res.ToString() == "True") && res.ToString() != "False")
-                {
-                    if (item.Word.Contains("x"))
-                        item.Word = "x";
-                    else
-                        item.Word = res.ToString();
-
-                    tp.Add(item);
-                }
-            }
-
-
-            //foreach (var property in typeof(Workers).GetProperties())
-            //{
-
-            //    var res = w.GetType().GetProperty(property.Name).GetValue(w, null);
-
-            //}
-
-            return tp;
-        }
 
         private List<Testpdfs> GetDataFromObject(WorkersWith101 workersWith101, List<Testpdfs> TestLists, Context Context)
         {

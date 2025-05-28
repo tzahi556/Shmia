@@ -664,7 +664,8 @@ namespace FarmsApi.Services
                     if (workersWith101.w101.IsNew)
                     {
                         if (type == 2) AddToLogDB("", "", " יצירת פדפ לעובדת חדשה  " + workersWith101.w.Id, null, "", workersWith101.w.Id);
-                        pa.CreatePDF(workersWith101);
+                        //pa.CreatePDF(workersWith101);
+                         pa.CreateNewCompanyPDF(workersWith101.w.FarmId, workersWith101);
                     }
 
                     else
@@ -1009,7 +1010,7 @@ namespace FarmsApi.Services
                 if (!string.IsNullOrEmpty(w101.ImgData))
                 {
 
-                    string root = HttpContext.Current.Server.MapPath("~/Uploads/");
+                    string root = HttpContext.Current.Server.MapPath("~/Uploads/Workers/");
 
                     string WorkerPath = root + w.Id.ToString();
 

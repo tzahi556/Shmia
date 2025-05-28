@@ -20,10 +20,10 @@
                 localStorage.setItem('userLogin', res.FirstName + " " + res.LastName);
                 localStorage.setItem('userLoginId', res.Id);
                 farmsService.getFarm(res.Farm_Id).then(function (data) {
-                
+                   
                     self.farmName = data.Name ? data.Name : DEFAULT_NAME;
                     authData.farmName = self.farmName;
-
+                   /* localStorage.setItem('FarmObj', data);*/
                     localStorage.setItem('FarmName', self.farmName);
                     localStorage.setItem('authorizationData', angular.toJson(authData));
                 //    localStorage.setItem('FarmInstractorPolicy', data.Meta.IsInstractorPolicy);

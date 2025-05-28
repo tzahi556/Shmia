@@ -144,6 +144,11 @@ namespace FarmsApi.DataModels
 
         public int PageNumber { get; set; }
 
+        [NotMapped]
+        public string Fields2GroupsWorkerDataValue { get; set; }
+
+        [NotMapped]
+        public int FieldsDataTypesId { get; set; }
 
 
     }
