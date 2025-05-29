@@ -293,7 +293,13 @@
 
         }
 
+
+
+
         $scope.getSetFields2PDF = function (type, Objects) {
+
+            
+
 
             // שליפה של כל הנקודות
             if (type == 1) {
@@ -303,15 +309,13 @@
 
                         while (!CurrentScale && self.farmspdffiles.length>0) // define the condition as you like
                             await new Promise(resolve => setTimeout(resolve, 500));
+                            AddParamsToPDF(field2pdf);
 
-                         
 
-                        AddParamsToPDF(field2pdf);
-                       
-                      
                     })();
-                   
 
+
+                    //setTimeout(function clog() { AddParamsToPDF(field2pdf); }, 1400);
                    
 
                 });

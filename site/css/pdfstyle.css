@@ -119,6 +119,7 @@
 
 /*הטאב של הגרירה PDF*/
 
+
 #canvasEdit {
     border-style: dashed;
     border-width: 2px;
@@ -127,6 +128,8 @@
     border-radius: .7rem;
     direction: ltr !important;
     box-shadow: 10px 10px 5px lightblue;
+  /*  width: 100% !important;
+    height: fit-content !important;*/
 }
 
 .page-item {
@@ -223,6 +226,9 @@
     margin-bottom: 5px;
     z-index: 9;
     /* width: 150px;*/
+    border:solid 1px black;
+    border-radius:5px;
+   
 }
 
 .btnGrpFieldHelper {

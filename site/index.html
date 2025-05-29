@@ -207,9 +207,9 @@
             function handlePages(page) {
 
                 // console.log('Page loaded');
-                // $("#canvasContainer div").not('#the-canvas').remove();
+              
 
-
+                $("#canvasContainer div").not('#canvasEdit').remove();
                 //var scale = 1.5;
                 //var viewport = page.getViewport({ scale: scale });
 
@@ -337,6 +337,9 @@
 
         function handlePages(page) {
 
+
+            //$("#canvasContainer div").not('#canvasEdit').remove();
+
             // console.log('Page loaded');
 
 
@@ -356,20 +359,28 @@
             // נסיון
             var canvas = document.getElementById(elemId);
             var context = canvas.getContext('2d');
-            var viewport = page.getViewport({ scale: 1 });
+            var viewport = page.getViewport({ scale: 1,rotation:0 });
+
+
+            //alert(canvas.width + "  " + viewport.width);
 
             var scale = CurrentWidth / viewport.width;
+
+           
             // var scaleY = CurrentHeight / viewport.height;
+
+            //alert(scaleY);
 
             // var scale = Math.max(scaleX, scaleY);
 
-            viewport = page.getViewport({ scale: scale });
+            viewport = page.getViewport({ scale: scale, rotation: 0 });
 
 
             canvas.height = viewport.height;
 
             canvas.width = viewport.width;
 
+            
 
 
             // Render PDF page into canvas context
@@ -429,12 +440,6 @@
 
             return { x: xPdf, y: yPdf };
         }
-
-
-
-
-
-
 
         function changePage(delta) {
 
@@ -593,12 +598,7 @@
 
         }
 
-        //$(function () {
-
-
-        //        $(".date").datepicker();
-
-        //    });
+      
 
 
 

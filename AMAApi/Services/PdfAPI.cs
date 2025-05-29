@@ -493,7 +493,7 @@ namespace FarmsApi.Services
                         res = Convert.ToDateTime(res).ToString("dd/MM/yyyy");
                     }
 
-                    if (item.FieldsDataTypesId == 4)
+                    if (item.FieldsDataTypesId == 4 || item.FieldsDataTypesId == 6)
                     {
                         if (res == "true")
                             res = "True";

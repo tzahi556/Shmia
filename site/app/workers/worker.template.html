@@ -288,7 +288,7 @@
                             <div class="form-group">
                                 <label>
                                     מיקוד  <span class="tp-help-below">
-                                        ( ניתן להיעזר ב<a href="http://www.israelpost.co.il/zipcode.nsf/demozip" target="_blank">אתר הדואר</a>)
+                                        ( ניתן להיעזר ב<a href="https://doar.israelpost.co.il/locatezip" target="_blank">אתר הדואר</a>)
                                     </span>
                                 </label>
                                 <input type="text" class="form-control" ng-model="$ctrl.worker.w.Mikud" />
@@ -1866,7 +1866,7 @@
 
 
                         <div ng-if="screend.f2g.IsWorkerHide!=1 && group.TitleTypeId!=2" class="col-md-{{12/group.CountFieldsInRow}}" ng-repeat="screend in getGroupsDetails(group.Id)">
-                            <div class="form-group" ng-if="screend.f2g.FieldsDataTypesId!=4">
+                            <div class="form-group" ng-if="screend.f2g.FieldsDataTypesId!=4 && screend.f2g.FieldsDataTypesId!=6">
                                 <label ng-if="!screend.f2g.Title">{{screend.f.Name}}</label>
                                 <label ng-if="screend.f2g.Title">{{screend.f2g.Title}}</label>
 
@@ -1891,6 +1891,27 @@
 
                                 </div>
                             </div>
+
+
+                            <div class="col-md-12" ng-if="screend.f2g.FieldsDataTypesId==6">
+                                <div class="form-group">
+                                    <label>
+                                        <span ng-if="!screend.f2g.Title">
+                                            {{screend.f.Name}}
+                                        </span>
+                                        <span ng-if="screend.f2g.Title">
+                                            {{screend.f2g.Title}}
+                                        </span>
+                                     
+                                    </label><br />
+                                    <input type="checkbox" ng-model="screend.f2gwd.Value">
+                                </div>
+
+                            </div>
+
+
+
+
                         </div>
 
 
@@ -1900,7 +1921,7 @@
                             </div>
                             <div class="panel-body">
                                 <div ng-if="screend.f2g.IsWorkerHide!=1" class="col-md-{{12/group.CountFieldsInRow}}" ng-repeat="screend in getGroupsDetails(group.Id)">
-                                    <div class="form-group" ng-if="screend.f2g.FieldsDataTypesId!=4">
+                                    <div class="form-group" ng-if="screend.f2g.FieldsDataTypesId!=4  && screend.f2g.FieldsDataTypesId!=6">
                                         <label ng-if="!screend.f2g.Title">{{screend.f.Name}}</label>
                                         <label ng-if="screend.f2g.Title">{{screend.f2g.Title}}</label>
 
@@ -1924,6 +1945,21 @@
 
 
                                         </div>
+                                    </div>
+
+                                    <div class="col-md-12" ng-if="screend.f2g.FieldsDataTypesId==6">
+                                        <div class="form-group">
+                                            <label>
+                                                <span ng-if="!screend.f2g.Title">
+                                                    {{screend.f.Name}}
+                                                </span>
+                                                <span ng-if="screend.f2g.Title">
+                                                    {{screend.f2g.Title}}
+                                                </span>
+                                            </label><br />
+                                            <input type="checkbox" ng-model="screend.f2gwd.Value">
+                                        </div>
+
                                     </div>
                                 </div>
 

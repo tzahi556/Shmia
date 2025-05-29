@@ -13,6 +13,8 @@
 
         var CurrentPdfId;
 
+        var firstLoad = true;
+
         $(function () {
 
             $("#sortable").sortable({
@@ -46,7 +48,20 @@
 
             $('#tab3').click(function (e) {
                 CurrentPage = 1;
-                RefreshComboFiles();
+
+
+                if (firstLoad) {
+
+                    RefreshComboFiles();
+                    setTimeout(function clog() { RefreshComboFiles(); }, 200);
+                    setTimeout(function clog() { RefreshComboFiles(); }, 400);
+                    firstLoad = false;
+                } else {
+
+                    RefreshComboFiles();
+                }
+               
+
             });
 
             $('#tab4').click(function (e) {
@@ -335,7 +350,6 @@
                 var itemHeight = $("#btnGrpFieldHelper_" + f2p.Id).height();
 
 
-
                 var ViewportPoints = CurrentViewport.convertToViewportPoint(f2p.PdfX, f2p.PdfY);
 
 
@@ -498,7 +512,6 @@
     <uib-tabset active="active" class="tab-form-demo" ng-show="!$ctrl.IsPopUp">
 
 
-
         <!--פרטי חברה-->
         <uib-tab index="0" heading="פרטי חברה">
 
@@ -571,13 +584,13 @@
 
                             <!--<div class="col-md-12">
 
-                                <div class="form-group"><br />
+                            <div class="form-group"><br />
 
-                                    <br />
-                                    <hr />
-                                </div>
+                                <br />
+                                <hr />
+                            </div>
 
-                            </div>-->
+                        </div>-->
                             <div class="col-md-12">
 
                                 <div class="form-group">
@@ -857,7 +870,7 @@
 
 
                                 </div>
-                                </div>
+                            </div>
                         </div>
                     </div>
 
@@ -981,8 +994,8 @@
 
                     <span id="spxx"></span> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span id="spyy"></span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span id="spScale"></span>
                     <!--<br />
-                    <span id="spx"></span> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span id="spy"></span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-                    <br />W-<span id="spWidth"></span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<br />H-<span id="spHeight"></span>-->
+                <span id="spx"></span> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span id="spy"></span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+                <br />W-<span id="spWidth"></span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<br />H-<span id="spHeight"></span>-->
                 </div>
 
 
@@ -991,6 +1004,7 @@
 
 
                         <canvas id="canvasEdit">
+                         
                         </canvas>
 
                     </div>
@@ -999,6 +1013,7 @@
 
 
         </uib-tab>
+
 
         <!--תצוגת-->
         <uib-tab id="tab4" index="7" heading="תצוגת סופית של PDF">
@@ -1013,13 +1028,13 @@
 
                         <div class="panel panel-primary">
                             <!--<div class="panel-heading">
-                                תצוגת קובץ PDF
+                            תצוגת קובץ PDF
 
-                                <div style="float:left;cursor:pointer" class="panelClose">
-                                    <img src="../../images/_notArrive.png" width="24px" />
-                                </div>
+                            <div style="float:left;cursor:pointer" class="panelClose">
+                                <img src="../../images/_notArrive.png" width="24px" />
+                            </div>
 
-                            </div>-->
+                        </div>-->
                             <div class="panel-body" id="panelBody">
                                 <div id="divContainerEnd"
                                      style="border:2px solid black;height:100%;overflow:auto;">
@@ -1169,7 +1184,8 @@
                             <option value="1">טקסט</option>
                             <option value="2">מספר</option>
                             <option value="3">תאריך</option>
-                            <option value="4">צ'קבוקס</option>
+                            <option value="4">צ'קבוקס מאוזן</option>
+                            <option value="6">צ'קבוקס אנכי</option>
                             <option value="5">טקסט רחב</option>
                         </select>
                     </div>
