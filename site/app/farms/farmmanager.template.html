@@ -124,8 +124,8 @@
 
 
         function setCurrentFontSizeDrag() {
-            CurrentFontSizeDrag = (CurrentScale / 1.7868541288718671).toString() + "em"; //"16px";//
-            //alert(1);
+           //CurrentFontSizeDrag = (CurrentScale / 1.7868541288718671).toString() + "em"; //"16px";//
+            CurrentFontSizeDrag = (CurrentScale * 10) + "px";
         }
 
         function RefreshPage() {
@@ -327,10 +327,13 @@
             $("#canvasContainer div").not('#canvasEdit').remove();
             //while (!CurrentViewport) {
 
-
-            CurrentFontSizeDrag =  (CurrentScale / 1.7868541288718671).toString() + "em";
+            CurrentFontSizeDrag = (CurrentScale * 10) + "px";
+            //CurrentFontSizeDrag =  (CurrentScale / 1.7868541288718671).toString() + "em";
 
             //}
+
+
+           
 
             for (var i = 0; i < ObjList.length; i++) {
 
@@ -990,9 +993,14 @@
                 </div>
 
 
-                <div class="col-md-4">
+                <div class="col-md-4" style="padding:0px">
 
-                    <span id="spxx"></span> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span id="spyy"></span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span id="spScale"></span>
+                
+                    <div class="alert alert-info alertPdfPage" role="alert">
+                        במידה והקובץ לא נטען כראוי לחצ/י <a class="clickHere" onclick="CurrentPage = 1; RefreshComboFiles();">כאן</a>
+                    </div>
+                    
+                    <!--<span id="spxx"></span> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span id="spyy"></span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span id="spScale"></span>-->
                     <!--<br />
                 <span id="spx"></span> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span id="spy"></span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
                 <br />W-<span id="spWidth"></span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<br />H-<span id="spHeight"></span>-->

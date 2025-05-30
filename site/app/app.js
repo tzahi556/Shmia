@@ -549,6 +549,26 @@
             }
         });
 
+        $stateProvider.state('campains', {
+            url: '/campains/',
+            views: {
+                'main': {
+                    template: '<campains workers="$ctrl.workers"></campains>',
+                    controller: function (workers) {
+
+                        this.workers = workers;
+
+
+                    },
+                    controllerAs: '$ctrl',
+                    resolve: {
+                        workers: function (usersService) {
+                            return usersService.getWorkers(true);
+                        }
+                    }
+                }
+            }
+        });
 
         //$stateProvider.state('student', {
         //    url: '/student/{id}/',

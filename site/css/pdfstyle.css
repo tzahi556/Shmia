@@ -226,9 +226,10 @@
     margin-bottom: 5px;
     z-index: 9;
     /* width: 150px;*/
-    border:solid 1px black;
-    border-radius:5px;
-   
+    border: dashed 1px #337ab7;
+    border-radius: 5px;
+
+    
 }
 
 .btnGrpFieldHelper {
@@ -253,9 +254,21 @@
 }
 
 
+.clickHere {
+    cursor:pointer;
+    font-weight:bold;
+    text-decoration:underline;
+}
+
+.alertPdfPage {
+    margin: 0px;
+    padding: 5px;
+
+   
+}
+
 
 @media (max-width:500px) {
-
     .panelFields {
         position: inherit;
         width: 100%;

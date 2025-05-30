@@ -143,7 +143,8 @@
 
     <script src="css/jquery.inputmask.bundle.js"></script>
     <script src="app/farms/farmmanager.component.js"></script>
-
+    <script src="app/farms/campains.component.js"></script>
+    <!--<script src="app/farms/campain.component.js"></script>-->
 
     <link href="css/jquery.toast.css" rel="stylesheet" />
 
@@ -207,7 +208,7 @@
             function handlePages(page) {
 
                 // console.log('Page loaded');
-              
+
 
                 $("#canvasContainer div").not('#canvasEdit').remove();
                 //var scale = 1.5;
@@ -344,7 +345,7 @@
 
 
             // for clean all pages
-         
+
 
 
             //var scale = 1.5;
@@ -353,20 +354,20 @@
             //var canvas = document.getElementById(elemId);
 
             //var context = canvas.getContext('2d');
-
+            // alert(window.innerWidth);
 
 
             // נסיון
             var canvas = document.getElementById(elemId);
             var context = canvas.getContext('2d');
-            var viewport = page.getViewport({ scale: 1,rotation:0 });
+            var viewport = page.getViewport({ scale: 1, rotation: 0 });
 
 
             //alert(canvas.width + "  " + viewport.width);
 
             var scale = CurrentWidth / viewport.width;
 
-           
+
             // var scaleY = CurrentHeight / viewport.height;
 
             //alert(scaleY);
@@ -380,7 +381,7 @@
 
             canvas.width = viewport.width;
 
-            
+
 
 
             // Render PDF page into canvas context
@@ -419,7 +420,7 @@
         function convertPixelsToPdfCoords(xPixel, yPixel, sssss) {
 
 
-         
+
             // var scale = 1;
             var viewport = CurrentPDFPage.getViewport({ scale: CurrentScale });
 
@@ -598,7 +599,7 @@
 
         }
 
-      
+
 
 
 
