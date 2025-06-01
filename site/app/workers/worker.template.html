@@ -190,7 +190,7 @@
                                         <tbody>
                                             <tr ng-repeat="file in $ctrl.tazfiles">
                                                 <td>
-                                                    <a ng-href="{{$ctrl.uploadsUri+$ctrl.worker.w.Id + '/' + file.FileName}}" target="_blank"><span style="width:20px;overflow:hidden">{{file.FileName}}</span></a>
+                                                    <a ng-href="{{$ctrl.uploadsUri + '/Workers/' + $ctrl.worker.w.Id + '/' + file.FileName}}" target="_blank"><span style="width:20px;overflow:hidden">{{file.FileName}}</span></a>
                                                 </td>
                                                 <td><div class="btn btn-xs btn-default" ng-click="$ctrl.removeFile(file.FileName,1)">הסר/י</div></td>
                                             </tr>
@@ -425,7 +425,7 @@
                                     <i class="fa fa-cloud-upload"></i>
                                 </label>
 
-                                <a ng-href="{{$ctrl.uploadsUri+$ctrl.worker.w.Id + '/' + $ctrl.fileparud}}" target="_blank"><span style="width:20px;overflow:hidden">{{$ctrl.fileparud}}</span></a>
+                                <a ng-href="{{$ctrl.uploadsUri + '/Workers/' + $ctrl.worker.w.Id + '/' + $ctrl.fileparud}}" target="_blank"><span style="width:20px;overflow:hidden">{{$ctrl.fileparud}}</span></a>
 
 
 
@@ -909,7 +909,7 @@
                                         <i class="fa fa-cloud-upload"></i>
                                     </label>
 
-                                    <a ng-href="{{$ctrl.uploadsUri+$ctrl.worker.w.Id + '/' + $ctrl.filezikuyneke}}" target="_blank"><span style="width:20px;overflow:hidden">{{$ctrl.filezikuyneke}}</span></a>
+                                    <a ng-href="{{$ctrl.uploadsUri + '/Workers/' + $ctrl.worker.w.Id + '/' + $ctrl.filezikuyneke}}" target="_blank"><span style="width:20px;overflow:hidden">{{$ctrl.filezikuyneke}}</span></a>
 
 
                                 </div>
@@ -971,7 +971,7 @@
                                         </label>
 
 
-                                        <a ng-href="{{$ctrl.uploadsUri+$ctrl.worker.w.Id + '/' + $ctrl.filezikuytoshav}}" target="_blank"><span style="width:20px;overflow:hidden">{{$ctrl.filezikuytoshav}}</span></a>
+                                        <a ng-href="{{$ctrl.uploadsUri + '/Workers/' + $ctrl.worker.w.Id + '/' + $ctrl.filezikuytoshav}}" target="_blank"><span style="width:20px;overflow:hidden">{{$ctrl.filezikuytoshav}}</span></a>
 
 
 
@@ -1028,7 +1028,7 @@
                                         </label>
 
 
-                                        <a ng-href="{{$ctrl.uploadsUri+$ctrl.worker.w.Id + '/' + $ctrl.filezikuyolehadash}}" target="_blank"><span style="width:20px;overflow:hidden">{{$ctrl.filezikuyolehadash}}</span></a>
+                                        <a ng-href="{{$ctrl.uploadsUri + '/Workers/' + $ctrl.worker.w.Id + '/' + $ctrl.filezikuyolehadash}}" target="_blank"><span style="width:20px;overflow:hidden">{{$ctrl.filezikuyolehadash}}</span></a>
 
 
 
@@ -1272,7 +1272,7 @@
 
 
 
-                                        <a ng-href="{{$ctrl.uploadsUri+$ctrl.worker.w.Id + '/' + $ctrl.filezikuypsakdinmezonot}}" target="_blank"><span style="width:20px;overflow:hidden">{{$ctrl.filezikuypsakdinmezonot}}</span></a>
+                                        <a ng-href="{{$ctrl.uploadsUri + '/Workers/' + $ctrl.worker.w.Id + '/' + $ctrl.filezikuypsakdinmezonot}}" target="_blank"><span style="width:20px;overflow:hidden">{{$ctrl.filezikuypsakdinmezonot}}</span></a>
 
 
                                     </div>
@@ -1334,7 +1334,7 @@
                                             <i class="fa fa-cloud-upload"></i>
                                         </label>
 
-                                        <a ng-href="{{$ctrl.uploadsUri+$ctrl.worker.w.Id + '/' + $ctrl.filezikuyluladmugbalut}}" target="_blank"><span style="width:20px;overflow:hidden">{{$ctrl.filezikuyluladmugbalut}}</span></a>
+                                        <a ng-href="{{$ctrl.uploadsUri + '/Workers/' + $ctrl.worker.w.Id + '/' + $ctrl.filezikuyluladmugbalut}}" target="_blank"><span style="width:20px;overflow:hidden">{{$ctrl.filezikuyluladmugbalut}}</span></a>
 
 
                                     </div>
@@ -1384,7 +1384,7 @@
                                             <i class="fa fa-cloud-upload"></i>
                                         </label>
 
-                                        <a ng-href="{{$ctrl.uploadsUri+$ctrl.worker.w.Id + '/' + $ctrl.filezikuypsakdinmezonot}}" target="_blank"><span style="width:20px;overflow:hidden">{{$ctrl.filezikuypsakdinmezonot}}</span></a>
+                                        <a ng-href="{{$ctrl.uploadsUri + '/Workers/' + $ctrl.worker.w.Id + '/' + $ctrl.filezikuypsakdinmezonot}}" target="_blank"><span style="width:20px;overflow:hidden">{{$ctrl.filezikuypsakdinmezonot}}</span></a>
 
 
                                     </div>
@@ -1473,7 +1473,7 @@
                                             בחירת קובץ
                                             <i class="fa fa-cloud-upload"></i>
                                         </label>
-                                        <a ng-href="{{$ctrl.uploadsUri+$ctrl.worker.w.Id + '/' + $ctrl.filezikuyhayalend}}" target="_blank"><span style="width:20px;overflow:hidden">{{$ctrl.filezikuyhayalend}}</span></a>
+                                        <a ng-href="{{$ctrl.uploadsUri + '/Workers/' + $ctrl.worker.w.Id + '/' + $ctrl.filezikuyhayalend}}" target="_blank"><span style="width:20px;overflow:hidden">{{$ctrl.filezikuyhayalend}}</span></a>
 
 
 
@@ -1515,7 +1515,7 @@
                                         <i class="fa fa-cloud-upload"></i>
                                     </label>
 
-                                    <a ng-href="{{$ctrl.uploadsUri+$ctrl.worker.w.Id + '/' + $ctrl.filezikuytoarakdemi}}" target="_blank"><span style="width:20px;overflow:hidden">{{$ctrl.filezikuytoarakdemi}}</span></a>
+                                    <a ng-href="{{$ctrl.uploadsUri + '/Workers/' + $ctrl.worker.w.Id + '/' + $ctrl.filezikuytoarakdemi}}" target="_blank"><span style="width:20px;overflow:hidden">{{$ctrl.filezikuytoarakdemi}}</span></a>
                                     <label class="tp-help-below">
                                         ניתן להיעזר ב<a href="https://tofes101.co.il/fill-form-119/" target="_blank">טופס 119 הממוחשב</a>&nbsp;או להוריד את הטופס <a href="https://taxes.gov.il/TaxesFormsList/itc119_11.pdf" target="_blank">מאתר רשות המסים</a>.
                                     </label>
@@ -1645,7 +1645,7 @@
                                     <i class="fa fa-cloud-upload"></i>
                                 </label>
 
-                                <a ng-href="{{$ctrl.uploadsUri+$ctrl.worker.w.Id + '/' + $ctrl.filetiummasaproove}}" target="_blank"><span style="width:20px;overflow:hidden">{{$ctrl.filetiummasaproove}}</span></a>
+                                <a ng-href="{{$ctrl.uploadsUri + '/Workers/' + $ctrl.worker.w.Id + '/' + $ctrl.filetiummasaproove}}" target="_blank"><span style="width:20px;overflow:hidden">{{$ctrl.filetiummasaproove}}</span></a>
                                 <label class="tp-help-below">
                                     כגון: אישור משטרת הגבולות בגין שהייה בחו"ל, אישור מחלה וכיו"ב. בהעדר הוכחה יש לפנות לפקיד השומה.
                                     לתשומת לבך: דמי לידה ודמי אבטלה הינם הכנסה חייבת.
@@ -1799,7 +1799,7 @@
                                             בחירת קובץ
                                             <i class="fa fa-cloud-upload"></i>
                                         </label>
-                                        <a ng-href="{{$ctrl.uploadsUri+$ctrl.worker.w.Id + '/' + $ctrl.filetiummastlush}}" target="_blank"><span style="width:20px;overflow:hidden">{{$ctrl.filetiummastlush}}</span></a>
+                                        <a ng-href="{{$ctrl.uploadsUri + '/Workers/' + $ctrl.worker.w.Id + '/' + $ctrl.filetiummastlush}}" target="_blank"><span style="width:20px;overflow:hidden">{{$ctrl.filetiummastlush}}</span></a>
 
 
                                     </div>
@@ -1833,7 +1833,7 @@
                                     <i class="fa fa-cloud-upload"></i>
                                 </label>
 
-                                <a ng-href="{{$ctrl.uploadsUri+$ctrl.worker.w.Id + '/' + $ctrl.filetiummas}}" target="_blank"><span style="width:20px;overflow:hidden">{{$ctrl.filetiummas}}</span></a>
+                                <a ng-href="{{$ctrl.uploadsUri + '/Workers/' + $ctrl.worker.w.Id + '/' + $ctrl.filetiummas}}" target="_blank"><span style="width:20px;overflow:hidden">{{$ctrl.filetiummas}}</span></a>
 
 
                             </div>

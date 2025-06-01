@@ -830,10 +830,11 @@
 
 
                     usersService.updateWorker(this.worker, this.files, this.childs, type).then(function (worker) {
+                        
                         SaveDynamicData(worker);
                        //$.unblockUI();
-                       // $window.open(this.uploadsUri + "/" + this.worker.w.Id + "/OfekAllPdf.pdf", '_blank');
-                        $window.open(this.uploadsUri + "Workers/2/AllPdfTemp.pdf", '_blank');
+                        $window.open(this.uploadsUri + "Workers/" + this.worker.w.Id + "/-1/"+  "/AllPdfTemp.pdf", '_blank');
+                        //$window.open(this.uploadsUri + "Workers/2/AllPdfTemp.pdf", '_blank');
                     }.bind(this));
 
                 }

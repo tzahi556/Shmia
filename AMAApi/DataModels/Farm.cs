@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using System;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace FarmsApi.DataModels
 {
@@ -38,6 +39,9 @@ namespace FarmsApi.DataModels
     {
         public int Id { get; set; }
         public int FarmId { get; set; }
+
+        public int CampainsId { get; set; }
+        
         public string FileName { get; set; }
         public int Seq { get; set; }
         public int StatusId { get; set; }
@@ -49,4 +53,21 @@ namespace FarmsApi.DataModels
 
     }
 
+
+    [Table("Campains")]
+    public class Campains
+    {
+        public int Id { get; set; }
+
+        public int FarmId { get; set; }
+
+        public string Name { get; set; }
+
+        public DateTime DateRigster { get; set; }
+
+        public int CountSend { get; set; }
+
+        public int StatusId { get; set; }
+
+    }
 }

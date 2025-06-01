@@ -123,7 +123,7 @@
                 var f = this.farmspdffiles[i];
 
 
-                f.FullLink = sharedValues.apiUrl + "/Uploads/Companies/" + self.farm.Id + "/PDFS/" + f.FileName;
+                f.FullLink = sharedValues.apiUrl + "/Uploads/Companies/" + self.farm.Id + "/PDFS/"+f.CampainsId+"/" + f.FileName;
 
                 if (eval(f.Is101)) f.FullLink = sharedValues.apiUrl + "/Uploads/Companies/101.pdf";
 
@@ -144,7 +144,7 @@
             confirmBox.click(function () {
 
 
-                farmsService.updateFarmsPdfFiles(3, Id, self.farmspdffiles).then(function (farmspdffiles) {
+                farmsService.updateFarmsPdfFiles(3, Id,-1, self.farmspdffiles).then(function (farmspdffiles) {
 
                     self.farmspdffiles = farmspdffiles;
                     self.init();
@@ -167,7 +167,7 @@
 
         function _uploadFilePdf(file) {
 
-            farmsService.getFarmPDFFiles(this.farm.Id).then(function (farmspdffiles) {
+            farmsService.getFarmPDFFiles(this.farm.Id,-1).then(function (farmspdffiles) {
 
 
 
@@ -229,7 +229,7 @@
 
             }
 
-            farmsService.updateFarmsPdfFiles(4, this.farm.Id, farmspdffilestemp).then(function (farmspdffiles) {
+            farmsService.updateFarmsPdfFiles(4, this.farm.Id,-1, farmspdffilestemp).then(function (farmspdffiles) {
 
                 //this.farmspdffiles = farmspdffiles;
                 const myTimeout = setTimeout(RefreshComboFiles, 300);
@@ -415,7 +415,7 @@
 
 
 
-                farmsService.updateFarmsPdfFiles(2, self.farm.Id, self.farmspdffiles).then(function (farmspdffiles) {
+                farmsService.updateFarmsPdfFiles(2, self.farm.Id,-1, self.farmspdffiles).then(function (farmspdffiles) {
 
 
 

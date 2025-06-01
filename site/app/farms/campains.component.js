@@ -7,7 +7,7 @@
         templateUrl: 'app/farms/campains.template.html?v=2',
         controller: CampainsController,
         bindings: {
-            workers: '<'
+            campains: '<'
 
         }
     });

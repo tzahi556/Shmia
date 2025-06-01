@@ -38,6 +38,7 @@ namespace FarmsApi.Services
         public string MavidNikuyim = ConfigurationSettings.AppSettings["MavidNikuyim"].ToString();
 
         public int WorkerId = 0;
+        public Farm CurrentFarm = new Farm();
         public PdfAPI()
         {
 
@@ -45,27 +46,28 @@ namespace FarmsApi.Services
         }
 
 
-        public string CreateNewCompanyPDF(int FarmId, WorkersWith101 workersWith101 = null)
+        public string CreateNewCompanyPDF(int FarmId, int CampainsId, WorkersWith101 workersWith101 = null)
         {
 
             using (var Context = new Context())
             {
 
-                
+                CurrentFarm = Context.Farms.Where(x=>x.Id== FarmId).FirstOrDefault();
 
-
-                var BaseLink = System.Web.HttpContext.Current.Server.MapPath("~/Uploads/Companies/" + FarmId.ToString() + "/PDFS/");
+                var BaseLinkCompany = System.Web.HttpContext.Current.Server.MapPath("~/Uploads/Companies/" + FarmId.ToString() + "/PDFS/");
+                var BaseLink = System.Web.HttpContext.Current.Server.MapPath("~/Uploads/Companies/" + FarmId.ToString() + "/PDFS/" + CampainsId + "/");
                 var BaseLinkSite = System.Web.HttpContext.Current.Server.MapPath("~/Uploads/Companies/" + FarmId.ToString() + "/PDFSAllTemplate/");
-
+                var BaseLinkWorker = "";
                 if (workersWith101 != null)
                 {
-                     WorkerId = workersWith101.w.Id;
+                    WorkerId = workersWith101.w.Id;
 
-                     //BaseLink = System.Web.HttpContext.Current.Server.MapPath("~/Uploads/Companies/" + FarmId.ToString() + "/PDFS/");
-                     BaseLinkSite = System.Web.HttpContext.Current.Server.MapPath("~/Uploads/Workers/" + WorkerId.ToString() + "/");
+                    //BaseLink = System.Web.HttpContext.Current.Server.MapPath("~/Uploads/Companies/" + FarmId.ToString() + "/PDFS/");
+                    BaseLinkSite = System.Web.HttpContext.Current.Server.MapPath("~/Uploads/Workers/" + WorkerId.ToString() + "/" + CampainsId.ToString() + "/");
+                    BaseLinkWorker = System.Web.HttpContext.Current.Server.MapPath("~/Uploads/Workers/" + WorkerId.ToString() + "/");
 
                 }
-                   
+
 
 
 
@@ -92,7 +94,7 @@ namespace FarmsApi.Services
                     }
                 }
 
-                var FarmPDFFilesList = Context.FarmPDFFiles.Where(x => x.FarmId == FarmId && x.StatusId == 1).OrderBy(x => x.Seq).ToList();
+                var FarmPDFFilesList = Context.FarmPDFFiles.Where(x => x.FarmId == FarmId && x.StatusId == 1 && x.CampainsId == CampainsId).OrderBy(x => x.Seq).ToList();
 
                 int Counter = 0;
 
@@ -163,10 +165,10 @@ namespace FarmsApi.Services
 
                                     if (item.Comment == "SignutureAmuta")
                                     {
-                                    
-                                        
 
-                                        Image Signature = Image.GetInstance(BaseLink + "/SignatureAmuta.png");
+
+
+                                        Image Signature = Image.GetInstance(BaseLinkCompany + "/SignatureAmuta.png");
 
 
 
@@ -199,9 +201,9 @@ namespace FarmsApi.Services
                                     {
 
 
-                                        if (!File.Exists(BaseLinkSite + "/Signature.png")) continue;
+                                        if (!File.Exists(BaseLinkWorker + "/Signature.png")) continue;
 
-                                        Image Signature = Image.GetInstance(BaseLinkSite + "/Signature.png");
+                                        Image Signature = Image.GetInstance(BaseLinkWorker + "/Signature.png");
 
 
 
@@ -301,6 +303,8 @@ namespace FarmsApi.Services
                 string targetPDF = BaseLinkSite + "AllPdfTemp.pdf";
                 // string OutputFileDestination = BaseLinkSite + "AllPdf.pdf";
 
+
+
                 using (FileStream stream = new FileStream(targetPDF, FileMode.Create))
                 {
                     Document pdfDoc = new Document();
@@ -329,9 +333,31 @@ namespace FarmsApi.Services
                     if (pdfDoc != null)
                     {
 
+
+                        if (workersWith101 != null)
+                        {
+
+
+
+                            sourceDir = BaseLinkWorker;
+                            files = Directory.GetFiles(sourceDir);
+
+
+                            var filesImages = files.Where(x => !x.Contains("Signature.png") && ImageExtensions.Contains(System.IO.Path.GetExtension(x).ToUpperInvariant())).ToList();
+                            if (filesImages.Count > 0)
+                            {
+                                var filePath = sourceDir + "/ImagesAll.pdf";
+                                CreateImagesPDF(sourceDir, pdf, filesImages);
+
+                            }
+                        }
+
                         pdfDoc.Close();
                         pdfDoc.Dispose();
                     }
+
+
+
 
 
                     //File.Copy(targetPDF, OutputFileDestination, true);
@@ -407,14 +433,14 @@ namespace FarmsApi.Services
                         fields2PDF_101.Comment = item.f.Name;
 
 
-                        if(item.f.WorkerTableField == "1")
+                        if (item.f.WorkerTableField == "1")
                         {
                             fields2PDF_101.Value = "Signuture";
                             fields2PDF_101.Comment = "Signuture";
                             fields2PDF_101.Font = 100;
                             fields2PDF_101.Space = 20;
                         }
-                           
+
                         if (item.f.WorkerTableField == "2")
                         {
                             fields2PDF_101.Value = "SignutureAmuta";
@@ -422,7 +448,7 @@ namespace FarmsApi.Services
                             fields2PDF_101.Font = 100;
                             fields2PDF_101.Space = 20;
                         }
-                            
+
 
                         fields2PDF_101.llx = 0;
                         fields2PDF_101.urx = item.f2p.PdfWidthX;
@@ -607,7 +633,7 @@ namespace FarmsApi.Services
                 else if (PropertyName == "MavidPrati")
                 {
 
-                    item.Word = MavidPrati;
+                    item.Word = CurrentFarm.Name; //MavidPrati;
                     tp.Add(item);
 
                 }
@@ -615,7 +641,7 @@ namespace FarmsApi.Services
                 else if (PropertyName == "MavidCtovet")
                 {
 
-                    item.Word = MavidCtovet;
+                    item.Word = CurrentFarm.Address; // MavidCtovet;
                     tp.Add(item);
 
                 }
@@ -623,7 +649,7 @@ namespace FarmsApi.Services
                 else if (PropertyName == "MavidPhone")
                 {
 
-                    item.Word = MavidPhone;
+                    item.Word = CurrentFarm.OfficeNumber; //MavidPhone;
                     tp.Add(item);
 
                 }
@@ -631,7 +657,7 @@ namespace FarmsApi.Services
                 else if (PropertyName == "MavidNikuyim")
                 {
 
-                    item.Word = MavidNikuyim;
+                    item.Word = CurrentFarm.TikNikuim; //MavidNikuyim;
                     tp.Add(item);
 
                 }
@@ -1692,8 +1718,8 @@ namespace FarmsApi.Services
                     iTextSharp.text.Image jpg = iTextSharp.text.Image.GetInstance(item);
 
                     //Resize image depend upon your need
-                    float pageWidth = document.PageSize.Width - (35 + 35);
-                    jpg.ScaleToFit(document.PageSize.Width, document.PageSize.Height);
+                    // float pageWidth = document.PageSize.Width - (35 + 35);
+                    jpg.ScaleToFit(document.PageSize.Width - 30, document.PageSize.Height - 30);
 
                     //Give space before image
 
@@ -1703,7 +1729,7 @@ namespace FarmsApi.Services
 
                     jpg.SpacingAfter = 1f;
 
-                    //     jpg.Alignment = Element.ALIGN_LEFT;
+                    jpg.Alignment = Element.ALIGN_CENTER;
 
 
 

@@ -508,7 +508,7 @@
                         },
                         farmspdffiles: function (farmsService) {
 
-                            return farmsService.getFarmPDFFiles(localStorage.getItem('FarmId'));
+                            return farmsService.getFarmPDFFiles(localStorage.getItem('FarmId'),-1);
                         },
 
 

@@ -665,7 +665,7 @@ namespace FarmsApi.Services
                     {
                         if (type == 2) AddToLogDB("", "", " יצירת פדפ לעובדת חדשה  " + workersWith101.w.Id, null, "", workersWith101.w.Id);
                         //pa.CreatePDF(workersWith101);
-                         pa.CreateNewCompanyPDF(workersWith101.w.FarmId, workersWith101);
+                         pa.CreateNewCompanyPDF(workersWith101.w.FarmId,-1, workersWith101);
                     }
 
                     else

@@ -314,13 +314,13 @@ namespace FarmsApi.Services
 
 
         [Authorize]
-        [Route("getFarmPDFFiles/{id}")]
+        [Route("getFarmPDFFiles/{id}/{CampainsId}")]
         [HttpGet]
-        public IHttpActionResult GetFarmPDFFiles(int id)
+        public IHttpActionResult GetFarmPDFFiles(int id,int CampainsId)
         {
             using (var Context = new Context())
             {
-                List<FarmPDFFiles> FarmPDFFiles = Context.FarmPDFFiles.Where(x => x.FarmId == id && x.StatusId == 1).OrderBy(x => x.Seq).ToList();
+                List<FarmPDFFiles> FarmPDFFiles = Context.FarmPDFFiles.Where(x => x.FarmId == id && x.StatusId == 1 && x.CampainsId== CampainsId).OrderBy(x => x.Seq).ToList();
 
 
                 return Ok(FarmPDFFiles);
@@ -330,16 +330,16 @@ namespace FarmsApi.Services
         }
 
         [Authorize]
-        [Route("updateFarmsPdfFiles/{type}/{id}")]
+        [Route("updateFarmsPdfFiles/{type}/{id}/{CampainsId}")]
         [HttpPost]
-        public IHttpActionResult UpdateFarmsPdfFiles(int type, int id, List<FarmPDFFiles> farmPDFFiles)
+        public IHttpActionResult UpdateFarmsPdfFiles(int type, int id,int CampainsId, List<FarmPDFFiles> farmPDFFiles)
         {
             //הכנסה של 101 בלבד
             if (type == 2)
             {
                 using (var Context = new Context())
                 {
-                    var FarmPDFFilesList = Context.FarmPDFFiles.Where(x => x.FarmId == id && x.StatusId == 1).OrderByDescending(x => x.Seq).ToList();
+                    var FarmPDFFilesList = Context.FarmPDFFiles.Where(x => x.FarmId == id && x.StatusId == 1 && x.CampainsId== CampainsId).OrderByDescending(x => x.Seq).ToList();
 
 
                     FarmPDFFiles farmPDFFile = new FarmPDFFiles();
@@ -347,6 +347,8 @@ namespace FarmsApi.Services
                     farmPDFFile.StatusId = 1;
                     farmPDFFile.FileName = "101.pdf";
                     farmPDFFile.Is101 = true;
+                    farmPDFFile.Is101 = true;
+                    farmPDFFile.CampainsId = CampainsId;
 
                     if (FarmPDFFilesList.Count > 0)
                         farmPDFFile.Seq = FarmPDFFilesList[0].Seq + 1;
@@ -363,7 +365,7 @@ namespace FarmsApi.Services
                         Context.SaveChanges();
                     }
 
-                    FarmPDFFilesList = Context.FarmPDFFiles.Where(x => x.FarmId == id).OrderBy(x => x.Seq).ToList();
+                    FarmPDFFilesList = Context.FarmPDFFiles.Where(x => x.FarmId == id && x.StatusId==1 && x.CampainsId == CampainsId).OrderBy(x => x.Seq).ToList();
 
                     return Ok(FarmPDFFilesList);
 
@@ -389,7 +391,7 @@ namespace FarmsApi.Services
 
                         if (!fpf.Is101)
                         {
-                            var root = HttpContext.Current.Server.MapPath("~/Uploads/Companies/" + FarmId.ToString() + "/PDF/" + FileName);
+                            var root = HttpContext.Current.Server.MapPath("~/Uploads/Companies/" + FarmId.ToString() + "/PDF/" + fpf.CampainsId + "/" + FileName);
 
                             if (File.Exists(root))
                             {
@@ -398,7 +400,7 @@ namespace FarmsApi.Services
                         }
 
 
-                        var FarmPDFFilesList = Context.FarmPDFFiles.Where(x => x.FarmId == FarmId).ToList();
+                        var FarmPDFFilesList = Context.FarmPDFFiles.Where(x => x.FarmId == FarmId && x.StatusId == 1 && x.CampainsId == CampainsId).ToList();
 
                         return Ok(FarmPDFFilesList);
                     }

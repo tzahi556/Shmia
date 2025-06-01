@@ -63,12 +63,12 @@
             return deferred.promise;
         }
 
-        function _updateFarmsPdfFiles(type,id,farmspdffiles) {
+        function _updateFarmsPdfFiles(type, id, campainsId,farmspdffiles) {
 
 
 
             var deferred = $q.defer();
-            $http.post(sharedValues.apiUrl + 'farms/updateFarmsPdfFiles/' + type + "/" + id , farmspdffiles).then(function (res) {
+            $http.post(sharedValues.apiUrl + 'farms/updateFarmsPdfFiles/' + type + "/" + id + "/" + campainsId  , farmspdffiles).then(function (res) {
 
                 deferred.resolve(res.data);
             });
@@ -153,10 +153,10 @@
         }
 
 
-        function _getFarmPDFFiles(id) {
+        function _getFarmPDFFiles(id, campainsId) {
             var deferred = $q.defer();
            
-            $http.get(sharedValues.apiUrl + 'farms/getFarmPDFFiles/' + id).then(function (res) {
+            $http.get(sharedValues.apiUrl + 'farms/getFarmPDFFiles/' + id + '/' + campainsId).then(function (res) {
 
                     var farmsfiles = res.data;
                    

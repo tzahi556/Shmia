@@ -1,18 +1,18 @@
 ﻿<div class="panel panel-default">
     <div class="panel-heading">
-        קליטת עובדים חדשים
+       קמפיינים מחוללי טפסים
 
-        <div style="float:left">
+        <!--<div style="float:left">
             <button ng-click="$ctrl.downloadExcel()" class="btn btn-success btn-xs">הורדת פרטי עובדים</button>
 
-        </div>
+        </div>-->
     </div>
     <div class="panel-body">
-        <a class="btn btn-success btn-xs" ui-sref="worker({id:0})">עובד חדש</a>
+        <a class="btn btn-success btn-xs" ui-sref="campain({id:0})">קמפיין חדש</a>
 
-        <button class="btn btn-danger btn-xs" style="float:left" ng-click="$ctrl.deleteAll()">מחיקת מסומנים</button>
+        <!--<button class="btn btn-danger btn-xs" style="float:left" ng-click="$ctrl.deleteAll()">מחיקת מסומנים</button>
        
-        <button class="btn btn-success btn-xs" style="float:left;margin-left:10px;" ng-click="$ctrl.sendSMS()">שליחת SMS למסומנים</button>
+        <button class="btn btn-success btn-xs" style="float:left;margin-left:10px;" ng-click="$ctrl.sendSMS()">שליחת SMS למסומנים</button>-->
     </div>
     <div class="table-responsive">
 
@@ -20,17 +20,19 @@
             <thead>
                 <tr>
 
-                    <th>מנהל אזור</th>
-                    <th>שם פרטי</th>
-                    <th>שם משפחה</th>
-                    <th>אימייל</th>
-                    <th>ת.עדכון</th>
+                   
+                    <th>שם קמפיין</th>
+                    <th>תאריך הקמה</th>
+                    <th>כמות עובדים</th>
+                   
+                    <!--<th>ת.עדכון</th>
                     <th>סטטוס</th>
-                    <th>SMS</th>
+                    <th>SMS</th>-->
+
                     <th>PDF</th>
                     <th></th>
                     <th></th>
-                    <th width="5%"><input type="checkbox" ng-model="$ctrl.checkAllc" style="width:52px;height:20px" ng-click="$ctrl.checkAll()"></th>
+                    <!--<th width="5%"><input type="checkbox" ng-model="$ctrl.checkAllc" style="width:52px;height:20px" ng-click="$ctrl.checkAll()"></th>-->
                 </tr>
             </thead>
             <tbody>
@@ -39,19 +41,18 @@
                         <input type="text" class="form-control"  ng-model="$ctrl.filter.$" placeholder="חיפוש חופשי" />
                     </td>
                 </tr>
-                <tr ng-repeat="worker in $ctrl.workers | filter:$ctrl.filter">
+                <tr ng-repeat="campain in $ctrl.campains | filter:$ctrl.filter">
 
-                    <td>{{worker.ManagerName}}</td>
-                    <td>{{worker.w.FirstName}}</td>
-                    <td>{{worker.w.LastName}}</td>
-                    <td>{{worker.w.Email}}</td>
-                    <td>{{worker.w101.DateRigster | ildate: 'HH:mm DD/MM/YYYY '}}</td>
-                    <td>{{worker.w101.Status}}</td>
-                    <td>{{worker.w101.IsSendSMS==1 ? 'נשלח':'' }}</td>
-                    <td><a class="btn  btn-success" ng-href="{{$ctrl.uploadsUri + worker.Id + '/OfekAllPdf.pdf'}}" target="_blank">PDF</a></td>
-                    <td> <button class="btn  btn-warning" ui-sref="worker({id:worker.w.Id})">עדכון</button></td>
-                    <td> <button class="btn  btn-danger" ng-click="$ctrl.delete(worker.w.Id)">מחק עובד</button></td>
-                    <td width="5%"><input style="width:52px;height:20px" type="checkbox" ng-model="worker.IsSelected" /></td>
+                    <td>{{campain.Name}}</td>
+                    <td>{{campain.DateRigster | ildate: 'DD/MM/YYYY'}}</td>
+                    <td>{{campain.CountSend}}</td>2
+                 
+                    <!--<td>{{campain.w101.Status}}</td>
+                    <td>{{campain.w101.IsSendSMS==1 ? 'נשלח':'' }}</td>-->
+                    <td><a class="btn  btn-success" ng-href="{{$ctrl.uploadsUri + campain.Id + '/OfekAllPdf.pdf'}}" target="_blank">PDF</a></td>
+                    <td> <button class="btn  btn-warning" ui-sref="campain({id:campain.w.Id})">עדכון</button></td>
+                    <td> <button class="btn  btn-danger" ng-click="$ctrl.delete(campain.w.Id)">מחק קמפיין</button></td>
+                    <!--<td width="5%"><input style="width:52px;height:20px" type="checkbox" ng-model="campain.IsSelected" /></td>-->
 
                 </tr>
             </tbody>

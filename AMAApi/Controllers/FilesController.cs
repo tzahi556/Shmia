@@ -32,26 +32,36 @@ namespace FarmsApi.Controllers
                 throw new HttpResponseException(HttpStatusCode.UnsupportedMediaType);
 
 
+            string CampainsId = "-1";
+
             string root = HttpContext.Current.Server.MapPath("~/Uploads/");
 
             if (folder.Contains("Companies"))
             {
                 root = HttpContext.Current.Server.MapPath("~/Uploads/Companies/");
+
+
             }
-
-
-
-            string tempRoot = root;
-
-            string WorkerPath = root + workerid.ToString();
-
-            if (!Directory.Exists(WorkerPath))
+            else
             {
-                Directory.CreateDirectory(WorkerPath);
+                root = root + "Workers/";
+
 
             }
 
-            root = WorkerPath;
+            root = root + "/" + workerid.ToString();
+
+            //string tempRoot = root;
+
+            //string WorkerPath = root + "/" + workerid.ToString();
+
+            if (!Directory.Exists(root))
+            {
+                Directory.CreateDirectory(root);
+
+            }
+
+            //root = WorkerPath;
 
             var provider = new MultipartFormDataStreamProvider(root);
 
@@ -59,6 +69,10 @@ namespace FarmsApi.Controllers
 
             if (folder.Contains("taz_"))
             {
+
+
+
+
                 //string credential_path = tempRoot + "CrediJson/cerdi.json";   //HttpContext.Current.Server.MapPath("~/Uploads/CrediJson/cerdi.json");
                 ////// יצירת סרביס אקאונט ואז יצירת מפתח ולהוריד את הגייסון
                 ///// כשלא עובד להלן הסבר עם לינק פשוט ליצור אחד חדש
@@ -114,9 +128,9 @@ namespace FarmsApi.Controllers
 
             if (folder.Contains("Companies_Logo"))
             {
-                if (!Directory.Exists(WorkerPath + "/Logo/"))
+                if (!Directory.Exists(root + "/Logo/"))
                 {
-                    Directory.CreateDirectory(WorkerPath + "/Logo/");
+                    Directory.CreateDirectory(root + "/Logo/");
 
                 }
 
@@ -125,9 +139,9 @@ namespace FarmsApi.Controllers
 
             if (folder.Contains("Companies_Sign"))
             {
-                if (!Directory.Exists(WorkerPath + "/PDFS/"))
+                if (!Directory.Exists(root + "/PDFS/"))
                 {
-                    Directory.CreateDirectory(WorkerPath + "/PDFS/");
+                    Directory.CreateDirectory(root + "/PDFS/");
 
                 }
 
@@ -138,15 +152,33 @@ namespace FarmsApi.Controllers
 
             if (folder.Contains("PDFS_ALL"))
             {
-               
-                if (!Directory.Exists(WorkerPath + "/PDFS/"))
+
+                if (!Directory.Exists(root + "/PDFS/"))
                 {
-                    Directory.CreateDirectory(WorkerPath + "/PDFS/");
+                    Directory.CreateDirectory(root + "/PDFS/");
 
                 }
 
 
                 root = root + "/PDFS";
+
+                //Companies_PDFS_ALL_CAMPAINS
+                if (folder.Contains("CAMPAINS"))
+                {
+                    CampainsId = folder.Replace("Companies_PDFS_ALL_CAMPAINS_","");
+
+                    root = root + "/" + CampainsId + "/";
+
+                }
+                else
+                {
+                    root = root + "/-1/";
+
+
+                }
+
+               
+              
             }
 
             string fileList = "";
@@ -191,9 +223,10 @@ namespace FarmsApi.Controllers
                 {
                     var CurrentFileName = Path.GetFileName(dest);
 
+
                     using (var Context = new Context())
                     {
-                        var FarmPDFFilesList = Context.FarmPDFFiles.Where(x => x.FarmId == workerid).OrderByDescending(x => x.Seq).ToList();
+                        var FarmPDFFilesList = Context.FarmPDFFiles.Where(x => x.FarmId == workerid && x.StatusId==1 && x.CampainsId.ToString()== CampainsId).OrderByDescending(x => x.Seq).ToList();
 
 
                         FarmPDFFiles farmPDFFiles = new FarmPDFFiles();
@@ -201,6 +234,7 @@ namespace FarmsApi.Controllers
                         farmPDFFiles.StatusId = 1;
                         farmPDFFiles.FileName = CurrentFileName;
                         farmPDFFiles.Is101 = false;
+                        farmPDFFiles.CampainsId = Helper.ConvertToInt(CampainsId);
 
                         if (FarmPDFFilesList.Count > 0) 
                             farmPDFFiles.Seq = FarmPDFFilesList[0].Seq + 1;

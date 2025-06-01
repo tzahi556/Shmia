@@ -450,7 +450,7 @@ namespace FarmsApi.Services
 
 
                     PdfAPI pa = new PdfAPI();
-                    string Link= pa.CreateNewCompanyPDF(farmid);
+                    string Link= pa.CreateNewCompanyPDF(farmid,-1);
 
 
 
