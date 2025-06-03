@@ -796,7 +796,7 @@
 
 
 
-                            $.unblockUI();
+                          //  $.unblockUI();
                             if (worker.Status == "נשלח למשרד") {
                                 SaveDynamicData(worker);
                                 alertMessage('הנתונים נשלחו למשרד בהצלחה!');

@@ -1,0 +1,1174 @@
+﻿
+<form name="farmmangerForm" novalidate>
+
+
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.14.1/themes/base/jquery-ui.css">
+    <link href="../../css/pdfstyle.css" rel="stylesheet" />
+
+    <script>
+
+        var PdfList = [];
+
+        var CurrentFontSizeDrag;
+
+        var CurrentPdfId;
+
+        var firstLoad = true;
+
+        $(function () {
+
+            $("#sortable").sortable({
+                items: ".ui-state-default",
+                placeholder: "portlet-placeholder ui-corner-all",
+                stop: function (event, ui) {
+
+
+                    var idsInOrder = $("#sortable").sortable("toArray");
+                    for (i in idsInOrder) {
+
+                        idsInOrder[i] = idsInOrder[i].replace("dv_", "");
+
+                    }
+                    angular.element(document.getElementById('mainControllerHorse')).scope().sendNewOrderPdfs(idsInOrder);
+
+                }
+            });
+
+            $("#sortable").disableSelection();
+
+            RefreshPage();
+
+            BuildEditPDF();
+
+            $(".panelFields").draggable();
+            /* $(".panelFields").draggable();*/
+
+            // for dev
+
+
+            $('#tab3').click(function (e) {
+                CurrentPage = 1;
+
+
+                if (firstLoad) {
+
+                    RefreshComboFiles();
+                    setTimeout(function clog() { RefreshComboFiles(); }, 200);
+                    setTimeout(function clog() { RefreshComboFiles(); }, 400);
+                    firstLoad = false;
+                } else {
+
+                    RefreshComboFiles();
+                }
+
+
+            });
+
+            $('#tab4').click(function (e) {
+                angular.element(document.getElementById('mainControllerHorse')).scope().setNewPdfGenerator();
+            });
+
+
+            const myTimeout = setTimeout(setCurrentFontSizeDrag
+
+                , 500);
+
+        });
+
+
+        function RefreshComboFiles() {
+
+            PdfList = [];
+
+
+            $(".dvSeq").each(function (item) {
+
+
+                var Id = $(this).attr("Id").replace("dv_", "");
+                var FileName = $(this).attr("pdfname");
+                var FullLink = $(this).attr("pdffulllink");
+                var Is101 = $(this).attr("is101");
+                var Seq = $(this).attr("seq");
+
+                var JsonObj = { "Id": Id, "FileName": FileName, "FullLink": FullLink, "Is101": Is101, "Seq": Seq };
+
+                PdfList.push(JsonObj);
+
+
+            });
+
+
+
+            if (PdfList.length > 0) {
+
+
+                for (var i = 0; i < PdfList.length; i++) {
+
+
+                    if (PdfList[i].Is101 == "true") {
+                        continue;
+                    }
+
+                    $("#ddlFiles").val("number:" + PdfList[i].Id);
+                    $('#ddlFiles').trigger("change");
+
+                    break;
+                }
+
+
+
+
+            }
+
+        }
+
+
+        function setCurrentFontSizeDrag() {
+            //CurrentFontSizeDrag = (CurrentScale / 1.7868541288718671).toString() + "em"; //"16px";//
+            CurrentFontSizeDrag = (CurrentScale * 10) + "px";
+        }
+
+        function RefreshPage() {
+
+            PdfList = [];
+
+
+            $(".dvSeq").each(function (item) {
+
+
+                var Id = $(this).attr("Id").replace("dv_", "");
+                var FileName = $(this).attr("pdfname");
+                var FullLink = $(this).attr("pdffulllink");
+                var Is101 = $(this).attr("is101");
+                var Seq = $(this).attr("seq");
+
+                var JsonObj = { "Id": Id, "FileName": FileName, "FullLink": FullLink, "Is101": Is101, "Seq": Seq };
+
+                PdfList.push(JsonObj);
+
+                CallPdfJs("Canvas_" + Id, 150, 250, FullLink);
+
+
+
+
+            });
+
+            $(".dvSeq").click(function () {
+                var FullLink = $(this).attr("pdffulllink");
+
+
+                $("#objPdf").attr('data', FullLink).hide().show();
+
+
+                $("#dialogContainer").dialog({
+                    modal: true, height: 590, width: 1005,
+                });
+            });
+
+            $(".panelClose").click(function () {
+
+                $(".ui-dialog-content").dialog('destroy');
+
+            });
+
+            $(".btn-del").click(function (e) {
+
+                e.stopPropagation();
+                //alert($(this).attr("id"));
+
+                var Id = $(this).attr("Id").replace("dvDel_", "");
+
+
+                angular.element(document.getElementById('mainControllerHorse')).scope().makeDropPdf(Id);
+
+            });
+
+        }
+
+        function BuildEditPDF() {
+
+
+            $(".btnField").draggable({
+
+                helper: "clone",
+                cursor: "pointer"
+
+            });
+
+            $(".btnGrpField").draggable({
+
+                //'fontSize': '18px',
+                //'border': '1px solid gray'
+                helper: function () {
+
+                    var btnGrpFieldId = $(this).attr("id");
+
+                    return $("<div id='" + btnGrpFieldId + "' class='btnGrpField'>").text($(this).text()).css({
+                        'padding': '0px',
+                        'fontSize': CurrentFontSizeDrag
+                    });
+                },
+
+
+                cursor: "pointer"
+            });
+
+            $('.grpBody').droppable({
+                accept: ".btnField",
+                drop: function (event, ui) {
+
+                    var grpId = $(this).attr("id").replace("grpBody_", "");
+                    var btnid = ui.draggable.attr("id").replace("btnField_", "")
+
+                    angular.element(document.getElementById('mainControllerHorse')).scope().sendFields2Groups(1, grpId, btnid);
+
+
+
+                }
+            });
+
+            $(".panelGroup").sortable({
+                placeholder: "portlet-placeholderGroups ui-corner-all",
+                stop: function (event, ui) {
+                    var idsInOrder = $(".panelGroup").sortable("toArray");
+
+
+                    for (i in idsInOrder) {
+
+                        idsInOrder[i] = idsInOrder[i].replace("grp_", "");
+                    }
+                    angular.element(document.getElementById('mainControllerHorse')).scope().sendNewOrderforGroupsFields(1, idsInOrder);
+                }
+
+            });
+
+            $(".btnGrpField").mouseover(function () {
+                $(".panelGroup").sortable("disable");
+            });
+
+            $(".btnGrpField").mouseout(function () {
+                $(".panelGroup").sortable("enable");
+            });
+
+            $("#ddlFiles").on("change", function () {
+
+
+                CurrentPdfId = $(this).val().replace("number:", "");
+
+                var CurrentFilePDF = PdfList.filter(x => x.Id == CurrentPdfId);
+
+                if (CurrentFilePDF.length > 0) {
+
+                    var currentWidth = $("#canvasContainer").width();
+                    var currentHeight = $("#canvasContainer").height();
+
+                    CallEditPdfJs("canvasEdit", CurrentFilePDF[0].FullLink, currentWidth, currentHeight);
+
+
+
+                    // const myTimeoutssss = setTimeout(AddParamsToPDF, 5000);
+
+
+                    //var fdfdf = CurrentViewport;
+
+
+                    var Objects = { Id: 0, Fields2GroupsId: 0, FarmPDFFilesId: CurrentPdfId, PageNumber: CurrentPage, PdfX: 0, PdfY: 0, StatusId: 1 };
+
+                    angular.element(document.getElementById('mainControllerHorse')).scope().getSetFields2PDF(1, Objects);
+
+
+
+
+                } else {
+
+                    $("#canvasContainer div").not('#canvasEdit').remove();
+
+                }
+
+
+
+
+            });
+
+            $("#liPrev").click(function () {
+
+                changePage(-1);
+                var Objects = { Id: 0, Fields2GroupsId: 0, FarmPDFFilesId: CurrentPdfId, PageNumber: CurrentPage, PdfX: 0, PdfY: 0, StatusId: 1 };
+
+                angular.element(document.getElementById('mainControllerHorse')).scope().getSetFields2PDF(1, Objects);
+
+            });
+
+            $("#liNext").click(function () {
+
+                changePage(1);
+                var Objects = { Id: 0, Fields2GroupsId: 0, FarmPDFFilesId: CurrentPdfId, PageNumber: CurrentPage, PdfX: 0, PdfY: 0, StatusId: 1 };
+
+                angular.element(document.getElementById('mainControllerHorse')).scope().getSetFields2PDF(1, Objects);
+
+
+
+
+            });
+
+            BuildCanvasDrop();
+
+            //$("#canvasContainer").append('<div class="btnGrpFieldHelper ui-draggable ui-draggable-handle" style="padding: 0px; font-size: 18px; border: 1px solid gray; position: absolute; left: 806.828px; top: 246px;"> שם פרטי  </div > ');
+            //$(".btnGrpFieldHelper").draggable({ cursor: "pointer" });
+
+
+
+        }
+
+
+        function AddParamsToPDF(ObjList) {
+
+
+            $("#canvasContainer div").not('#canvasEdit').remove();
+            //while (!CurrentViewport) {
+
+            CurrentFontSizeDrag = (CurrentScale * 10) + "px";
+            //CurrentFontSizeDrag =  (CurrentScale / 1.7868541288718671).toString() + "em";
+
+            //}
+
+
+
+
+            for (var i = 0; i < ObjList.length; i++) {
+
+
+                var f2p = ObjList[i].f2p;
+                var f = ObjList[i].f;
+
+                //if()
+
+                //if (!f) continue;
+
+
+
+                $("#canvasContainer").append('<div id="btnGrpFieldHelper_' + f2p.Id + '" fields2groupsid="' + f2p.Fields2GroupsId + '" fieldsid="' + f2p.FieldsId + '" style="position:absolute;" class="btnGrpField btnGrpFieldHelper ui-draggable ui-draggable-handle">' + f.Name + '</div>');
+
+                var itemWidth = $("#btnGrpFieldHelper_" + f2p.Id).width();
+                var itemHeight = $("#btnGrpFieldHelper_" + f2p.Id).height();
+
+
+                var ViewportPoints = CurrentViewport.convertToViewportPoint(f2p.PdfX, f2p.PdfY);
+
+
+                $("#btnGrpFieldHelper_" + f2p.Id).css({ left: ViewportPoints[0] - 3, top: ViewportPoints[1], fontSize: CurrentFontSizeDrag });
+
+                // for dev
+                $('#spxx').text(f2p.PdfX);
+                $('#spyy').text(f2p.PdfY);
+
+                //$('#spxx').text(parseFloat(ViewportPoints[0] - itemWidth).toFixed(2));
+                //$('#spyy').text(parseFloat(ViewportPoints[1] + itemHeight).toFixed(2));
+
+                //$('#spScale').text(parseFloat(CurrentScale).toFixed(2));
+                //  $('#spWidth').text($("#canvasContainer").width());
+                //$('#spHeight').text($("#canvasContainer").height());
+                /* , fontSize: CurrentFontSizeDrag*/
+
+
+            }
+            $(".btnGrpFieldHelper").draggable({ cursor: "pointer" });
+
+
+
+
+        }
+
+        function OpenDialog(type) {
+
+            if (type == 1) {
+
+                $("#dialogContainerEditGroup").dialog({
+                    modal: true, height: 'auto', width: 'auto'
+                });
+            }
+
+            if (type == 2) {
+
+                $("#dialogContainerEditFields").dialog({
+                    modal: true, height: 'auto', width: 'auto'
+                });
+            }
+
+
+
+
+        }
+
+        function BuildCanvasDrop() {
+
+            $('#canvasEdit').droppable({
+                accept: ".btnGrpField, .btnGrpFieldHelper",
+
+                drop: function (event, ui) {
+
+
+                    debugger
+
+
+                    var x = ui.offset.left - $(this).offset().left;
+                    var y = ui.offset.top - $(this).offset().top;
+
+
+
+
+
+
+                    var itemWidth = $(ui.helper).width();
+                    var itemHeight = $(ui.helper).height();
+
+
+
+
+
+                    var PdfPoints = CurrentViewport.convertToPdfPoint(x, y);
+
+                    var PdfX = parseFloat(PdfPoints[0]).toFixed(2);
+                    var PdfY = parseFloat(PdfPoints[1]).toFixed(2);
+
+                    var PdfPointsNew = CurrentViewport.convertToPdfPoint(x + itemWidth, y - itemHeight);
+                    var PdfWidthX = parseFloat(PdfPointsNew[0]).toFixed(2);
+                    var PdfHeightY = parseFloat(PdfPointsNew[1]).toFixed(2);
+                    //$('#spxx').text(parseFloat(PdfPointsNew[0]).toFixed(2));
+                    //$('#spyy').text(parseFloat(PdfPointsNew[1]).toFixed(2));
+
+                    //$('#spxx').text(x + itemWidth);
+                    //$('#spyy').text(y - (itemHeight));
+
+
+                    if (!$(ui.helper).hasClass("btnGrpFieldHelper")) {
+
+
+                        var FieldsId;
+
+                        var Fields2GroupsId = $(ui.helper).attr("id").replace("btnGrpField_", "");//.replace("btnGrpFieldHelper_", "");
+
+                        if (Fields2GroupsId.indexOf("btnField_") > -1) {
+
+
+                            FieldsId = Fields2GroupsId.replace("btnField_", "");
+                            Fields2GroupsId = -1;
+
+
+                        }
+
+
+
+                        $("#canvasContainer").append(ui.helper.clone(true).css({ left: x - 3, top: y }).addClass("btnGrpFieldHelper"));//.removeClass("btnGrpField"));
+
+                        $(".btnGrpFieldHelper").draggable({ cursor: "pointer" });
+
+
+                        var Objects = { Id: 0, Fields2GroupsId: Fields2GroupsId, FarmPDFFilesId: CurrentPdfId, PageNumber: CurrentPage, PdfX: PdfX, PdfY: PdfY, PdfWidthX: PdfWidthX, PdfHeightY: PdfHeightY, FieldsId: FieldsId, StatusId: 1 };
+
+                        angular.element(document.getElementById('mainControllerHorse')).scope().getSetFields2PDF(2, Objects);
+
+
+                    } else {
+
+                        var Fields2PDFId = $(ui.helper).attr("id").replace("btnGrpFieldHelper_", "");
+                        var Fields2GroupsId = $(ui.helper).attr("fields2groupsid");
+                        var FieldsId = eval($(ui.helper).attr("fieldsid"));
+
+                        var Objects = { Id: Fields2PDFId, Fields2GroupsId: Fields2GroupsId, FarmPDFFilesId: CurrentPdfId, PageNumber: CurrentPage, PdfX: PdfX, PdfY: PdfY, PdfWidthX: PdfWidthX, PdfHeightY: PdfHeightY, FieldsId: FieldsId, StatusId: 1 };
+
+                        angular.element(document.getElementById('mainControllerHorse')).scope().getSetFields2PDF(2, Objects);
+
+                    }
+
+
+
+                },
+
+                out: function (event, ui) {
+                    if ($(ui.helper).hasClass("btnGrpFieldHelper")) {
+                        $(ui.draggable).fadeOut(1000, function () {
+
+
+                            var Fields2PDFId = $(ui.helper).attr("id").replace("btnGrpFieldHelper_", "");
+                            $(this).remove();
+
+
+                            var Objects = { Id: Fields2PDFId, Fields2GroupsId: 0, FarmPDFFilesId: 0, PageNumber: 0, PdfX: 0, PdfY: 0, StatusId: 0 };
+
+                            angular.element(document.getElementById('mainControllerHorse')).scope().getSetFields2PDF(2, Objects);
+
+                        });
+                    }
+                }
+
+
+            });
+
+
+        }
+
+
+
+    </script>
+
+    <uib-tabset active="active" class="tab-form-demo" ng-show="!$ctrl.IsPopUp">
+
+
+        <!--פרטי קמפיין-->
+        <uib-tab index="-1" heading="עובדים">
+
+            <div class="col-md-12">
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        עובדים
+
+                    </div>
+                    <div class="panel-body">
+
+                        <button class="btn btn-success btn-xs" style="float:left;margin-left:10px;" ng-click="$ctrl.sendSMS()">שליחת SMS למסומנים</button>
+
+
+
+
+
+
+                    </div>
+
+                    <div class="table-responsive">
+
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+
+                                    <th>#</th>
+                                    <th>שם פרטי</th>
+                                    <th>שם משפחה</th>
+                                    <th>אימייל</th>
+                                    <th>סוג שליחה</th>
+                                    <th>תאריך שליחה</th>
+                                    <th>תאריך אישור עובד/ת</th>
+                                    <th>סטטוס</th>
+                                    <!--<th>SMS</th>-->
+                                    <th>PDF</th>
+                                    <th></th>
+
+                                    <th width="5%"><input type="checkbox" ng-model="$ctrl.checkAllc" style="width:52px;height:20px" ng-click="$ctrl.checkAll()"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td colspan="10">
+                                        <input type="text" class="form-control" ng-model="$ctrl.filter.$" placeholder="חיפוש חופשי" />
+                                    </td>
+                                </tr>
+                                <tr ng-repeat="worker in $ctrl.workers | filter:$ctrl.filter">
+
+                                    <td>{{worker.w.Id}}</td>
+                                    <td>{{worker.w.FirstName}}</td>
+                                    <td>{{worker.w.LastName}}</td>
+                                    <td>{{worker.w.Email}}</td>
+                                    <td>{{worker.m.Name}}</td>
+
+
+                                    <td>{{(worker.cs.DateSend) ? (worker.cs.DateSend | ildate: 'HH:mm DD/MM/YYYY ') :''}}</td>
+                                    <td>{{(worker.cs.DateConfirm) ? (worker.cs.DateConfirm | ildate: 'HH:mm DD/MM/YYYY ') :''}}</td>
+                                    <td>{{(worker.css.Id!=4) ? worker.css.Name:''}}</td>
+
+
+
+                                    <td><a class="btn  btn-success" ng-href="{{$ctrl.uploadsUri + worker.Id + '/OfekAllPdf.pdf'}}" target="_blank">PDF</a></td>
+                                    <td> <button class="btn  btn-warning" ui-sref="workercampains({id:worker.w.Id,campainid:$ctrl.campain.Id})">עדכון</button></td>
+
+                                    <td width="5%"><input style="width:52px;height:20px" type="checkbox" ng-model="worker.IsSelected" /></td>
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="panel-footer">
+
+                        <label>במסך זה ניתן להגדיר את השליחה של הקמפיין לעובדים. </label>
+
+
+                    </div>
+                </div>
+            </div>
+
+        </uib-tab>
+
+
+
+        <!--פרטי קמפיין-->
+        <uib-tab index="0" heading="פרטי קמפיין">
+
+            <div class="col-md-12">
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        פרטי קמפיין
+
+                    </div>
+                    <div class="panel-body">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>מזהה</label>
+                                <input type="number" disabled class="form-control" ng-model="$ctrl.campain.Id" />
+                            </div>
+
+
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>שם</label>
+                                <input type="text" name="name" class="form-control" ng-model="$ctrl.campain.Name" required />
+                            </div>
+
+                        </div>
+
+                        <div class="col-md-6">
+
+                            <div class="form-group">
+                                <label>מס' עובדים שנשלח להם הודעה</label>
+                                <input type="text" disabled class="form-control" ng-model="$ctrl.campain.CountSend" />
+                            </div>
+                        </div>
+
+
+                        <div class="col-md-6">
+
+                            <div class="form-group">
+                                <label>מס' עובדים שאישרו</label>
+                                <input type="text" disabled class="form-control" ng-model="$ctrl.campain.CountSign" />
+                            </div>
+                        </div>
+
+
+
+
+
+                        <div class="col-md-6">
+
+                            <div class="form-group">
+                                <label>תאריך הקמה</label>
+                                <input type="date" disabled class="form-control date" ng-model="$ctrl.campain.DateRigster" />
+                            </div>
+
+
+                          
+
+                        </div>
+
+                        <div class="col-md-6">
+
+                            <div class="form-group">
+
+
+                                <label>
+                                    האם בקמפיין זה צריך לחייב חתימה מחודשת ?
+                                </label><br />
+                                <input type="checkbox" ng-model="$ctrl.campain.MustSign">
+
+
+                            </div>
+                        </div>
+
+
+                    </div>
+                    <div class="panel-footer colAlignLeft">
+
+                        <button class="btn btn-primary" ng-click="$ctrl.SaveData(1)">שמירת נתונים</button>
+
+                    </div>
+                </div>
+            </div>
+
+        </uib-tab>
+
+        <!--הוספת קבצים-->
+        <uib-tab index="1" heading="הוספת קבצים">
+
+            <div class="col-md-12">
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        הוספת קבצים לשליחה
+
+                    </div>
+                    <div class="panel-body">
+
+
+                        <!--<div class="col-md-2">
+                        <button class="btnAddPdf btn btn-default" ng-click="$ctrl.SaveData(2)">הוספת קובץ 101</button>-->
+                        <!--<input type="file" accept="application/pdf" name="avatar" class="hideUpload" filename="" folder="'PDFS_101'" workerid="$ctrl.farm.Id" filename-callback="$ctrl.uploadFile">-->
+                        <!--</div>-->
+
+                        <div class="col-md-12">
+
+                            <div id="sortable">
+
+
+                                <div id="dv_{{farmspdffile.Id}}" ng-repeat="farmspdffile in $ctrl.farmspdffiles"
+                                     is101={{farmspdffile.Is101}}
+                                     pdfname="{{farmspdffile.FileName}}"
+                                     pdffulllink="{{farmspdffile.FullLink}}"
+                                     farmid="{{farmspdffile.FarmId}}"
+                                     seq="{{farmspdffile.Seq}}"
+                                     class="ui-state-default dvSeq">
+
+                                    <div class="dvfileNamePdf" title="{{farmspdffile.FileName}}">{{farmspdffile.FileName}}</div>
+
+                                    <canvas id="Canvas_{{farmspdffile.Id}}">
+                                    </canvas>
+
+                                    <div id="dvDel_{{farmspdffile.Id}}" class="btn-del">
+
+                                    </div>
+                                </div>
+
+
+                            </div>
+                            <div class="dvAddPdf">
+                                <!--<button id="btnAddPdf" class="btnAddPdf btn btn-default">-->
+                                הוספת קובץ <br />
+                                PDF
+
+                                <input type="file" accept="application/pdf" name="avatar" class="hideUploadnew" filename="" folder="'Companies_PDFS_ALL_CAMPAINS_' + $ctrl.campain.Id" workerid="$ctrl.farm.Id" filename-callback="$ctrl.uploadFilePdf">
+
+
+                            </div>
+
+                        </div>
+
+
+
+                    </div>
+                    <div class="panel-footer">
+                        <label>במסך זה ניתן להגדיר את קבצי הPDF שישלחו לעובד. </label>
+
+                    </div>
+                </div>
+            </div>
+
+            <div id="dialogContainer" style="display:none">
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        תצוגת קובץ PDF
+
+                        <div style="float:left;cursor:pointer" class="panelClose">
+                            <img src="../../images/_notArrive.png" width="24px" />
+                        </div>
+
+                    </div>
+                    <div class="panel-body" id="panelBody">
+                        <div id="divContainer"
+                             style="border:2px solid black;height:100%;overflow:auto;">
+                            <object id="objPdf" data=""
+                                    type="application/pdf"
+                                    width="100%"
+                                    height="99%" style="">
+                            </object>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </uib-tab>
+
+        <!--עריכת PDF-->
+        <uib-tab index="5" id="tab3" heading="עריכת PDF">
+
+            <div class="col-md-5 colPadding0">
+
+                <div class="col-md-12 colPadding0">
+
+                    <div class="col-md-6 colPadding2">
+                        <div class="panel panel-primary panelFields" style="z-index: 5 !important;">
+                            <div class="panel-heading">
+                                שדות קיימים במערכת
+                                <span></span>
+                            </div>
+                            <div class="panel-body">
+                                <div class="row">
+                                    <div class="col-md-8" style="margin:0">
+
+                                        <input type="text" style="margin:0" class="form-control" ng-model="$ctrl.FieldName" placeholder="שם שדה" />
+
+                                    </div>
+                                    <div class="col-md-4">
+                                        <button class="btn btn-success" title="הוספת שדה " ng-click="$ctrl.actionFieldGroup(4)">הוסף שדה</button>
+                                    </div>
+                                    <div class="col-md-12">&nbsp;</div>
+
+                                    <div class="col-md-6" ng-repeat="btn in $ctrl.btns | filter:FilterOnlySign ">
+
+                                        <div id="btnField_{{btn.Id}}" class="btn btn-danger btnGrpField" title="יש לגרור לקבוצה הרצויה">
+                                            {{btn.Name}}
+                                        </div>
+
+                                    </div>
+
+                                    <div class="col-md-12">
+
+                                        <hr />
+
+                                    </div>
+
+
+                                    <div class="col-md-12" ng-repeat="btn in $ctrl.btns | filter:FilterWithoutSign">
+
+                                        <div id="btnField_{{btn.Id}}" class="btn btn-primary btnField" title="יש לגרור לקבוצה הרצויה">
+                                            {{btn.Name}}
+                                        </div>
+                                        <div ng-if="btn.FarmId>0" class="btnLeft" ng-click="$ctrl.actionFieldGroup(5,btn.Id)">
+                                            <img src="../../images/delete3.png" width="18px" />
+                                        </div>
+                                    </div>
+
+
+
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="col-md-6 colPadding2">
+                        <div class="panel panel-primary panelFields" style="z-index:4 !important;">
+                            <div class="panel-heading">
+                                <div style="float:right">קבוצות שדות טופס</div>
+                                <div class="askIcon">
+                                    <img src="../../images/ask.png" class="imgAsk" />
+                                </div>
+                                <div>&nbsp;</div>
+
+                            </div>
+                            <div class="panel-body">
+
+
+                                <div class="row">
+
+                                    <div class="col-md-8">
+                                        <input type="text" class="form-control" ng-model="$ctrl.GroupName" placeholder="שם קבוצה" />
+                                    </div>
+
+                                    <div class="col-md-4 colPadding0">
+
+
+                                        <button style="" class="btn btn-success" title="הוספת קבוצה" ng-click="$ctrl.actionFieldGroup(6)">הוסף קבוצה</button>
+
+
+                                    </div>
+
+                                    <div class="col-md-12">&nbsp;</div>
+
+
+                                    <div class="panelGroup">
+                                        <div id="grp_{{grp.Id}}" class="col-md-12" ng-repeat="grp in $ctrl.grps">
+
+                                            <div class="panel panel-info">
+
+                                                <div class="panel-heading">
+
+                                                    <div style="float:right">{{grp.Name}}</div>
+                                                    <div class="btnLeft" ng-click="$ctrl.actionFieldGroup(7,grp.Id)">
+                                                        <img src="../../images/delete3.png" width="24px" />
+                                                    </div>
+
+                                                    <div class="btnLeft" style="margin-left:5px;" ng-click="$ctrl.actionFieldGroup(11,grp.Id)">
+                                                        <img src="../../images/edit.png" width="24px" />
+                                                    </div>
+                                                    <div>&nbsp;</div>
+                                                </div>
+
+                                                <div class="panel-body grpBody" id="grpBody_{{grp.Id}}">
+
+                                                    <div class="col-md-12 colPadding0" style="" ng-if="btns2grp.f2g.FieldsGroupsId==grp.Id" ng-repeat="btns2grp in $ctrl.btns2grps">
+
+
+                                                        <div class="col-md-11 colPadding0" style="">
+
+                                                            <div id="btnGrpField_{{btns2grp.f2g.Id}}" ng-click="$ctrl.actionFieldGroup(12,btns2grp.f2g.Id)" class="btn btn-primary btnGrpField" title="יש לגרור למקום הרצוי בטופס ">
+                                                                {{btns2grp.f.Name}}
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="col-md-1 colPadding0" style="">
+                                                            <div class="" ng-click="$ctrl.actionFieldGroup(10,btns2grp.f2g.Id)">
+                                                                <img src="../../images/delete3.png" width="18px" />
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+
+
+                            </div>
+                        </div>
+
+                    </div>
+
+
+
+                </div>
+
+            </div>
+            <div class="col-md-7">
+
+                <div class="col-md-4 colPadding2">
+                    <select id="ddlFiles" class="form-control borderSelectBlue" ng-model="$ctrl.fileId" ng-options="farmspdffile.Id as farmspdffile.FileName for farmspdffile in $ctrl.farmspdffiles | filter:{Is101:false}">
+                        <option value="">בחירת קובץ</option>
+                    </select>
+                </div>
+
+
+                <div class="col-md-4">
+
+
+                    <div id="liNext" class="navButton">
+                        <span>«</span>
+                    </div>
+                    <div class="spMikra">
+
+                        <span id="spCurPage" class="spCurPage">0</span>/<span id="spCurTotalPage" class="spCurTotalPage">0</span>
+
+                    </div>
+                    <div id="liPrev" class="navButton">
+                        <span>&raquo;</span>
+                    </div>
+
+
+                </div>
+
+
+                <div class="col-md-4" style="padding:0px">
+
+
+                    <div class="alert alert-info alertPdfPage" role="alert">
+                        במידה והקובץ לא נטען כראוי לחצ/י <a class="clickHere" onclick="CurrentPage = 1; RefreshComboFiles();">כאן</a>
+                    </div>
+
+                    <!--<span id="spxx"></span> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span id="spyy"></span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span id="spScale"></span>-->
+                    <!--<br />
+                    <span id="spx"></span> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span id="spy"></span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+                    <br />W-<span id="spWidth"></span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<br />H-<span id="spHeight"></span>-->
+                </div>
+
+
+                <div class="col-md-12 colPadding0">
+                    <div id="canvasContainer">
+
+
+                        <canvas id="canvasEdit">
+                        </canvas>
+
+                    </div>
+                </div>
+            </div>
+
+
+        </uib-tab>
+
+
+        <!--תצוגת-->
+        <uib-tab id="tab4" index="7" heading="תצוגת סופית של PDF">
+
+            <div class="col-md-12">
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        תצוגת סופית של PDF
+
+                    </div>
+                    <div class="panel-body">
+
+                        <div class="panel panel-primary">
+                            <!--<div class="panel-heading">
+                                תצוגת קובץ PDF
+
+                                <div style="float:left;cursor:pointer" class="panelClose">
+                                    <img src="../../images/_notArrive.png" width="24px" />
+                                </div>
+
+                            </div>-->
+                            <div class="panel-body" id="panelBody">
+                                <div id="divContainerEnd"
+                                     style="border:2px solid black;height:100%;overflow:auto;">
+                                    <object id="objPdfEnd" data=""
+                                            type="application/pdf"
+                                            width="100%"
+                                            height="99%" style="">
+                                    </object>
+                                </div>
+
+                            </div>
+                        </div>
+
+
+                    </div>
+                    <div class="panel-footer">
+                        <label>בחלק זה ניתן לצפות בקובץ PDF כפי שנבנה בשלבים הקודמים. </label>
+
+                    </div>
+                </div>
+            </div>
+
+
+        </uib-tab>
+
+
+    </uib-tabset>
+
+    <div id="mainControllerHorse"></div>
+
+
+    <div id="dialogContainerEditGroup" style="display:none">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                עריכת קבוצה - <b style="font-size:15px">{{$ctrl.grp.Name}}</b>
+
+                <div style="float:left;cursor:pointer" class="panelClose">
+                    <img src="../../images/_notArrive.png" width="24px" />
+                </div>
+
+            </div>
+            <div class="panel-body">
+                <div class="col-md-12">
+
+                    <div class="form-group">
+                        <label>סגנון כותרת קבוצה</label>
+
+                        <select id="ddlTitleTypes" class="form-control" ng-model="$ctrl.grp.TitleTypeId">
+                            <option value="1">כותרת דקה</option>
+                            <option value="2">כותרת עבה(פאנל)</option>
+                            <option value="3">ללא כותרת</option>
+
+                        </select>
+
+
+
+                        <!--<input type="text" class="form-control" ng-model="$ctrl.grp.CountFieldsInRow" />-->
+                    </div>
+
+
+                    <div class="form-group">
+                        <label>שם</label>
+                        <input type="text" name="name" class="form-control" ng-model="$ctrl.grp.Name" required />
+                    </div>
+                    <div class="form-group">
+                        <label>סדר</label>
+                        <input type="text" class="form-control" ng-model="$ctrl.grp.Seq" />
+                    </div>
+                    <div class="form-group">
+                        <label>מס' שדות בשורה</label>
+
+                        <select id="ddlGroups" class="form-control" ng-model="$ctrl.grp.CountFieldsInRow">
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="6">6</option>
+                        </select>
+
+
+
+                        <!--<input type="text" class="form-control" ng-model="$ctrl.grp.CountFieldsInRow" />-->
+                    </div>
+
+
+                </div>
+
+
+            </div>
+
+            <div class="panel-footer colAlignLeft">
+
+                <button class="btn btn-primary panelClose" ng-click="$ctrl.SaveData(3)">שמירת נתונים</button>
+
+                <button class="btn btn-danger panelClose">סגור</button>
+
+            </div>
+        </div>
+    </div>
+
+    <div id="dialogContainerEditFields" style="display:none">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                עריכת שדה - <b style="font-size:15px">{{$ctrl.btns2grp.Name}}</b>
+
+                <div style="float:left;cursor:pointer" class="panelClose">
+                    <img src="../../images/_notArrive.png" width="24px" />
+                </div>
+
+            </div>
+            <div class="panel-body">
+                <div class="col-md-6">
+
+                    <div class="form-group">
+                        <label>כותרת</label>
+                        <input type="text" name="name" class="form-control" ng-model="$ctrl.btns2grp.Title" />
+                    </div>
+
+
+
+                    <div class="form-group">
+                        <label>סדר</label>
+                        <input type="text" class="form-control" ng-model="$ctrl.btns2grp.Seq" />
+                    </div>
+
+                    <div class="form-group">
+                        <label><br /><input type="checkbox" ng-model="$ctrl.btns2grp.IsWorkerShow" />  האם להסתיר מהעובד/ת  </label>
+                    </div>
+
+
+                </div>
+
+                <div class="col-md-6">
+
+
+                    <div class="form-group">
+                        <label>שם</label>
+                        <input type="text" name="name" class="form-control" disabled ng-model="$ctrl.btns2grp.Name" />
+                    </div>
+
+
+
+                    <div class="form-group">
+                        <label>סוג שדה </label>
+                        <select id="ddlFieldsDataTypes" class="form-control" ng-model="$ctrl.btns2grp.FieldsDataTypesId">
+
+                            <option value="1">טקסט</option>
+                            <option value="2">מספר</option>
+                            <option value="3">תאריך</option>
+                            <option value="4">צ'קבוקס מאוזן</option>
+                            <option value="6">צ'קבוקס אנכי</option>
+                            <option value="5">טקסט רחב</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>ערך דיפלוטיבי</label>
+                        <input type="text" class="form-control" ng-model="$ctrl.btns2grp.DefaultValue" />
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="panel-footer colAlignLeft">
+
+                <button class="btn btn-primary panelClose" ng-click="$ctrl.SaveData(4)">שמירת נתונים</button>
+
+                <button class="btn btn-danger panelClose">סגור</button>
+
+            </div>
+        </div>
+    </div>
+</form>
+
+

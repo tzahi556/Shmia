@@ -44,7 +44,9 @@ namespace FarmsApi.DataModels
         public DbSet<Fields2GroupsWorkerData> Fields2GroupsWorkerData { get; set; }
 
         public DbSet<Campains> Campains { get; set; }
+        public DbSet<CampainsStatus> CampainsStatus { get; set; }
 
+        public DbSet<CampainsStatusType> CampainsStatusType { get; set; }
 
         public Context() : base("Farms") {
 

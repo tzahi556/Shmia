@@ -24,10 +24,25 @@
         this.actionFieldGroup = _actionFieldGroup;
         this.getSetWorkerAndCompanyData = _getSetWorkerAndCompanyData;
 
+        this.getSetCampainsData = _getSetCampainsData;
 
-        function _getSetWorkerAndCompanyData(type, workerid, objects) {
+        function _getSetWorkerAndCompanyData(type, workerid, objects, campainsId) {
+
+            if (!campainsId) campainsId = -1;
+
             var deferred = $q.defer();
-            $http.post(sharedValues.apiUrl + 'fields/getSetWorkerAndCompanyData/' + type + "/" + workerid, objects).then(function (res) {
+            $http.post(sharedValues.apiUrl + 'fields/getSetWorkerAndCompanyData/' + type + "/" + workerid + "/" + campainsId, objects).then(function (res) {
+
+                deferred.resolve(res.data);
+            });
+
+            return deferred.promise;
+        }
+
+
+        function _getSetCampainsData(type, campainid, objects) {
+            var deferred = $q.defer();
+            $http.post(sharedValues.apiUrl + 'fields/getSetCampainsData/' + type + "/" + campainid, objects).then(function (res) {
 
                 deferred.resolve(res.data);
             });
@@ -37,9 +52,14 @@
 
 
 
-        function _actionFieldGroup(type, farmid, objects) {
+
+
+        function _actionFieldGroup(type, farmid, objects, campainsId) {
+
+            if (!campainsId) campainsId = -1;
+
             var deferred = $q.defer();
-            $http.post(sharedValues.apiUrl + 'fields/actionFieldGroup/' + type + "/" + farmid, objects).then(function (res) {
+            $http.post(sharedValues.apiUrl + 'fields/actionFieldGroup/' + type + "/" + farmid + "/" + campainsId, objects).then(function (res) {
 
                 deferred.resolve(res.data);
             });
@@ -155,7 +175,7 @@
 
         function _getFarmPDFFiles(id, campainsId) {
             var deferred = $q.defer();
-           
+          
             $http.get(sharedValues.apiUrl + 'farms/getFarmPDFFiles/' + id + '/' + campainsId).then(function (res) {
 
                     var farmsfiles = res.data;

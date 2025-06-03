@@ -225,7 +225,6 @@
             }
         });
 
-
         $stateProvider.state('users', {
             url: '/users/',
             views: {
@@ -284,7 +283,6 @@
             }
         });
 
-
         $stateProvider.state('farms', {
             url: '/farms/',
             views: {
@@ -321,8 +319,6 @@
                 }
             }
         });
-
-
 
         $stateProvider.state('awsmangershistory', {
             url: '/awsmangershistory/',
@@ -480,7 +476,6 @@
             }
         });
 
-
         $stateProvider.state('farmmanager', {
             url: '/farmmanager/',
             views: {
@@ -553,22 +548,146 @@
             url: '/campains/',
             views: {
                 'main': {
-                    template: '<campains workers="$ctrl.workers"></campains>',
-                    controller: function (workers) {
+                    template: '<campains campains="$ctrl.campains"></campains>',
+                    controller: function (campains) {
 
-                        this.workers = workers;
+                        this.campains = campains;
 
 
                     },
                     controllerAs: '$ctrl',
                     resolve: {
-                        workers: function (usersService) {
-                            return usersService.getWorkers(true);
+                        campains: function (farmsService) {
+                            return farmsService.getSetCampainsData(1, localStorage.getItem('FarmId'),null);
                         }
                     }
                 }
             }
         });
+
+        $stateProvider.state('campain', {
+            url: '/campain/{id}/',
+            views: {
+                'main': {
+                    template: '<campain workers="$ctrl.workers" campain="$ctrl.campain" btns="$ctrl.btns"  grps="$ctrl.grps"  btns2grps="$ctrl.btns2grps" farm="$ctrl.farm" farmspdffiles="$ctrl.farmspdffiles"></campain>',
+                    controller: function (campain, farm, farmspdffiles, btns, grps, btns2grps, workers) {
+                        this.farm = farm;
+                        this.campain = campain;
+                        this.farmspdffiles = farmspdffiles;
+                        this.btns = btns;
+                        this.grps = grps;
+                        this.btns2grps = btns2grps;
+                        this.workers = workers;
+
+                    },
+                    controllerAs: '$ctrl',
+                    resolve: {
+                        campain: function (farmsService, $stateParams) {
+                            return farmsService.getSetCampainsData(2, $stateParams.id, null);
+                        },
+
+                        farm: function (farmsService, $stateParams) {
+
+                            return farmsService.getFarm(localStorage.getItem('FarmId'));
+                        },
+
+                        farmspdffiles: function (farmsService, $stateParams) {
+
+                            return farmsService.getFarmPDFFiles(localStorage.getItem('FarmId'), $stateParams.id);
+                        },
+
+                        btns: function (farmsService, $stateParams) {
+
+                            return farmsService.actionFieldGroup(1, localStorage.getItem('FarmId'), null, $stateParams.id);
+                        },
+
+                        grps: function (farmsService, $stateParams) {
+
+                            return farmsService.actionFieldGroup(2, localStorage.getItem('FarmId'), null, $stateParams.id);
+                        },
+
+                        btns2grps: function (farmsService, $stateParams) {
+
+                            return farmsService.actionFieldGroup(3, localStorage.getItem('FarmId'), null, $stateParams.id);
+                        },
+
+                        workers: function (farmsService, $stateParams) {
+                             return farmsService.getSetCampainsData(4, $stateParams.id, null);
+                        }
+
+
+                    }
+                }
+            }
+        });
+
+        $stateProvider.state('workercampains', {
+            url: '/workercampains/{id}/{campainid}/',
+            views: {
+                'main': {
+                    template: '<workercampains  screendata="$ctrl.screendata" worker="$ctrl.worker" campain="$ctrl.campain" ></workercampains>',
+                    controller: function (screendata, worker, campain) {
+                        this.worker = worker;
+                        this.campain = campain;
+                        //this.childs = childs;
+                        //this.cities = cities;
+                        //this.banks = banks;
+                        //this.banksbrunchs = banksbrunchs;
+                        //this.users = users;
+                        this.screendata = screendata;
+                        //this.farm = farm;
+
+                    },
+                    controllerAs: '$ctrl',
+                    resolve: {
+                        worker: function (farmsService, $stateParams) {
+
+                            return farmsService.getSetCampainsData(5, $stateParams.id, null);
+                        },
+                        campain: function (farmsService, $stateParams) {
+
+                            return farmsService.getSetCampainsData(6, $stateParams.campainid, null);
+                        },
+                        //childs: function (usersService, $stateParams) {
+
+                        //    return usersService.getWorkerChilds($stateParams.id);
+                        //},
+
+                        //cities: function (usersService, $stateParams) {
+
+                        //    return usersService.getMasterTable(1);
+                        //},
+                        //banks: function (usersService, $stateParams) {
+
+                        //    return usersService.getMasterTable(2);
+                        //},
+                        //banksbrunchs: function (usersService, $stateParams) {
+
+                        //    return usersService.getMasterTable(3);
+                        //},
+
+                        //users: function (usersService) {
+                        //    if (localStorage.getItem('currentRole') == "farmAdmin")
+                        //        return usersService.getUsers("instructor");
+                        //},
+
+                        screendata: function (farmsService, $stateParams) {
+
+                           
+
+                            return farmsService.getSetWorkerAndCompanyData(1, $stateParams.id, null, $stateParams.campainid);
+                        }
+
+                        //farm: function (farmsService, $stateParams) {
+
+                        //    return farmsService.getSetWorkerAndCompanyData(3, $stateParams.id, null);
+                        //}
+
+                    }
+                }
+            }
+        });
+
 
         //$stateProvider.state('student', {
         //    url: '/student/{id}/',

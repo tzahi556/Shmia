@@ -67,7 +67,45 @@ namespace FarmsApi.DataModels
 
         public int CountSend { get; set; }
 
+        public int CountSign { get; set; }
+
+        public bool MustSign { get; set; }
+        
+
         public int StatusId { get; set; }
 
     }
+
+
+    [Table("CampainsStatus")]
+    public class CampainsStatus
+    {
+        public int Id { get; set; }
+
+        public int CampainsId { get; set; }
+
+        public int WorkersId { get; set; }
+
+        public DateTime? DateSend { get; set; }
+
+        public int? MediaId { get; set; }
+
+        public DateTime? DateConfirm { get; set; }
+
+        public int StatusId { get; set; }
+
+    }
+
+
+    [Table("CampainsStatusType")]
+    public class CampainsStatusType
+    {
+        public int Id { get; set; }
+
+        public int Type { get; set; }
+
+        public string Name { get; set; }
+    }
+        
+
 }

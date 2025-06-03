@@ -153,11 +153,11 @@ namespace FarmsApi.Controllers
             if (folder.Contains("PDFS_ALL"))
             {
 
-                if (!Directory.Exists(root + "/PDFS/"))
-                {
-                    Directory.CreateDirectory(root + "/PDFS/");
+                //if (!Directory.Exists(root + "/PDFS/"))
+                //{
+                //    Directory.CreateDirectory(root + "/PDFS/");
 
-                }
+                //}
 
 
                 root = root + "/PDFS";
@@ -177,8 +177,15 @@ namespace FarmsApi.Controllers
 
                 }
 
-               
-              
+
+                if (!Directory.Exists(root))
+                {
+                    Directory.CreateDirectory(root);
+
+                }
+
+
+
             }
 
             string fileList = "";

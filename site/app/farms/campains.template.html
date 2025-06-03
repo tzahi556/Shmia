@@ -43,15 +43,15 @@
                 </tr>
                 <tr ng-repeat="campain in $ctrl.campains | filter:$ctrl.filter">
 
-                    <td>{{campain.Name}}</td>
+                    <td style="width:50%">{{campain.Name}}</td>
                     <td>{{campain.DateRigster | ildate: 'DD/MM/YYYY'}}</td>
-                    <td>{{campain.CountSend}}</td>2
+                    <td>{{campain.CountSend}}</td>
                  
                     <!--<td>{{campain.w101.Status}}</td>
                     <td>{{campain.w101.IsSendSMS==1 ? 'נשלח':'' }}</td>-->
                     <td><a class="btn  btn-success" ng-href="{{$ctrl.uploadsUri + campain.Id + '/OfekAllPdf.pdf'}}" target="_blank">PDF</a></td>
-                    <td> <button class="btn  btn-warning" ui-sref="campain({id:campain.w.Id})">עדכון</button></td>
-                    <td> <button class="btn  btn-danger" ng-click="$ctrl.delete(campain.w.Id)">מחק קמפיין</button></td>
+                    <td> <button class="btn  btn-warning" ui-sref="campain({id:campain.Id})">עדכון</button></td>
+                    <td> <button class="btn  btn-danger" ng-click="$ctrl.delete(campain.Id)">מחק קמפיין</button></td>
                     <!--<td width="5%"><input style="width:52px;height:20px" type="checkbox" ng-model="campain.IsSelected" /></td>-->
 
                 </tr>

@@ -1,0 +1,247 @@
+﻿
+<style>
+    .nopadding {
+        padding: 0px !important;
+        margin: 0px !important;
+    }
+
+    .signature {
+        height: 140px;
+        border: 1px solid gray;
+        border-radius: 5px;
+    }
+
+        .signature canvas {
+            height: 100%;
+            width: 100%;
+        }
+
+    .date {
+        direction: ltr;
+        text-align: right;
+    }
+
+    input[type="file"] {
+        display: none;
+    }
+
+    .custom-file-upload {
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        background: #5bc0de;
+        display: inline-block;
+        padding: 6px 12px;
+        cursor: pointer;
+        color: white;
+    }
+</style>
+
+
+<form name="workercampainsForm">
+
+
+
+    <div ng-if="$ctrl.farmStyle!=1 || $ctrl.role=='farmAdmin' ||  $ctrl.role=='instructor'">
+
+       
+
+        <!--טופס הסכם-->
+        <div class="col-md-12 nopadding">
+
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    פרטים נוספים
+                </div>
+                <div class="panel-body">
+                    <div class="row" ng-repeat="group in $ctrl.groupsonly">
+
+                        <div ng-if="group.TitleTypeId==1" class="col-md-12 alert-info">
+                            <label>{{group.Name}}</label>
+                        </div>
+
+
+                        <div ng-if="screend.f2g.IsWorkerHide!=1 && group.TitleTypeId!=2" class="col-md-{{12/group.CountFieldsInRow}}" ng-repeat="screend in getGroupsDetails(group.Id)">
+                            <div class="form-group" ng-if="screend.f2g.FieldsDataTypesId!=4 && screend.f2g.FieldsDataTypesId!=6">
+                                <label ng-if="!screend.f2g.Title">{{screend.f.Name}}</label>
+                                <label ng-if="screend.f2g.Title">{{screend.f2g.Title}}</label>
+
+                                <input ng-if="screend.f2g.FieldsDataTypesId==1" type="text" class="form-control" ng-model="screend.f2gwd.Value" />
+                                <input ng-if="screend.f2g.FieldsDataTypesId==2" type="number" class="form-control" ng-model="screend.f2gwd.Value" />
+                                <input ng-if="screend.f2g.FieldsDataTypesId==3" type="date" class="form-control date" ng-model="screend.f2gwd.Value" />
+                                <!--<input ng-if="screend.f2g.FieldsDataTypesId==4" type="checkbox" class="form-check-input" />-->
+                                <textarea ng-if="screend.f2g.FieldsDataTypesId==5" type="text" class="form-control" ng-model="screend.f2gwd.Value" ng-disabled="$ctrl.role!='farmAdmin' && $ctrl.role!='instructor'" rows="4"></textarea>
+                            </div>
+                            <div class="col-md-12" ng-if="screend.f2g.FieldsDataTypesId==4">
+
+                                <div class="checkbox">
+                                    <input class="form-check-input"
+                                           type="checkbox" ng-model="screend.f2gwd.Value" ng-true-value="true" ng-false-value="false" />
+                                    <span ng-if="!screend.f2g.Title">
+                                        {{screend.f.Name}}
+                                    </span>
+                                    <span ng-if="screend.f2g.Title">
+                                        {{screend.f2g.Title}}
+                                    </span>
+
+
+                                </div>
+                            </div>
+
+
+                            <div class="col-md-12" ng-if="screend.f2g.FieldsDataTypesId==6">
+                                <div class="form-group">
+                                    <label>
+                                        <span ng-if="!screend.f2g.Title">
+                                            {{screend.f.Name}}
+                                        </span>
+                                        <span ng-if="screend.f2g.Title">
+                                            {{screend.f2g.Title}}
+                                        </span>
+                                     
+                                    </label><br />
+                                    <input type="checkbox" ng-model="screend.f2gwd.Value">
+                                </div>
+
+                            </div>
+
+
+
+
+                        </div>
+
+
+                        <div ng-if="group.TitleTypeId==2" class="panel panel-primary">
+                            <div class="panel-heading">
+                                <label>{{group.Name}}</label>
+                            </div>
+                            <div class="panel-body">
+                                <div ng-if="screend.f2g.IsWorkerHide!=1" class="col-md-{{12/group.CountFieldsInRow}}" ng-repeat="screend in getGroupsDetails(group.Id)">
+                                    <div class="form-group" ng-if="screend.f2g.FieldsDataTypesId!=4  && screend.f2g.FieldsDataTypesId!=6">
+                                        <label ng-if="!screend.f2g.Title">{{screend.f.Name}}</label>
+                                        <label ng-if="screend.f2g.Title">{{screend.f2g.Title}}</label>
+
+                                        <input ng-if="screend.f2g.FieldsDataTypesId==1" type="text" class="form-control" ng-model="screend.f2gwd.Value" />
+                                        <input ng-if="screend.f2g.FieldsDataTypesId==2" type="number" class="form-control" ng-model="screend.f2gwd.Value" />
+                                        <input ng-if="screend.f2g.FieldsDataTypesId==3" type="date" class="form-control date" ng-model="screend.f2gwd.Value" />
+                                        <!--<input ng-if="screend.f2g.FieldsDataTypesId==4" type="checkbox" class="form-check-input" />-->
+                                        <textarea ng-if="screend.f2g.FieldsDataTypesId==5" type="text" class="form-control" ng-model="screend.f2gwd.Value" ng-disabled="$ctrl.role!='farmAdmin' && $ctrl.role!='instructor'" rows="4"></textarea>
+                                    </div>
+                                    <div class="col-md-12" ng-if="screend.f2g.FieldsDataTypesId==4">
+
+                                        <div class="checkbox">
+                                            <input class="form-check-input"
+                                                   type="checkbox" ng-model="screend.f2gwd.Value" ng-true-value="true" ng-false-value="false" />
+                                            <span ng-if="!screend.f2g.Title">
+                                                {{screend.f.Name}}
+                                            </span>
+                                            <span ng-if="screend.f2g.Title">
+                                                {{screend.f2g.Title}}
+                                            </span>
+
+
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-12" ng-if="screend.f2g.FieldsDataTypesId==6">
+                                        <div class="form-group">
+                                            <label>
+                                                <span ng-if="!screend.f2g.Title">
+                                                    {{screend.f.Name}}
+                                                </span>
+                                                <span ng-if="screend.f2g.Title">
+                                                    {{screend.f2g.Title}}
+                                                </span>
+                                            </label><br />
+                                            <input type="checkbox" ng-model="screend.f2gwd.Value">
+                                        </div>
+
+                                    </div>
+                                </div>
+
+
+                            </div>
+                        </div>
+
+
+
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <!--הצהרה - 101-->
+    <div class="col-md-12 nopadding">
+
+
+        <!--<img id="imgWorker"  src="{{$ctrl.image}}"/>-->
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                הצהרה
+            </div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <label>אני מצהיר/ה כי הפרטים שמסרתי בטופס זה הינם מלאים ונכונים.</label>
+                       
+                        <br /><color style="color:red">*</color><span>חתימת המבקש/ת</span>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="col-md-12">
+
+
+                                <signature-pad dataurl="storedSignature" accept="accept" clear="clear"></signature-pad>
+                                <!--<button ng-click="clear()">Reset</button>
+                                <button ng-click="restore()">Clear and restore</button>-->
+                                <!--<div id="bcPaint"></div>-->
+                            </div>
+
+                            <div class="col-md-12">
+
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="tp-help-below">ניתן לחתום בעזרת העכבר או עם האצבע על מסך מגע.</label>
+                            </div>
+
+                            <div class="col-md-6" style="text-align:left">
+                                <div class="btn  btn-primary" ng-click="$ctrl.clearSignuture()">נקה חתימה</div>
+                            </div>
+
+                        </div>
+                    </div>
+
+
+
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <hr />
+                    </div>
+                    <div class="col-md-4">
+                        <div ng-if="$ctrl.farmStyle!=1 || $ctrl.role=='farmAdmin' ||  $ctrl.role=='instructor'" style="width:100%;margin-top:2px" class="btn  btn-primary" ng-click="$ctrl.saveWorker(1)">שמור נתונים</div>
+                    </div>
+                    <div class="col-md-4" style="text-align:center">
+                        <div style="width:100%;margin-top:2px" class="btn  btn-info" ng-click="$ctrl.saveWorker(2)">שמור ושלח טופס</div>
+                    </div>
+                    <div class="col-md-4" style="text-align:left">
+                        <div style="width:100%;margin-top:2px" class="btn  btn-warning" ng-click="$ctrl.saveWorker(3)">תצוגה מקדימה PDF</div>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+
+    </div>
+
+
+
+
+</form>

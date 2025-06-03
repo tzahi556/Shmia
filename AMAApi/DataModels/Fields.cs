@@ -24,6 +24,8 @@ namespace FarmsApi.DataModels
 
         public int FarmId { get; set; }
 
+        public int CampainsId { get; set; }
+
         public string Name { get; set; }
 
         public int Seq { get; set; }
@@ -45,6 +47,9 @@ namespace FarmsApi.DataModels
 
         public int? FarmId { get; set; }
 
+        public int? CampainsId { get; set; }
+        
+
         public string Name { get; set; }
 
         public string WorkerTableField { get; set; }
@@ -63,6 +68,7 @@ namespace FarmsApi.DataModels
         public int FarmId { get; set; }
         public int FieldsId { get; set; }
 
+        public int CampainsId { get; set; }
         public int FieldsGroupsId { get; set; }
 
         public int FieldsDataTypesId { get; set; }

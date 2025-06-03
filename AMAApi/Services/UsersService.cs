@@ -654,162 +654,189 @@ namespace FarmsApi.Services
             List<WorkerChilds> wc = dataObj[2].ToObject<List<WorkerChilds>>();
             if (wc != null) UpdateWorkerChildsObject(wc, workersWith101.w);
 
-            try
+
+            using (var Context = new Context())
             {
 
-                if (type == 2 || type == 3)
-                {
-                    PdfAPI pa = new PdfAPI();
-
-                    if (workersWith101.w101.IsNew)
-                    {
-                        if (type == 2) AddToLogDB("", "", " יצירת פדפ לעובדת חדשה  " + workersWith101.w.Id, null, "", workersWith101.w.Id);
-                        //pa.CreatePDF(workersWith101);
-                         pa.CreateNewCompanyPDF(workersWith101.w.FarmId,-1, workersWith101);
-                    }
-
-                    else
-                    {
-                        if (type == 2) AddToLogDB("", "", " יצירת פדפ לעובדת קיים  " + workersWith101.w.Id, null, "", workersWith101.w.Id);
-                        pa.CreatePDFOnly101(workersWith101);
-                    }
-                }
-
-                //אם זה שמירה ושליחה למשרד
-                if (type == 2)
+                try
                 {
 
-                    try
+
+                    if (type == 2 || type == 3)
                     {
+                        PdfAPI pa = new PdfAPI();
 
-
-                        var BaseLinkSite = System.Web.HttpContext.Current.Server.MapPath("~/Uploads/" + workersWith101.w.Id);
-
-                        if (!File.Exists(BaseLinkSite + "/Signature.png"))
+                        if (workersWith101.w101.IsNew)
                         {
-                            workersWith101.w101.Status = "לא ניתן לשלוח ללא חתימת עובדת";
-                            return workersWith101;
+                            if (type == 2) AddToLogDB("", "", " יצירת פדפ לעובד/ת חדשה  " + workersWith101.w.Id, null, "", workersWith101.w.Id);
+                            //pa.CreatePDF(workersWith101);
+                            pa.CreateNewCompanyPDF(workersWith101.w.FarmId, -1, workersWith101);
                         }
-                        else
+
+                        //else
+                        //{
+                        //    if (type == 2) AddToLogDB("", "", " יצירת פדפ לעובדת קיים  " + workersWith101.w.Id, null, "", workersWith101.w.Id);
+                        //    pa.CreatePDFOnly101(workersWith101);
+                        //}
+                    }
+
+                    //אם זה שמירה ושליחה למשרד
+                    if (type == 2)
+                    {
+
+                        try
                         {
-                            bool IsEmpty = IsBlank(BaseLinkSite + "/Signature.png");
-                            if (IsEmpty)
+
+
+
+                            var BaseLinkSite = System.Web.HttpContext.Current.Server.MapPath("~/Uploads/Workers/" + workersWith101.w.Id);
+
+                            if (!File.Exists(BaseLinkSite + "/Signature.png"))
                             {
                                 workersWith101.w101.Status = "לא ניתן לשלוח ללא חתימת עובדת";
                                 return workersWith101;
                             }
-                        }
+                            else
+                            {
+                                bool IsEmpty = IsBlank(BaseLinkSite + "/Signature.png");
+                                if (IsEmpty)
+                                {
+                                    workersWith101.w101.Status = "לא ניתן לשלוח ללא חתימת עובדת";
+                                    return workersWith101;
+                                }
+                            }
 
 
-                        // אם עובדת חדש תשלח למשרד
-                        if (workersWith101.w101.IsNew)
-                        {
+                            // אם עובדת חדש תשלח למשרד
+                            if (workersWith101.w101.IsNew)
+                            {
 
-                            var CurrentUser = GetCurrentUser();
+                                var Farm = Context.Farms.Where(x => x.Id == workersWith101.w.FarmId).FirstOrDefault();
 
-                            string MailTo = ConfigurationSettings.AppSettings["MailTo"].ToString();
+                                var CurrentUser = GetCurrentUser();
+
+                                string CompanyEmails = null;
+
+                                if(Farm.OfficeIsMail && !string.IsNullOrEmpty(Farm.OfficeMail))
+                                {
+                                    CompanyEmails = Farm.OfficeMail + ";";
+                                }
+                                if (Farm.ContactIsMail && !string.IsNullOrEmpty(Farm.ContactMail))
+                                {
+                                    CompanyEmails += Farm.ContactMail + ";";
+                                }
+
+
+                                if (CompanyEmails == null)
+                                {
+                                    workersWith101.w101.Status = "לא מוגדר מייל חברה";
+                                    return workersWith101;
+
+                                }
+
+                                string MailTo = CompanyEmails;//ConfigurationSettings.AppSettings["MailTo"].ToString();
 
                             // צחי עדכן שזה יישלח לעובד עצמו במידה ויש לו מייל
                             if (!string.IsNullOrEmpty(workersWith101.w.Email))
+                                {
+                                    MailTo = MailTo + "," + workersWith101.w.Email;
+                                }
+
+
+
+                                string SmtpHost = ConfigurationSettings.AppSettings["SmtpHost"].ToString();
+                                string MailUser = ConfigurationSettings.AppSettings["MailUser"].ToString();
+                                string MailPassword = ConfigurationSettings.AppSettings["MailPassword"].ToString();
+
+
+
+                                SmtpClient client = new SmtpClient(SmtpHost, 25);
+                                client.Credentials = new System.Net.NetworkCredential(MailUser, MailPassword); //
+                                client.EnableSsl = false;
+
+                                string Body = "<html dir='rtl'><div style='text-align:right'><b>שלום רב,</b>" + "<br/>" + "מצ''ב קובץ עובד/ת חדשה.</div><br/>";// </html>";
+
+                                Body += " מנהל/ת אזור -  " + CurrentUser.FirstName + " " + CurrentUser.LastName + "</html>";
+
+                                string Title = "עובד/ת חדשה - " + workersWith101.w.FirstName + " " + workersWith101.w.LastName + " - " + workersWith101.w.Taz;
+
+                                MailMessage actMSG = new MailMessage(
+                                                        MailUser,
+                                                        MailTo,
+                                                        Title,
+                                                         Body);
+
+
+                                actMSG.IsBodyHtml = true;
+                                //  var BaseLinkSite = System.Web.HttpContext.Current.Server.MapPath("~/Uploads/" + w.Id);
+                                Attachment attachment = new Attachment(BaseLinkSite + "/-1/AllPdfTemp.pdf");
+
+                                actMSG.Attachments.Add(attachment);
+                                client.Send(actMSG);
+
+                                workersWith101.w101.Status = "נשלח למשרד";
+
+                                AddToLogDB("", "", " שליחה למשרד של עובד/ת חדשה  " + workersWith101.w.Id, null, "", workersWith101.w.Id);
+                            }
+                            //101 שנתי 
+                            else
                             {
-                                MailTo = MailTo + "," + workersWith101.w.Email;
+
+                                // string ManagerFile =
+                                var BaseLinkSite101 = System.Web.HttpContext.Current.Server.MapPath("~/Uploads/Workers/Years_" + workersWith101.w101.ShnatMas.ToString());
+                                if (!Directory.Exists(BaseLinkSite101))
+                                {
+                                    Directory.CreateDirectory(BaseLinkSite101);
+
+                                }
+
+                                string WorkerPath = BaseLinkSite101 + "/" + workersWith101.w101.UserId;
+
+                                if (!Directory.Exists(WorkerPath))
+                                {
+                                    Directory.CreateDirectory(WorkerPath);
+
+
+
+                                }
+
+                                File.Copy(BaseLinkSite + "/-1/AllPdfTemp.pdf", WorkerPath + "/" + workersWith101.w.Id + ".pdf", true);
+                                // string filePath = WorkerPath + "\\Signature.png";
+
+                                workersWith101.w101.Status = "נשלח למשרד";
+
+                                AddToLogDB("", "", " שליחה למשרד של עובד/ת קיימת  " + workersWith101.w.Id, null, "", workersWith101.w.Id);
                             }
 
 
-
-                            string SmtpHost = ConfigurationSettings.AppSettings["SmtpHost"].ToString();
-                            string MailUser = ConfigurationSettings.AppSettings["MailUser"].ToString();
-                            string MailPassword = ConfigurationSettings.AppSettings["MailPassword"].ToString();
-
-
-
-                            SmtpClient client = new SmtpClient(SmtpHost, 25);
-                            client.Credentials = new System.Net.NetworkCredential(MailUser, MailPassword); //
-                            client.EnableSsl = false;
-
-                            string Body = "<html dir='rtl'><div style='text-align:right'><b>שלום רב,</b>" + "<br/>" + "מצ''ב קובץ עובדתת חדשה.</div><br/>";// </html>";
-
-                            Body += " מנהל אזור -  " + CurrentUser.FirstName + " " + CurrentUser.LastName + "</html>";
-
-                            string Title = "עובדת חדשה - " + workersWith101.w.FirstName + " " + workersWith101.w.LastName + " - " + workersWith101.w.Taz;
-
-                            MailMessage actMSG = new MailMessage(
-                                                    "office@ofekmanage.com",
-                                                     MailTo,
-                                                    Title,
-                                                     Body);
-
-
-                            actMSG.IsBodyHtml = true;
-                            //  var BaseLinkSite = System.Web.HttpContext.Current.Server.MapPath("~/Uploads/" + w.Id);
-                            Attachment attachment = new Attachment(BaseLinkSite + "/OfekAllPdf.pdf");
-
-                            actMSG.Attachments.Add(attachment);
-                            client.Send(actMSG);
-
-                            workersWith101.w101.Status = "נשלח למשרד";
-
-                            AddToLogDB("", "", " שליחה למשרד של עובדת חדשה  " + workersWith101.w.Id, null, "", workersWith101.w.Id);
                         }
-                        //101 שנתי 
-                        else
+                        catch (Exception ex)
+                        {
+                            workersWith101.w101.Status = "תקלה שליחת נתונים";
+                            AddToLogDB("", "", " תקלה שליחה למשרד של עובדת  " + workersWith101.w.Id, null, ex.Message, workersWith101.w.Id);
+                            // w.Status = ex.InnerException.ToString();
+                        }
+                        finally
                         {
 
-                            // string ManagerFile =
-                            var BaseLinkSite101 = System.Web.HttpContext.Current.Server.MapPath("~/Uploads/Years_" + workersWith101.w101.ShnatMas.ToString());
-                            if (!Directory.Exists(BaseLinkSite101))
-                            {
-                                Directory.CreateDirectory(BaseLinkSite101);
-
-                            }
-
-                            string WorkerPath = BaseLinkSite101 + "/" + workersWith101.w101.UserId;
-
-                            if (!Directory.Exists(WorkerPath))
-                            {
-                                Directory.CreateDirectory(WorkerPath);
-
-
-
-                            }
-
-                            File.Copy(BaseLinkSite + "/" + workersWith101.w101.UniqNumber + ".pdf", WorkerPath + "/" + workersWith101.w101.UniqNumber + ".pdf", true);
-                            // string filePath = WorkerPath + "\\Signature.png";
-
-                            workersWith101.w101.Status = "נשלח למשרד";
-
-                            AddToLogDB("", "", " שליחה למשרד של עובדת קיימת  " + workersWith101.w.Id, null, "", workersWith101.w.Id);
-                        }
-
-
-                    }
-                    catch (Exception ex)
-                    {
-                        workersWith101.w101.Status = "תקלה שליחת נתונים";
-                        AddToLogDB("", "", " תקלה שליחה למשרד של עובדת  " + workersWith101.w.Id, null, ex.Message, workersWith101.w.Id);
-                        // w.Status = ex.InnerException.ToString();
-                    }
-                    finally
-                    {
-                        using (var Context = new Context())
-                        {
 
                             Context.Entry(workersWith101.w).State = System.Data.Entity.EntityState.Modified;
                             Context.Entry(workersWith101.w101).State = System.Data.Entity.EntityState.Modified;
                             Context.SaveChanges();
 
-                        }
+                            
 
+
+                        }
 
                     }
 
                 }
+                catch (Exception ex)
+                {
+                    AddToLogDB("", "", " תקלה שליחה למשרד של עובדת  " + workersWith101.w.Id, null, ex.Message, workersWith101.w.Id);
 
-            }
-            catch (Exception ex)
-            {
-                AddToLogDB("", "", " תקלה שליחה למשרד של עובדת  " + workersWith101.w.Id, null, ex.Message, workersWith101.w.Id);
-
+                }
             }
             return workersWith101;
         }

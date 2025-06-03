@@ -144,7 +144,10 @@
     <script src="css/jquery.inputmask.bundle.js"></script>
     <script src="app/farms/farmmanager.component.js"></script>
     <script src="app/farms/campains.component.js"></script>
-    <!--<script src="app/farms/campain.component.js"></script>-->
+    <script src="app/farms/campain.component.js"></script>
+    <script src="app/farms/workercampains.component.js"></script>
+
+    
 
     <link href="css/jquery.toast.css" rel="stylesheet" />
 
@@ -287,6 +290,7 @@
         var elemId;
         var CurrentWidth;
         var CurrentHeight;
+
         function CallEditPdfJs(elementId, url, width, height) {
             elemId = elementId;
 
@@ -339,22 +343,16 @@
         function handlePages(page) {
 
 
-            //$("#canvasContainer div").not('#canvasEdit').remove();
+            $("#canvasEdit").remove();
+            var container = document.getElementById("canvasContainer");
 
-            // console.log('Page loaded');
+            const newCanvas = document.createElement("canvas");
+            newCanvas.id = "canvasEdit";
+            container.appendChild(newCanvas);
+
+            BuildCanvasDrop();
 
 
-            // for clean all pages
-
-
-
-            //var scale = 1.5;
-            //var viewport = page.getViewport({ scale: scale });
-
-            //var canvas = document.getElementById(elemId);
-
-            //var context = canvas.getContext('2d');
-            // alert(window.innerWidth);
 
 
             // נסיון
@@ -394,6 +392,10 @@
 
             };
 
+
+
+
+
             var renderTask = page.render(renderContext);
 
             renderTask.promise.then(function () {
@@ -405,12 +407,7 @@
             CurrentViewport = viewport;
             CurrentPDFPage = page;
             CurrentScale = scale;
-            // if currentpage etc///
 
-            //if (CurrentPage == 1)
-            //    $("#canvasContainer").append('<div class="draggableOut" style="position: absolute; left: 599px; top: 204px;">שם</div>');
-
-            // $(".draggableOut").draggable({ cursor: "pointer" });
 
             return "done";
 
