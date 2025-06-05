@@ -28,6 +28,7 @@
 
         function _getSetWorkerAndCompanyData(type, workerid, objects, campainsId) {
 
+            
             if (!campainsId) campainsId = -1;
 
             var deferred = $q.defer();

@@ -233,7 +233,7 @@
         }
 
         $scope.sendNewOrderforGroupsFields = function (type, IdsOrders) {
-            // debugger
+            
             var grpstemp = [];
 
             for (var i = 0; i < IdsOrders.length; i++) {
@@ -252,7 +252,7 @@
 
             }
 
-            farmsService.actionFieldGroup(8, this.farm.Id, grpstemp).then(function (grps) {
+            farmsService.actionFieldGroup(8, this.farm.Id, grpstemp, self.campain.Id).then(function (grps) {
 
                 self.grps = grps;
                 const myTimeout = setTimeout(BuildEditPDF, 300);

@@ -2,7 +2,7 @@
 
     var app = angular.module('app');
 
-   // https://test.dgtracking.co.il/#/worker/1880/
+    // https://test.dgtracking.co.il/#/worker/1880/
 
     app.component('workercampains', {
         templateUrl: 'app/farms/workercampains.template.html?v=3',
@@ -27,7 +27,7 @@
         this.scope = $scope;
         //this.submit = _submit.bind(this);
         this.roles = usersService.roles;
-      
+
         this.role = localStorage.getItem('currentRole');
         this.farmStyle = localStorage.getItem('FarmStyle');
         this.farmid = localStorage.getItem('FarmId');
@@ -41,15 +41,14 @@
         self = this;
 
         $scope.getGroupsDetails = function (groupId) {
-          
-            return self.screendata.filter(x => x.f2g.FieldsGroupsId == groupId);
-       
+
+            return self.screendata.filter(x => x.f2g != null && x.f2g.FieldsGroupsId == groupId);
+
         };
 
         function uniqueBy(arr, prop, prop2, tempRes) {
             return arr.reduce((a, d) => {
-                if (!a.includes(d[prop][prop2]))
-                {
+                if (!a.includes(d[prop][prop2])) {
                     a.push(d[prop][prop2]);
                     tempRes.push(d[prop]);
                 }
@@ -66,10 +65,10 @@
                 Object.keys(obj).forEach(function (key, index) {
 
                     if (key.indexOf("Date") != -1 && obj[key] && key != "DateRigster") {
-                        
+
                         obj[key] = new Date(moment(obj[key]).format("YYYY-MM-DD"));// .startOf('day').toDate();
 
-                       
+
                     }
 
 
@@ -78,28 +77,33 @@
             }
 
             this.groupsonly = [];
-           
+
             uniqueBy(this.screendata, "fg", "Id", this.groupsonly);
 
             for (var i = 0; i < this.screendata.length; i++) {
 
-                if (this.screendata[i].f2g.FieldsDataTypesId == 4 && this.screendata[i].f2gwd.Value)
-                {
+                if (!this.screendata[i].f2g) continue;
+
+                if (this.screendata[i].f2g.FieldsDataTypesId == 4 && this.screendata[i].f2gwd.Value) {
                     this.screendata[i].f2gwd.Value = eval(this.screendata[i].f2gwd.Value);
                 }
 
 
                 if (this.screendata[i].f2g.FieldsDataTypesId == 3 && this.screendata[i].f2gwd.Value) {
-                    
+
                     this.screendata[i].f2gwd.Value = new Date(moment(this.screendata[i].f2gwd.Value).format("YYYY-MM-DD"));
                 }
             }
+
+
+            alert(this.worker.IsHaveSignature);
+           /* alert(this.campain.MustSign);*/
         }
-       
+
         function _clearSignuture() {
 
             $scope.clear();
-            
+
         }
 
         function _changeDateFormat(dateVal) {
@@ -115,22 +119,22 @@
             //return yy + "-" + mm + "-" + dd;
 
 
-           
-            var d = new Date(dateVal),
-                    month = '' + (d.getMonth() + 1),
-                    day = '' + d.getDate(),
-                    year = d.getFullYear();
 
-                if (month.length < 2)
-                    month = '0' + month;
-                if (day.length < 2)
-                   day = '0' + day;
+            var d = new Date(dateVal),
+                month = '' + (d.getMonth() + 1),
+                day = '' + d.getDate(),
+                year = d.getFullYear();
+
+            if (month.length < 2)
+                month = '0' + month;
+            if (day.length < 2)
+                day = '0' + day;
 
             if (year < 1900 || year > 2100) return false;
 
 
-                return [year, month, day].join('-');
-           
+            return [year, month, day].join('-');
+
 
 
 
@@ -140,13 +144,13 @@
 
             var fields2GroupsWorkerDataList = [];
 
-          
+
 
             for (var i = 0; i < self.screendata.length; i++) {
-
+                if (!self.screendata[i].f2g) continue;
                 if (self.screendata[i].f2gwd) {
 
-                   
+
                     if (self.screendata[i].f2g.FieldsDataTypesId == 3 && self.screendata[i].f2gwd.Value)
                         self.screendata[i].f2gwd.Value = self.changeDateFormat(self.screendata[i].f2gwd.Value);
 
@@ -161,12 +165,23 @@
 
             farmsService.getSetWorkerAndCompanyData(2, self.worker.Id, fields2GroupsWorkerDataList, self.campain.Id).then(function (screendata) {
 
-               self.screendata = screendata;
 
-               self.init();
 
-               //debugger
-                //alertMessage('הנתונים נשssssמרו בהצלחה!');
+                if (worker["ImgData"]) {
+
+                    var ImgData = { "ImgData": worker["ImgData"] };
+
+                    farmsService.getSetWorkerAndCompanyData(22, self.worker.Id, ImgData, self.campain.Id).then(function (screendata) {
+
+                    }.bind(self));
+                }
+
+
+                self.screendata = screendata;
+
+                self.init();
+
+                alertMessage('הנתונים נשמרו בהצלחה!');
 
             }.bind(self));
 
@@ -200,13 +215,13 @@
             }
 
 
-           
-           
+
+
             try {
 
-                
 
-              
+
+
 
                 var obj = this.worker; //angular.copy(this.worker.w);
 
@@ -225,17 +240,6 @@
 
                 if (type == 1) {
 
-                    //if (this.scope.workerForm.$valid && this.tazfiles.length > 0) {
-
-                    //    obj101["IsValid"] = true;
-
-
-                    //} else {
-                    //    obj101["IsValid"] = false;
-                         
-                    //}
-
-                   
 
                     var Signature = $scope.accept();
                     if (!Signature.isEmpty) {
@@ -245,13 +249,13 @@
 
                     }
 
-                    debugger
 
-                   // usersService.updateWorker(this.worker, this.files, this.childs, type).then(function (worker) {
-                        //  this.worker = worker;
-                        SaveDynamicData(obj);
-                        alertMessage('הנתונים נשמרו בהצלחה!');
-                       
+
+                    // usersService.updateWorker(this.worker, this.files, this.childs, type).then(function (worker) {
+                    //  this.worker = worker;
+                    SaveDynamicData(obj);
+                   
+
                     //}.bind(this));
 
                 }
@@ -267,7 +271,7 @@
                         //}
 
 
-                      
+
                         var Signature = $scope.accept();
                         if (!Signature.isEmpty) {
                             obj101["ImgData"] = Signature.dataUrl;
@@ -277,22 +281,22 @@
                         }
 
 
-                       // $.blockUI({ css: {}, message: '<h5><div id="loader"></div><div class="tzahiStyle"> אנחנו כרגע מעבדים את הנתונים ומייצרים קובץ  PDF ושולחים אותו למשרד <br/>אנא המתנ/י...</div></h5>' });
+                        // $.blockUI({ css: {}, message: '<h5><div id="loader"></div><div class="tzahiStyle"> אנחנו כרגע מעבדים את הנתונים ומייצרים קובץ  PDF ושולחים אותו למשרד <br/>אנא המתנ/י...</div></h5>' });
 
 
 
-                       
+
 
                         usersService.updateWorker(this.worker, this.files, this.childs, type).then(function (worker) {
 
 
 
-                          //  $.unblockUI();
+                            //  $.unblockUI();
                             if (worker.Status == "נשלח למשרד") {
                                 SaveDynamicData(worker);
                                 alertMessage('הנתונים נשלחו למשרד בהצלחה!');
                             }
-                                
+
                             else
                                 alertMessage(worker.Status);
 
@@ -300,7 +304,7 @@
                     }
 
                     else {
-                        alertMessage("יש למלא את כל השדות המסומנים באדום , אלו שדות חובה",3);
+                        alertMessage("יש למלא את כל השדות המסומנים באדום , אלו שדות חובה", 3);
 
                     }
 
@@ -308,7 +312,7 @@
                 }
 
                 if (type == 3) {
-                   // $.blockUI({ css: {}, message: '<h5><div id="loader"></div><div class="tzahiStyle"> אנחנו כרגע מעבדים את הנתונים ומייצרים קובץ PDF  <br/>אנא המתנ/י...</div></h5>' });
+                    // $.blockUI({ css: {}, message: '<h5><div id="loader"></div><div class="tzahiStyle"> אנחנו כרגע מעבדים את הנתונים ומייצרים קובץ PDF  <br/>אנא המתנ/י...</div></h5>' });
 
                     var Signature = $scope.accept();
                     if (!Signature.isEmpty) {
@@ -321,10 +325,10 @@
 
 
                     usersService.updateWorker(this.worker, this.files, this.childs, type).then(function (worker) {
-                        
+
                         SaveDynamicData(worker);
-                       //$.unblockUI();
-                        $window.open(this.uploadsUri + "Workers/" + this.worker.w.Id + "/-1/"+  "/AllPdfTemp.pdf", '_blank');
+                        //$.unblockUI();
+                        $window.open(this.uploadsUri + "Workers/" + this.worker.w.Id + "/-1/" + "/AllPdfTemp.pdf", '_blank');
                         //$window.open(this.uploadsUri + "Workers/2/AllPdfTemp.pdf", '_blank');
                     }.bind(this));
 
@@ -332,13 +336,13 @@
 
             } catch (err) {
                 alertMessage(err.message, 3);
-              
+
 
             }
 
         }
 
-     
+
 
     }
 

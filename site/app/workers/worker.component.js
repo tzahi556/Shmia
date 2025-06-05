@@ -79,8 +79,8 @@
 
         $scope.getGroupsDetails = function (groupId) {
 
-          
-            return self.screendata.filter(x => x.f2g.FieldsGroupsId == groupId);
+            return self.screendata.filter(x => x.f2g != null && x.f2g.FieldsGroupsId == groupId);
+            //return self.screendata.filter(x => x.f2g.FieldsGroupsId == groupId);
 
 
             //return item.WorkerTableField === '1' || item.WorkerTableField === '2';
@@ -132,6 +132,8 @@
             uniqueBy(this.screendata, "fg", "Id", this.groupsonly);
 
             for (var i = 0; i < this.screendata.length; i++) {
+
+                if (!this.screendata[i].f2g) continue;
 
                 if (this.screendata[i].f2g.FieldsDataTypesId == 4 && this.screendata[i].f2gwd.Value)
                 {
@@ -195,7 +197,7 @@
             }, 1000);
 
 
-           
+            this.worker.w101.ZikuyToshavIsrael = (this.worker.w101.ToshavIsrael == 1 ? true : false)
               
 
             //}.bind(this));
@@ -652,10 +654,12 @@
           
 
             for (var i = 0; i < self.screendata.length; i++) {
+                if (!self.screendata[i].f2g) continue;
 
                 if (self.screendata[i].f2gwd) {
 
                    
+
                     if (self.screendata[i].f2g.FieldsDataTypesId == 3 && self.screendata[i].f2gwd.Value)
                         self.screendata[i].f2gwd.Value = self.changeDateFormat(self.screendata[i].f2gwd.Value);
 

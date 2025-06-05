@@ -1094,7 +1094,7 @@
                             <option value="1">כותרת דקה</option>
                             <option value="2">כותרת עבה(פאנל)</option>
                             <option value="3">ללא כותרת</option>
-                       
+
                         </select>
 
 
@@ -1122,10 +1122,17 @@
                             <option value="6">6</option>
                         </select>
 
-
-
-                        <!--<input type="text" class="form-control" ng-model="$ctrl.grp.CountFieldsInRow" />-->
                     </div>
+
+                    <div class="form-group">
+                        <label>קבוצה בתוך</label>
+
+                        <select id="ddlParentGroups" class="form-control" ng-model="$ctrl.grp.ParentId" ng-options="grp.Id as grp.Name for grp in $ctrl.grps | filter:{TitleTypeId:2}">
+                            <option value="">ללא קבוצת אב</option>
+                        </select>
+
+                    </div>
+
 
 
                 </div>

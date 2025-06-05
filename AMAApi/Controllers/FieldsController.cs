@@ -505,8 +505,11 @@ namespace FarmsApi.Services
 
 
 
-                    var Results = (from fields2Groups in Context.Fields2Groups.Where(x => x.FarmId == CurrentFarmId && x.CampainsId== campainid && x.StatusId==1)
-                                   from fieldsGroups in Context.FieldsGroups.Where(x => x.Id == fields2Groups.FieldsGroupsId && x.CampainsId == campainid && x.StatusId == 1)
+                    var Results = (
+
+                                   from fieldsGroups in Context.FieldsGroups.Where(x =>  x.CampainsId == campainid && x.StatusId == 1).DefaultIfEmpty()
+                                   from fields2Groups in Context.Fields2Groups.Where(x => (x.FieldsGroupsId == fieldsGroups.Id || x ==null) && x.CampainsId== campainid && x.StatusId==1).DefaultIfEmpty()
+                                 
 
                                    from fields in Context.Fields.Where(x => x.Id == fields2Groups.FieldsId && x.StatusId == 1).DefaultIfEmpty()
                                    from fields2GroupsWorkerData in Context.Fields2GroupsWorkerData.Where(x => x.WorkersId == WorkerId && x.Fields2GroupsId == fields2Groups.Id).DefaultIfEmpty()
@@ -527,7 +530,7 @@ namespace FarmsApi.Services
                         if (Worker != null)
                         {
 
-                            if (item.f2gwd == null && item.f.WorkerTableField != null)
+                            if (item.f2gwd == null && item.f!=null && item.f.WorkerTableField != null)
                             {
 
                                 var WorkerTableFieldValue = Context.Entry(Worker).Property(item.f.WorkerTableField).CurrentValue;
@@ -552,7 +555,7 @@ namespace FarmsApi.Services
 
                             }
 
-                            if (item.f2gwd == null && item.f2g.DefaultValue != null)
+                            if (item.f2gwd == null && item.f2g != null && item.f2g.DefaultValue != null)
                             {
                                 Fields2GroupsWorkerData fields2GroupsWorkerData = new Fields2GroupsWorkerData();
                                 fields2GroupsWorkerData.Fields2GroupsId = item.f2g.Id;
@@ -570,7 +573,7 @@ namespace FarmsApi.Services
                         if (item.f2gwd == null)
                         {
                             Fields2GroupsWorkerData fields2GroupsWorkerData = new Fields2GroupsWorkerData();
-                            fields2GroupsWorkerData.Fields2GroupsId = item.f2g.Id;
+                            fields2GroupsWorkerData.Fields2GroupsId = (item.f2g!=null)? item.f2g.Id :0;
                             fields2GroupsWorkerData.WorkersId = WorkerId;
                             fields2GroupsWorkerData.Value = null;
                             fields2GroupsWorkerData.Type = 0;
@@ -619,6 +622,52 @@ namespace FarmsApi.Services
 
                 }
 
+                // עדכון של חתימה של עובד
+                if (type == 22)
+                {
+
+                       string root = HttpContext.Current.Server.MapPath("~/Uploads/Workers/");
+                       string WorkerPath = root + WorkerId.ToString();
+                        if (!Directory.Exists(WorkerPath))
+                        {
+                            Directory.CreateDirectory(WorkerPath);
+
+                        }
+                        string filePath = WorkerPath + "\\Signature.png";
+
+                        string ImgData = objs["ImgData"].ToString();
+                        System.IO.File.WriteAllBytes(filePath, GetValidString(ImgData));
+
+                }
+
+
+                //if (!string.IsNullOrEmpty(w101.ImgData))
+                //{
+
+                //    string root = HttpContext.Current.Server.MapPath("~/Uploads/Workers/");
+
+                //    string WorkerPath = root + w.Id.ToString();
+
+                //    if (!Directory.Exists(WorkerPath))
+                //    {
+                //        Directory.CreateDirectory(WorkerPath);
+
+                //    }
+                //    string filePath = WorkerPath + "\\Signature.png";
+
+
+                //    File.WriteAllBytes(filePath, GetValidString(w101.ImgData));
+
+                //    AddToLogDB("", "", " הוספת חתימה לעובדת " + w.Id, null, "", w.Id);
+                //}
+
+
+
+
+
+
+
+
                 // שליפה של הנתונים
                 if (type == 3)
                 {
@@ -639,6 +688,13 @@ namespace FarmsApi.Services
 
 
             return Ok();
+        }
+
+        public static byte[] GetValidString(string s)
+        {
+            s = s.Replace("data:image/png;base64,", "");
+            s = s.Replace('-', '+').Replace('_', '/').PadRight(4 * ((s.Length + 3) / 4), '=');
+            return Convert.FromBase64String(s);
         }
 
         // [Authorize]
@@ -670,6 +726,8 @@ namespace FarmsApi.Services
 
                     var Campain = Context.Campains.Where(x => x.Id == CampainId && x.StatusId == 1).FirstOrDefault();
 
+
+
                     return Ok(Campain);
 
                 }
@@ -681,6 +739,15 @@ namespace FarmsApi.Services
                     int WorkerId = Convert.ToInt32(res);
 
                     var Workers = Context.Workers.Where(x => x.Id == WorkerId && x.StatusId == 1).FirstOrDefault();
+
+                    string root = HttpContext.Current.Server.MapPath("~/Uploads/Workers/");
+                    string WorkerPath = root + WorkerId.ToString();
+                    string filePath = WorkerPath + "\\Signature.png";
+
+                    if (System.IO.File.Exists(filePath)) {
+
+                        Workers.IsHaveSignature = true; 
+                    }
 
                     return Ok(Workers);
 

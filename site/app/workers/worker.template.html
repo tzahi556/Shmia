@@ -161,7 +161,7 @@
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label>שם משפחה</label>
-                                <input type="text" class="form-control" ng-model="$ctrl.worker.w.LastName"  required />
+                                <input type="text" class="form-control" ng-model="$ctrl.worker.w.LastName" required />
                                 <label class="tp-help-below">
                                     ע"פ הרשום בת.ז.
                                 </label>
@@ -171,7 +171,7 @@
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label>תעודת זהות</label>
-                                <input type="text" class="form-control" ng-model="$ctrl.worker.w.Taz"  required />
+                                <input type="text" class="form-control" ng-model="$ctrl.worker.w.Taz" required />
                                 <label class="tp-help-below">
                                     ע"פ הרשום בת.ז.
                                 </label>
@@ -236,7 +236,7 @@
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label>מס' טלפון נייד</label>
-                                <input type="text" name="Taz" class="form-control" ng-model="$ctrl.worker.w.PhoneSelular"  required />
+                                <input type="text" name="Taz" class="form-control" ng-model="$ctrl.worker.w.PhoneSelular" required />
 
                             </div>
 
@@ -270,7 +270,7 @@
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label>רחוב</label>
-                                <input type="text" class="form-control" ng-model="$ctrl.worker.w.Street"  required />
+                                <input type="text" class="form-control" ng-model="$ctrl.worker.w.Street" required />
 
                             </div>
 
@@ -278,7 +278,7 @@
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label>מס' בית</label>
-                                <input type="text" class="form-control" ng-model="$ctrl.worker.w.HouseNumber"  required />
+                                <input type="text" class="form-control" ng-model="$ctrl.worker.w.HouseNumber" required />
 
                             </div>
 
@@ -327,7 +327,7 @@
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label>תושב ישראל </label>
-                                <select class="form-control" ng-model="$ctrl.worker.w101.ToshavIsrael" required>
+                                <select class="form-control" ng-model="$ctrl.worker.w101.ToshavIsrael" ng-change="$ctrl.worker.w101.ZikuyToshavIsrael=($ctrl.worker.w101.ToshavIsrael==1?true:false)" required>
                                     <option value="">--תושב ישראל--</option>
                                     <option value="1">כן</option>
                                     <option value="2">לא</option>
@@ -1850,37 +1850,52 @@
 
 
 
+
         <!--טופס הסכם-->
-        <div class="col-md-12 nopadding">
+        <div class="col-md-12">
 
-            <div class="panel panel-primary">
-                <div class="panel-heading">
-                    פרטים נוספים
-                </div>
-                <div class="panel-body">
-                    <div class="row" ng-repeat="group in $ctrl.groupsonly">
+            <div class="row" ng-repeat="group in $ctrl.groupsonly">
+                <div ng-if="group.TitleTypeId!=2 && !group.ParentId">
 
-                        <div ng-if="group.TitleTypeId==1" class="col-md-12 alert-info">
-                            <label>{{group.Name}}</label>
+                    <div ng-if="group.TitleTypeId==1" class="col-md-12 alert-info">
+                        <label>{{group.Name}}</label>
+                    </div>
+
+                    <div ng-if="group2.TitleTypeId==3" class="col-md-12">
+
+                    </div>
+
+                    <div ng-if="screend.f2g.IsWorkerHide!=1 && group.TitleTypeId!=2" class="col-md-{{12/group.CountFieldsInRow}}" ng-repeat="screend in getGroupsDetails(group.Id)">
+                        <div class="form-group" ng-if="screend.f2g.FieldsDataTypesId!=4 && screend.f2g.FieldsDataTypesId!=6">
+                            <label ng-if="!screend.f2g.Title">{{screend.f.Name}}</label>
+                            <label ng-if="screend.f2g.Title">{{screend.f2g.Title}}</label>
+
+                            <input ng-if="screend.f2g.FieldsDataTypesId==1" type="text" class="form-control" ng-model="screend.f2gwd.Value" />
+                            <input ng-if="screend.f2g.FieldsDataTypesId==2" type="number" class="form-control" ng-model="screend.f2gwd.Value" />
+                            <input ng-if="screend.f2g.FieldsDataTypesId==3" type="date" class="form-control date" ng-model="screend.f2gwd.Value" />
+                            <!--<input ng-if="screend.f2g.FieldsDataTypesId==4" type="checkbox" class="form-check-input" />-->
+                            <textarea ng-if="screend.f2g.FieldsDataTypesId==5" type="text" class="form-control" ng-model="screend.f2gwd.Value" ng-disabled="$ctrl.role!='farmAdmin' && $ctrl.role!='instructor'" rows="4"></textarea>
+                        </div>
+                        <div class="col-md-12" ng-if="screend.f2g.FieldsDataTypesId==4">
+
+                            <div class="checkbox">
+                                <input class="form-check-input"
+                                       type="checkbox" ng-model="screend.f2gwd.Value" ng-true-value="true" ng-false-value="false" />
+                                <span ng-if="!screend.f2g.Title">
+                                    {{screend.f.Name}}
+                                </span>
+                                <span ng-if="screend.f2g.Title">
+                                    {{screend.f2g.Title}}
+                                </span>
+
+
+                            </div>
                         </div>
 
 
-                        <div ng-if="screend.f2g.IsWorkerHide!=1 && group.TitleTypeId!=2" class="col-md-{{12/group.CountFieldsInRow}}" ng-repeat="screend in getGroupsDetails(group.Id)">
-                            <div class="form-group" ng-if="screend.f2g.FieldsDataTypesId!=4 && screend.f2g.FieldsDataTypesId!=6">
-                                <label ng-if="!screend.f2g.Title">{{screend.f.Name}}</label>
-                                <label ng-if="screend.f2g.Title">{{screend.f2g.Title}}</label>
-
-                                <input ng-if="screend.f2g.FieldsDataTypesId==1" type="text" class="form-control" ng-model="screend.f2gwd.Value" />
-                                <input ng-if="screend.f2g.FieldsDataTypesId==2" type="number" class="form-control" ng-model="screend.f2gwd.Value" />
-                                <input ng-if="screend.f2g.FieldsDataTypesId==3" type="date" class="form-control date" ng-model="screend.f2gwd.Value" />
-                                <!--<input ng-if="screend.f2g.FieldsDataTypesId==4" type="checkbox" class="form-check-input" />-->
-                                <textarea ng-if="screend.f2g.FieldsDataTypesId==5" type="text" class="form-control" ng-model="screend.f2gwd.Value" ng-disabled="$ctrl.role!='farmAdmin' && $ctrl.role!='instructor'" rows="4"></textarea>
-                            </div>
-                            <div class="col-md-12" ng-if="screend.f2g.FieldsDataTypesId==4">
-
-                                <div class="checkbox">
-                                    <input class="form-check-input"
-                                           type="checkbox" ng-model="screend.f2gwd.Value" ng-true-value="true" ng-false-value="false" />
+                        <div class="col-md-12" ng-if="screend.f2g.FieldsDataTypesId==6">
+                            <div class="form-group">
+                                <label>
                                     <span ng-if="!screend.f2g.Title">
                                         {{screend.f.Name}}
                                     </span>
@@ -1888,54 +1903,65 @@
                                         {{screend.f2g.Title}}
                                     </span>
 
-
-                                </div>
+                                </label><br />
+                                <input type="checkbox" ng-model="screend.f2gwd.Value">
                             </div>
 
+                        </div>
 
-                            <div class="col-md-12" ng-if="screend.f2g.FieldsDataTypesId==6">
-                                <div class="form-group">
-                                    <label>
+
+
+
+                    </div>
+
+                </div>
+
+                <div ng-if="group.TitleTypeId==2" class="panel panel-primary">
+                    <div class="panel-heading">
+                        <label>{{group.Name}}</label>
+                    </div>
+                    <div class="panel-body" style="padding-right: 0px; padding-left: 0px;">
+
+                        <div ng-repeat="group2 in $ctrl.groupsonly | filter:{ParentId:group.Id}">
+
+                            <div ng-if="group2.TitleTypeId==1" class="col-md-12 alert-info">
+                                <label>{{group2.Name}}</label>
+                            </div>
+
+                             <div ng-if="group2.TitleTypeId==3" class="col-md-12">
+                                
+                            </div>
+
+                            <div ng-if="screend.f2g.IsWorkerHide!=1" class="col-md-{{12/group2.CountFieldsInRow}}" ng-repeat="screend in getGroupsDetails(group2.Id)">
+                                <div class="form-group" ng-if="screend.f2g.FieldsDataTypesId!=4 && screend.f2g.FieldsDataTypesId!=6">
+                                    <label ng-if="!screend.f2g.Title">{{screend.f.Name}}</label>
+                                    <label ng-if="screend.f2g.Title">{{screend.f2g.Title}}</label>
+
+                                    <input ng-if="screend.f2g.FieldsDataTypesId==1" type="text" class="form-control" ng-model="screend.f2gwd.Value" />
+                                    <input ng-if="screend.f2g.FieldsDataTypesId==2" type="number" class="form-control" ng-model="screend.f2gwd.Value" />
+                                    <input ng-if="screend.f2g.FieldsDataTypesId==3" type="date" class="form-control date" ng-model="screend.f2gwd.Value" />
+                                    <textarea ng-if="screend.f2g.FieldsDataTypesId==5" type="text" class="form-control" ng-model="screend.f2gwd.Value" ng-disabled="$ctrl.role!='farmAdmin' && $ctrl.role!='instructor'" rows="4"></textarea>
+                                </div>
+                                <div class="col-md-12" ng-if="screend.f2g.FieldsDataTypesId==4">
+
+                                    <div class="checkbox">
+                                        <input class="form-check-input"
+                                               type="checkbox" ng-model="screend.f2gwd.Value" ng-true-value="true" ng-false-value="false" />
                                         <span ng-if="!screend.f2g.Title">
                                             {{screend.f.Name}}
                                         </span>
                                         <span ng-if="screend.f2g.Title">
                                             {{screend.f2g.Title}}
                                         </span>
-                                     
-                                    </label><br />
-                                    <input type="checkbox" ng-model="screend.f2gwd.Value">
+
+
+                                    </div>
                                 </div>
 
-                            </div>
 
-
-
-
-                        </div>
-
-
-                        <div ng-if="group.TitleTypeId==2" class="panel panel-primary">
-                            <div class="panel-heading">
-                                <label>{{group.Name}}</label>
-                            </div>
-                            <div class="panel-body">
-                                <div ng-if="screend.f2g.IsWorkerHide!=1" class="col-md-{{12/group.CountFieldsInRow}}" ng-repeat="screend in getGroupsDetails(group.Id)">
-                                    <div class="form-group" ng-if="screend.f2g.FieldsDataTypesId!=4  && screend.f2g.FieldsDataTypesId!=6">
-                                        <label ng-if="!screend.f2g.Title">{{screend.f.Name}}</label>
-                                        <label ng-if="screend.f2g.Title">{{screend.f2g.Title}}</label>
-
-                                        <input ng-if="screend.f2g.FieldsDataTypesId==1" type="text" class="form-control" ng-model="screend.f2gwd.Value" />
-                                        <input ng-if="screend.f2g.FieldsDataTypesId==2" type="number" class="form-control" ng-model="screend.f2gwd.Value" />
-                                        <input ng-if="screend.f2g.FieldsDataTypesId==3" type="date" class="form-control date" ng-model="screend.f2gwd.Value" />
-                                        <!--<input ng-if="screend.f2g.FieldsDataTypesId==4" type="checkbox" class="form-check-input" />-->
-                                        <textarea ng-if="screend.f2g.FieldsDataTypesId==5" type="text" class="form-control" ng-model="screend.f2gwd.Value" ng-disabled="$ctrl.role!='farmAdmin' && $ctrl.role!='instructor'" rows="4"></textarea>
-                                    </div>
-                                    <div class="col-md-12" ng-if="screend.f2g.FieldsDataTypesId==4">
-
-                                        <div class="checkbox">
-                                            <input class="form-check-input"
-                                                   type="checkbox" ng-model="screend.f2gwd.Value" ng-true-value="true" ng-false-value="false" />
+                                <div class="col-md-12" ng-if="screend.f2g.FieldsDataTypesId==6">
+                                    <div class="form-group">
+                                        <label>
                                             <span ng-if="!screend.f2g.Title">
                                                 {{screend.f.Name}}
                                             </span>
@@ -1943,38 +1969,68 @@
                                                 {{screend.f2g.Title}}
                                             </span>
 
-
-                                        </div>
+                                        </label><br />
+                                        <input type="checkbox" ng-model="screend.f2gwd.Value">
                                     </div>
 
-                                    <div class="col-md-12" ng-if="screend.f2g.FieldsDataTypesId==6">
-                                        <div class="form-group">
-                                            <label>
-                                                <span ng-if="!screend.f2g.Title">
-                                                    {{screend.f.Name}}
-                                                </span>
-                                                <span ng-if="screend.f2g.Title">
-                                                    {{screend.f2g.Title}}
-                                                </span>
-                                            </label><br />
-                                            <input type="checkbox" ng-model="screend.f2gwd.Value">
-                                        </div>
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                        <div ng-if="!group.ParentId">
+                            <div ng-if="screend.f2g.IsWorkerHide!=1" class="col-md-{{12/group.CountFieldsInRow}}" ng-repeat="screend in getGroupsDetails(group.Id)">
+                                <div class="form-group" ng-if="screend.f2g.FieldsDataTypesId!=4 && screend.f2g.FieldsDataTypesId!=6">
+                                    <label ng-if="!screend.f2g.Title">{{screend.f.Name}}</label>
+                                    <label ng-if="screend.f2g.Title">{{screend.f2g.Title}}</label>
+
+                                    <input ng-if="screend.f2g.FieldsDataTypesId==1" type="text" class="form-control" ng-model="screend.f2gwd.Value" />
+                                    <input ng-if="screend.f2g.FieldsDataTypesId==2" type="number" class="form-control" ng-model="screend.f2gwd.Value" />
+                                    <input ng-if="screend.f2g.FieldsDataTypesId==3" type="date" class="form-control date" ng-model="screend.f2gwd.Value" />
+
+                                    <textarea ng-if="screend.f2g.FieldsDataTypesId==5" type="text" class="form-control" ng-model="screend.f2gwd.Value" ng-disabled="$ctrl.role!='farmAdmin' && $ctrl.role!='instructor'" rows="4"></textarea>
+                                </div>
+                                <div class="col-md-12" ng-if="screend.f2g.FieldsDataTypesId==4">
+
+                                    <div class="checkbox">
+                                        <input class="form-check-input"
+                                               type="checkbox" ng-model="screend.f2gwd.Value" ng-true-value="true" ng-false-value="false" />
+                                        <span ng-if="!screend.f2g.Title">
+                                            {{screend.f.Name}}
+                                        </span>
+                                        <span ng-if="screend.f2g.Title">
+                                            {{screend.f2g.Title}}
+                                        </span>
+
 
                                     </div>
                                 </div>
+                                <div class="col-md-12" ng-if="screend.f2g.FieldsDataTypesId==6">
+                                    <div class="form-group">
+                                        <label>
+                                            <span ng-if="!screend.f2g.Title">
+                                                {{screend.f.Name}}
+                                            </span>
+                                            <span ng-if="screend.f2g.Title">
+                                                {{screend.f2g.Title}}
+                                            </span>
 
+                                        </label><br />
+                                        <input type="checkbox" ng-model="screend.f2gwd.Value">
+                                    </div>
 
+                                </div>
                             </div>
                         </div>
 
-
-
-
-
                     </div>
                 </div>
+
             </div>
+
         </div>
+      
     </div>
 
 

@@ -36,7 +36,7 @@ namespace FarmsApi.DataModels
         public string Gender { get; set; }
 
         public int StatusId { get; set; }
-        
+
         //public string ToshavIsrael { get; set; }
         //public string Kibutz { get; set; }
 
@@ -159,6 +159,9 @@ namespace FarmsApi.DataModels
 
         //public bool IsValid { get; set; }
 
+
+        [NotMapped]
+        public bool IsHaveSignature { get; set; }
         public string FullName
         {
             get

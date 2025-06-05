@@ -642,11 +642,11 @@
                     resolve: {
                         worker: function (farmsService, $stateParams) {
 
-                            return farmsService.getSetCampainsData(5, $stateParams.id, null);
+                            return farmsService.getSetCampainsData(6, $stateParams.id, null);
                         },
                         campain: function (farmsService, $stateParams) {
 
-                            return farmsService.getSetCampainsData(6, $stateParams.campainid, null);
+                            return farmsService.getSetCampainsData(5, $stateParams.campainid, null);
                         },
                         //childs: function (usersService, $stateParams) {
 
