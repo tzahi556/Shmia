@@ -36,6 +36,8 @@
         this.saveWorker = _saveWorker.bind(this);
         this.changeDateFormat = _changeDateFormat.bind(this);
         this.ImageSignuture;
+        this.uploadsUri = sharedValues.apiUrl + '/uploads/'
+
         this.init();
 
         self = this;
@@ -96,7 +98,7 @@
             }
 
 
-            alert(this.worker.IsHaveSignature);
+            //alert(this.worker.IsHaveSignature);
            /* alert(this.campain.MustSign);*/
         }
 
@@ -140,14 +142,15 @@
 
         }
 
-        function SaveDynamicData(worker) {
-
+        function SaveDynamicData(type,worker) {
+          
             var fields2GroupsWorkerDataList = [];
 
 
 
             for (var i = 0; i < self.screendata.length; i++) {
                 if (!self.screendata[i].f2g) continue;
+
                 if (self.screendata[i].f2gwd) {
 
 
@@ -162,26 +165,31 @@
             }
 
 
+           
+            var ObjPost = { "Fields2GroupsWorkerData": fields2GroupsWorkerDataList, "InnerType": type, "Workers": worker};
 
-            farmsService.getSetWorkerAndCompanyData(2, self.worker.Id, fields2GroupsWorkerDataList, self.campain.Id).then(function (screendata) {
+            //ObjPost.Fields2GroupsWorkerData = fields2GroupsWorkerDataList;
+            //ObjPost.InnerType = type;
+            //if (worker["ImgData"]) ObjPost.ImgData = { "ImgData": worker["ImgData"] };
 
+            
 
+            farmsService.getSetWorkerAndCompanyData(22, self.worker.Id, ObjPost, self.campain.Id).then(function (screendata) {
 
-                if (worker["ImgData"]) {
+                //if (worker["ImgData"]) {
 
-                    var ImgData = { "ImgData": worker["ImgData"] };
+                //    var ImgData = { "ImgData": worker["ImgData"] };
 
-                    farmsService.getSetWorkerAndCompanyData(22, self.worker.Id, ImgData, self.campain.Id).then(function (screendata) {
+                //    farmsService.getSetWorkerAndCompanyData(22, self.worker.Id, ImgData, self.campain.Id).then(function (screendata2) {
 
-                    }.bind(self));
-                }
+                //    }.bind(self));
+                //}
 
+               // self.screendata = screendata;
 
-                self.screendata = screendata;
-
-                self.init();
-
-                alertMessage('הנתונים נשמרו בהצלחה!');
+                //self.init();
+                //if (type==1)
+                //alertMessage('הנתונים נשמרו בהצלחה!');
 
             }.bind(self));
 
@@ -223,37 +231,39 @@
 
 
 
-                var obj = this.worker; //angular.copy(this.worker.w);
+                var obj = this.worker; 
 
                 setRightDate(obj);
 
-                //var obj101 = this.worker.w101;//angular.copy(this.worker.w101);
-
-                //setRightDate(obj101);
+             
 
                 if (IsInvalid) {
-
 
                     alertMessage("נא להכניס תאריך נכון בשדות תאריך!", 3);
                     return;
                 }
 
+                var Signature = $scope.accept();
+                if (!Signature.isEmpty) {
+                    obj["ImgData"] = Signature.dataUrl;
+                } else {
+                    obj["ImgData"] = "";
+
+                }
+
+
+
+
                 if (type == 1) {
 
 
-                    var Signature = $scope.accept();
-                    if (!Signature.isEmpty) {
-                        obj["ImgData"] = Signature.dataUrl;
-                    } else {
-                        obj["ImgData"] = "";
-
-                    }
+                  
 
 
 
                     // usersService.updateWorker(this.worker, this.files, this.childs, type).then(function (worker) {
                     //  this.worker = worker;
-                    SaveDynamicData(obj);
+                    SaveDynamicData(1,obj);
                    
 
                     //}.bind(this));
@@ -264,43 +274,34 @@
                     if (this.scope.workercampainsForm.$valid) {
 
 
-                        //if (this.tazfiles.length == 0) {
 
-                        //    alertMessage('חובה לצרף צילום תעודת זהות!');
-                        //    return;
+                        //var Signature = $scope.accept();
+                        //if (!Signature.isEmpty) {
+                        //    obj["ImgData"] = Signature.dataUrl;
+                        //} else {
+                        //    obj["ImgData"] = "";
+
                         //}
 
 
+                        SaveDynamicData(2, obj);
 
-                        var Signature = $scope.accept();
-                        if (!Signature.isEmpty) {
-                            obj101["ImgData"] = Signature.dataUrl;
-                        } else {
-                            obj101["ImgData"] = "";
+                        
 
-                        }
-
-
-                        // $.blockUI({ css: {}, message: '<h5><div id="loader"></div><div class="tzahiStyle"> אנחנו כרגע מעבדים את הנתונים ומייצרים קובץ  PDF ושולחים אותו למשרד <br/>אנא המתנ/י...</div></h5>' });
+                        //usersService.updateWorker(this.worker, this.files, this.childs, type).then(function (worker) {
 
 
 
+                            
+                        //    if (worker.Status == "נשלח למשרד") {
+                        //        SaveDynamicData(worker);
+                        //        alertMessage('הנתונים נשלחו למשרד בהצלחה!');
+                        //    }
 
+                        //    else
+                        //        alertMessage(worker.Status);
 
-                        usersService.updateWorker(this.worker, this.files, this.childs, type).then(function (worker) {
-
-
-
-                            //  $.unblockUI();
-                            if (worker.Status == "נשלח למשרד") {
-                                SaveDynamicData(worker);
-                                alertMessage('הנתונים נשלחו למשרד בהצלחה!');
-                            }
-
-                            else
-                                alertMessage(worker.Status);
-
-                        }.bind(this));
+                        //}.bind(this));
                     }
 
                     else {
@@ -312,25 +313,29 @@
                 }
 
                 if (type == 3) {
-                    // $.blockUI({ css: {}, message: '<h5><div id="loader"></div><div class="tzahiStyle"> אנחנו כרגע מעבדים את הנתונים ומייצרים קובץ PDF  <br/>אנא המתנ/י...</div></h5>' });
-
-                    var Signature = $scope.accept();
-                    if (!Signature.isEmpty) {
-                        obj101["ImgData"] = Signature.dataUrl;
-                    } else {
-                        obj101["ImgData"] = "";
-
-                    }
 
 
+                    //var Signature = $scope.accept();
+                    //if (!Signature.isEmpty) {
+                    //    obj["ImgData"] = Signature.dataUrl;
+                    //} else {
+                    //    obj["ImgData"] = "";
 
-                    usersService.updateWorker(this.worker, this.files, this.childs, type).then(function (worker) {
+                    //}
 
-                        SaveDynamicData(worker);
+
+
+                    //usersService.updateWorker(this.worker, this.files, this.childs, type).then(function (worker) {
+
+                    SaveDynamicData(3, obj);
+
+                  
+
+                    setTimeout(_openLink, 400);
                         //$.unblockUI();
-                        $window.open(this.uploadsUri + "Workers/" + this.worker.w.Id + "/-1/" + "/AllPdfTemp.pdf", '_blank');
+                   
                         //$window.open(this.uploadsUri + "Workers/2/AllPdfTemp.pdf", '_blank');
-                    }.bind(this));
+                    //}.bind(this));
 
                 }
 
@@ -343,7 +348,14 @@
         }
 
 
+        function _openLink() {
 
+            //const today = new Date();
+            //const timestamp = today.getTime(); //
+
+            $window.open(self.uploadsUri + "Workers/" + self.worker.Id + "/" + self.campain.Id + "/AllPdfTemp.pdf", '_blank');
+
+        }
     }
 
 

@@ -622,12 +622,34 @@ namespace FarmsApi.Services
 
                 }
 
-                // עדכון של חתימה של עובד
+                // עדכון של כל הדברים של קמפיין כולל שליחת מייל
                 if (type == 22)
                 {
 
-                       string root = HttpContext.Current.Server.MapPath("~/Uploads/Workers/");
-                       string WorkerPath = root + WorkerId.ToString();
+                    // שמירה של כל השדות
+                    ResultCampainSave result = JsonConvert.DeserializeObject<ResultCampainSave>(objs.ToString());
+                    List<Fields2GroupsWorkerData> f2gwd = result.Fields2GroupsWorkerData;
+                    foreach (var item in f2gwd)
+                    {
+
+                        if (item.Id == 0)
+                        {
+                            Context.Fields2GroupsWorkerData.Add(item);
+                        }
+                        else
+                        {
+                            Context.Entry(item).State = System.Data.Entity.EntityState.Modified;
+                        }
+
+
+                    }
+                    Context.SaveChanges();
+
+                    // שמירה של חתימת עובד על קמפיין
+                    if (!string.IsNullOrEmpty(result.Workers.ImgData))
+                    {
+                        string root = HttpContext.Current.Server.MapPath("~/Uploads/Workers/");
+                        string WorkerPath = root + WorkerId.ToString();
                         if (!Directory.Exists(WorkerPath))
                         {
                             Directory.CreateDirectory(WorkerPath);
@@ -635,32 +657,33 @@ namespace FarmsApi.Services
                         }
                         string filePath = WorkerPath + "\\Signature.png";
 
-                        string ImgData = objs["ImgData"].ToString();
+                        string ImgData = result.Workers.ImgData;
                         System.IO.File.WriteAllBytes(filePath, GetValidString(ImgData));
+
+
+                    }
+
+                    //יצירת PDF
+                    var InnerType = result.InnerType;
+                    
+                    if (InnerType == 3)
+                    {
+                        PdfAPI pa = new PdfAPI();
+
+
+                        WorkersWith101 workersWith101 = new WorkersWith101();
+                        workersWith101.w = result.Workers;
+
+                        pa.CreateNewCompanyPDF(result.Workers.FarmId, campainid, workersWith101);
+
+
+                    }
+
 
                 }
 
 
-                //if (!string.IsNullOrEmpty(w101.ImgData))
-                //{
-
-                //    string root = HttpContext.Current.Server.MapPath("~/Uploads/Workers/");
-
-                //    string WorkerPath = root + w.Id.ToString();
-
-                //    if (!Directory.Exists(WorkerPath))
-                //    {
-                //        Directory.CreateDirectory(WorkerPath);
-
-                //    }
-                //    string filePath = WorkerPath + "\\Signature.png";
-
-
-                //    File.WriteAllBytes(filePath, GetValidString(w101.ImgData));
-
-                //    AddToLogDB("", "", " הוספת חתימה לעובדת " + w.Id, null, "", w.Id);
-                //}
-
+             
 
 
 
@@ -717,44 +740,6 @@ namespace FarmsApi.Services
 
             using (var Context = new Context())
             {
-
-
-                // שליפה של קמפיין לטובת משתמש שנכנס לקמפיין
-                if (type == 5)
-                {
-                    int CampainId = Convert.ToInt32(res);
-
-                    var Campain = Context.Campains.Where(x => x.Id == CampainId && x.StatusId == 1).FirstOrDefault();
-
-
-
-                    return Ok(Campain);
-
-                }
-
-
-                // שליפה של עובד לטובת משתמש שנכנס לקמפיין
-                if (type == 6)
-                {
-                    int WorkerId = Convert.ToInt32(res);
-
-                    var Workers = Context.Workers.Where(x => x.Id == WorkerId && x.StatusId == 1).FirstOrDefault();
-
-                    string root = HttpContext.Current.Server.MapPath("~/Uploads/Workers/");
-                    string WorkerPath = root + WorkerId.ToString();
-                    string filePath = WorkerPath + "\\Signature.png";
-
-                    if (System.IO.File.Exists(filePath)) {
-
-                        Workers.IsHaveSignature = true; 
-                    }
-
-                    return Ok(Workers);
-
-                }
-
-
-
                 // שליפה של הנתונים
                 if (type == 1)
                 {
@@ -839,54 +824,104 @@ namespace FarmsApi.Services
                 }
 
 
+                // שליפה של קמפיין לטובת משתמש שנכנס לקמפיין
+                if (type == 5)
+                {
+                    int CampainId = Convert.ToInt32(res);
+
+                    var Campain = Context.Campains.Where(x => x.Id == CampainId && x.StatusId == 1).FirstOrDefault();
 
 
-                //// עדכון של הנתונים
-                //if (type == 2)
-                //{
-                //    List<Fields2GroupsWorkerData> f2gwd = JsonConvert.DeserializeObject<List<Fields2GroupsWorkerData>>(objs.ToString());
 
-                //    foreach (var item in f2gwd)
-                //    {
+                    return Ok(Campain);
+
+                }
 
 
-                //        //if (item.SourceValue != item.Value)
-                //        //{
-                //        if (item.Id == 0)
-                //        {
-                //            Context.Fields2GroupsWorkerData.Add(item);
-                //        }
-                //        else
-                //        {
-                //            Context.Entry(item).State = System.Data.Entity.EntityState.Modified;
-                //        }
+                // שליפה האם קיימת לו חתימה
+                if (type == 6)
+                {
+                    int WorkerId = Convert.ToInt32(res);
+
+                    var Workers = Context.Workers.Where(x => x.Id == WorkerId && x.StatusId == 1).FirstOrDefault();
+
+                    string root = HttpContext.Current.Server.MapPath("~/Uploads/Workers/");
+                    string WorkerPath = root + WorkerId.ToString();
+                    string filePath = WorkerPath + "\\Signature.png";
+
+                    if (System.IO.File.Exists(filePath))
+                    {
+
+                        Workers.IsHaveSignature = true;
+                    }
+
+                    return Ok(Workers);
+
+                }
 
 
-                //        // }
+
+                // שליחה של PDF
+                if (type == 7)
+                {
+                    
+                    
+                    int WorkerId = Convert.ToInt32(res);
 
 
-                //    }
 
-                //    Context.SaveChanges();
 
-                //    return GetSetWorkerAndCompanyData(1, id, objs);
+                }
 
-                //}
 
-                //// שליפה של הנתונים
-                //if (type == 3)
-                //{
-                //    var Worker = Context.Workers.Where(x => x.Id == WorkerId).FirstOrDefault();
 
-                //    var CurrentFarmId = (Worker != null) ? Worker.FarmId : UsersService.GetCurrentUser().Farm_Id;
 
-                //    var Farm = Context.Farms.Where(x => x.Id == CurrentFarmId).FirstOrDefault();
+                    //// עדכון של הנתונים
+                    //if (type == 2)
+                    //{
+                    //    List<Fields2GroupsWorkerData> f2gwd = JsonConvert.DeserializeObject<List<Fields2GroupsWorkerData>>(objs.ToString());
 
-                //    return Ok(Farm);
+                    //    foreach (var item in f2gwd)
+                    //    {
 
-                //}
 
-            }
+                    //        //if (item.SourceValue != item.Value)
+                    //        //{
+                    //        if (item.Id == 0)
+                    //        {
+                    //            Context.Fields2GroupsWorkerData.Add(item);
+                    //        }
+                    //        else
+                    //        {
+                    //            Context.Entry(item).State = System.Data.Entity.EntityState.Modified;
+                    //        }
+
+
+                    //        // }
+
+
+                    //    }
+
+                    //    Context.SaveChanges();
+
+                    //    return GetSetWorkerAndCompanyData(1, id, objs);
+
+                    //}
+
+                    //// שליפה של הנתונים
+                    //if (type == 3)
+                    //{
+                    //    var Worker = Context.Workers.Where(x => x.Id == WorkerId).FirstOrDefault();
+
+                    //    var CurrentFarmId = (Worker != null) ? Worker.FarmId : UsersService.GetCurrentUser().Farm_Id;
+
+                    //    var Farm = Context.Farms.Where(x => x.Id == CurrentFarmId).FirstOrDefault();
+
+                    //    return Ok(Farm);
+
+                    //}
+
+                }
 
 
 

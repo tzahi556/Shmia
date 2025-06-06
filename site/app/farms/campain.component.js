@@ -39,7 +39,8 @@
 
         $scope.farm = this.farm;
         this.scope = $scope;
-
+        this.checkAll = _checkAll.bind(this);
+        this.sendSMS = _sendSMS.bind(this);
         //this.horsesService = horsesService;
         this.farmsService = farmsService;
         this.SaveData = _SaveData.bind(this);
@@ -626,7 +627,46 @@
 
         }
 
+        function _checkAll() {
 
+
+            this.workers.forEach(x => x.IsSelected = this.checkAllc);
+        }
+        function _sendSMS() {
+
+
+            var ctrl = this;
+
+
+             //debugger
+
+            //var selected = this.workers.filter(x => x.IsSelected && (x.IsValid || this.farmStyle != 1));
+            var selected = this.workers.filter(x => x.IsSelected);
+
+            ctrl.checkAllc = false;
+            ctrl.checkAll();
+
+
+            for (var i = 0; i < selected.length; i++) {
+                selected[i].IsSelected = true;
+            }
+
+            if (selected.length > 0) {
+                var confirmBox = alertMessage("האם לשלוח SMS לכל העובדים המסומנים?", 4);
+                confirmBox.click(function () {
+                    usersService.sendSMS(selected, 1).then(function (res) {
+
+                        //to do
+                        //ctrl.workers = res;
+                        ctrl.checkAllc = false;
+                        ctrl.checkAll();
+                    });
+                });
+            }
+
+
+
+        }
 
 
 

@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace FarmsApi.DataModels
@@ -187,5 +188,19 @@ namespace FarmsApi.DataModels
         public Fields2GroupsWorkerData f2gwd { get; set; }
 
     }
+
+
+    public class ResultCampainSave
+    {
+        public List<Fields2GroupsWorkerData> Fields2GroupsWorkerData { get; set; }
+
+        public int InnerType { get; set; }
+
+        public Workers Workers { get; set; }
+
+
+
+    }
+
 
 }

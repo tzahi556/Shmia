@@ -504,7 +504,7 @@ namespace FarmsApi.Services
 
                 var res = workersWith101.w[PropertyName];
 
-                if (res == null)
+                if (res == null && workersWith101.w101!=null)
                 {
                     res = workersWith101.w101[PropertyName];
                 }

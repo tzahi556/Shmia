@@ -162,6 +162,9 @@ namespace FarmsApi.DataModels
 
         [NotMapped]
         public bool IsHaveSignature { get; set; }
+        [NotMapped]
+        public string ImgData { get; set; }
+
         public string FullName
         {
             get

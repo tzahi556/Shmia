@@ -789,20 +789,15 @@
 
                         }
 
-
-                       // $.blockUI({ css: {}, message: '<h5><div id="loader"></div><div class="tzahiStyle"> אנחנו כרגע מעבדים את הנתונים ומייצרים קובץ  PDF ושולחים אותו למשרד <br/>אנא המתנ/י...</div></h5>' });
-
-
-
                        
-
+                        SaveDynamicData(this.worker);
                         usersService.updateWorker(this.worker, this.files, this.childs, type).then(function (worker) {
 
 
 
-                          //  $.unblockUI();
+                        
                             if (worker.Status == "נשלח למשרד") {
-                                SaveDynamicData(worker);
+                                
                                 alertMessage('הנתונים נשלחו למשרד בהצלחה!');
                             }
                                 
@@ -832,10 +827,9 @@
                     }
 
 
-
+                    SaveDynamicData(this.worker);
                     usersService.updateWorker(this.worker, this.files, this.childs, type).then(function (worker) {
                         
-                        SaveDynamicData(worker);
                        //$.unblockUI();
                         $window.open(this.uploadsUri + "Workers/" + this.worker.w.Id + "/-1/"+  "/AllPdfTemp.pdf", '_blank');
                         //$window.open(this.uploadsUri + "Workers/2/AllPdfTemp.pdf", '_blank');
