@@ -10,12 +10,14 @@
         this.delete = _delete.bind(this);
 
         function _upload(file,folder,workerid) {
-         
+
+           // debugger
            
             var deferred = $q.defer();
             var fd = new FormData();
            
             for (var i = 0; i < file.length; i++) {
+                //file[i].name = encodeURIComponent(file[i].name);
                 fd.append('file', file[i]);
             }
            

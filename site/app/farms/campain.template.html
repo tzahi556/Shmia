@@ -142,10 +142,16 @@
                 var Is101 = $(this).attr("is101");
                 var Seq = $(this).attr("seq");
 
+                //FullLink = FullLink.replace(FileName, "");
+
+                //FullLink = FullLink + encodeURIComponent(FileName);
+
+
                 var JsonObj = { "Id": Id, "FileName": FileName, "FullLink": FullLink, "Is101": Is101, "Seq": Seq };
 
                 PdfList.push(JsonObj);
-
+              
+              
                 CallPdfJs("Canvas_" + Id, 150, 250, FullLink);
 
 

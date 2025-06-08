@@ -136,7 +136,7 @@
             confirmBox.click(function () {
 
 
-                farmsService.updateFarmsPdfFiles(3, Id,-1, self.farmspdffiles).then(function (farmspdffiles) {
+                farmsService.updateFarmsPdfFiles(3, Id,self.campain.Id, self.farmspdffiles).then(function (farmspdffiles) {
 
                     self.farmspdffiles = farmspdffiles;
                     self.init();
@@ -161,7 +161,7 @@
 
             farmsService.getFarmPDFFiles(this.farm.Id, this.campain.Id).then(function (farmspdffiles) {
 
-
+                
 
                 self.farmspdffiles = farmspdffiles;
                 self.init();

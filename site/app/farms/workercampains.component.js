@@ -188,8 +188,8 @@
                // self.screendata = screendata;
 
                 //self.init();
-                //if (type==1)
-                //alertMessage('הנתונים נשמרו בהצלחה!');
+                if (type==1)
+                   alertMessage('הנתונים נשמרו בהצלחה!');
 
             }.bind(self));
 

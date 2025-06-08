@@ -124,6 +124,28 @@ namespace FarmsApi.Controllers
                 };
 
 
+                root = root + "/-1/";
+
+                if (!Directory.Exists(root))
+                {
+                    Directory.CreateDirectory(root);
+
+                }
+
+
+            }
+
+            if (folder=="taz")
+            {
+                root = root + "/-1/";
+
+                if (!Directory.Exists(root))
+                {
+                    Directory.CreateDirectory(root);
+
+                }
+
+
             }
 
             if (folder.Contains("Companies_Logo"))
@@ -193,7 +215,8 @@ namespace FarmsApi.Controllers
             {
                 var source = file.FileData[i].LocalFileName;
 
-                var dest = root + "/" + file.FileData[i].Headers.ContentDisposition.FileName.Replace("\"", "");
+
+                var dest = root + "/" + file.FileData[i].Headers.ContentDisposition.FileName.Replace("\"", "").Replace(" ", "").Replace("#", "").Replace("-", "_");
                 //dest = filterFilename(dest);
 
                 if (folder.Contains("Companies_Sign"))
@@ -292,6 +315,12 @@ namespace FarmsApi.Controllers
 
         //}
 
+
+        public string RemoveInvalidFileNameChars(string fileName)
+        {
+            var invalidChars = Path.GetInvalidFileNameChars();
+            return new string(fileName.Where(ch => !invalidChars.Contains(ch)).ToArray());
+        }
 
         [Route("uploadformail/{folder}/{workerid}/{text}")]
         [HttpPost]
