@@ -2,10 +2,12 @@
 using Microsoft.Owin;
 using Microsoft.Owin.Cors;
 using Microsoft.Owin.Security.OAuth;
+using Newtonsoft.Json;
 using Owin;
 using System;
 using System.Linq;
 using System.Security.Claims;
+using System.Text.Json;
 using System.Threading.Tasks;
 using System.Web.Http;
 
@@ -82,6 +84,10 @@ namespace FarmsApi
 
                     var identity = new ClaimsIdentity(context.Options.AuthenticationType);
                     identity.AddClaim(new Claim("sub", user.Email));
+
+                    identity.AddClaim(new Claim("UserObj", JsonConvert.SerializeObject(user)));
+
+
                     identity.AddClaim(new Claim(ClaimTypes.Role, user.Role));
 
                     context.Validated(identity);

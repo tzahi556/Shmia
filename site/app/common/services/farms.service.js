@@ -25,6 +25,21 @@
         this.getSetWorkerAndCompanyData = _getSetWorkerAndCompanyData;
 
         this.getSetCampainsData = _getSetCampainsData;
+        this.sendLinktoWorkers = _sendLinktoWorkers;
+        
+
+        function _sendLinktoWorkers(workers, type, campainsId) {
+
+            if (!campainsId) campainsId = -1;
+            var deferred = $q.defer();
+            $http.post(sharedValues.apiUrl + 'fields/sendLinktoWorkers/' + type + "/" + campainsId, workers).then(function (res) {
+                var res = res.data;
+                deferred.resolve(res);
+            });
+            return deferred.promise;
+        }
+
+
 
         function _getSetWorkerAndCompanyData(type, workerid, objects, campainsId) {
 

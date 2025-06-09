@@ -54,6 +54,8 @@
         //this.IsPopUp = false;
         //this.IsStop = false;
 
+        this.uploadsUri = sharedValues.apiUrl + '/uploads/Workers/'
+
         function _deleteLogo(type) {
 
 
@@ -632,16 +634,24 @@
 
             this.workers.forEach(x => x.IsSelected = this.checkAllc);
         }
-        function _sendSMS() {
+        function _sendSMS(type) {
 
-
+            
             var ctrl = this;
 
 
-             //debugger
+           
 
             //var selected = this.workers.filter(x => x.IsSelected && (x.IsValid || this.farmStyle != 1));
             var selected = this.workers.filter(x => x.IsSelected);
+
+            if (selected.length== 0) {
+
+                alertMessage(`לא נבחר עובד/ת למשלוח`, 3);
+
+                return;
+            }
+
 
             ctrl.checkAllc = false;
             ctrl.checkAll();
@@ -651,16 +661,38 @@
                 selected[i].IsSelected = true;
             }
 
-            if (selected.length > 0) {
-                var confirmBox = alertMessage("האם לשלוח SMS לכל העובדים המסומנים?", 4);
-                confirmBox.click(function () {
-                    usersService.sendSMS(selected, 1).then(function (res) {
+            let typename = "SMS";
 
-                        //to do
-                        //ctrl.workers = res;
+            if (type == 2) {
+
+                typename = "מייל";
+            }
+            if (type == 3) {
+
+                typename = "ווטסאפ";
+            }
+
+
+           
+
+
+           
+
+            const workersSelected = selected.map(selected => selected.w);
+
+            if (selected.length > 0) {
+                var confirmBox = alertMessage(`האם לשלוח ${typename} לכל העובדים המסומנים?`, 4);
+                confirmBox.click(function () {
+
+                    farmsService.sendLinktoWorkers(workersSelected, type, ctrl.campain.Id).then(function (res) {
+
+                        ctrl.workers = res;
                         ctrl.checkAllc = false;
                         ctrl.checkAll();
                     });
+
+
+                   
                 });
             }
 

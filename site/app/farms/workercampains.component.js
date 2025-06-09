@@ -99,7 +99,7 @@
 
 
             //alert(this.worker.IsHaveSignature);
-           /* alert(this.campain.MustSign);*/
+            /* alert(this.campain.MustSign);*/
         }
 
         function _clearSignuture() {
@@ -142,8 +142,8 @@
 
         }
 
-        function SaveDynamicData(type,worker) {
-          
+        function SaveDynamicData(type, worker) {
+
             var fields2GroupsWorkerDataList = [];
 
 
@@ -165,15 +165,15 @@
             }
 
 
-           
-            var ObjPost = { "Fields2GroupsWorkerData": fields2GroupsWorkerDataList, "InnerType": type, "Workers": worker};
+
+            var ObjPost = { "Fields2GroupsWorkerData": fields2GroupsWorkerDataList, "InnerType": type, "Workers": worker };
 
             //ObjPost.Fields2GroupsWorkerData = fields2GroupsWorkerDataList;
             //ObjPost.InnerType = type;
             //if (worker["ImgData"]) ObjPost.ImgData = { "ImgData": worker["ImgData"] };
 
-            
 
+           
             farmsService.getSetWorkerAndCompanyData(22, self.worker.Id, ObjPost, self.campain.Id).then(function (screendata) {
 
                 //if (worker["ImgData"]) {
@@ -185,11 +185,20 @@
                 //    }.bind(self));
                 //}
 
-               // self.screendata = screendata;
+                // self.screendata = screendata;
 
                 //self.init();
-                if (type==1)
-                   alertMessage('הנתונים נשמרו בהצלחה!');
+                if (type == 1)
+                    alertMessage('הנתונים נשמרו בהצלחה!');
+
+                if (type == 2)
+                    alertMessage('הנתונים נשמרו בהצלחה ונשלחו למשרד להמשך טיפול!');
+
+                if (type == 3) {
+
+                    setTimeout(_openLink, 400);
+
+                }
 
             }.bind(self));
 
@@ -231,11 +240,11 @@
 
 
 
-                var obj = this.worker; 
+                var obj = this.worker;
 
                 setRightDate(obj);
 
-             
+
 
                 if (IsInvalid) {
 
@@ -257,14 +266,14 @@
                 if (type == 1) {
 
 
-                  
+
 
 
 
                     // usersService.updateWorker(this.worker, this.files, this.childs, type).then(function (worker) {
                     //  this.worker = worker;
-                    SaveDynamicData(1,obj);
-                   
+                    SaveDynamicData(1, obj);
+
 
                     //}.bind(this));
 
@@ -272,6 +281,19 @@
 
                 if (type == 2) {
                     if (this.scope.workercampainsForm.$valid) {
+
+
+
+                        //alert(this.worker.IsHaveSignature);
+                        if ((this.campain.MustSign || !this.worker.IsHaveSignature) && Signature.isEmpty) {
+
+
+                            alertMessage("חובה לחתום על מסמך זה!", 3);
+                            return;
+
+                        }
+                      
+
 
 
 
@@ -286,13 +308,13 @@
 
                         SaveDynamicData(2, obj);
 
-                        
+
 
                         //usersService.updateWorker(this.worker, this.files, this.childs, type).then(function (worker) {
 
 
 
-                            
+
                         //    if (worker.Status == "נשלח למשרד") {
                         //        SaveDynamicData(worker);
                         //        alertMessage('הנתונים נשלחו למשרד בהצלחה!');
@@ -329,12 +351,12 @@
 
                     SaveDynamicData(3, obj);
 
-                  
 
-                    setTimeout(_openLink, 400);
-                        //$.unblockUI();
+
                    
-                        //$window.open(this.uploadsUri + "Workers/2/AllPdfTemp.pdf", '_blank');
+                    //$.unblockUI();
+
+                    //$window.open(this.uploadsUri + "Workers/2/AllPdfTemp.pdf", '_blank');
                     //}.bind(this));
 
                 }

@@ -63,6 +63,7 @@ namespace FarmsApi.DataModels
 
         public string Name { get; set; }
 
+        public string NameEn { get; set; }
         public DateTime DateRigster { get; set; }
 
         public int CountSend { get; set; }
@@ -70,8 +71,9 @@ namespace FarmsApi.DataModels
         public int CountSign { get; set; }
 
         public bool MustSign { get; set; }
-        
 
+        public bool IsSendToWorker { get; set; }
+        
         public int StatusId { get; set; }
 
     }

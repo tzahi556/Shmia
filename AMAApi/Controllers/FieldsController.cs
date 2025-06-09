@@ -39,7 +39,7 @@ namespace FarmsApi.Services
 
                 using (var Context = new Context())
                 {
-                    List<Fields> FieldsList = Context.Fields.Where(x => ((x.FarmId == farmid && x.CampainsId== campainsId) || x.FarmId == null) && x.StatusId == 1).OrderBy(x => x.FarmId).ToList();
+                    List<Fields> FieldsList = Context.Fields.Where(x => ((x.FarmId == farmid && x.CampainsId == campainsId) || x.FarmId == null) && x.StatusId == 1).OrderBy(x => x.FarmId).ToList();
                     return Ok(FieldsList);
                 }
 
@@ -69,7 +69,7 @@ namespace FarmsApi.Services
                 {
 
 
-                    var Results = (from f2g in Context.Fields2Groups.Where(x => x.FarmId == farmid && x.CampainsId == campainsId && x.StatusId==1 ).DefaultIfEmpty()
+                    var Results = (from f2g in Context.Fields2Groups.Where(x => x.FarmId == farmid && x.CampainsId == campainsId && x.StatusId == 1).DefaultIfEmpty()
                                    from f in Context.Fields.Where(x => x.Id == f2g.FieldsId).DefaultIfEmpty()
 
 
@@ -79,7 +79,7 @@ namespace FarmsApi.Services
                                        f2g,
                                        f
 
-                                   }).Where(x=>x.f2g!=null).OrderBy(x => x.f2g.Seq).ToList();
+                                   }).Where(x => x.f2g != null).OrderBy(x => x.f2g.Seq).ToList();
 
 
                     return Ok(Results);
@@ -100,7 +100,7 @@ namespace FarmsApi.Services
 
                     string FieldName = objs["Obj"].ToString();
 
-                    Fields FieldsObj = Context.Fields.Where(x => x.FarmId == farmid &&  x.CampainsId == campainsId && x.StatusId == 1 && x.Name == FieldName).FirstOrDefault();
+                    Fields FieldsObj = Context.Fields.Where(x => x.FarmId == farmid && x.CampainsId == campainsId && x.StatusId == 1 && x.Name == FieldName).FirstOrDefault();
 
 
                     if (FieldsObj == null)
@@ -283,7 +283,7 @@ namespace FarmsApi.Services
                     Context.SaveChanges();
 
                     //מחזירים את הזה שלנו החדש
-                    return ActionFieldGroup(3, farmid, null,campainsId);
+                    return ActionFieldGroup(3, farmid, null, campainsId);
 
                 }
             }
@@ -303,7 +303,7 @@ namespace FarmsApi.Services
                     Context.SaveChanges();
 
                     //מחזירים את הזה שלנו החדש
-                    return ActionFieldGroup(3, farmid, null,campainsId);
+                    return ActionFieldGroup(3, farmid, null, campainsId);
 
                 }
             }
@@ -357,7 +357,7 @@ namespace FarmsApi.Services
 
 
                     //מחזירים את הזה שלנו החדש
-                    return ActionFieldGroup(3, farmid, null,campainsId);
+                    return ActionFieldGroup(3, farmid, null, campainsId);
 
 
                 }
@@ -454,7 +454,7 @@ namespace FarmsApi.Services
 
 
                     PdfAPI pa = new PdfAPI();
-                    string Link= pa.CreateNewCompanyPDF(farmid, campainsId);
+                    string Link = pa.CreateNewCompanyPDF(farmid, campainsId);
 
 
 
@@ -471,7 +471,7 @@ namespace FarmsApi.Services
         // [Authorize]
         [Route("getSetWorkerAndCompanyData/{type}/{id}/{campainid}/")]
         [HttpPost]
-        public IHttpActionResult GetSetWorkerAndCompanyData(int type, string id, dynamic objs,int campainid=-1)
+        public IHttpActionResult GetSetWorkerAndCompanyData(int type, string id, dynamic objs, int campainid = -1)
         {
             string res = id;
 
@@ -507,9 +507,9 @@ namespace FarmsApi.Services
 
                     var Results = (
 
-                                   from fieldsGroups in Context.FieldsGroups.Where(x =>  x.CampainsId == campainid && x.StatusId == 1).DefaultIfEmpty()
-                                   from fields2Groups in Context.Fields2Groups.Where(x => (x.FieldsGroupsId == fieldsGroups.Id || x ==null) && x.CampainsId== campainid && x.StatusId==1).DefaultIfEmpty()
-                                 
+                                   from fieldsGroups in Context.FieldsGroups.Where(x => x.CampainsId == campainid && x.StatusId == 1).DefaultIfEmpty()
+                                   from fields2Groups in Context.Fields2Groups.Where(x => (x.FieldsGroupsId == fieldsGroups.Id || x == null) && x.CampainsId == campainid && x.StatusId == 1).DefaultIfEmpty()
+
 
                                    from fields in Context.Fields.Where(x => x.Id == fields2Groups.FieldsId && x.StatusId == 1).DefaultIfEmpty()
                                    from fields2GroupsWorkerData in Context.Fields2GroupsWorkerData.Where(x => x.WorkersId == WorkerId && x.Fields2GroupsId == fields2Groups.Id).DefaultIfEmpty()
@@ -530,7 +530,7 @@ namespace FarmsApi.Services
                         if (Worker != null)
                         {
 
-                            if (item.f2gwd == null && item.f!=null && item.f.WorkerTableField != null)
+                            if (item.f2gwd == null && item.f != null && item.f.WorkerTableField != null)
                             {
 
                                 var WorkerTableFieldValue = Context.Entry(Worker).Property(item.f.WorkerTableField).CurrentValue;
@@ -541,11 +541,11 @@ namespace FarmsApi.Services
                                     fields2GroupsWorkerData.Fields2GroupsId = item.f2g.Id;
                                     fields2GroupsWorkerData.WorkersId = WorkerId;
 
-                                    if(item.f2g.FieldsDataTypesId==3)
+                                    if (item.f2g.FieldsDataTypesId == 3)
                                         fields2GroupsWorkerData.Value = Convert.ToDateTime(WorkerTableFieldValue).ToString("yyyy-MM-dd");
-                                    else 
+                                    else
                                         fields2GroupsWorkerData.Value = WorkerTableFieldValue.ToString();
-                                    
+
                                     fields2GroupsWorkerData.Type = 1;
                                     fields2GroupsWorkerData.SourceValue = WorkerTableFieldValue.ToString();
 
@@ -573,7 +573,7 @@ namespace FarmsApi.Services
                         if (item.f2gwd == null)
                         {
                             Fields2GroupsWorkerData fields2GroupsWorkerData = new Fields2GroupsWorkerData();
-                            fields2GroupsWorkerData.Fields2GroupsId = (item.f2g!=null)? item.f2g.Id :0;
+                            fields2GroupsWorkerData.Fields2GroupsId = (item.f2g != null) ? item.f2g.Id : 0;
                             fields2GroupsWorkerData.WorkersId = WorkerId;
                             fields2GroupsWorkerData.Value = null;
                             fields2GroupsWorkerData.Type = 0;
@@ -597,21 +597,21 @@ namespace FarmsApi.Services
 
                     foreach (var item in f2gwd)
                     {
-                        
+
 
                         //if (item.SourceValue != item.Value)
                         //{
-                            if (item.Id == 0)
-                            {
-                                Context.Fields2GroupsWorkerData.Add(item);
-                            }
-                            else
-                            {
-                                Context.Entry(item).State = System.Data.Entity.EntityState.Modified;
-                            }
+                        if (item.Id == 0)
+                        {
+                            Context.Fields2GroupsWorkerData.Add(item);
+                        }
+                        else
+                        {
+                            Context.Entry(item).State = System.Data.Entity.EntityState.Modified;
+                        }
 
 
-                       // }
+                        // }
 
 
                     }
@@ -665,8 +665,8 @@ namespace FarmsApi.Services
 
                     //יצירת PDF
                     var InnerType = result.InnerType;
-                    
-                    if (InnerType == 3)
+
+                    if (InnerType == 2 || InnerType == 3)
                     {
                         PdfAPI pa = new PdfAPI();
 
@@ -678,12 +678,86 @@ namespace FarmsApi.Services
 
 
                     }
+                    // שליחת מייל 
+                    if (InnerType == 2)
+                    {
+                        var Campain = Context.Campains.Where(x => x.Id == campainid && x.StatusId == 1).FirstOrDefault();
+                      
+                        var Farm = Context.Farms.Where(x => x.Id == Campain.FarmId).FirstOrDefault();
 
+                        //var CurrentUser = GetCurrentUser();
+
+                        string CompanyEmails = null;
+
+                        if (Farm.OfficeIsMail && !string.IsNullOrEmpty(Farm.OfficeMail))
+                        {
+                            CompanyEmails = Farm.OfficeMail + ",";
+                        }
+                        if (Farm.ContactIsMail && !string.IsNullOrEmpty(Farm.ContactMail))
+                        {
+                            CompanyEmails += Farm.ContactMail + ",";
+                        }
+
+
+                        if (!string.IsNullOrEmpty(CompanyEmails))
+                        {
+                            string MailTo = CompanyEmails.Remove(CompanyEmails.Length - 1);
+
+                            string Body = "<b>שלום רב,</b>" + "<br/>" + "מצ''ב קובץ עובד/ת.<br/>";// </html>";
+
+                            string CC = "";
+
+                            if(Campain.IsSendToWorker && !string.IsNullOrEmpty(result.Workers.Email))
+                                CC = result.Workers.Email;
+
+
+                            // $window.open(self.uploadsUri + "Workers/" + self.worker.Id + "/" + self.campain.Id + "/AllPdfTemp.pdf", '_blank');
+
+                            string FileLink = HttpContext.Current.Server.MapPath("~/Uploads/Workers/" + result.Workers.Id + "/" + campainid +  "/AllPdfTemp.pdf");
+
+                            if(System.IO.File.Exists(FileLink))
+                            {
+
+                                List<string> FilesToSend = new List<string>();
+                                FilesToSend.Add(FileLink);
+
+                                bool Res = Helper.SendMail(Campain.Name + " " + result.Workers.FullName, Body, MailTo, CC, result.Workers.FarmId.ToString(), false, FilesToSend);
+
+                                if (Res)
+                                {
+                                    CampainsStatus cs = Context.CampainsStatus.Where(x => x.CampainsId == campainid && x.WorkersId == result.Workers.Id).FirstOrDefault();
+
+                                   
+                                    cs.StatusId = 6;
+                                    cs.CampainsId = campainid;
+                                   // cs.MediaId = type;
+                                    cs.WorkersId = result.Workers.Id;
+                                    cs.DateConfirm = DateTime.Now;
+
+                                    Context.Entry(cs).State = System.Data.Entity.EntityState.Modified;
+                                    Context.SaveChanges();
+                                   
+
+
+                                }
+
+
+                            }
+
+
+
+                        }
+
+                       // return GetSetCampainsData(4, campainid.ToString(), null);
+
+
+
+                    }
 
                 }
 
 
-             
+
 
 
 
@@ -704,7 +778,7 @@ namespace FarmsApi.Services
 
                 }
 
-                
+
 
             }
 
@@ -744,15 +818,34 @@ namespace FarmsApi.Services
                 if (type == 1)
                 {
 
-                    var CampainsList=Context.Campains.Where(x=>x.FarmId.ToString()==id && x.StatusId==1).OrderByDescending(x=>x.DateRigster).ToList();
+                    var CampainsList = Context.Campains.Where(x => x.FarmId.ToString() == id && x.StatusId == 1).OrderByDescending(x => x.DateRigster).ToList();
 
                     return Ok(CampainsList);
-               
+
                 }
 
                 // שליפה של קמפיין לפי איידי
                 if (type == 2)
                 {
+
+                    if (id == "0")
+                    {
+                        User user = Helper.GetCurrentUser();
+                        Campains c = new Campains();
+                        c.DateRigster = DateTime.Now;
+                        c.StatusId = 1;
+                        c.FarmId = user.Farm_Id;
+                        c.CountSign = 0;
+                        c.CountSend = 0;
+                        c.MustSign = false;
+                        c.IsSendToWorker = false;
+                        Context.Campains.Add(c);
+                        Context.SaveChanges();
+                        id = c.Id.ToString();
+
+                    }
+
+
 
                     var Campain = Context.Campains.Where(x => x.Id.ToString() == id && x.StatusId == 1).FirstOrDefault();
 
@@ -809,11 +902,11 @@ namespace FarmsApi.Services
                                        {
                                            w,
                                            cs,
-                                           m, 
+                                           m,
                                            css
-                                           
 
-                                       }).Where(x=>x.w!=null).ToList();
+
+                                       }).Where(x => x.w != null).ToList();
 
 
                         return Ok(Results);
@@ -861,72 +954,229 @@ namespace FarmsApi.Services
 
 
 
-                // שליחה של PDF
-                if (type == 7)
+                //// שליחה של PDF
+                //if (type == 7)
+                //{
+
+
+                //    int WorkerId = Convert.ToInt32(res);
+
+
+
+
+                //}
+
+
+                // מחיקת קמפיין לקמפיין
+                if (type == 8)
                 {
-                    
-                    
-                    int WorkerId = Convert.ToInt32(res);
+                    int CampainId = Convert.ToInt32(res);
 
+                    var Campain = Context.Campains.Where(x => x.Id == CampainId).FirstOrDefault();
+
+                    Campain.StatusId = 0;
+                    Context.Entry(Campain).State = System.Data.Entity.EntityState.Modified;
+
+                    Context.SaveChanges();
+
+
+                    return GetSetCampainsData(1, Campain.FarmId.ToString(), null);
 
 
 
                 }
 
+                //// עדכון של הנתונים
+                //if (type == 2)
+                //{
+                //    List<Fields2GroupsWorkerData> f2gwd = JsonConvert.DeserializeObject<List<Fields2GroupsWorkerData>>(objs.ToString());
+
+                //    foreach (var item in f2gwd)
+                //    {
 
 
-
-                    //// עדכון של הנתונים
-                    //if (type == 2)
-                    //{
-                    //    List<Fields2GroupsWorkerData> f2gwd = JsonConvert.DeserializeObject<List<Fields2GroupsWorkerData>>(objs.ToString());
-
-                    //    foreach (var item in f2gwd)
-                    //    {
-
-
-                    //        //if (item.SourceValue != item.Value)
-                    //        //{
-                    //        if (item.Id == 0)
-                    //        {
-                    //            Context.Fields2GroupsWorkerData.Add(item);
-                    //        }
-                    //        else
-                    //        {
-                    //            Context.Entry(item).State = System.Data.Entity.EntityState.Modified;
-                    //        }
+                //        //if (item.SourceValue != item.Value)
+                //        //{
+                //        if (item.Id == 0)
+                //        {
+                //            Context.Fields2GroupsWorkerData.Add(item);
+                //        }
+                //        else
+                //        {
+                //            Context.Entry(item).State = System.Data.Entity.EntityState.Modified;
+                //        }
 
 
-                    //        // }
+                //        // }
 
 
-                    //    }
+                //    }
 
-                    //    Context.SaveChanges();
+                //    Context.SaveChanges();
 
-                    //    return GetSetWorkerAndCompanyData(1, id, objs);
+                //    return GetSetWorkerAndCompanyData(1, id, objs);
 
-                    //}
+                //}
 
-                    //// שליפה של הנתונים
-                    //if (type == 3)
-                    //{
-                    //    var Worker = Context.Workers.Where(x => x.Id == WorkerId).FirstOrDefault();
+                //// שליפה של הנתונים
+                //if (type == 3)
+                //{
+                //    var Worker = Context.Workers.Where(x => x.Id == WorkerId).FirstOrDefault();
 
-                    //    var CurrentFarmId = (Worker != null) ? Worker.FarmId : UsersService.GetCurrentUser().Farm_Id;
+                //    var CurrentFarmId = (Worker != null) ? Worker.FarmId : UsersService.GetCurrentUser().Farm_Id;
 
-                    //    var Farm = Context.Farms.Where(x => x.Id == CurrentFarmId).FirstOrDefault();
+                //    var Farm = Context.Farms.Where(x => x.Id == CurrentFarmId).FirstOrDefault();
 
-                    //    return Ok(Farm);
+                //    return Ok(Farm);
 
-                    //}
+                //}
 
-                }
+            }
 
 
 
             return Ok();
         }
+
+
+        // [Authorize]
+        [Route("sendLinktoWorkers/{type}/{campainid}/")]
+        [HttpPost]
+        public IHttpActionResult sendLinktoWorkers(int type, int campainid, List<Workers> workers)
+        {
+
+
+            using (var Context = new Context())
+            {
+
+                var CurrentDate = DateTime.Now;
+
+                foreach (Workers worker in workers)
+                {
+
+                    var Phone = worker.PhoneSelular;
+                    var Id = worker.Id;
+                    var FullName = worker.FullName;
+                    var Email = worker.Email;
+                    var FarmId = worker.FarmId;
+
+
+                    string EncryptId = AesOperation.EncryptString(Id.ToString());
+
+                    EncryptId = EncryptId.Replace("+", "@@").Replace("/", "ofekslash");
+
+                    //string DecryptId = AesOperation.DecryptString(EncryptId);
+
+
+
+                    if (!string.IsNullOrEmpty(Phone) && Phone.Length > 7)
+                    {
+
+                        string SiteRegisterCampain = Helper.GetConfigureValue("SiteRegisterCampain");
+
+                        var Message = string.Format("שלום {0}\r\nלהשלמת הטופס ולחתימה לחצ/י כאן:\r\n{1}\r\n", FullName, SiteRegisterCampain + EncryptId + "/" + campainid.ToString() + "/");
+
+                        Campains c = Context.Campains.Where(x => x.Id == campainid).FirstOrDefault();
+
+                        bool IsSendWorkers = false;
+
+                        // SMS
+                        if (type == 1)
+                        {
+
+
+                            string Title = "";
+                            if (!string.IsNullOrEmpty(c.NameEn))
+                                Title = c.NameEn;
+
+                            var res = Helper.SendSMSEndPoint(Phone, Message, Title);
+
+                            var resObj = Helper.ResAsJson(res);
+
+                            if (resObj["success"] == "true")
+                            {
+                                IsSendWorkers = true;
+
+
+                            }
+
+                        }
+                        //מייל
+                        if (type == 2 && !string.IsNullOrEmpty(Email))
+                        {
+
+                            bool Res = Helper.SendMail(c.Name, Message.Replace("\r\n", "<br>"), Email, "", FarmId.ToString());
+
+                            if (Res)
+                            {
+                                IsSendWorkers = true;
+
+                            }
+
+                        }
+
+                        if (IsSendWorkers)
+                        {
+                            CampainsStatus cs = new CampainsStatus();
+                            cs.StatusId = 5;
+                            cs.CampainsId = campainid;
+                            cs.MediaId = type;
+                            cs.WorkersId = Id;
+                            cs.DateSend = CurrentDate;
+
+
+                            CampainsStatus CampainsStatusExist = Context.CampainsStatus.Where(x => x.CampainsId == campainid && x.WorkersId == Id).FirstOrDefault();
+
+                            if (CampainsStatusExist != null)
+                            {
+                                Context.Entry(cs).State = System.Data.Entity.EntityState.Modified;
+                            }
+                            else
+                            {
+                                Context.CampainsStatus.Add(cs);
+
+
+                            }
+
+                            Context.SaveChanges();
+
+                        }
+
+
+
+                    }
+
+
+                }
+
+
+
+
+                //string res = id;
+
+                //if (Regex.Matches(id, @"[a-zA-Z]").Count > 0)
+                //{
+                //    id = id.Replace("@@", "+").Replace("ofekslash", "/");
+                //    res = UsersService.DecryptString(id);
+                //}
+
+
+                //int WorkerId = Convert.ToInt32(res);
+
+
+
+
+
+
+
+
+            }
+            return GetSetCampainsData(4, campainid.ToString(), null);
+
+
+            //return Ok();
+        }
+
 
     }
 }

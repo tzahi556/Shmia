@@ -8,7 +8,7 @@
         </div>-->
     </div>
     <div class="panel-body">
-        <a class="btn btn-success btn-xs" ui-sref="campain({id:0})">קמפיין חדש</a>
+        <a class="btn btn-success btn-xs"  ng-click="$ctrl.createNewCampains()">קמפיין חדש</a>
 
         <!--<button class="btn btn-danger btn-xs" style="float:left" ng-click="$ctrl.deleteAll()">מחיקת מסומנים</button>
        
@@ -23,13 +23,13 @@
                    
                     <th>שם קמפיין</th>
                     <th>תאריך הקמה</th>
-                    <th>כמות עובדים</th>
-                   
+                    <th>כמות עובדים שנשלח קישור</th>
+                    <th>כמות עובדים שאישרו</th>
                     <!--<th>ת.עדכון</th>
                     <th>סטטוס</th>
                     <th>SMS</th>-->
 
-                    <th>PDF</th>
+                    <!--<th>PDF</th>-->
                     <th></th>
                     <th></th>
                     <!--<th width="5%"><input type="checkbox" ng-model="$ctrl.checkAllc" style="width:52px;height:20px" ng-click="$ctrl.checkAll()"></th>-->
@@ -46,10 +46,10 @@
                     <td style="width:50%">{{campain.Name}}</td>
                     <td>{{campain.DateRigster | ildate: 'DD/MM/YYYY'}}</td>
                     <td>{{campain.CountSend}}</td>
-                 
+                    <td>{{campain.CountConfirm}}</td>
                     <!--<td>{{campain.w101.Status}}</td>
-                    <td>{{campain.w101.IsSendSMS==1 ? 'נשלח':'' }}</td>-->
-                    <td><a class="btn  btn-success" ng-href="{{$ctrl.uploadsUri + campain.Id + '/OfekAllPdf.pdf'}}" target="_blank">PDF</a></td>
+    <td>{{campain.w101.IsSendSMS==1 ? 'נשלח':'' }}</td>-->
+                    <!--<td><a class="btn  btn-success" ng-href="{{$ctrl.uploadsUri + campain.Id + '/OfekAllPdf.pdf'}}" target="_blank">PDF</a></td>-->
                     <td> <button class="btn  btn-warning" ui-sref="campain({id:campain.Id})">עדכון</button></td>
                     <td> <button class="btn  btn-danger" ng-click="$ctrl.delete(campain.Id)">מחק קמפיין</button></td>
                     <!--<td width="5%"><input style="width:52px;height:20px" type="checkbox" ng-model="campain.IsSelected" /></td>-->

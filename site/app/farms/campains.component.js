@@ -12,7 +12,7 @@
         }
     });
 
-    function CampainsController(usersService, sharedValues, $state) {
+    function CampainsController(usersService, farmsService, sharedValues, $state) {
 
 
         this.roles = usersService.roles;
@@ -24,6 +24,10 @@
 
         this.delete = _delete.bind(this);
         this.downloadExcel = _downloadExcel.bind(this);
+        this.createNewCampains = _createNewCampains.bind(this);
+
+        
+
         this.uploadsUri = sharedValues.apiUrl + '/uploads/';
 
         this.role = localStorage.getItem('currentRole');
@@ -308,24 +312,33 @@
 
         }
 
-        function _delete(workerid) {
+        function _delete(campainid) {
 
             var ctrl = this;
-            var confirmBox = alertMessage("האם למחוק את העובד?", 4);
+            var confirmBox = alertMessage("האם למחוק את הקמפיין?", 4);
             confirmBox.click(function () {
                
-                usersService.deleteWorker(workerid, true).then(function (res) {
+                farmsService.getSetCampainsData(8, campainid, null).then(function (campains) {
+
+                    ctrl.campains = campains;
 
 
-                    ctrl.workers = res;
-                 
                 });
 
             })
 
           
         }
+        function _createNewCampains() {
 
+            farmsService.getSetCampainsData(2, 0, null).then(function (campain) {
+             
+                $state.go('campain', { id: campain.Id });
+
+
+            });
+
+        }
         function _sendSMS() {
 
 
@@ -345,10 +358,13 @@
                 selected[i].IsSelected = true;
             }
 
+
+           
+
             if (selected.length > 0) {
                 var confirmBox = alertMessage("האם לשלוח SMS לכל העובדים המסומנים?", 4);
                 confirmBox.click(function () {
-                    usersService.sendSMS(selected, 1).then(function (res) {
+                    farmsService.sendLinktoWorkers(selected, 1).then(function (res) {
 
 
                         ctrl.workers = res;

@@ -15402,3 +15402,83 @@ div#AvatarFileUploadSign > .avatar-selector {
 .dvFloatLeft {
     float: left !important;
 }
+
+.icon {
+
+    display: inline-block;
+    width: 40px;
+    height: 40px;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    margin: 10px;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+
+.icon:hover {
+    transform: scale(1.2);
+}
+
+/* אייקון דוא"ל */
+.icon-email {
+    background-image: url('../images/Email.png');
+}
+
+/* אייקון וואטסאפ */
+.icon-whatsapp {
+    background-image: url('../images/whatsapp.png');
+}
+
+/* אייקון SMS */
+.icon-sms {
+    background-image: url('../images/SMS32.png');
+}
+
+.tooltip-container {
+    position: relative;
+    /*display: inline-block;*/
+    float:left;
+
+   
+}
+
+.tooltip-text {
+    visibility: hidden;
+    /* width: 120px;*/
+    /* background-color: black;*/
+    border: solid 1px gray;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 0px;
+    position: absolute;
+   /* top: 100%;*/ /* מציב את הפופאפ מעל הכפתור */
+    left: 100%;
+    transform: translateX(-50%);
+    opacity: 0;
+    transition: opacity 0.3s;
+    z-index: 1;
+    background: white;
+}
+
+.tooltip-container:hover .tooltip-text {
+    visibility: visible;
+    opacity: 1;
+}
+
+
+.spFooter{
+
+    font-weight:bold;
+    color:darkgreen;
+
+}
+
+
+.alertCampainName {
+    font-weight: bold;
+    position: absolute;
+    left:50px;
+}

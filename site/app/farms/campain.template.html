@@ -520,8 +520,10 @@
 
     <uib-tabset active="active" class="tab-form-demo" ng-show="!$ctrl.IsPopUp">
 
-
-        <!--פרטי קמפיין-->
+        <div class="alert alert-info alertCampainName" role="alert">
+            {{$ctrl.campain.Name}}
+        </div>
+        <!--עובדים קמפיין-->
         <uib-tab index="-1" heading="עובדים">
 
             <div class="col-md-12">
@@ -532,7 +534,20 @@
                     </div>
                     <div class="panel-body">
 
-                        <button class="btn btn-success btn-xs" style="float:left;margin-left:10px;" ng-click="$ctrl.sendSMS()">שליחת SMS למסומנים</button>
+
+                        <div class="tooltip-container">
+                            <button class="btn btn-success btn-xs" style="float:left;margin-left:10px;">שליחת קישור למסומנים</button>
+                            <div class="tooltip-text">
+                                <i class="icon icon-sms" ng-click="$ctrl.sendSMS(1)"></i>
+                                <i class="icon icon-email" ng-click="$ctrl.sendSMS(2)"></i>
+                                <i class="icon icon-whatsapp" ng-click="$ctrl.sendSMS(3)"></i>
+
+
+
+                            </div>
+                        </div>
+
+
 
 
 
@@ -583,7 +598,7 @@
 
 
 
-                                    <td><a class="btn  btn-success" ng-href="{{$ctrl.uploadsUri + worker.Id + '/OfekAllPdf.pdf'}}" target="_blank">PDF</a></td>
+                                    <td><a ng-if="worker.css.Id==6" class="btn  btn-success" ng-href="{{$ctrl.uploadsUri + worker.w.Id +'/' + worker.cs.CampainsId +'/AllPdfTemp.pdf'}}" target="_blank">PDF</a></td>
                                     <td> <button class="btn  btn-warning" ui-sref="workercampains({id:worker.w.Id,campainid:$ctrl.campain.Id})">עדכון</button></td>
 
                                     <td width="5%"><input style="width:52px;height:20px" type="checkbox" ng-model="worker.IsSelected" /></td>
@@ -615,7 +630,7 @@
 
                     </div>
                     <div class="panel-body">
-                        <div class="col-md-6">
+                        <div class="col-md-12">
                             <div class="form-group">
                                 <label>מזהה</label>
                                 <input type="number" disabled class="form-control" ng-model="$ctrl.campain.Id" />
@@ -628,6 +643,15 @@
                             <div class="form-group">
                                 <label>שם</label>
                                 <input type="text" name="name" class="form-control" ng-model="$ctrl.campain.Name" required />
+                            </div>
+
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label> שם באנגלית</label>
+                                <input type="text" name="name" class="form-control" ng-model="$ctrl.campain.NameEn" />
+                                <span class="spFooter"> (נועד בשביל כותרת בשליחת SMS)</span>
                             </div>
 
                         </div>
@@ -661,11 +685,11 @@
                             </div>
 
 
-                          
+
 
                         </div>
 
-                        <div class="col-md-6">
+                        <div class="col-md-3">
 
                             <div class="form-group">
 
@@ -674,6 +698,21 @@
                                     האם בקמפיין זה צריך לחייב חתימה מחודשת ?
                                 </label><br />
                                 <input type="checkbox" ng-model="$ctrl.campain.MustSign">
+
+
+                            </div>
+                        </div>
+
+
+                        <div class="col-md-3">
+
+                            <div class="form-group">
+
+
+                                <label>
+                                    האם לשלוח קובץ סופי גם לעובד ?
+                                </label><br />
+                                <input type="checkbox" ng-model="$ctrl.campain.IsSendToWorker">
 
 
                             </div>
@@ -704,7 +743,7 @@
 
 
                         <!--<div class="col-md-2">
-                        <button class="btnAddPdf btn btn-default" ng-click="$ctrl.SaveData(2)">הוספת קובץ 101</button>-->
+                    <button class="btnAddPdf btn btn-default" ng-click="$ctrl.SaveData(2)">הוספת קובץ 101</button>-->
                         <!--<input type="file" accept="application/pdf" name="avatar" class="hideUpload" filename="" folder="'PDFS_101'" workerid="$ctrl.farm.Id" filename-callback="$ctrl.uploadFile">-->
                         <!--</div>-->
 
@@ -963,8 +1002,8 @@
 
                     <!--<span id="spxx"></span> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span id="spyy"></span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span id="spScale"></span>-->
                     <!--<br />
-                    <span id="spx"></span> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span id="spy"></span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-                    <br />W-<span id="spWidth"></span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<br />H-<span id="spHeight"></span>-->
+                <span id="spx"></span> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span id="spy"></span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+                <br />W-<span id="spWidth"></span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<br />H-<span id="spHeight"></span>-->
                 </div>
 
 
@@ -996,13 +1035,13 @@
 
                         <div class="panel panel-primary">
                             <!--<div class="panel-heading">
-                                תצוגת קובץ PDF
+                            תצוגת קובץ PDF
 
-                                <div style="float:left;cursor:pointer" class="panelClose">
-                                    <img src="../../images/_notArrive.png" width="24px" />
-                                </div>
+                            <div style="float:left;cursor:pointer" class="panelClose">
+                                <img src="../../images/_notArrive.png" width="24px" />
+                            </div>
 
-                            </div>-->
+                        </div>-->
                             <div class="panel-body" id="panelBody">
                                 <div id="divContainerEnd"
                                      style="border:2px solid black;height:100%;overflow:auto;">

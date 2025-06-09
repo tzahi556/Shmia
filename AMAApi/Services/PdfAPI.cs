@@ -437,8 +437,8 @@ namespace FarmsApi.Services
                         {
                             fields2PDF_101.Value = "Signuture";
                             fields2PDF_101.Comment = "Signuture";
-                            fields2PDF_101.Font = 100;
-                            fields2PDF_101.Space = 20;
+                            fields2PDF_101.Font = 200;
+                            fields2PDF_101.Space = 50;
                         }
 
                         if (item.f.WorkerTableField == "2")
@@ -446,7 +446,7 @@ namespace FarmsApi.Services
                             fields2PDF_101.Value = "SignutureAmuta";
                             fields2PDF_101.Comment = "SignutureAmuta";
                             fields2PDF_101.Font = 100;
-                            fields2PDF_101.Space = 20;
+                            fields2PDF_101.Space = 40;
                         }
 
 
