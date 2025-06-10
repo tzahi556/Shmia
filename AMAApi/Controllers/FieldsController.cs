@@ -682,7 +682,7 @@ namespace FarmsApi.Services
                     if (InnerType == 2)
                     {
                         var Campain = Context.Campains.Where(x => x.Id == campainid && x.StatusId == 1).FirstOrDefault();
-                      
+
                         var Farm = Context.Farms.Where(x => x.Id == Campain.FarmId).FirstOrDefault();
 
                         //var CurrentUser = GetCurrentUser();
@@ -707,15 +707,15 @@ namespace FarmsApi.Services
 
                             string CC = "";
 
-                            if(Campain.IsSendToWorker && !string.IsNullOrEmpty(result.Workers.Email))
+                            if (Campain.IsSendToWorker && !string.IsNullOrEmpty(result.Workers.Email))
                                 CC = result.Workers.Email;
 
 
                             // $window.open(self.uploadsUri + "Workers/" + self.worker.Id + "/" + self.campain.Id + "/AllPdfTemp.pdf", '_blank');
 
-                            string FileLink = HttpContext.Current.Server.MapPath("~/Uploads/Workers/" + result.Workers.Id + "/" + campainid +  "/AllPdfTemp.pdf");
+                            string FileLink = HttpContext.Current.Server.MapPath("~/Uploads/Workers/" + result.Workers.Id + "/" + campainid + "/AllPdfTemp.pdf");
 
-                            if(System.IO.File.Exists(FileLink))
+                            if (System.IO.File.Exists(FileLink))
                             {
 
                                 List<string> FilesToSend = new List<string>();
@@ -727,16 +727,26 @@ namespace FarmsApi.Services
                                 {
                                     CampainsStatus cs = Context.CampainsStatus.Where(x => x.CampainsId == campainid && x.WorkersId == result.Workers.Id).FirstOrDefault();
 
-                                   
+                                    // הוספה למספר החותמים
+                                    if (cs.DateConfirm == null)
+                                    {
+                                        Campain.CountSign++;
+                                        Context.Entry(Campain).State = System.Data.Entity.EntityState.Modified;
+                                    }
+
                                     cs.StatusId = 6;
                                     cs.CampainsId = campainid;
-                                   // cs.MediaId = type;
+                                    // cs.MediaId = type;
                                     cs.WorkersId = result.Workers.Id;
+
                                     cs.DateConfirm = DateTime.Now;
 
                                     Context.Entry(cs).State = System.Data.Entity.EntityState.Modified;
+
+
+
                                     Context.SaveChanges();
-                                   
+
 
 
                                 }
@@ -748,7 +758,7 @@ namespace FarmsApi.Services
 
                         }
 
-                       // return GetSetCampainsData(4, campainid.ToString(), null);
+                        // return GetSetCampainsData(4, campainid.ToString(), null);
 
 
 
@@ -1114,29 +1124,58 @@ namespace FarmsApi.Services
                             }
 
                         }
+                        if (type == 3)
+                        {
+                            IsSendWorkers = true;
+
+                        }
+                        // קבלת אך ורק את ההודעה מהשרת
+                        if (type == 4)
+                        {
+                            return Ok(Message);
+
+                        }
 
                         if (IsSendWorkers)
                         {
-                            CampainsStatus cs = new CampainsStatus();
-                            cs.StatusId = 5;
-                            cs.CampainsId = campainid;
-                            cs.MediaId = type;
-                            cs.WorkersId = Id;
-                            cs.DateSend = CurrentDate;
 
+                            CampainsStatus cs = Context.CampainsStatus.Where(x => x.CampainsId == campainid && x.WorkersId == Id).FirstOrDefault();
 
-                            CampainsStatus CampainsStatusExist = Context.CampainsStatus.Where(x => x.CampainsId == campainid && x.WorkersId == Id).FirstOrDefault();
-
-                            if (CampainsStatusExist != null)
+                            if (cs != null)
                             {
+
+                                if (cs.DateSend == null)
+                                {
+
+                                    c.CountSend++;
+
+                                }
+
+
+                                cs.StatusId = 5;
+                                cs.CampainsId = campainid;
+                                cs.MediaId = type;
+                                cs.WorkersId = Id;
+                                cs.DateSend = CurrentDate;
                                 Context.Entry(cs).State = System.Data.Entity.EntityState.Modified;
                             }
                             else
                             {
+                                cs.StatusId = 5;
+                                cs.CampainsId = campainid;
+                                cs.MediaId = type;
+                                cs.WorkersId = Id;
+                                cs.DateSend = CurrentDate;
+
                                 Context.CampainsStatus.Add(cs);
+
+                                c.CountSend++;
 
 
                             }
+
+                            Context.Entry(c).State = System.Data.Entity.EntityState.Modified;
+
 
                             Context.SaveChanges();
 

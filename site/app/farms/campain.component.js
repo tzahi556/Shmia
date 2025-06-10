@@ -92,8 +92,8 @@
 
         function _init() {
 
-           
-         
+
+
 
 
 
@@ -102,7 +102,7 @@
                 var f = this.farmspdffiles[i];
 
 
-                f.FullLink = sharedValues.apiUrl + "/Uploads/Companies/" + self.farm.Id + "/PDFS/"+f.CampainsId+"/" + f.FileName;
+                f.FullLink = sharedValues.apiUrl + "/Uploads/Companies/" + self.farm.Id + "/PDFS/" + f.CampainsId + "/" + f.FileName;
 
                 if (eval(f.Is101)) f.FullLink = sharedValues.apiUrl + "/Uploads/Companies/101.pdf";
 
@@ -138,7 +138,7 @@
             confirmBox.click(function () {
 
 
-                farmsService.updateFarmsPdfFiles(3, Id,self.campain.Id, self.farmspdffiles).then(function (farmspdffiles) {
+                farmsService.updateFarmsPdfFiles(3, Id, self.campain.Id, self.farmspdffiles).then(function (farmspdffiles) {
 
                     self.farmspdffiles = farmspdffiles;
                     self.init();
@@ -163,7 +163,7 @@
 
             farmsService.getFarmPDFFiles(this.farm.Id, this.campain.Id).then(function (farmspdffiles) {
 
-                
+
 
                 self.farmspdffiles = farmspdffiles;
                 self.init();
@@ -223,20 +223,20 @@
 
             }
 
-           
+
 
 
             farmsService.updateFarmsPdfFiles(4, this.farm.Id, self.campain.Id, farmspdffilestemp).then(function (farmspdffiles) {
 
                 //this.farmspdffiles = farmspdffiles;
                 const myTimeout = setTimeout(RefreshComboFiles, 300);
-               
+
             });
 
         }
 
         $scope.sendNewOrderforGroupsFields = function (type, IdsOrders) {
-            
+
             var grpstemp = [];
 
             for (var i = 0; i < IdsOrders.length; i++) {
@@ -265,7 +265,7 @@
 
         $scope.sendFields2Groups = function (type, grpId, btnid) {
 
-            
+
             var existfield2group = self.btns2grps.filter(x => x.f2g.FieldsGroupsId == grpId && x.f2g.FieldsId == btnid);
 
             if (existfield2group.length > 0) {
@@ -295,8 +295,8 @@
 
         $scope.getSetFields2PDF = function (type, Objects) {
 
-            
-            
+
+
 
             // שליפה של כל הנקודות
             if (type == 1) {
@@ -304,16 +304,16 @@
 
                     (async () => {
 
-                        while (!CurrentScale && self.farmspdffiles.length>0) // define the condition as you like
+                        while (!CurrentScale && self.farmspdffiles.length > 0) // define the condition as you like
                             await new Promise(resolve => setTimeout(resolve, 500));
-                            AddParamsToPDF(field2pdf);
+                        AddParamsToPDF(field2pdf);
 
 
                     })();
 
 
                     //setTimeout(function clog() { AddParamsToPDF(field2pdf); }, 1400);
-                   
+
 
                 });
 
@@ -327,7 +327,7 @@
 
                         while (!CurrentScale && self.farmspdffiles.length > 0) // define the condition as you like
                             await new Promise(resolve => setTimeout(resolve, 500));
-                       
+
                         AddParamsToPDF(field2pdf);
 
 
@@ -354,7 +354,7 @@
         }
 
         $scope.FilterOnlySign = function (item) {
-           
+
             return item.WorkerTableField === '1' || item.WorkerTableField === '2';
         };
 
@@ -366,14 +366,14 @@
         $scope.setNewPdfGenerator = function () {
 
             farmsService.actionFieldGroup(15, self.farm.Id, null, self.campain.Id).then(function (link) {
-              
-               
-               
+
+
+
                 (async () => {
 
-                   // while (!CurrentScale && self.farmspdffiles.length > 0) // define the condition as you like
-                        await new Promise(resolve => setTimeout(resolve, 500));
-                   
+                    // while (!CurrentScale && self.farmspdffiles.length > 0) // define the condition as you like
+                    await new Promise(resolve => setTimeout(resolve, 500));
+
                     $("#objPdfEnd").attr('data', sharedValues.apiUrl + "/Uploads/Companies/" + self.farm.Id + "/PDFSAllTemplate/AllPdfTemp.pdf");
 
                 })();
@@ -388,7 +388,7 @@
         }
 
 
-        
+
 
 
         function _SaveData(type) {
@@ -398,7 +398,7 @@
             //שמירת פרטי חברה
             if (type == 1) {
 
-                this.farmsService.getSetCampainsData(3,0,this.campain).then(function (farm) {
+                this.farmsService.getSetCampainsData(3, 0, this.campain).then(function (farm) {
                     alertMessage('הנתונים נשמרו בהצלחה!', 1);
 
                 }.bind(this));
@@ -481,7 +481,7 @@
                 var Objects = { Obj: this.FieldName };
 
 
-              
+
                 this.farmsService.actionFieldGroup(4, this.farm.Id, Objects, this.campain.Id).then(function (btns) {
 
 
@@ -596,7 +596,7 @@
                 var grp = this.grps.filter(x => x.Id == objid);
 
                 if (grp.length > 0) {
-                    
+
                     thisCtrl.grp = grp[0];
                     thisCtrl.grp.CountFieldsInRow = grp[0].CountFieldsInRow.toString();
                     thisCtrl.grp.TitleTypeId = grp[0].TitleTypeId.toString();
@@ -636,16 +636,16 @@
         }
         function _sendSMS(type) {
 
-            
+
             var ctrl = this;
 
 
-           
+
 
             //var selected = this.workers.filter(x => x.IsSelected && (x.IsValid || this.farmStyle != 1));
             var selected = this.workers.filter(x => x.IsSelected);
 
-            if (selected.length== 0) {
+            if (selected.length == 0) {
 
                 alertMessage(`לא נבחר עובד/ת למשלוח`, 3);
 
@@ -661,6 +661,11 @@
                 selected[i].IsSelected = true;
             }
 
+
+
+
+            const workersSelected = selected.map(selected => selected.w);
+
             let typename = "SMS";
 
             if (type == 2) {
@@ -670,15 +675,58 @@
             if (type == 3) {
 
                 typename = "ווטסאפ";
+
+                if (workersSelected.length == 1) {
+                    //var confirmBox = alertMessage(`האם לשלוח ${typename} לכל העובדים המסומנים?`, 4);
+                    //confirmBox.click(function () {
+
+
+                    const phone = "972" + workersSelected[0].PhoneSelular;
+
+                    farmsService.sendLinktoWorkers(workersSelected, 4, ctrl.campain.Id).then(function (res) {
+
+                        const message = res;
+
+                        const encodedMessage = encodeURIComponent(message);
+
+                        const url = `https://wa.me/${phone}?text=${encodedMessage}`;
+
+                        window.open(url, '_blank');
+
+                        debugger
+                        farmsService.sendLinktoWorkers(workersSelected, type, ctrl.campain.Id).then(function (res) {
+
+                            ctrl.workers = res;
+                            ctrl.checkAllc = false;
+                            ctrl.checkAll();
+                        });
+
+                    });
+
+
+
+
+                    //phoneNumbers.forEach(phone => {
+                    //    const url = `https://wa.me/${phone}?text=${encodedMessage}`;
+                    //    window.open(url, '_blank');
+                    //});
+
+
+
+
+
+
+                    // });
+                }
+
+
+                return;
+
             }
 
 
-           
 
 
-           
-
-            const workersSelected = selected.map(selected => selected.w);
 
             if (selected.length > 0) {
                 var confirmBox = alertMessage(`האם לשלוח ${typename} לכל העובדים המסומנים?`, 4);
@@ -692,7 +740,7 @@
                     });
 
 
-                   
+
                 });
             }
 
