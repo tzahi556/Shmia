@@ -296,7 +296,7 @@
 
 
 
-        $scope.getSetFields2PDF = function (type, Objects) {
+        $scope.getSetFields2PDF = function (type, Objects, FullLink, currentWidth,dir) {
 
             
 
@@ -305,15 +305,27 @@
             if (type == 1) {
                 farmsService.actionFieldGroup(13, self.farm.Id, Objects).then(function (field2pdf) {
 
-                    (async () => {
+                    //(async () => {
 
-                        while (!CurrentScale && self.farmspdffiles.length>0) // define the condition as you like
-                            await new Promise(resolve => setTimeout(resolve, 500));
-                            AddParamsToPDF(field2pdf);
+                    //    while (!CurrentScale && self.farmspdffiles.length>0) // define the condition as you like
+                    //        await new Promise(resolve => setTimeout(resolve, 500));
+                    //        AddParamsToPDF(field2pdf);
 
 
-                    })();
+                    //})();
 
+                    if (dir) {
+
+                        changePage(dir, field2pdf);
+
+
+                    } else {
+
+                        CallEditPdfJs("canvasEdit", FullLink, currentWidth, field2pdf);
+
+                    }
+
+              
 
                     //setTimeout(function clog() { AddParamsToPDF(field2pdf); }, 1400);
                    

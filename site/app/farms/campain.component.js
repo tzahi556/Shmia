@@ -90,10 +90,17 @@
 
         };
 
+
+
         function _init() {
 
 
+            if (this.campain.Name) {
 
+
+                IsSave = true;
+
+            }
 
 
 
@@ -124,7 +131,7 @@
 
 
 
-            //debugger
+            //
             //var sddsds = this.farmspdffiles;
 
         }
@@ -293,7 +300,7 @@
 
 
 
-        $scope.getSetFields2PDF = function (type, Objects) {
+        $scope.getSetFields2PDF = function (type, Objects, FullLink, currentWidth, dir) {
 
 
 
@@ -302,14 +309,32 @@
             if (type == 1) {
                 farmsService.actionFieldGroup(13, self.farm.Id, Objects, self.campain.Id).then(function (field2pdf) {
 
-                    (async () => {
-
-                        while (!CurrentScale && self.farmspdffiles.length > 0) // define the condition as you like
-                            await new Promise(resolve => setTimeout(resolve, 500));
-                        AddParamsToPDF(field2pdf);
 
 
-                    })();
+
+
+
+
+                    if (dir) {
+
+                        changePage(dir, field2pdf);
+
+
+                    } else {
+
+                        CallEditPdfJs("canvasEdit", FullLink, currentWidth, field2pdf);
+
+                    }
+
+
+                    //(async () => {
+
+                    //    while (!CurrentScale && self.farmspdffiles.length > 0) // define the condition as you like
+                    //        await new Promise(resolve => setTimeout(resolve, 500));
+                    //    AddParamsToPDF(field2pdf);
+
+
+                    //})();
 
 
                     //setTimeout(function clog() { AddParamsToPDF(field2pdf); }, 1400);
@@ -398,8 +423,19 @@
             //שמירת פרטי חברה
             if (type == 1) {
 
+
+                if (!this.campain.Name) {
+
+                    alertMessage("שדה שם קמפיין הינו שדה חובה", 3)
+
+                    return;
+                }
+
+
                 this.farmsService.getSetCampainsData(3, 0, this.campain).then(function (farm) {
                     alertMessage('הנתונים נשמרו בהצלחה!', 1);
+
+                    IsSave = true;
 
                 }.bind(this));
 

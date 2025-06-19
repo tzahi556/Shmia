@@ -15,6 +15,8 @@
 
         var firstLoad = true;
 
+        var IsSave = false;
+
         $(function () {
 
             $("#sortable").sortable({
@@ -45,23 +47,55 @@
 
             // for dev
 
+            
+
+            $('#tab2,#tab3,#tab4,#tab5').click(function (e) {
+
+                //var Name = $("#txtName").val();
+
+                //if (!Name || !IsSave) {
+
+                    
+
+                //}
+
+                //alert(IsSave);
+
+                var CurrentName = (angular.element(document.getElementById('mainControllerHorse')).scope().$ctrl.campain.Name);
+                if (!CurrentName || !IsSave) {
+
+
+                    
+
+
+                    angular.element(document.getElementById('mainControllerHorse')).scope().$apply(function (scope) {
+                        scope.active = 0;
+                    });
+                    alertMessage("חובה לשמור שם קמפיין", 3);
+                    //$('#tab1').click();
+
+                }
+                   
+
+                //txtName
+                // alert(Name);
+
+            });
 
             $('#tab3').click(function (e) {
                 CurrentPage = 1;
+                RefreshComboFiles();
 
+                //if (firstLoad) {
 
-                if (firstLoad) {
+                //    RefreshComboFiles();
+                //    //setTimeout(function clog() { RefreshComboFiles(); }, 200);
+                //    //setTimeout(function clog() { RefreshComboFiles(); }, 400);
+                //    firstLoad = false;
+                //} else {
 
-                    RefreshComboFiles();
-                    setTimeout(function clog() { RefreshComboFiles(); }, 200);
-                    setTimeout(function clog() { RefreshComboFiles(); }, 400);
-                    firstLoad = false;
-                } else {
-
-                    RefreshComboFiles();
-                }
-
-
+                //    RefreshComboFiles();
+                //}
             });
 
             $('#tab4').click(function (e) {
@@ -150,8 +184,8 @@
                 var JsonObj = { "Id": Id, "FileName": FileName, "FullLink": FullLink, "Is101": Is101, "Seq": Seq };
 
                 PdfList.push(JsonObj);
-              
-              
+
+
                 CallPdfJs("Canvas_" + Id, 150, 250, FullLink);
 
 
@@ -266,21 +300,16 @@
                 if (CurrentFilePDF.length > 0) {
 
                     var currentWidth = $("#canvasContainer").width();
-                    var currentHeight = $("#canvasContainer").height();
-
-                    CallEditPdfJs("canvasEdit", CurrentFilePDF[0].FullLink, currentWidth, currentHeight);
+                    //var currentHeight = $("#canvasContainer").height();
 
 
 
-                    // const myTimeoutssss = setTimeout(AddParamsToPDF, 5000);
 
-
-                    //var fdfdf = CurrentViewport;
-
+                    //  CallEditPdfJs("canvasEdit", CurrentFilePDF[0].FullLink, currentWidth);
 
                     var Objects = { Id: 0, Fields2GroupsId: 0, FarmPDFFilesId: CurrentPdfId, PageNumber: CurrentPage, PdfX: 0, PdfY: 0, StatusId: 1 };
 
-                    angular.element(document.getElementById('mainControllerHorse')).scope().getSetFields2PDF(1, Objects);
+                    angular.element(document.getElementById('mainControllerHorse')).scope().getSetFields2PDF(1, Objects, CurrentFilePDF[0].FullLink, currentWidth);
 
 
 
@@ -298,19 +327,19 @@
 
             $("#liPrev").click(function () {
 
-                changePage(-1);
-                var Objects = { Id: 0, Fields2GroupsId: 0, FarmPDFFilesId: CurrentPdfId, PageNumber: CurrentPage, PdfX: 0, PdfY: 0, StatusId: 1 };
+                // changePage(-1);
+                var Objects = { Id: 0, Fields2GroupsId: 0, FarmPDFFilesId: CurrentPdfId, PageNumber: CurrentPage - 1, PdfX: 0, PdfY: 0, StatusId: 1 };
 
-                angular.element(document.getElementById('mainControllerHorse')).scope().getSetFields2PDF(1, Objects);
+                angular.element(document.getElementById('mainControllerHorse')).scope().getSetFields2PDF(1, Objects, null, null, -1);
 
             });
 
             $("#liNext").click(function () {
 
-                changePage(1);
-                var Objects = { Id: 0, Fields2GroupsId: 0, FarmPDFFilesId: CurrentPdfId, PageNumber: CurrentPage, PdfX: 0, PdfY: 0, StatusId: 1 };
+                // changePage(1);
+                var Objects = { Id: 0, Fields2GroupsId: 0, FarmPDFFilesId: CurrentPdfId, PageNumber: CurrentPage + 1, PdfX: 0, PdfY: 0, StatusId: 1 };
 
-                angular.element(document.getElementById('mainControllerHorse')).scope().getSetFields2PDF(1, Objects);
+                angular.element(document.getElementById('mainControllerHorse')).scope().getSetFields2PDF(1, Objects, null, null, 1);
 
 
 
@@ -324,6 +353,8 @@
 
 
 
+
+
         }
 
 
@@ -332,6 +363,9 @@
 
             $("#canvasContainer div").not('#canvasEdit').remove();
             //while (!CurrentViewport) {
+
+
+            // alert("Add Params After- " +  CurrentScale);
 
             CurrentFontSizeDrag = (CurrentScale * 10) + "px";
             //CurrentFontSizeDrag =  (CurrentScale / 1.7868541288718671).toString() + "em";
@@ -523,105 +557,10 @@
         <div class="alert alert-info alertCampainName" role="alert">
             {{$ctrl.campain.Name}}
         </div>
-        <!--עובדים קמפיין-->
-        <uib-tab index="-1" heading="עובדים">
-
-            <div class="col-md-12">
-                <div class="panel panel-primary">
-                    <div class="panel-heading">
-                        עובדים
-
-                    </div>
-                    <div class="panel-body">
-
-
-                        <div class="tooltip-container">
-                            <button class="btn btn-success btn-xs" style="float:left;margin-left:10px;">שליחת קישור למסומנים</button>
-                            <div class="tooltip-text">
-                                <i class="icon icon-sms" ng-click="$ctrl.sendSMS(1)"></i>
-                                <i class="icon icon-email" ng-click="$ctrl.sendSMS(2)"></i>
-                                <i class="icon icon-whatsapp" title="באופציה זו יש לבחור עובד/ת בודד/ת" ng-click="$ctrl.sendSMS(3)"></i>
-
-
-
-                            </div>
-                        </div>
-
-
-
-
-
-
-
-
-                    </div>
-
-                    <div class="table-responsive">
-
-                        <table class="table table-hover">
-                            <thead>
-                                <tr>
-
-                                    <th>#</th>
-                                    <th>שם פרטי</th>
-                                    <th>שם משפחה</th>
-                                    <th>אימייל</th>
-                                    <th>סוג שליחה</th>
-                                    <th>תאריך שליחה</th>
-                                    <th>תאריך אישור עובד/ת</th>
-                                    <th>סטטוס</th>
-                                    <!--<th>SMS</th>-->
-                                    <th>PDF</th>
-                                    <th></th>
-
-                                    <th width="5%"><input type="checkbox" ng-model="$ctrl.checkAllc" style="width:52px;height:20px" ng-click="$ctrl.checkAll()"></th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td colspan="10">
-                                        <input type="text" class="form-control" ng-model="$ctrl.filter.$" placeholder="חיפוש חופשי" />
-                                    </td>
-                                </tr>
-                                <tr ng-repeat="worker in $ctrl.workers | filter:$ctrl.filter">
-
-                                    <td>{{worker.w.Id}}</td>
-                                    <td>{{worker.w.FirstName}}</td>
-                                    <td>{{worker.w.LastName}}</td>
-                                    <td>{{worker.w.Email}}</td>
-                                    <td>{{worker.m.Name}}</td>
-
-
-                                    <td>{{(worker.cs.DateSend) ? (worker.cs.DateSend | ildate: 'HH:mm DD/MM/YYYY ') :''}}</td>
-                                    <td>{{(worker.cs.DateConfirm) ? (worker.cs.DateConfirm | ildate: 'HH:mm DD/MM/YYYY ') :''}}</td>
-                                    <td>{{(worker.css.Id!=4) ? worker.css.Name:''}}</td>
-
-
-
-                                    <td><a ng-if="worker.css.Id==6" class="btn  btn-success" ng-href="{{$ctrl.uploadsUri + worker.w.Id +'/' + worker.cs.CampainsId +'/AllPdfTemp.pdf'}}" target="_blank">PDF</a></td>
-                                    <td> <button class="btn  btn-warning" ui-sref="workercampains({id:worker.w.Id,campainid:$ctrl.campain.Id})">עדכון</button></td>
-
-                                    <td width="5%"><input style="width:52px;height:20px" type="checkbox" ng-model="worker.IsSelected" /></td>
-
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    <div class="panel-footer">
-
-                        <label>במסך זה ניתן להגדיר את השליחה של הקמפיין לעובדים. </label>
-
-
-                    </div>
-                </div>
-            </div>
-
-        </uib-tab>
-
 
 
         <!--פרטי קמפיין-->
-        <uib-tab index="0" heading="פרטי קמפיין">
+        <uib-tab index="0" id="tab1" heading="פרטי קמפיין">
 
             <div class="col-md-12">
                 <div class="panel panel-primary">
@@ -642,7 +581,7 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label>שם</label>
-                                <input type="text" name="name" class="form-control" ng-model="$ctrl.campain.Name" required />
+                                <input type="text" name="name" id="txtName" class="form-control" ng-model="$ctrl.campain.Name" required />
                             </div>
 
                         </div>
@@ -731,7 +670,7 @@
         </uib-tab>
 
         <!--הוספת קבצים-->
-        <uib-tab index="1" heading="הוספת קבצים">
+        <uib-tab index="1" id="tab2" heading="הוספת קבצים">
 
             <div class="col-md-12">
                 <div class="panel panel-primary">
@@ -743,7 +682,7 @@
 
 
                         <!--<div class="col-md-2">
-                    <button class="btnAddPdf btn btn-default" ng-click="$ctrl.SaveData(2)">הוספת קובץ 101</button>-->
+                        <button class="btnAddPdf btn btn-default" ng-click="$ctrl.SaveData(2)">הוספת קובץ 101</button>-->
                         <!--<input type="file" accept="application/pdf" name="avatar" class="hideUpload" filename="" folder="'PDFS_101'" workerid="$ctrl.farm.Id" filename-callback="$ctrl.uploadFile">-->
                         <!--</div>-->
 
@@ -877,7 +816,6 @@
                         </div>
                     </div>
 
-
                     <div class="col-md-6 colPadding2">
                         <div class="panel panel-primary panelFields" style="z-index:4 !important;">
                             <div class="panel-heading">
@@ -961,7 +899,6 @@
                     </div>
 
 
-
                 </div>
 
             </div>
@@ -1002,8 +939,8 @@
 
                     <!--<span id="spxx"></span> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span id="spyy"></span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span id="spScale"></span>-->
                     <!--<br />
-                <span id="spx"></span> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span id="spy"></span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-                <br />W-<span id="spWidth"></span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<br />H-<span id="spHeight"></span>-->
+                    <span id="spx"></span> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span id="spy"></span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+                    <br />W-<span id="spWidth"></span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<br />H-<span id="spHeight"></span>-->
                 </div>
 
 
@@ -1035,13 +972,13 @@
 
                         <div class="panel panel-primary">
                             <!--<div class="panel-heading">
-                            תצוגת קובץ PDF
+                                תצוגת קובץ PDF
 
-                            <div style="float:left;cursor:pointer" class="panelClose">
-                                <img src="../../images/_notArrive.png" width="24px" />
-                            </div>
+                                <div style="float:left;cursor:pointer" class="panelClose">
+                                    <img src="../../images/_notArrive.png" width="24px" />
+                                </div>
 
-                        </div>-->
+                            </div>-->
                             <div class="panel-body" id="panelBody">
                                 <div id="divContainerEnd"
                                      style="border:2px solid black;height:100%;overflow:auto;">
@@ -1064,6 +1001,102 @@
                 </div>
             </div>
 
+
+        </uib-tab>
+
+
+        <!--עובדים קמפיין-->
+        <uib-tab index="-1" id="tab5" heading="עובדים">
+
+            <div class="col-md-12">
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        עובדים
+
+                    </div>
+                    <div class="panel-body">
+
+
+                        <div class="tooltip-container">
+                            <button class="btn btn-success btn-xs" style="float:left;margin-left:10px;">שליחת קישור למסומנים</button>
+                            <div class="tooltip-text">
+                                <i class="icon icon-sms" ng-click="$ctrl.sendSMS(1)"></i>
+                                <i class="icon icon-email" ng-click="$ctrl.sendSMS(2)"></i>
+                                <i class="icon icon-whatsapp" title="באופציה זו יש לבחור עובד/ת בודד/ת" ng-click="$ctrl.sendSMS(3)"></i>
+
+
+
+                            </div>
+                        </div>
+
+
+
+
+
+
+
+
+                    </div>
+
+                    <div class="table-responsive">
+
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+
+                                    <th>#</th>
+                                    <th>שם פרטי</th>
+                                    <th>שם משפחה</th>
+                                    <th>אימייל</th>
+                                    <th>סוג שליחה</th>
+                                    <th>תאריך שליחה</th>
+                                    <th>תאריך אישור עובד/ת</th>
+                                    <th>סטטוס</th>
+                                    <!--<th>SMS</th>-->
+                                    <th>PDF</th>
+                                    <th></th>
+
+                                    <th width="5%"><input type="checkbox" ng-model="$ctrl.checkAllc" style="width:52px;height:20px" ng-click="$ctrl.checkAll()"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td colspan="10">
+                                        <input type="text" class="form-control" ng-model="$ctrl.filter.$" placeholder="חיפוש חופשי" />
+                                    </td>
+                                </tr>
+                                <tr ng-repeat="worker in $ctrl.workers | filter:$ctrl.filter">
+
+                                    <td>{{worker.w.Id}}</td>
+                                    <td>{{worker.w.FirstName}}</td>
+                                    <td>{{worker.w.LastName}}</td>
+                                    <td>{{worker.w.Email}}</td>
+                                    <td>{{worker.m.Name}}</td>
+
+
+                                    <td>{{(worker.cs.DateSend) ? (worker.cs.DateSend | ildate: 'HH:mm DD/MM/YYYY ') :''}}</td>
+                                    <td>{{(worker.cs.DateConfirm) ? (worker.cs.DateConfirm | ildate: 'HH:mm DD/MM/YYYY ') :''}}</td>
+                                    <td>{{(worker.css.Id!=4) ? worker.css.Name:''}}</td>
+
+
+
+                                    <td><a ng-if="worker.css.Id==6" class="btn  btn-success" ng-href="{{$ctrl.uploadsUri + worker.w.Id +'/' + worker.cs.CampainsId +'/AllPdfTemp.pdf'}}" target="_blank">PDF</a></td>
+                                    <td> <button class="btn  btn-warning" ui-sref="workercampains({id:worker.w.Id,campainid:$ctrl.campain.Id})">עדכון</button></td>
+
+                                    <td width="5%"><input style="width:52px;height:20px" type="checkbox" ng-model="worker.IsSelected" /></td>
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="panel-footer">
+
+                        <label>במסך זה ניתן להגדיר את השליחה של הקמפיין לעובדים. </label>
+
+
+                    </div>
+                </div>
+            </div>
 
         </uib-tab>
 
