@@ -184,8 +184,8 @@
 
                 //    }.bind(self));
                 //}
-
-                // self.screendata = screendata;
+               
+                self.screendata = screendata;
 
                 //self.init();
                 if (type == 1)

@@ -49,17 +49,17 @@
             $('#tab3').click(function (e) {
                 CurrentPage = 1;
 
-                RefreshComboFiles();
-                //if (firstLoad) {
+               // RefreshComboFiles();
+                if (firstLoad) {
 
-                //    RefreshComboFiles();
-                //    setTimeout(function clog() { RefreshComboFiles(); }, 200);
-                //    setTimeout(function clog() { RefreshComboFiles(); }, 400);
-                //    firstLoad = false;
-                //} else {
+                    RefreshComboFiles();
+                    setTimeout(function clog() { RefreshComboFiles(); }, 200);
+                    setTimeout(function clog() { RefreshComboFiles(); }, 400);
+                    firstLoad = false;
+                } else {
 
-                //    RefreshComboFiles();
-                //}
+                    RefreshComboFiles();
+                }
 
 
             });

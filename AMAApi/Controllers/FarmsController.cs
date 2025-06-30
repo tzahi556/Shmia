@@ -226,7 +226,7 @@ namespace FarmsApi.Services
             return Ok(FarmsService.GetFarms(deleted));
         }
 
-        [Authorize]
+       //[Authorize]
         [Route("getFarm/{id}")]
         [HttpGet]
         public IHttpActionResult GetFarm(int id)

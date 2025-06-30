@@ -727,21 +727,43 @@ namespace FarmsApi.Services
                                 {
                                     CampainsStatus cs = Context.CampainsStatus.Where(x => x.CampainsId == campainid && x.WorkersId == result.Workers.Id).FirstOrDefault();
 
-                                    // הוספה למספר החותמים
-                                    if (cs.DateConfirm == null)
+
+                                    if (cs == null)
                                     {
+                                        cs = new CampainsStatus();
+                                        cs.StatusId = 6;
+                                        cs.CampainsId = campainid;
+                                        cs.WorkersId = result.Workers.Id;
+                                        cs.DateConfirm = DateTime.Now;
+
+                                        Context.CampainsStatus.Add(cs);
+
+
                                         Campain.CountSign++;
                                         Context.Entry(Campain).State = System.Data.Entity.EntityState.Modified;
+
+
+
+                                    }
+                                    else
+                                    {
+
+                                        // הוספה למספר החותמים
+                                        if (cs.DateConfirm == null)
+                                        {
+                                            Campain.CountSign++;
+                                            Context.Entry(Campain).State = System.Data.Entity.EntityState.Modified;
+                                        }
+
+
+                                        cs.StatusId = 6;
+                                        cs.CampainsId = campainid;
+                                        cs.WorkersId = result.Workers.Id;
+                                        cs.DateConfirm = DateTime.Now;
+
+                                        Context.Entry(cs).State = System.Data.Entity.EntityState.Modified;
                                     }
 
-                                    cs.StatusId = 6;
-                                    cs.CampainsId = campainid;
-                                    // cs.MediaId = type;
-                                    cs.WorkersId = result.Workers.Id;
-
-                                    cs.DateConfirm = DateTime.Now;
-
-                                    Context.Entry(cs).State = System.Data.Entity.EntityState.Modified;
 
 
 
@@ -763,6 +785,9 @@ namespace FarmsApi.Services
 
 
                     }
+
+
+                    return GetSetWorkerAndCompanyData(1, id, null, campainid);
 
                 }
 
@@ -963,20 +988,6 @@ namespace FarmsApi.Services
                 }
 
 
-
-                //// שליחה של PDF
-                //if (type == 7)
-                //{
-
-
-                //    int WorkerId = Convert.ToInt32(res);
-
-
-
-
-                //}
-
-
                 // מחיקת קמפיין לקמפיין
                 if (type == 8)
                 {
@@ -996,50 +1007,17 @@ namespace FarmsApi.Services
 
                 }
 
-                //// עדכון של הנתונים
-                //if (type == 2)
-                //{
-                //    List<Fields2GroupsWorkerData> f2gwd = JsonConvert.DeserializeObject<List<Fields2GroupsWorkerData>>(objs.ToString());
+               
 
-                //    foreach (var item in f2gwd)
-                //    {
+                // שליפה של הנתונים
+                if (type == 9)
+                {
 
+                    var DepartmentsList = Context.Departments.Where(x => x.FarmId.ToString() == id && x.StatusId == 1).ToList();
 
-                //        //if (item.SourceValue != item.Value)
-                //        //{
-                //        if (item.Id == 0)
-                //        {
-                //            Context.Fields2GroupsWorkerData.Add(item);
-                //        }
-                //        else
-                //        {
-                //            Context.Entry(item).State = System.Data.Entity.EntityState.Modified;
-                //        }
+                    return Ok(DepartmentsList);
 
-
-                //        // }
-
-
-                //    }
-
-                //    Context.SaveChanges();
-
-                //    return GetSetWorkerAndCompanyData(1, id, objs);
-
-                //}
-
-                //// שליפה של הנתונים
-                //if (type == 3)
-                //{
-                //    var Worker = Context.Workers.Where(x => x.Id == WorkerId).FirstOrDefault();
-
-                //    var CurrentFarmId = (Worker != null) ? Worker.FarmId : UsersService.GetCurrentUser().Farm_Id;
-
-                //    var Farm = Context.Farms.Where(x => x.Id == CurrentFarmId).FirstOrDefault();
-
-                //    return Ok(Farm);
-
-                //}
+                }
 
             }
 
@@ -1161,6 +1139,9 @@ namespace FarmsApi.Services
                             }
                             else
                             {
+
+                                cs = new CampainsStatus();
+
                                 cs.StatusId = 5;
                                 cs.CampainsId = campainid;
                                 cs.MediaId = type;

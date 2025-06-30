@@ -48,6 +48,8 @@ namespace FarmsApi.DataModels
 
         public DbSet<CampainsStatusType> CampainsStatusType { get; set; }
 
+        public DbSet<Departments> Departments { get; set; }
+
         public Context() : base("Farms") {
 
             // this.Configuration.ProxyCreationEnabled = false;

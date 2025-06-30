@@ -11,7 +11,8 @@
             btns: '<',
             grps: '<',
             btns2grps: '<',
-            workers: '<'
+            workers: '<',
+            departments: '<'
         }
     });
     //app.filter('dateRangeClalit', function () {

@@ -7,7 +7,8 @@
         templateUrl: 'app/workers/workers.template.html?v=2',
         controller: WorkersController,
         bindings: {
-            workers: '<'
+            workers: '<',
+            departments: '<'
 
         }
     });
@@ -28,6 +29,9 @@
 
         this.role = localStorage.getItem('currentRole');
         this.farmStyle = localStorage.getItem('FarmStyle');
+
+
+       
 
         function _downloadExcel() {
 
@@ -181,13 +185,6 @@
             }
 
         }
-
-
-
-
-
-
-
         function _getReport(rows) {
             function s2ab(s) {
                 var buf = new ArrayBuffer(s.length);
@@ -262,16 +259,11 @@
             var wbout = XLSX.write(wb, { bookType: 'xlsx', bookSST: true, type: 'binary', cellStyles: true });
             saveAs(new Blob([s2ab(wbout)], { type: "application/octet-stream" }), "report.xlsx");
         }
-
         function _checkAll() {
 
 
             this.workers.forEach(x => x.IsSelected = this.checkAllc);
         }
-
-
-
-
         function _getHebRole(id) {
 
 

@@ -24,16 +24,42 @@
         });
 
         $stateProvider.state('login', {
-            url: '/login/{returnUrl}',
+            url: '/login/{farmid}',
             views: {
                 'main': {
-                    template: '<login return-url="$ctrl.returnUrl"></login>'
-                },
-                controller: function ($stateParams) {
+                    template: '<login farm="$ctrl.farm"></login>', //return-url="$ctrl.returnUrl"
+                    controller: function (farm) {
+                        /*debugger*/
+                        // this.returnUrl = $stateParams.returnUrl;
+                        this.farm = farm;
 
-                    this.returnUrl = $stateParams.returnUrl;
+                    },
+                    controllerAs: '$ctrl',
+                    resolve: {
 
+                        farm: function (farmsService, $stateParams) {
+
+                            if (localStorage.getItem('FarmId'))
+                                return farmsService.getFarm(localStorage.getItem('FarmId'));
+                            else if ($stateParams.farmid)
+                                return farmsService.getFarm($stateParams.farmid);
+                            else
+                                return null;
+                        }
+
+
+                        
+                    }
                 }
+              
+            
+                //controllerAs: '$ctrl',
+                //resolve: {
+                //    farmid: function ($stateParams) {
+                //        return $stateParams.farmid;
+                //    }
+                //}
+               
             }
         });
 
@@ -73,17 +99,20 @@
             url: '/workers/',
             views: {
                 'main': {
-                    template: '<workers workers="$ctrl.workers"></workers>',
-                    controller: function (workers) {
+                    template: '<workers workers="$ctrl.workers" departments="$ctrl.departments"></workers>',
+                    controller: function (workers, departments) {
 
                         this.workers = workers;
-
+                        this.departments = departments;
 
                     },
                     controllerAs: '$ctrl',
                     resolve: {
                         workers: function (usersService) {
                             return usersService.getWorkers(true);
+                        },
+                        departments: function (farmsService) {
+                            return farmsService.getSetCampainsData(9, localStorage.getItem('FarmId'), null);
                         }
                     }
                 }
@@ -116,8 +145,8 @@
             url: '/worker/{id}/',
             views: {
                 'main': {
-                    template: '<worker farm="$ctrl.farm" screendata="$ctrl.screendata" users="$ctrl.users" worker="$ctrl.worker" files="$ctrl.files" childs="$ctrl.childs" cities="$ctrl.cities" banks="$ctrl.banks"  banksbrunchs="$ctrl.banksbrunchs" ></worker>',
-                    controller: function (worker, files, childs, cities, banks, banksbrunchs, users, screendata,farm) {
+                    template: '<worker farm="$ctrl.farm" screendata="$ctrl.screendata" users="$ctrl.users" worker="$ctrl.worker" files="$ctrl.files" childs="$ctrl.childs" cities="$ctrl.cities" banks="$ctrl.banks"  banksbrunchs="$ctrl.banksbrunchs"   ></worker>',
+                    controller: function (worker, files, childs, cities, banks, banksbrunchs, users, screendata, farm) {
                         this.worker = worker;
                         this.files = files;
                         this.childs = childs;
@@ -127,6 +156,7 @@
                         this.users = users;
                         this.screendata = screendata;
                         this.farm = farm;
+                      
 
                     },
                     controllerAs: '$ctrl',
@@ -569,8 +599,8 @@
             url: '/campain/{id}/',
             views: {
                 'main': {
-                    template: '<campain workers="$ctrl.workers" campain="$ctrl.campain" btns="$ctrl.btns"  grps="$ctrl.grps"  btns2grps="$ctrl.btns2grps" farm="$ctrl.farm" farmspdffiles="$ctrl.farmspdffiles"></campain>',
-                    controller: function (campain, farm, farmspdffiles, btns, grps, btns2grps, workers) {
+                    template: '<campain workers="$ctrl.workers" campain="$ctrl.campain" btns="$ctrl.btns"  grps="$ctrl.grps"  btns2grps="$ctrl.btns2grps" farm="$ctrl.farm" farmspdffiles="$ctrl.farmspdffiles" departments="$ctrl.departments"></campain>',
+                    controller: function (campain, farm, farmspdffiles, btns, grps, btns2grps, workers, departments) {
                         this.farm = farm;
                         this.campain = campain;
                         this.farmspdffiles = farmspdffiles;
@@ -578,6 +608,7 @@
                         this.grps = grps;
                         this.btns2grps = btns2grps;
                         this.workers = workers;
+                        this.departments = departments;
 
                     },
                     controllerAs: '$ctrl',
@@ -613,8 +644,12 @@
 
                         workers: function (farmsService, $stateParams) {
                              return farmsService.getSetCampainsData(4, $stateParams.id, null);
-                        }
+                        },
+                       
 
+                        departments: function (farmsService, $stateParams) {
+                            return farmsService.getSetCampainsData(9, localStorage.getItem('FarmId'), null);
+                        }
 
                     }
                 }

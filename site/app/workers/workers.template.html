@@ -4,57 +4,104 @@
 
         <div style="float:left">
             <button ng-click="$ctrl.downloadExcel()" class="btn btn-success btn-xs">הורדת פרטי עובדים</button>
-
+            <a class="btn btn-primary btn-xs" ui-sref="worker({id:0})">עובד חדש</a>
         </div>
     </div>
     <div class="panel-body">
-        <a class="btn btn-success btn-xs" ui-sref="worker({id:0})">עובד חדש</a>
 
-        <button class="btn btn-danger btn-xs" style="float:left" ng-click="$ctrl.deleteAll()">מחיקת מסומנים</button>
-       
-        <button class="btn btn-success btn-xs" style="float:left;margin-left:10px;" ng-click="$ctrl.sendSMS()">שליחת SMS למסומנים</button>
+        <div class="col-md-2">
+            <label>חיפוש חופשי</label>
+            <input type="text" class="form-control" ng-model="$ctrl.filter.$" placeholder="חיפוש חופשי" />
+        </div>
+
+        <div class="col-md-2" style="">
+            <div class="form-group"
+                 ng-if="($ctrl.departments | filter:{TypeId:1}).length > 0">
+                <label>אגף</label>
+                <select class="form-control" ng-options="department.Id as department.Name for department in $ctrl.departments | filter:{TypeId:1}" ng-model="$ctrl.departmentId">
+                    <option value="">-- אגף --</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="col-md-2" style="" >
+            <div class="form-group" 
+                ng-if="($ctrl.departments | filter:{TypeId:2}).length > 0">
+               
+                <label>מחלקה</label>
+                <select class="form-control" ng-options="department.Id as department.Name for department in $ctrl.departments | filter:{TypeId:2}" ng-model="$ctrl.departmentId2">
+                    <option value="">-- מחלקה --</option>
+                </select>
+            </div>
+        </div>
+      
+        <div class="col-md-2" style="">
+            <div class="form-group"
+                 ng-if="($ctrl.departments | filter:{TypeId:3}).length > 0">
+                <label>תת מחלקה</label>
+                <select class="form-control" ng-options="department.Id as department.Name for department in $ctrl.departments | filter:{TypeId:3}" ng-model="$ctrl.departmentId3">
+                    <option value="">--תת מחלקה  --</option>
+                </select>
+            </div>
+        </div>
+
+
+
+
+
+
+        <div class="col-md-4" style="padding:0px">
+
+
+
+            <button class="btn btn-danger btn-xs" style="float:left" ng-click="$ctrl.deleteAll()">מחיקת מסומנים</button>
+
+            <button class="btn btn-success btn-xs" style="float:left;margin-left:10px;" ng-click="$ctrl.sendSMS()">שליחת SMS למסומנים</button>
+        </div>
     </div>
-    <div class="table-responsive">
+        <div class="table-responsive">
 
-        <table class="table table-hover">
-            <thead>
-                <tr>
+            <table class="table table-hover">
+                <thead>
+                    <tr>
 
-                    <th>מנהל אזור</th>
-                    <th>שם פרטי</th>
-                    <th>שם משפחה</th>
-                    <th>אימייל</th>
-                    <th>ת.עדכון</th>
-                    <th>סטטוס</th>
-                    <th>SMS</th>
-                    <th>PDF</th>
-                    <th></th>
-                    <th></th>
-                    <th width="5%"><input type="checkbox" ng-model="$ctrl.checkAllc" style="width:52px;height:20px" ng-click="$ctrl.checkAll()"></th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td colspan="10">
-                        <input type="text" class="form-control"  ng-model="$ctrl.filter.$" placeholder="חיפוש חופשי" />
-                    </td>
-                </tr>
-                <tr ng-repeat="worker in $ctrl.workers | filter:$ctrl.filter">
+                        <th>מנהל אזור</th>
+                        <th>שם פרטי</th>
+                        <th>שם משפחה</th>
+                        <th>אימייל</th>
+                        <th>ת.עדכון</th>
+                        <th>סטטוס</th>
+                        <th>SMS</th>
+                        <th>PDF</th>
+                        <th></th>
+                        <th></th>
+                        <th width="5%"><input type="checkbox" ng-model="$ctrl.checkAllc" style="width:52px;height:20px" ng-click="$ctrl.checkAll()"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!--<tr>
+                        <td colspan="10">
+                           
+                        </td>
+                    </tr>-->
+                    <tr ng-repeat="worker in $ctrl.workers | filter:$ctrl.filter  | filter: ($ctrl.departmentId ? {w: {DepartmentsId: $ctrl.departmentId}} : undefined)
+                         | filter: ($ctrl.departmentId2 ? {w: {SubDepartmentsId: $ctrl.departmentId2}} : undefined)
+                         | filter: ($ctrl.departmentId3 ? {w: {SubSubDepartmentsId: $ctrl.departmentId3}} : undefined)">
 
-                    <td>{{worker.ManagerName}}</td>
-                    <td>{{worker.w.FirstName}}</td>
-                    <td>{{worker.w.LastName}}</td>
-                    <td>{{worker.w.Email}}</td>
-                    <td>{{worker.w101.DateRigster | ildate: 'HH:mm DD/MM/YYYY '}}</td>
-                    <td>{{worker.w101.Status}}</td>
-                    <td>{{worker.w101.IsSendSMS==1 ? 'נשלח':'' }}</td>
-                    <td><a class="btn  btn-success" ng-href="{{$ctrl.uploadsUri + worker.Id + '/OfekAllPdf.pdf'}}" target="_blank">PDF</a></td>
-                    <td> <button class="btn  btn-warning" ui-sref="worker({id:worker.w.Id})">עדכון</button></td>
-                    <td> <button class="btn  btn-danger" ng-click="$ctrl.delete(worker.w.Id)">מחק עובד</button></td>
-                    <td width="5%"><input style="width:52px;height:20px" type="checkbox" ng-model="worker.IsSelected" /></td>
+                        <td>{{worker.ManagerName}}</td>
+                        <td>{{worker.w.FirstName}}</td>
+                        <td>{{worker.w.LastName}}</td>
+                        <td>{{worker.w.Email}}</td>
+                        <td>{{worker.w101.DateRigster | ildate: 'HH:mm DD/MM/YYYY '}}</td>
+                        <td>{{worker.w101.Status}}</td>
+                        <td>{{worker.w101.IsSendSMS==1 ? 'נשלח':'' }}</td>
+                        <td><a class="btn  btn-success" ng-href="{{$ctrl.uploadsUri + worker.Id + '/OfekAllPdf.pdf'}}" target="_blank">PDF</a></td>
+                        <td> <button class="btn  btn-warning" ui-sref="worker({id:worker.w.Id})">עדכון</button></td>
+                        <td> <button class="btn  btn-danger" ng-click="$ctrl.delete(worker.w.Id)">מחק עובד</button></td>
+                        <td width="5%"><input style="width:52px;height:20px" type="checkbox" ng-model="worker.IsSelected" /></td>
 
-                </tr>
-            </tbody>
-        </table>
+                    </tr>
+                </tbody>
+            </table>
         </div>
     </div>

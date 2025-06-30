@@ -84,18 +84,18 @@
 
             $('#tab3').click(function (e) {
                 CurrentPage = 1;
-                RefreshComboFiles();
+               // RefreshComboFiles();
 
-                //if (firstLoad) {
+                if (firstLoad) {
 
-                //    RefreshComboFiles();
-                //    //setTimeout(function clog() { RefreshComboFiles(); }, 200);
-                //    //setTimeout(function clog() { RefreshComboFiles(); }, 400);
-                //    firstLoad = false;
-                //} else {
+                    RefreshComboFiles();
+                    setTimeout(function clog() { RefreshComboFiles(); }, 200);
+                    setTimeout(function clog() { RefreshComboFiles(); }, 400);
+                    firstLoad = false;
+                } else {
 
-                //    RefreshComboFiles();
-                //}
+                    RefreshComboFiles();
+                }
             });
 
             $('#tab4').click(function (e) {
@@ -1017,6 +1017,47 @@
                     <div class="panel-body">
 
 
+
+                        <div class="col-md-2">
+                            <label>חיפוש חופשי</label>
+                            <input type="text" class="form-control" ng-model="$ctrl.filter.$" placeholder="חיפוש חופשי" />
+                        </div>
+
+                        <div class="col-md-2" style="">
+                            <div class="form-group"
+                                 ng-if="($ctrl.departments | filter:{TypeId:1}).length > 0">
+                                <label>אגף</label>
+                                <select class="form-control" ng-options="department.Id as department.Name for department in $ctrl.departments | filter:{TypeId:1}" ng-model="$ctrl.departmentId">
+                                    <option value="">-- אגף --</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-md-2" style="">
+                            <div class="form-group"
+                                 ng-if="($ctrl.departments | filter:{TypeId:2}).length > 0">
+
+                                <label>מחלקה</label>
+                                <select class="form-control" ng-options="department.Id as department.Name for department in $ctrl.departments | filter:{TypeId:2}" ng-model="$ctrl.departmentId2">
+                                    <option value="">-- מחלקה --</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-md-2" style="">
+                            <div class="form-group"
+                                 ng-if="($ctrl.departments | filter:{TypeId:3}).length > 0">
+                                <label>תת מחלקה</label>
+                                <select class="form-control" ng-options="department.Id as department.Name for department in $ctrl.departments | filter:{TypeId:3}" ng-model="$ctrl.departmentId3">
+                                    <option value="">--תת מחלקה  --</option>
+                                </select>
+                            </div>
+                        </div>
+
+
+
+
+
                         <div class="tooltip-container">
                             <button class="btn btn-success btn-xs" style="float:left;margin-left:10px;">שליחת קישור למסומנים</button>
                             <div class="tooltip-text">
@@ -1060,12 +1101,14 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td colspan="10">
-                                        <input type="text" class="form-control" ng-model="$ctrl.filter.$" placeholder="חיפוש חופשי" />
-                                    </td>
-                                </tr>
-                                <tr ng-repeat="worker in $ctrl.workers | filter:$ctrl.filter">
+                                <!--<tr>
+        <td colspan="10">
+            <input type="text" class="form-control" ng-model="$ctrl.filter.$" placeholder="חיפוש חופשי" />
+        </td>
+    </tr>-->
+                                <tr ng-repeat="worker in $ctrl.workers | filter:$ctrl.filter  | filter: ($ctrl.departmentId ? {w: {DepartmentsId: $ctrl.departmentId}} : undefined)
+        | filter: ($ctrl.departmentId2 ? {w: {SubDepartmentsId: $ctrl.departmentId2}} : undefined)
+        | filter: ($ctrl.departmentId3 ? {w: {SubSubDepartmentsId: $ctrl.departmentId3}} : undefined)">
 
                                     <td>{{worker.w.Id}}</td>
                                     <td>{{worker.w.FirstName}}</td>

@@ -6,15 +6,25 @@
         templateUrl: 'app/login/login.template.html',
         controller: LoginController,
         bindings: {
-            returnUrl: '<',
-           // loginimage: '<'
+            farm: '<',
         }
     });
 
-    function LoginController(authenticationService, $state) {
+    function LoginController(authenticationService, $state, sharedValues) {
+        var self = this;
         this.login = _login;
 
+       
+        if (self.farm.Logo && self.farm.Logo.indexOf("http") == -1) {
+            self.LogoTemp = "/Companies/" + self.farm.Id + "/Logo/" + self.farm.Logo;
+            self.farm.Logo = sharedValues.apiUrl + "/Uploads/Companies/" + self.farm.Id + "/Logo/" + self.farm.Logo;
+        } else if (!self.farm.Logo) {
 
+            self.LogoTemp = "";
+            self.farm.Logo = "../../favicon.png";
+        }
+
+     //   alert(localStorage.getItem('FarmId'));
 
         //if (!this.loginimage) {
 
@@ -41,7 +51,7 @@
                 location.href = './';
             },
             function (res) {
-                alert(res.error_description);
+                alertMessage(res.error_description,3);
             });
         }
     }

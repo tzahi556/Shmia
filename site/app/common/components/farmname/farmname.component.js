@@ -8,7 +8,8 @@
     });
 
     function FarmName(usersService, farmsService, $rootScope) {
-      
+
+
         var DEFAULT_NAME = 'מערכת לניהול עובדים 101';
         var self = this;
         var authData = angular.fromJson(localStorage.getItem('authorizationData'));
