@@ -32,6 +32,7 @@
             this.users = ['sysAdmin', 'farmAdmin'].indexOf(role) != -1 ? true : false;
             //this.instructors = (['sysAdmin', 'farmAdmin', 'farmAdminHorse', 'instructor', 'profAdmin', 'vetrinar', 'shoeing'].indexOf(role) != -1 && ["stableman", "worker"].indexOf(this.subrole) == -1 )? true : false;
             this.awsmangers = ['sysAdmin'].indexOf(role) != -1 ? true : false;
+
             this.workers = ['sysAdmin', 'farmAdmin', 'instructor'].indexOf(role) != -1 ? true : false;
 
             this.bindtodata = ['sysAdmin'].indexOf(role) != -1 ? true : false;

@@ -10,7 +10,7 @@
     function FarmName(usersService, farmsService, $rootScope) {
 
 
-        var DEFAULT_NAME = 'מערכת לניהול עובדים 101';
+        var DEFAULT_NAME = 'מערכת להפצת טפסים';
         var self = this;
         var authData = angular.fromJson(localStorage.getItem('authorizationData'));
         if (authData && authData.farmName) {

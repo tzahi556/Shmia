@@ -5,11 +5,13 @@ using Microsoft.Owin.Security.OAuth;
 using Newtonsoft.Json;
 using Owin;
 using System;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Security.Claims;
 using System.Text.Json;
 using System.Threading.Tasks;
 using System.Web.Http;
+using System.Web.Security;
 
 [assembly: OwinStartup(typeof(FarmsApi.Startup))]
 
@@ -57,36 +59,27 @@ namespace FarmsApi
             {
                 using (var Context = new Context())
                 {
-                    var user = Context.Users.SingleOrDefault(u => u.Email == context.UserName);
-                    if (user == null || user.Password != context.Password)
+                    var user = Context.Database.SqlQuery<User>(
+                             "EXEC dbo.GetUser @Email,@Password",
+                              new SqlParameter("@Email", context.UserName),
+                              new SqlParameter("@Password", context.Password)
+
+                         ).FirstOrDefault();
+
+                    //var user = Context.Users.SingleOrDefault(u => u.Email == context.UserName);
+                    if (user == null)
                     {
                         context.SetError("invalid_grant", "שם משתמש או סיסמה אינם נכונים");
                         return;
                     }
 
-
-                    //var users = Context.Users.Where(x=>x.CurrentUserId==user.Id).ToList();
-                    //users.ForEach(a =>
-                    //{
-                    //    a.IsTafus = false;
-                    //    a.CurrentUserId = null;
-                    //    Context.Entry(a).State = System.Data.Entity.EntityState.Modified;
-                    //});
-
-
-                    //users.IsTafus = false;
-                    //users.CurrentUserId = null;
-                  
-                    Context.SaveChanges();
-                  
-
-
+                    //Context.SaveChanges();
 
                     var identity = new ClaimsIdentity(context.Options.AuthenticationType);
+
                     identity.AddClaim(new Claim("sub", user.Email));
 
                     identity.AddClaim(new Claim("UserObj", JsonConvert.SerializeObject(user)));
-
 
                     identity.AddClaim(new Claim(ClaimTypes.Role, user.Role));
 

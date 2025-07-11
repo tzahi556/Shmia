@@ -44,13 +44,21 @@
 
 
             if (this.scope.userForm.$valid) {
-               
+
+                
+                if (this.user.Id == 0 && !this.user.Password) {
+                    alertMessage("חובה לשים סיסמה על משתמש/ת חדש/ה!", 3);
+                    return;
+
+                }
+
+
                 usersService.updateUser(this.user).then(function (user) {
                   
                     this.user = user;
                   
                   
-                    alert('נשמר בהצלחה');
+                    alertMessage('הנתונים נשמרו בהצלחה!');
                 }.bind(this));
             }
         }

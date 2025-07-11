@@ -32,7 +32,7 @@ namespace FarmsApi.Services
         [HttpPost]
         public IHttpActionResult ActionFieldGroup(int type, int farmid, dynamic objs, int campainsId = -1)
         {
-
+          
             // שליפה של שדות
             if (type == 1)
             {
@@ -834,6 +834,9 @@ namespace FarmsApi.Services
         [HttpPost]
         public IHttpActionResult GetSetCampainsData(int type, string id, dynamic objs)
         {
+
+          
+
             string res = id;
 
             if (Regex.Matches(id, @"[a-zA-Z]").Count > 0)

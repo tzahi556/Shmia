@@ -15,7 +15,7 @@
             </div>
             <div class="form-group">
                 <label>סיסמה</label>
-                <input type="text" name="password" class="form-control" ng-model="$ctrl.user.Password" required />
+                <input type="password" name="password" class="form-control" ng-model="$ctrl.user.Password" />
             </div>
             <div class="form-group">
                 <label>שם פרטי</label>
@@ -36,7 +36,7 @@
                 </select>
             </div>
 
-            <div class="form-group">
+            <!--<div class="form-group">
                 <label>אזור עובדת</label>
                 <select class="form-control" ng-options="area.id as area.name for area in $ctrl.areas" ng-model="$ctrl.user.AreaId" required>
                     <option value="">--בחרי אזור--</option>
@@ -48,7 +48,7 @@
                 <select class="form-control" ng-options="area.id as area.name for area in $ctrl.areas" ng-model="$ctrl.user.AreaId2" >
                     <option value="">--בחרי אזור 2-- </option>
                 </select>
-            </div>
+            </div>-->
             <!--<div class="form-group" ng-if="$ctrl.role=='sysAdmin'">
         <label>חווה</label>
         <select class="form-control" ng-options="farm.Id as farm.Name for farm in $ctrl.farms" ng-model="$ctrl.user.Farm_Id" required>

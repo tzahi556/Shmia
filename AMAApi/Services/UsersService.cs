@@ -112,7 +112,7 @@ namespace FarmsApi.Services
                 Users = FilterRole(Users, Role);
                 Users = FilterDeleted(Users, IncludeDeleted);
 
-                return RemovePassword(Users);
+                return Users;
             }
         }
 
@@ -416,14 +416,14 @@ namespace FarmsApi.Services
 
                     //var WorkersList = Context.Workers.Include(x => x.UserManager).Where(x => x.IsNew == isnew && x.UserId == CurrentUserId) .OrderByDescending(x => x.DateRigster).ToList();
 
-                  
 
-                    var WorkersList = (from w1 in Context.Workers.Where(x => x.FarmId == CurrentFarmId && x.StatusId==1 && (!string.IsNullOrEmpty(x.FirstName.Trim()) || !string.IsNullOrEmpty(x.LastName.Trim()) || !string.IsNullOrEmpty(x.Taz.Trim()))).DefaultIfEmpty()
-                                       from w1011 in Context.Workers101.Where(x => x.IsNew == isnew && x.WorkersId == w1.Id && x.UserId==CurrentUserId).DefaultIfEmpty()
+
+                    var WorkersList = (from w1 in Context.Workers.Where(x => x.FarmId == CurrentFarmId && x.StatusId == 1 && (!string.IsNullOrEmpty(x.FirstName.Trim()) || !string.IsNullOrEmpty(x.LastName.Trim()) || !string.IsNullOrEmpty(x.Taz.Trim()))).DefaultIfEmpty()
+                                       from w1011 in Context.Workers101.Where(x => x.IsNew == isnew && x.WorkersId == w1.Id && x.UserId == CurrentUserId).DefaultIfEmpty()
                                        from u in Context.Users.Where(x => x.Id == w1011.UserId).DefaultIfEmpty()
                                        select new WorkersWith101
                                        {
-                                           w=w1,
+                                           w = w1,
                                            w101 = w1011,
                                            ManagerName = (u != null) ? (u.FirstName + " " + u.LastName) : null
 
@@ -480,7 +480,7 @@ namespace FarmsApi.Services
                                        }).OrderByDescending(x => x.w101.DateRigster).ToList();
 
 
-                    return WorkersList.Where(x=>x.w!=null).ToList();
+                    return WorkersList.Where(x => x.w != null).ToList();
 
                     //return Context.Workers.Include(x => x.UserManager).Where(x => x.IsNew == isnew && x.UserManager.Farm_Id == CurrentFarmId && (!string.IsNullOrEmpty(x.FirstName.Trim()) || !string.IsNullOrEmpty(x.LastName.Trim()) || !string.IsNullOrEmpty(x.Taz.Trim()))).OrderByDescending(x => x.DateRigster).ToList();
 
@@ -558,19 +558,19 @@ namespace FarmsApi.Services
 
 
                     var Worker = (from w1 in Context.Workers.Where(x => x.Id == id).DefaultIfEmpty()
-                                       from w1011 in Context.Workers101.Where(x =>  x.WorkersId == w1.Id).DefaultIfEmpty()
+                                  from w1011 in Context.Workers101.Where(x => x.WorkersId == w1.Id).DefaultIfEmpty()
                                   from u in Context.Users.Where(x => x.Id == w1011.UserId).DefaultIfEmpty()
                                   select new WorkersWith101
-                                       {
-                                           w = w1,
-                                           w101 = w1011,
+                                  {
+                                      w = w1,
+                                      w101 = w1011,
                                       ManagerName = u.FirstName + " " + u.LastName
 
                                   }).OrderByDescending(x => x.w101.DateRigster).FirstOrDefault();
 
 
 
-               
+
 
 
                     //.Select(x => new WorkersThin{Id =x.Id, x.FirstName,x.LastName,x.ManagerName,x.Status,x.PhoneSelular,x.DateRigster,x.IsSendSMS}).ToList();
@@ -717,7 +717,7 @@ namespace FarmsApi.Services
 
                                 string CompanyEmails = null;
 
-                                if(Farm.OfficeIsMail && !string.IsNullOrEmpty(Farm.OfficeMail))
+                                if (Farm.OfficeIsMail && !string.IsNullOrEmpty(Farm.OfficeMail))
                                 {
                                     CompanyEmails = Farm.OfficeMail + ";";
                                 }
@@ -736,8 +736,8 @@ namespace FarmsApi.Services
 
                                 string MailTo = CompanyEmails;//ConfigurationSettings.AppSettings["MailTo"].ToString();
 
-                            // צחי עדכן שזה יישלח לעובד עצמו במידה ויש לו מייל
-                            if (!string.IsNullOrEmpty(workersWith101.w.Email))
+                                // צחי עדכן שזה יישלח לעובד עצמו במידה ויש לו מייל
+                                if (!string.IsNullOrEmpty(workersWith101.w.Email))
                                 {
                                     MailTo = MailTo + "," + workersWith101.w.Email;
                                 }
@@ -764,7 +764,7 @@ namespace FarmsApi.Services
                                                         MailUser,
                                                         MailTo,
                                                         Title,
-                                                         Body);
+                                                        Body);
 
 
                                 actMSG.IsBodyHtml = true;
@@ -824,7 +824,7 @@ namespace FarmsApi.Services
                             Context.Entry(workersWith101.w101).State = System.Data.Entity.EntityState.Modified;
                             Context.SaveChanges();
 
-                            
+
 
 
                         }
@@ -1047,7 +1047,7 @@ namespace FarmsApi.Services
 
                     }
                     string filePath = WorkerPath + "\\Signature.png";
-                 
+
 
                     File.WriteAllBytes(filePath, GetValidString(w101.ImgData));
 
@@ -1067,7 +1067,7 @@ namespace FarmsApi.Services
 
         public static string DecryptString(string Val)
         {
-           return AesOperation.DecryptString(Val);
+            return AesOperation.DecryptString(Val);
         }
 
 
@@ -1103,7 +1103,7 @@ namespace FarmsApi.Services
                         if (resObj["success"] == "true")
                         {
                             item.w101.IsSendSMS = true;
-                            
+
                             Context.Entry(item).State = System.Data.Entity.EntityState.Modified;
 
                         }
@@ -1313,11 +1313,23 @@ namespace FarmsApi.Services
                 {
                     User.Farm_Id = 0;
                 }
+
+
+
+
+
+
                 var UserIdByEmail = GetUserIdByEmail(User.Email, CurrentUserFarmId);
                 if (User.Id == 0 && UserIdByEmail == 0)
                 {
                     Context.Users.Add(User);
                     Context.SaveChanges();
+
+                    Context.Database.ExecuteSqlCommand(
+                        "EXEC dbo.[SetUser] @UserId, @Password",
+                        new SqlParameter("@UserId", User.Id),
+                        new SqlParameter("@Password", User.Password)
+                    );
                 }
 
                 // צחי הוסיף בכדי למנוע עדכון של ת"ז קיים לחווה מסויימת
@@ -1329,16 +1341,7 @@ namespace FarmsApi.Services
 
 
 
-                //// צחי שינה
-                //var Meta = JObject.Parse(User.Meta);
-                //if (Meta["AvailableHours"] != null)
-                //{
-                //    foreach (var Item in Meta["AvailableHours"])
-                //    {
-                //        Item["resourceId"] = User.Id;
-                //    }
-                //}
-                //User.Meta = Meta.ToString(Formatting.None);
+
 
                 Context.Entry(User).State = System.Data.Entity.EntityState.Modified;
 
@@ -1407,9 +1410,24 @@ namespace FarmsApi.Services
 
             var identity = HttpContext.Current.User.Identity as ClaimsIdentity;
 
-            if (identity.Claims.Count()== 0)
-            return GetUser(GetUserIdByEmail("default@gmail.com"));
-            
+            if (identity.Claims.Count() == 0)
+                return GetUser(GetUserIdByEmail("default@gmail.com"));
+
+
+
+
+            //צחי מוסיף שליפה
+            var userJson = identity.Claims.FirstOrDefault(c => c.Type == "UserObj")?.Value;
+
+            if (!string.IsNullOrEmpty(userJson))
+            {
+                User user = JsonConvert.DeserializeObject<User>(userJson);
+
+                if (user != null) return user;
+                // עכשיו user הוא אובייקט מסוג User
+            }
+
+
             var Email = identity.Claims.SingleOrDefault(c => c.Type == "sub").Value;
             return GetUser(GetUserIdByEmail(Email));
         }
@@ -1553,7 +1571,7 @@ namespace FarmsApi.Services
 
             //    Context.SaveChanges();
 
-                
+
 
 
             //}
@@ -1615,19 +1633,19 @@ namespace FarmsApi.Services
 
         public static List<User> RemovePassword(List<User> Users)
         {
-            foreach (var User in Users)
-                User.Password = null;
+            //foreach (var User in Users)
+            //    User.Password = null;
 
             return Users;
         }
 
         public static User RemovePassword(User User)
         {
-            User.Password = null;
+            //User.Password = null;
             return User;
         }
 
-      
+
 
         #endregion
     }

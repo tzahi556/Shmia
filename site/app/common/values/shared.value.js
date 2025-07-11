@@ -4,7 +4,7 @@
 
   //  var API_ADDRESS = window.location.href.indexOf('giddyup.co.il') != -1 ? '/api/' : 'http://giddyup.co.il/api/';
 
-    var API_ADDRESS = window.location.href.indexOf('ofekmanage.com') != -1 ? '/api/' : 'http://localhost:44033/';
+    var API_ADDRESS = window.location.href.indexOf('shmiatech.co.il') != -1 ? '/api/' : 'http://localhost:44033/';
 
     app.value('sharedValues', {
 
@@ -17,9 +17,9 @@
         DateModify:"20181105",
         apiUrl: API_ADDRESS,
         roles: [
-            { id: 'sysAdmin', name: 'מנהל מערכת', showInUsers: false, sysAdminOnly: true, homePage: 'users' },
-            { id: 'farmAdmin', name: ' מנהל/ת מערכת', showInUsers: false, sysAdminOnly: true, homePage: 'users' },
-            { id: 'instructor', name: 'מנהל/ת מחוז', showInUsers: true, sysAdminOnly: true, homePage: 'workers' },
+            { id: 'sysAdmin', name: 'מנהל/ת מערכת', showInUsers: false, sysAdminOnly: true, homePage: 'users' },
+            { id: 'farmAdmin', name: 'מנהל/ת מערכת', showInUsers: false, sysAdminOnly: true, homePage: 'users' },
+            { id: 'instructor', name: 'מנהל/ת', showInUsers: true, sysAdminOnly: true, homePage: 'workers' },
             //{ id: 'farmAdminHorse', name: 'מנהל חווה לגידול סוסים', showInUsers: true, sysAdminOnly: true, homePage: 'lessons' },
             //{ id: 'profAdmin', name: 'מנהל מקצועי', showInUsers: true, sysAdminOnly: false, homePage: 'lessons' },
             //{ id: 'stableman', name: 'סייס', showInUsers: true, sysAdminOnly: false, homePage: 'horses' },

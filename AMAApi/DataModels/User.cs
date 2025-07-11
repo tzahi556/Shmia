@@ -12,7 +12,7 @@ namespace FarmsApi.DataModels
         public string Role { get; set; }
       
         public string Email { get; set; }
-        public string Password { get; set; }
+        //public string Password { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
 
@@ -24,6 +24,8 @@ namespace FarmsApi.DataModels
         public string AreaId { get; set; }
         public string AreaId2 { get; set; }
 
+        [NotMapped]
+        public string Password { get; set; }
         public string FullName
         {
             get
