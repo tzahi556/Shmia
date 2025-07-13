@@ -1037,9 +1037,9 @@
                             <div class="form-group"
                                  ng-if="($ctrl.departments | filter:{TypeId:2}).length > 0">
 
-                                <label>מחלקה</label>
+                                <label>תת אגף</label>
                                 <select class="form-control" ng-options="department.Id as department.Name for department in $ctrl.departments | filter:{TypeId:2}" ng-model="$ctrl.departmentId2">
-                                    <option value="">-- מחלקה --</option>
+                                    <option value="">-- תת אגף --</option>
                                 </select>
                             </div>
                         </div>
@@ -1047,13 +1047,22 @@
                         <div class="col-md-2" style="">
                             <div class="form-group"
                                  ng-if="($ctrl.departments | filter:{TypeId:3}).length > 0">
-                                <label>תת מחלקה</label>
+                                <label>מחלקה</label>
                                 <select class="form-control" ng-options="department.Id as department.Name for department in $ctrl.departments | filter:{TypeId:3}" ng-model="$ctrl.departmentId3">
-                                    <option value="">--תת מחלקה  --</option>
+                                    <option value="">-- מחלקה  --</option>
                                 </select>
                             </div>
                         </div>
 
+                        <div class="col-md-2" style="">
+                            <div class="form-group"
+                                 ng-if="($ctrl.departments | filter:{TypeId:4}).length > 0">
+                                <label>תת מחלקה</label>
+                                <select class="form-control" ng-options="department.Id as department.Name for department in $ctrl.departments | filter:{TypeId:4}" ng-model="$ctrl.departmentId4">
+                                    <option value="">-- תת מחלקה  --</option>
+                                </select>
+                            </div>
+                        </div>
 
 
 
@@ -1106,9 +1115,12 @@
             <input type="text" class="form-control" ng-model="$ctrl.filter.$" placeholder="חיפוש חופשי" />
         </td>
     </tr>-->
-                                <tr ng-repeat="worker in $ctrl.workers | filter:$ctrl.filter  | filter: ($ctrl.departmentId ? {w: {DepartmentsId: $ctrl.departmentId}} : undefined)
-        | filter: ($ctrl.departmentId2 ? {w: {SubDepartmentsId: $ctrl.departmentId2}} : undefined)
-        | filter: ($ctrl.departmentId3 ? {w: {SubSubDepartmentsId: $ctrl.departmentId3}} : undefined)">
+                                <tr ng-repeat="worker in $ctrl.workers | filter:$ctrl.filter  
+                                    | filter: ($ctrl.departmentId ? {w: {DivisionsId: $ctrl.departmentId}} : undefined)
+                                    | filter: ($ctrl.departmentId2 ? {w: {SubDivisionsId: $ctrl.departmentId2}} : undefined)
+                                    | filter: ($ctrl.departmentId3 ? {w: {DepartmentsId: $ctrl.departmentId3}} : undefined)
+                                    | filter: ($ctrl.departmentId4 ? {w: {SubDepartmentsId: $ctrl.departmentId4}} : undefined)
+                                    ">
 
                                     <td>{{worker.w.Id}}</td>
                                     <td>{{worker.w.FirstName}}</td>

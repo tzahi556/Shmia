@@ -496,6 +496,30 @@
             return deferred.promise;
         }
 
+
+
+        //function _updateUserNewPassword(user, newpassword) {
+        //    var deferred = $q.defer();
+        //    $http.post(sharedValues.apiUrl + 'users/updateUserNewPassword', user).then(function (res) {
+
+        //        var user = res.data;
+        //        deferred.resolve(user);
+        //    });
+        //    return deferred.promise;
+        //}
+
+
+
+
+
+
+        
+
+
+
+
+
+
         function _importPortfolios(portfolioItems,counter) {
             var deferred = $q.defer();
             $http.post(sharedValues.apiUrl + 'users/importPortfolios/' + counter, portfolioItems).then(function () {

@@ -1,4 +1,34 @@
-﻿<form name="userForm" ng-submit="$ctrl.submit()" novalidate>
+﻿<form name="userForm"  novalidate>
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.14.1/themes/base/jquery-ui.css">
+    <link href="../../css/pdfstyle.css" rel="stylesheet" />
+
+    <script>
+
+
+
+        $(function () {
+
+           
+
+            $(".panelClose").click(function () {
+
+                $(".ui-dialog-content").dialog('destroy');
+
+            });
+        });
+
+
+
+        function OpenDialog() {
+            alert();
+            $("#dialogContainer").dialog({
+                modal: true, height: 'auto', width: 'auto'
+            });
+
+           
+        }
+
+    </script>
     <div class="panel panel-default">
         <div class="panel-heading">
             משתמש
@@ -10,12 +40,30 @@
             </div>
             <div class="form-group">
                 <label>אימייל</label>
-                <input type="email" name="email" class="form-control" ng-model="$ctrl.user.Email" ng-model-options="{updateOn:'blur'}" required email-exists="$ctrl.user.Id" />
+                <input type="email" name="email" class="form-control" autocomplete="off" ng-model="$ctrl.user.Email" ng-model-options="{updateOn:'blur'}" required email-exists="$ctrl.user.Id" />
                 <span ng-show="userForm.email.$error.emailExists">אימייל תפוס</span>
             </div>
-            <div class="form-group">
+            <div class="form-group" >
                 <label>סיסמה</label>
-                <input type="password" name="password" class="form-control" ng-model="$ctrl.user.Password" />
+
+
+                <input type="password"
+                       class="form-control"
+                       name="password"  autocomplete="new-password"
+                       ng-model="$ctrl.user.Password"
+                       ng-pattern="/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$/"
+                        ng-disabled="$ctrl.user.Id != 0"
+                       required />
+                <span class="spAlert" ng-show="userForm.password.$error.pattern">
+                    הסיסמה חייבת להכיל לפחות  6 תווים כולל אותיות ומספרים
+                </span>
+
+
+
+                <!--<input type="password" name="password" class="form-control" ng-model="$ctrl.user.Password" required />-->
+                <br />
+                <button type="button"   ng-disabled="$ctrl.user.Id == 0" class="btn btn-danger" ng-click="$ctrl.OpenDialog()">עדכון סיסמה</button>
+
             </div>
             <div class="form-group">
                 <label>שם פרטי</label>
@@ -50,15 +98,101 @@
                 </select>
             </div>-->
             <!--<div class="form-group" ng-if="$ctrl.role=='sysAdmin'">
-        <label>חווה</label>
-        <select class="form-control" ng-options="farm.Id as farm.Name for farm in $ctrl.farms" ng-model="$ctrl.user.Farm_Id" required>
-            <option value="">בחר חווה</option>
-        </select>
-    </div>-->
+                <label>חווה</label>
+                <select class="form-control" ng-options="farm.Id as farm.Name for farm in $ctrl.farms" ng-model="$ctrl.user.Farm_Id" required>
+                    <option value="">בחר חווה</option>
+                </select>
+            </div>-->
         </div>
         <div class="panel-footer">
-            <button type="submit" class="btn btn-success" ng-disabled="userForm.$invalid">עדכון</button>
-            <button type="button" class="btn btn-default" ng-disabled="$ctrl.selfEdit" ng-click="$ctrl.delete()">מחק</button>
+            <button type="submit" class="btn btn-success" ng-disabled="userForm.$invalid"  ng-click="$ctrl.submit()">עדכון</button>
+            <button type="button" class="btn btn-danger" ng-disabled="$ctrl.selfEdit" ng-click="$ctrl.delete()">מחק</button>
         </div>
     </div>
+
+
+
+    <div id="dialogContainer" style="display:none">
+
+
+        <style>
+            .password-container {
+                position: relative;
+                direction: rtl;
+            }
+
+                .password-container input {
+                    padding-left: 35px; /* עין בצד שמאל => padding משמאל */
+                }
+
+                .password-container .toggle-password {
+                    position: absolute;
+                    top: 50%;
+                    left: 10px; /* עין בצד שמאל */
+                    transform: translateY(-50%);
+                    cursor: pointer;
+                    color: #888;
+                    z-index: 2;
+                }
+        </style>
+
+
+
+
+
+
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                עדכון סיסמה
+
+                <div style="float:left;cursor:pointer" class="panelClose">
+                    <img src="../../images/_notArrive.png" width="24px" />
+                </div>
+
+            </div>
+
+            <div class="panel-body">
+                <div class="col-md-12" style="padding:0">
+
+
+                    <div class="form-group">
+                        <label>סיסמה חדשה</label>
+
+                        <div class="password-container" >
+                            <input type="{{showPassword ? 'text' : 'password'}}"
+                                   class="form-control"
+                                   name="newpassword"
+                                   ng-model="$ctrl.newpassword"
+                                   ng-pattern="/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$/"
+                                   />
+
+                            <i class="fa toggle-password"
+                               title="{{ showPassword ? 'הסתר סיסמה' : 'הצג סיסמה' }}"
+                               ng-click="showPassword = !showPassword"
+                               ng-class="{'fa-eye': !showPassword, 'fa-eye-slash': showPassword}">
+                            </i>
+                        </div>
+
+                        <span class="spAlert" ng-show="userForm.newpassword.$error.pattern">
+                            הסיסמה חייבת להכיל לפחות 6  תווים <br />כולל אותיות ומספרים
+                        </span>
+                    </div>
+
+
+                </div>
+
+
+            </div>
+
+            <div class="panel-footer colAlignLeft">
+
+                <button class="btn btn-primary panelClose" ng-disabled="userForm.newpassword.$invalid" ng-click="$ctrl.saveNewPassword()">שמור סיסמה</button>
+
+                <button class="btn btn-danger panelClose">סגור</button>
+
+            </div>
+        </div>
+    </div>
+
+
 </form>

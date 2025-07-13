@@ -15483,3 +15483,7 @@ div#AvatarFileUploadSign > .avatar-selector {
     left:50px;
 }
 
+.spAlert {
+    font-weight: bold;
+    color:red;
+}

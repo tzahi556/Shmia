@@ -1316,7 +1316,7 @@ namespace FarmsApi.Services
 
 
 
-
+               
 
 
                 var UserIdByEmail = GetUserIdByEmail(User.Email, CurrentUserFarmId);
@@ -1325,12 +1325,14 @@ namespace FarmsApi.Services
                     Context.Users.Add(User);
                     Context.SaveChanges();
 
-                    Context.Database.ExecuteSqlCommand(
-                        "EXEC dbo.[SetUser] @UserId, @Password",
-                        new SqlParameter("@UserId", User.Id),
-                        new SqlParameter("@Password", User.Password)
-                    );
+                   
+
+                   
                 }
+               
+
+
+
 
                 // צחי הוסיף בכדי למנוע עדכון של ת"ז קיים לחווה מסויימת
                 if (User.Id != UserIdByEmail && UserIdByEmail != 0)
@@ -1338,12 +1340,28 @@ namespace FarmsApi.Services
                     User.FirstName = "Error";
                     return User;
                 }
+                else
+                {
+
+                    if(!string.IsNullOrEmpty(User.Password))
+
+                    Context.Database.ExecuteSqlCommand(
+                       "EXEC dbo.[SetUser] @UserId, @Password",
+                       new SqlParameter("@UserId", User.Id),
+                       new SqlParameter("@Password", User.Password)
+                   );
+
+
+
+                }
 
 
 
 
 
-                Context.Entry(User).State = System.Data.Entity.EntityState.Modified;
+
+
+                    Context.Entry(User).State = System.Data.Entity.EntityState.Modified;
 
                 try
                 {

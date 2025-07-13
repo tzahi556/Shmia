@@ -13,8 +13,9 @@ namespace FarmsApi.DataModels
 
         public int TypeId { get; set; }
         // 1 אגף
-        // 2 מחלקה
-        // 3 תת מחלקה
+        // 2 אגף תת
+        // 3 מחלקה
+        // 4 תת מחלקה
 
         public int StatusId { get; set; }
 

@@ -4,9 +4,11 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
+using System.Text.Json;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
@@ -117,7 +119,18 @@ namespace FarmsApi.Services
 
         //****************************************************************************
 
+        [HttpGet]
+        [Route("TestGetRanadWorker")]
+        public async Task<IHttpActionResult> TestGetRanadWorker()
+        {
 
+           // var service = new WorkerApiService();
+           var res = await WorkerApiService.GetWorkersAsync("00EE8FDD54EAB3A37C54DB", new List<int>(), true);
+
+
+            return Ok(res);
+
+        }
 
 
     }
@@ -162,4 +175,45 @@ public class AuthService
         }
     }
 
+}
+
+public class GetWorkersExtendedRequest
+{
+    public string ApiKey { get; set; }
+    public List<int> Ids { get; set; } = new List<int>();
+    public bool IncludeDisabled { get; set; }
+}
+
+
+public static class WorkerApiService
+{
+    private static readonly HttpClient _httpClient = new HttpClient();
+    private const string _url = "https://api.isufitcore.com/Workers/GetWorkersExtended";
+
+    public static async Task<string> GetWorkersAsync(string apiKey, List<int> ids, bool includeDisabled = true)
+    {
+
+        ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12 | SecurityProtocolType.Tls13;
+
+        var request = new GetWorkersExtendedRequest
+        {
+            ApiKey = apiKey,
+            Ids = ids,
+            IncludeDisabled = includeDisabled
+        };
+
+        var response = await _httpClient.PostAsJsonAsync(_url, request);
+
+        var json = await response.Content.ReadAsStringAsync();
+
+        if (response.IsSuccessStatusCode)
+        {
+            return json; // מחזיר את ה-JSON הגולמי
+        }
+        else
+        {
+            // מחזיר שגיאה בתוך JSON
+            return $"{{\"error\": \"{response.StatusCode}\", \"details\": {JsonSerializer.Serialize(json)} }}";
+        }
+    }
 }

@@ -36,9 +36,38 @@
         this.selfEdit = angular.fromJson(localStorage.getItem('authorizationData')).userName == this.user.Email;
         this.role = localStorage.getItem('currentRole');
         this.areas = sharedValues.areas;
+        this.init = _init.bind(this);
+      
 
-        //this.user.Areaid = this.user.Areaid;
-       
+        this.init();
+        function _init() {
+
+
+           
+
+            if (this.user.Id != 0) {
+
+                this.user.Password = "12345678ssss9121234";
+            } else {
+                //this.Password = "";
+               // debugger
+
+                if (!this.user) this.user = {};
+
+                this.user.Id = 0;
+                this.user.Email = '';
+                this.user.Password = '';
+                this.user.FirstName = '';
+                this.user.LastName = '';
+                this.user.PhoneNumber = '';
+                this.user.Role = null;
+                    
+                   
+                
+               
+            }
+        }
+        
         function _submit() {
 
 
@@ -52,6 +81,11 @@
 
                 }
 
+
+                if (this.user.Id != 0) {
+
+                    this.user.Password = null;
+                }
 
                 usersService.updateUser(this.user).then(function (user) {
                   
@@ -70,6 +104,34 @@
                 });
             }
         }
+
+        this.OpenDialog = function () {
+            $("#dialogContainer").dialog({
+                modal: true,
+                height: 'auto',
+                width: 'auto',
+                resizable: true
+            });
+
+            $("#dialogContainer").dialog("option", "position", { my: "center", at: "center", of: window });
+        };
+
+
+        this.saveNewPassword = function () {
+
+           
+
+            this.user.Password = this.newpassword;
+            usersService.updateUser(this.user).then(function (user) {
+              
+                this.user = user;
+                this.user.Password = this.newpassword;
+                alertMessage('סיסמה חדשה עודכנה בהצלחה!');
+            }.bind(this));
+        };
+
+
+
     }
 
 })();

@@ -10,9 +10,12 @@ namespace FarmsApi.DataModels
         [Key]
         public int Id { get; set; }//מזהה עובד
         public int FarmId { get; set; }//ארגון
-        public int? DepartmentsId { get; set; }//אגף
-        public int? SubDepartmentsId { get; set; }//מחלקה
-        public int? SubSubDepartmentsId { get; set; }// תת מחלקה
+
+        public int? DivisionsId { get; set; }// אגף
+        public int? SubDivisionsId { get; set; }//תת אגף
+        public int? DepartmentsId { get; set; }//מחלקה
+        public int? SubDepartmentsId { get; set; }//מחלקה תת
+       
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string Taz { get; set; }
