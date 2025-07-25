@@ -36,7 +36,8 @@
         templateUrl: 'app/users/users.template.html',
         controller: UsersController,
         bindings: {
-            users: '<'
+            users: '<',
+            roles: '<'
 
         }
     });
@@ -50,7 +51,7 @@
         function _getHebRole(id) {
 
 
-            return this.sharedValues.roles.filter(x => x.id == id)[0].name;//(users[i].Role);
+            return this.roles.filter(x => x.Id == id)[0].Name;//(users[i].Role);
         }
 
         function _getHebArea(id, num) {

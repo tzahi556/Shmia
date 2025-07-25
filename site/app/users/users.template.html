@@ -28,7 +28,7 @@
                 <tr ng-repeat="user in $ctrl.users  | filter:$ctrl.filter" ui-sref="user({id:user.Id})">
                     <td>{{user.Id}}</td>
                     <td>{{user.Email}}</td>
-                    <td>{{$ctrl.getHebRole(user.Role)}}</td>
+                    <td>{{$ctrl.getHebRole(user.RolesId)}}</td>
                     <td>{{user.FirstName}}</td>
                     <td>{{user.LastName}}</td>
                     <td>{{$ctrl.getHebArea(user.AreaId)}}{{$ctrl.getHebArea(user.AreaId2,2)}}</td>

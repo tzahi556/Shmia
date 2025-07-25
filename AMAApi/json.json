@@ -1,0 +1,2669 @@
+{
+  "client": {
+    "id": "shalem",
+    "apiKey": "V4NUTC8N4KF6PRA12ATNXV",
+    "name": "מוצרי שלם"
+  },
+  "workers": [
+    {
+      "id": 1,
+      "permanentId": 1,
+      "firstName": "יהודה",
+      "lastName": "שלם",
+      "otherName": "קיסריה",
+      "fatherName": "",
+      "idNumber": "73749418",
+      "passportNumber": "",
+      "gender": "",
+      "birthDate": "05/06/1934",
+      "startDate": "01/01/1984",
+      "endDate": "",
+      "isufitStartDate": "",
+      "jobPercentage": 100,
+      "phoneNumber": "046262830",
+      "mobileNumber": "0545202030",
+      "emailAddress": "",
+      "minimumBreak": 0,
+      "address": {
+        "full": "קיסריה",
+        "street": "",
+        "houseNumber": "",
+        "apartmentNumber": "",
+        "city": "",
+        "country": "",
+        "zipcode": ""
+      },
+      "factory": {
+        "taxId": 0,
+        "address": "",
+        "id": 4,
+        "permanentId": 4,
+        "name": "חודשיים"
+      },
+      "division": {
+        "id": 0,
+        "permanentId": 1,
+        "name": "ללא אגף"
+      },
+      "subDivision": {
+        "id": 1,
+        "permanentId": 2,
+        "name": "כללי"
+      },
+      "department": {
+        "id": 1,
+        "permanentId": 1050,
+        "name": "מנהלה"
+      },
+      "subDepartment": {
+        "id": 0,
+        "permanentId": 1,
+        "name": ""
+      },
+      "jobPosition": {
+        "id": 25,
+        "permanentId": 26,
+        "name": "סמנכל תפעול"
+      },
+      "contract": {
+        "id": 137,
+        "permanentId": 81,
+        "name": "דור ג בוקר ע"
+      },
+      "directManager": {
+        "id": 0,
+        "permanentId": 0,
+        "name": ""
+      },
+      "healthInsitute": {
+        "id": 0,
+        "permanentId": 0,
+        "name": ""
+      },
+      "maritalStatus": {
+        "id": 0,
+        "permanentId": 0,
+        "name": ""
+      },
+      "jobPercentageByDate": [],
+      "isDisabled": false
+    },
+    {
+      "id": 5,
+      "permanentId": 4,
+      "firstName": "אילה",
+      "lastName": "קפוצ‘ון",
+      "otherName": "הרצליה",
+      "fatherName": "",
+      "idNumber": "58636952",
+      "passportNumber": "מנורה",
+      "gender": "Female",
+      "birthDate": "03/02/1964",
+      "startDate": "01/01/1982",
+      "endDate": "",
+      "isufitStartDate": "",
+      "jobPercentage": 100,
+      "phoneNumber": "046174010",
+      "mobileNumber": "099509454",
+      "emailAddress": "",
+      "minimumBreak": 0,
+      "address": {
+        "full": "הרצליה",
+        "street": "",
+        "houseNumber": "",
+        "apartmentNumber": "",
+        "city": "",
+        "country": "",
+        "zipcode": ""
+      },
+      "factory": {
+        "taxId": 0,
+        "address": "",
+        "id": 4,
+        "permanentId": 4,
+        "name": "חודשיים"
+      },
+      "division": {
+        "id": 0,
+        "permanentId": 1,
+        "name": "ללא אגף"
+      },
+      "subDivision": {
+        "id": 1,
+        "permanentId": 2,
+        "name": "כללי"
+      },
+      "department": {
+        "id": 1,
+        "permanentId": 1050,
+        "name": "מנהלה"
+      },
+      "subDepartment": {
+        "id": 0,
+        "permanentId": 1,
+        "name": ""
+      },
+      "jobPosition": {
+        "id": 22,
+        "permanentId": 23,
+        "name": "הנהלת חשבונות"
+      },
+      "contract": {
+        "id": 42,
+        "permanentId": 41,
+        "name": "גלובלי 5ימים"
+      },
+      "directManager": {
+        "id": 0,
+        "permanentId": 0,
+        "name": ""
+      },
+      "healthInsitute": {
+        "id": 0,
+        "permanentId": 0,
+        "name": ""
+      },
+      "maritalStatus": {
+        "id": 0,
+        "permanentId": 0,
+        "name": ""
+      },
+      "jobPercentageByDate": [],
+      "isDisabled": false
+    },
+    {
+      "id": 20,
+      "permanentId": 5,
+      "firstName": "עמנואל",
+      "lastName": "שלם",
+      "otherName": "קיסריה",
+      "fatherName": "",
+      "idNumber": "29406246",
+      "passportNumber": "",
+      "gender": "",
+      "birthDate": "",
+      "startDate": "01/05/1992",
+      "endDate": "",
+      "isufitStartDate": "",
+      "jobPercentage": 100,
+      "phoneNumber": "046363534",
+      "mobileNumber": "0545202040",
+      "emailAddress": "mane@shalam.co.il",
+      "minimumBreak": 0,
+      "address": {
+        "full": "קיסריה",
+        "street": "",
+        "houseNumber": "",
+        "apartmentNumber": "",
+        "city": "",
+        "country": "",
+        "zipcode": ""
+      },
+      "factory": {
+        "taxId": 0,
+        "address": "",
+        "id": 4,
+        "permanentId": 4,
+        "name": "חודשיים"
+      },
+      "division": {
+        "id": 0,
+        "permanentId": 1,
+        "name": "ללא אגף"
+      },
+      "subDivision": {
+        "id": 1,
+        "permanentId": 2,
+        "name": "כללי"
+      },
+      "department": {
+        "id": 1,
+        "permanentId": 1050,
+        "name": "מנהלה"
+      },
+      "subDepartment": {
+        "id": 0,
+        "permanentId": 1,
+        "name": ""
+      },
+      "jobPosition": {
+        "id": 60,
+        "permanentId": 1074,
+        "name": "מנכ\"ל"
+      },
+      "contract": {
+        "id": 41,
+        "permanentId": 40,
+        "name": "גלובלי 6 ימים"
+      },
+      "directManager": {
+        "id": 0,
+        "permanentId": 0,
+        "name": ""
+      },
+      "healthInsitute": {
+        "id": 0,
+        "permanentId": 0,
+        "name": ""
+      },
+      "maritalStatus": {
+        "id": 0,
+        "permanentId": 0,
+        "name": ""
+      },
+      "jobPercentageByDate": [],
+      "isDisabled": false
+    },
+    {
+      "id": 69,
+      "permanentId": 8,
+      "firstName": "גיא",
+      "lastName": "שלם",
+      "otherName": "הרצליה",
+      "fatherName": "",
+      "idNumber": "34408468",
+      "passportNumber": "",
+      "gender": "",
+      "birthDate": "",
+      "startDate": "01/07/2004",
+      "endDate": "",
+      "isufitStartDate": "",
+      "jobPercentage": 100,
+      "phoneNumber": "",
+      "mobileNumber": "0545202055",
+      "emailAddress": "",
+      "minimumBreak": 0,
+      "address": {
+        "full": "הרצליה",
+        "street": "",
+        "houseNumber": "",
+        "apartmentNumber": "",
+        "city": "",
+        "country": "",
+        "zipcode": ""
+      },
+      "factory": {
+        "taxId": 0,
+        "address": "",
+        "id": 4,
+        "permanentId": 4,
+        "name": "חודשיים"
+      },
+      "division": {
+        "id": 0,
+        "permanentId": 1,
+        "name": "ללא אגף"
+      },
+      "subDivision": {
+        "id": 1,
+        "permanentId": 2,
+        "name": "כללי"
+      },
+      "department": {
+        "id": 1,
+        "permanentId": 1050,
+        "name": "מנהלה"
+      },
+      "subDepartment": {
+        "id": 0,
+        "permanentId": 1,
+        "name": ""
+      },
+      "jobPosition": {
+        "id": 45,
+        "permanentId": 42,
+        "name": "שיווק"
+      },
+      "contract": {
+        "id": 41,
+        "permanentId": 40,
+        "name": "גלובלי 6 ימים"
+      },
+      "directManager": {
+        "id": 0,
+        "permanentId": 0,
+        "name": ""
+      },
+      "healthInsitute": {
+        "id": 0,
+        "permanentId": 0,
+        "name": ""
+      },
+      "maritalStatus": {
+        "id": 0,
+        "permanentId": 0,
+        "name": ""
+      },
+      "jobPercentageByDate": [],
+      "isDisabled": false
+    },
+    {
+      "id": 101,
+      "permanentId": 336,
+      "firstName": "חביב",
+      "lastName": "ירון",
+      "otherName": "הרצליה",
+      "fatherName": "",
+      "idNumber": "201255015",
+      "passportNumber": "",
+      "gender": "",
+      "birthDate": "15/04/1989",
+      "startDate": "01/01/2014",
+      "endDate": "",
+      "isufitStartDate": "",
+      "jobPercentage": 100,
+      "phoneNumber": "",
+      "mobileNumber": "",
+      "emailAddress": "",
+      "minimumBreak": 0,
+      "address": {
+        "full": "הרצליה",
+        "street": "",
+        "houseNumber": "",
+        "apartmentNumber": "",
+        "city": "",
+        "country": "",
+        "zipcode": ""
+      },
+      "factory": {
+        "taxId": 0,
+        "address": "",
+        "id": 4,
+        "permanentId": 4,
+        "name": "חודשיים"
+      },
+      "division": {
+        "id": 0,
+        "permanentId": 1,
+        "name": "ללא אגף"
+      },
+      "subDivision": {
+        "id": 1,
+        "permanentId": 2,
+        "name": "כללי"
+      },
+      "department": {
+        "id": 1,
+        "permanentId": 1050,
+        "name": "מנהלה"
+      },
+      "subDepartment": {
+        "id": 0,
+        "permanentId": 1,
+        "name": ""
+      },
+      "jobPosition": {
+        "id": 22,
+        "permanentId": 23,
+        "name": "הנהלת חשבונות"
+      },
+      "contract": {
+        "id": 42,
+        "permanentId": 41,
+        "name": "גלובלי 5ימים"
+      },
+      "directManager": {
+        "id": 0,
+        "permanentId": 0,
+        "name": ""
+      },
+      "healthInsitute": {
+        "id": 0,
+        "permanentId": 0,
+        "name": ""
+      },
+      "maritalStatus": {
+        "id": 0,
+        "permanentId": 0,
+        "name": ""
+      },
+      "jobPercentageByDate": [],
+      "isDisabled": false
+    },
+    {
+      "id": 708,
+      "permanentId": 5175,
+      "firstName": "רימה",
+      "lastName": "פיין",
+      "otherName": "חדרה",
+      "fatherName": "",
+      "idNumber": "320639115",
+      "passportNumber": "",
+      "gender": "",
+      "birthDate": "08/04/1976",
+      "startDate": "03/09/2008",
+      "endDate": "17/03/2025",
+      "isufitStartDate": "",
+      "jobPercentage": 0,
+      "phoneNumber": "0549743566",
+      "mobileNumber": "",
+      "emailAddress": "",
+      "minimumBreak": 0,
+      "address": {
+        "full": "חדרה",
+        "street": "",
+        "houseNumber": "",
+        "apartmentNumber": "",
+        "city": "",
+        "country": "",
+        "zipcode": ""
+      },
+      "factory": {
+        "taxId": 0,
+        "address": "",
+        "id": 4,
+        "permanentId": 4,
+        "name": "חודשיים"
+      },
+      "division": {
+        "id": 0,
+        "permanentId": 1,
+        "name": "ללא אגף"
+      },
+      "subDivision": {
+        "id": 1,
+        "permanentId": 2,
+        "name": "כללי"
+      },
+      "department": {
+        "id": 3,
+        "permanentId": 4,
+        "name": "מנהלת"
+      },
+      "subDepartment": {
+        "id": 0,
+        "permanentId": 1,
+        "name": ""
+      },
+      "jobPosition": {
+        "id": 111,
+        "permanentId": 67,
+        "name": "עזב"
+      },
+      "contract": {
+        "id": 42,
+        "permanentId": 41,
+        "name": "גלובלי 5ימים"
+      },
+      "directManager": {
+        "id": 0,
+        "permanentId": 0,
+        "name": ""
+      },
+      "healthInsitute": {
+        "id": 0,
+        "permanentId": 0,
+        "name": ""
+      },
+      "maritalStatus": {
+        "id": 0,
+        "permanentId": 0,
+        "name": ""
+      },
+      "jobPercentageByDate": [],
+      "isDisabled": true
+    },
+    {
+      "id": 870,
+      "permanentId": 18,
+      "firstName": "שירלי",
+      "lastName": "עמית שלם",
+      "otherName": "קיסריה",
+      "fatherName": "",
+      "idNumber": "32043002",
+      "passportNumber": "",
+      "gender": "",
+      "birthDate": "27/12/1974",
+      "startDate": "01/01/2005",
+      "endDate": "",
+      "isufitStartDate": "",
+      "jobPercentage": 100,
+      "phoneNumber": "046174011",
+      "mobileNumber": "0545202050",
+      "emailAddress": "",
+      "minimumBreak": 0,
+      "address": {
+        "full": "קיסריה",
+        "street": "",
+        "houseNumber": "",
+        "apartmentNumber": "",
+        "city": "",
+        "country": "",
+        "zipcode": ""
+      },
+      "factory": {
+        "taxId": 0,
+        "address": "",
+        "id": 4,
+        "permanentId": 4,
+        "name": "חודשיים"
+      },
+      "division": {
+        "id": 0,
+        "permanentId": 1,
+        "name": "ללא אגף"
+      },
+      "subDivision": {
+        "id": 1,
+        "permanentId": 2,
+        "name": "כללי"
+      },
+      "department": {
+        "id": 1,
+        "permanentId": 1050,
+        "name": "מנהלה"
+      },
+      "subDepartment": {
+        "id": 0,
+        "permanentId": 1,
+        "name": ""
+      },
+      "jobPosition": {
+        "id": 25,
+        "permanentId": 26,
+        "name": "סמנכל תפעול"
+      },
+      "contract": {
+        "id": 42,
+        "permanentId": 41,
+        "name": "גלובלי 5ימים"
+      },
+      "directManager": {
+        "id": 0,
+        "permanentId": 0,
+        "name": ""
+      },
+      "healthInsitute": {
+        "id": 0,
+        "permanentId": 0,
+        "name": ""
+      },
+      "maritalStatus": {
+        "id": 0,
+        "permanentId": 0,
+        "name": ""
+      },
+      "jobPercentageByDate": [],
+      "isDisabled": false
+    },
+    {
+      "id": 963,
+      "permanentId": 23,
+      "firstName": "רויטל",
+      "lastName": "שעוני",
+      "otherName": "בית אליעזר",
+      "fatherName": "",
+      "idNumber": "36370245",
+      "passportNumber": "מנורה",
+      "gender": "",
+      "birthDate": "",
+      "startDate": "06/04/2003",
+      "endDate": "13/04/2023",
+      "isufitStartDate": "",
+      "jobPercentage": 100,
+      "phoneNumber": "046174017",
+      "mobileNumber": "0545202058",
+      "emailAddress": "",
+      "minimumBreak": 0,
+      "address": {
+        "full": "בית אליעזר",
+        "street": "",
+        "houseNumber": "",
+        "apartmentNumber": "",
+        "city": "",
+        "country": "",
+        "zipcode": ""
+      },
+      "factory": {
+        "taxId": 0,
+        "address": "",
+        "id": 4,
+        "permanentId": 4,
+        "name": "חודשיים"
+      },
+      "division": {
+        "id": 0,
+        "permanentId": 1,
+        "name": "ללא אגף"
+      },
+      "subDivision": {
+        "id": 1,
+        "permanentId": 2,
+        "name": "כללי"
+      },
+      "department": {
+        "id": 3,
+        "permanentId": 4,
+        "name": "מנהלת"
+      },
+      "subDepartment": {
+        "id": 0,
+        "permanentId": 1,
+        "name": ""
+      },
+      "jobPosition": {
+        "id": 22,
+        "permanentId": 23,
+        "name": "הנהלת חשבונות"
+      },
+      "contract": {
+        "id": 42,
+        "permanentId": 41,
+        "name": "גלובלי 5ימים"
+      },
+      "directManager": {
+        "id": 0,
+        "permanentId": 0,
+        "name": ""
+      },
+      "healthInsitute": {
+        "id": 0,
+        "permanentId": 0,
+        "name": ""
+      },
+      "maritalStatus": {
+        "id": 0,
+        "permanentId": 0,
+        "name": ""
+      },
+      "jobPercentageByDate": [],
+      "isDisabled": true
+    },
+    {
+      "id": 1095,
+      "permanentId": 410,
+      "firstName": "דנית",
+      "lastName": "הוטמן שלם",
+      "otherName": "קיסריה",
+      "fatherName": "",
+      "idNumber": "27285139",
+      "passportNumber": "",
+      "gender": "",
+      "birthDate": "",
+      "startDate": "01/02/2004",
+      "endDate": "",
+      "isufitStartDate": "",
+      "jobPercentage": 100,
+      "phoneNumber": "046266267",
+      "mobileNumber": "0545202053",
+      "emailAddress": "",
+      "minimumBreak": 0,
+      "address": {
+        "full": "קיסריה",
+        "street": "",
+        "houseNumber": "",
+        "apartmentNumber": "",
+        "city": "",
+        "country": "",
+        "zipcode": ""
+      },
+      "factory": {
+        "taxId": 0,
+        "address": "",
+        "id": 4,
+        "permanentId": 4,
+        "name": "חודשיים"
+      },
+      "division": {
+        "id": 0,
+        "permanentId": 1,
+        "name": "ללא אגף"
+      },
+      "subDivision": {
+        "id": 1,
+        "permanentId": 2,
+        "name": "כללי"
+      },
+      "department": {
+        "id": 2,
+        "permanentId": 3,
+        "name": "שיווק"
+      },
+      "subDepartment": {
+        "id": 0,
+        "permanentId": 1,
+        "name": ""
+      },
+      "jobPosition": {
+        "id": 26,
+        "permanentId": 27,
+        "name": "אנשי מכירות"
+      },
+      "contract": {
+        "id": 42,
+        "permanentId": 41,
+        "name": "גלובלי 5ימים"
+      },
+      "directManager": {
+        "id": 0,
+        "permanentId": 0,
+        "name": ""
+      },
+      "healthInsitute": {
+        "id": 0,
+        "permanentId": 0,
+        "name": ""
+      },
+      "maritalStatus": {
+        "id": 0,
+        "permanentId": 0,
+        "name": ""
+      },
+      "jobPercentageByDate": [],
+      "isDisabled": false
+    },
+    {
+      "id": 1387,
+      "permanentId": 5176,
+      "firstName": "יפית",
+      "lastName": "ליפשיץ",
+      "otherName": "נתניה",
+      "fatherName": "",
+      "idNumber": "25208703",
+      "passportNumber": "",
+      "gender": "",
+      "birthDate": "09/05/1973",
+      "startDate": "02/06/2013",
+      "endDate": "",
+      "isufitStartDate": "",
+      "jobPercentage": 100,
+      "phoneNumber": "0523755073",
+      "mobileNumber": "",
+      "emailAddress": "1",
+      "minimumBreak": 0,
+      "address": {
+        "full": "נתניה",
+        "street": "",
+        "houseNumber": "",
+        "apartmentNumber": "",
+        "city": "",
+        "country": "",
+        "zipcode": ""
+      },
+      "factory": {
+        "taxId": 0,
+        "address": "",
+        "id": 4,
+        "permanentId": 4,
+        "name": "חודשיים"
+      },
+      "division": {
+        "id": 0,
+        "permanentId": 1,
+        "name": "ללא אגף"
+      },
+      "subDivision": {
+        "id": 1,
+        "permanentId": 2,
+        "name": "כללי"
+      },
+      "department": {
+        "id": 3,
+        "permanentId": 4,
+        "name": "מנהלת"
+      },
+      "subDepartment": {
+        "id": 0,
+        "permanentId": 1,
+        "name": ""
+      },
+      "jobPosition": {
+        "id": 22,
+        "permanentId": 23,
+        "name": "הנהלת חשבונות"
+      },
+      "contract": {
+        "id": 42,
+        "permanentId": 41,
+        "name": "גלובלי 5ימים"
+      },
+      "directManager": {
+        "id": 0,
+        "permanentId": 0,
+        "name": ""
+      },
+      "healthInsitute": {
+        "id": 0,
+        "permanentId": 0,
+        "name": ""
+      },
+      "maritalStatus": {
+        "id": 0,
+        "permanentId": 0,
+        "name": ""
+      },
+      "jobPercentageByDate": [],
+      "isDisabled": false
+    },
+    {
+      "id": 2064,
+      "permanentId": 99,
+      "firstName": "ניסים",
+      "lastName": "בן סימון",
+      "otherName": "עפולה",
+      "fatherName": "",
+      "idNumber": "22849640",
+      "passportNumber": "מנורה",
+      "gender": "",
+      "birthDate": "15/05/1967",
+      "startDate": "01/04/2005",
+      "endDate": "",
+      "isufitStartDate": "",
+      "jobPercentage": 100,
+      "phoneNumber": "046526170",
+      "mobileNumber": "0546202132",
+      "emailAddress": "nissim@shalam.co.il",
+      "minimumBreak": 0,
+      "address": {
+        "full": "עפולה",
+        "street": "",
+        "houseNumber": "",
+        "apartmentNumber": "",
+        "city": "",
+        "country": "",
+        "zipcode": ""
+      },
+      "factory": {
+        "taxId": 0,
+        "address": "",
+        "id": 4,
+        "permanentId": 4,
+        "name": "חודשיים"
+      },
+      "division": {
+        "id": 0,
+        "permanentId": 1,
+        "name": "ללא אגף"
+      },
+      "subDivision": {
+        "id": 1,
+        "permanentId": 2,
+        "name": "כללי"
+      },
+      "department": {
+        "id": 1,
+        "permanentId": 1050,
+        "name": "מנהלה"
+      },
+      "subDepartment": {
+        "id": 0,
+        "permanentId": 1,
+        "name": ""
+      },
+      "jobPosition": {
+        "id": 17,
+        "permanentId": 18,
+        "name": "סמנכל טכני"
+      },
+      "contract": {
+        "id": 42,
+        "permanentId": 41,
+        "name": "גלובלי 5ימים"
+      },
+      "directManager": {
+        "id": 0,
+        "permanentId": 0,
+        "name": ""
+      },
+      "healthInsitute": {
+        "id": 0,
+        "permanentId": 0,
+        "name": ""
+      },
+      "maritalStatus": {
+        "id": 0,
+        "permanentId": 0,
+        "name": ""
+      },
+      "jobPercentageByDate": [],
+      "isDisabled": false
+    },
+    {
+      "id": 2814,
+      "permanentId": 122,
+      "firstName": "אורה",
+      "lastName": "אריכא",
+      "otherName": "אבן יהודה",
+      "fatherName": "",
+      "idNumber": "59120592",
+      "passportNumber": "מנורה",
+      "gender": "",
+      "birthDate": "04/10/1964",
+      "startDate": "05/12/2007",
+      "endDate": "",
+      "isufitStartDate": "",
+      "jobPercentage": 100,
+      "phoneNumber": "0542360088",
+      "mobileNumber": "0542360088",
+      "emailAddress": "",
+      "minimumBreak": 0,
+      "address": {
+        "full": "אבן יהודה",
+        "street": "",
+        "houseNumber": "",
+        "apartmentNumber": "",
+        "city": "",
+        "country": "",
+        "zipcode": ""
+      },
+      "factory": {
+        "taxId": 0,
+        "address": "",
+        "id": 4,
+        "permanentId": 4,
+        "name": "חודשיים"
+      },
+      "division": {
+        "id": 0,
+        "permanentId": 1,
+        "name": "ללא אגף"
+      },
+      "subDivision": {
+        "id": 1,
+        "permanentId": 2,
+        "name": "כללי"
+      },
+      "department": {
+        "id": 3,
+        "permanentId": 4,
+        "name": "מנהלת"
+      },
+      "subDepartment": {
+        "id": 0,
+        "permanentId": 1,
+        "name": ""
+      },
+      "jobPosition": {
+        "id": 14,
+        "permanentId": 15,
+        "name": "שרות לקוחות"
+      },
+      "contract": {
+        "id": 42,
+        "permanentId": 41,
+        "name": "גלובלי 5ימים"
+      },
+      "directManager": {
+        "id": 0,
+        "permanentId": 0,
+        "name": ""
+      },
+      "healthInsitute": {
+        "id": 0,
+        "permanentId": 0,
+        "name": ""
+      },
+      "maritalStatus": {
+        "id": 0,
+        "permanentId": 0,
+        "name": ""
+      },
+      "jobPercentageByDate": [],
+      "isDisabled": false
+    },
+    {
+      "id": 2952,
+      "permanentId": 123,
+      "firstName": "נפתלי",
+      "lastName": "קאופמן",
+      "otherName": "כפר סבא",
+      "fatherName": "",
+      "idNumber": "55650832",
+      "passportNumber": "מנורה",
+      "gender": "",
+      "birthDate": "16/02/1959",
+      "startDate": "09/04/2008",
+      "endDate": "",
+      "isufitStartDate": "",
+      "jobPercentage": 100,
+      "phoneNumber": "0525597912",
+      "mobileNumber": "0545202090",
+      "emailAddress": "",
+      "minimumBreak": 0,
+      "address": {
+        "full": "כפר סבא",
+        "street": "",
+        "houseNumber": "",
+        "apartmentNumber": "",
+        "city": "",
+        "country": "",
+        "zipcode": ""
+      },
+      "factory": {
+        "taxId": 0,
+        "address": "",
+        "id": 4,
+        "permanentId": 4,
+        "name": "חודשיים"
+      },
+      "division": {
+        "id": 0,
+        "permanentId": 1,
+        "name": "ללא אגף"
+      },
+      "subDivision": {
+        "id": 1,
+        "permanentId": 2,
+        "name": "כללי"
+      },
+      "department": {
+        "id": 8,
+        "permanentId": 1051,
+        "name": "שרות לקוחות/מכירות"
+      },
+      "subDepartment": {
+        "id": 0,
+        "permanentId": 1,
+        "name": ""
+      },
+      "jobPosition": {
+        "id": 45,
+        "permanentId": 42,
+        "name": "שיווק"
+      },
+      "contract": {
+        "id": 42,
+        "permanentId": 41,
+        "name": "גלובלי 5ימים"
+      },
+      "directManager": {
+        "id": 0,
+        "permanentId": 0,
+        "name": ""
+      },
+      "healthInsitute": {
+        "id": 0,
+        "permanentId": 0,
+        "name": ""
+      },
+      "maritalStatus": {
+        "id": 0,
+        "permanentId": 0,
+        "name": ""
+      },
+      "jobPercentageByDate": [],
+      "isDisabled": false
+    },
+    {
+      "id": 4153,
+      "permanentId": 126,
+      "firstName": "יעל",
+      "lastName": "עאוד",
+      "otherName": "אור עקיבא",
+      "fatherName": "",
+      "idNumber": "316789692",
+      "passportNumber": "מנורה",
+      "gender": "",
+      "birthDate": "15/08/1979",
+      "startDate": "01/12/2011",
+      "endDate": "",
+      "isufitStartDate": "",
+      "jobPercentage": 100,
+      "phoneNumber": "0542456284",
+      "mobileNumber": "0542456284",
+      "emailAddress": "yael@shalam.co.il",
+      "minimumBreak": 0,
+      "address": {
+        "full": "אור עקיבא",
+        "street": "",
+        "houseNumber": "",
+        "apartmentNumber": "",
+        "city": "",
+        "country": "",
+        "zipcode": ""
+      },
+      "factory": {
+        "taxId": 0,
+        "address": "",
+        "id": 4,
+        "permanentId": 4,
+        "name": "חודשיים"
+      },
+      "division": {
+        "id": 0,
+        "permanentId": 1,
+        "name": "ללא אגף"
+      },
+      "subDivision": {
+        "id": 1,
+        "permanentId": 2,
+        "name": "כללי"
+      },
+      "department": {
+        "id": 3,
+        "permanentId": 4,
+        "name": "מנהלת"
+      },
+      "subDepartment": {
+        "id": 0,
+        "permanentId": 1,
+        "name": ""
+      },
+      "jobPosition": {
+        "id": 107,
+        "permanentId": 63,
+        "name": "משאבי אנוש"
+      },
+      "contract": {
+        "id": 56,
+        "permanentId": 85,
+        "name": "גלובלי 5ימים   פתוח"
+      },
+      "directManager": {
+        "id": 0,
+        "permanentId": 0,
+        "name": ""
+      },
+      "healthInsitute": {
+        "id": 0,
+        "permanentId": 0,
+        "name": ""
+      },
+      "maritalStatus": {
+        "id": 0,
+        "permanentId": 0,
+        "name": ""
+      },
+      "jobPercentageByDate": [],
+      "isDisabled": false
+    },
+    {
+      "id": 5012,
+      "permanentId": 5251,
+      "firstName": "יבגניה",
+      "lastName": "זרבנדיאן",
+      "otherName": "חדרה",
+      "fatherName": "",
+      "idNumber": "312647647",
+      "passportNumber": "",
+      "gender": "Female",
+      "birthDate": "",
+      "startDate": "05/05/2014",
+      "endDate": "20/02/2022",
+      "isufitStartDate": "",
+      "jobPercentage": 0,
+      "phoneNumber": "05431088821",
+      "mobileNumber": "",
+      "emailAddress": "",
+      "minimumBreak": 0,
+      "address": {
+        "full": "חדרה",
+        "street": "",
+        "houseNumber": "",
+        "apartmentNumber": "",
+        "city": "",
+        "country": "",
+        "zipcode": ""
+      },
+      "factory": {
+        "taxId": 0,
+        "address": "",
+        "id": 4,
+        "permanentId": 4,
+        "name": "חודשיים"
+      },
+      "division": {
+        "id": 0,
+        "permanentId": 1,
+        "name": "ללא אגף"
+      },
+      "subDivision": {
+        "id": 1,
+        "permanentId": 2,
+        "name": "כללי"
+      },
+      "department": {
+        "id": 8,
+        "permanentId": 1051,
+        "name": "שרות לקוחות/מכירות"
+      },
+      "subDepartment": {
+        "id": 0,
+        "permanentId": 1,
+        "name": ""
+      },
+      "jobPosition": {
+        "id": 111,
+        "permanentId": 67,
+        "name": "עזב"
+      },
+      "contract": {
+        "id": 42,
+        "permanentId": 41,
+        "name": "גלובלי 5ימים"
+      },
+      "directManager": {
+        "id": 0,
+        "permanentId": 0,
+        "name": ""
+      },
+      "healthInsitute": {
+        "id": 0,
+        "permanentId": 0,
+        "name": ""
+      },
+      "maritalStatus": {
+        "id": 0,
+        "permanentId": 0,
+        "name": ""
+      },
+      "jobPercentageByDate": [],
+      "isDisabled": true
+    },
+    {
+      "id": 5713,
+      "permanentId": 7682,
+      "firstName": "נטליה",
+      "lastName": "ניימן",
+      "otherName": "חדרה",
+      "fatherName": "",
+      "idNumber": "316789916",
+      "passportNumber": "",
+      "gender": "Female",
+      "birthDate": "",
+      "startDate": "10/10/2017",
+      "endDate": "16/08/2018",
+      "isufitStartDate": "",
+      "jobPercentage": 100,
+      "phoneNumber": "0545769976",
+      "mobileNumber": "",
+      "emailAddress": "hr3@shalam.co.il",
+      "minimumBreak": 0,
+      "address": {
+        "full": "חדרה",
+        "street": "",
+        "houseNumber": "",
+        "apartmentNumber": "",
+        "city": "",
+        "country": "",
+        "zipcode": ""
+      },
+      "factory": {
+        "taxId": 0,
+        "address": "",
+        "id": 4,
+        "permanentId": 4,
+        "name": "חודשיים"
+      },
+      "division": {
+        "id": 0,
+        "permanentId": 1,
+        "name": "ללא אגף"
+      },
+      "subDivision": {
+        "id": 1,
+        "permanentId": 2,
+        "name": "כללי"
+      },
+      "department": {
+        "id": 0,
+        "permanentId": 1,
+        "name": "פנוי"
+      },
+      "subDepartment": {
+        "id": 0,
+        "permanentId": 1,
+        "name": ""
+      },
+      "jobPosition": {
+        "id": 107,
+        "permanentId": 63,
+        "name": "משאבי אנוש"
+      },
+      "contract": {
+        "id": 42,
+        "permanentId": 41,
+        "name": "גלובלי 5ימים"
+      },
+      "directManager": {
+        "id": 0,
+        "permanentId": 0,
+        "name": ""
+      },
+      "healthInsitute": {
+        "id": 0,
+        "permanentId": 0,
+        "name": ""
+      },
+      "maritalStatus": {
+        "id": 0,
+        "permanentId": 0,
+        "name": ""
+      },
+      "jobPercentageByDate": [],
+      "isDisabled": true
+    },
+    {
+      "id": 5844,
+      "permanentId": 8105,
+      "firstName": "שחר",
+      "lastName": "ירון",
+      "otherName": "הרצליה",
+      "fatherName": "",
+      "idNumber": "207642091",
+      "passportNumber": "",
+      "gender": "Male",
+      "birthDate": "24/09/1996",
+      "startDate": "01/08/2020",
+      "endDate": "30/01/2021",
+      "isufitStartDate": "",
+      "jobPercentage": 0,
+      "phoneNumber": "0546202142",
+      "mobileNumber": "",
+      "emailAddress": "",
+      "minimumBreak": 0,
+      "address": {
+        "full": "פרדס חנה",
+        "street": "",
+        "houseNumber": "",
+        "apartmentNumber": "",
+        "city": "",
+        "country": "",
+        "zipcode": ""
+      },
+      "factory": {
+        "taxId": 0,
+        "address": "",
+        "id": 4,
+        "permanentId": 4,
+        "name": "חודשיים"
+      },
+      "division": {
+        "id": 0,
+        "permanentId": 1,
+        "name": "ללא אגף"
+      },
+      "subDivision": {
+        "id": 1,
+        "permanentId": 2,
+        "name": "כללי"
+      },
+      "department": {
+        "id": 3,
+        "permanentId": 4,
+        "name": "מנהלת"
+      },
+      "subDepartment": {
+        "id": 0,
+        "permanentId": 1,
+        "name": ""
+      },
+      "jobPosition": {
+        "id": 22,
+        "permanentId": 23,
+        "name": "הנהלת חשבונות"
+      },
+      "contract": {
+        "id": 138,
+        "permanentId": 82,
+        "name": "דור ג בוקר "
+      },
+      "directManager": {
+        "id": 0,
+        "permanentId": 0,
+        "name": ""
+      },
+      "healthInsitute": {
+        "id": 0,
+        "permanentId": 0,
+        "name": ""
+      },
+      "maritalStatus": {
+        "id": 0,
+        "permanentId": 0,
+        "name": ""
+      },
+      "jobPercentageByDate": [],
+      "isDisabled": true
+    },
+    {
+      "id": 5908,
+      "permanentId": 8217,
+      "firstName": "איהאב",
+      "lastName": "סעד",
+      "otherName": "נצרת עלית",
+      "fatherName": "",
+      "idNumber": "29863081",
+      "passportNumber": "",
+      "gender": "Male",
+      "birthDate": "28/08/1975",
+      "startDate": "01/09/2018",
+      "endDate": "22/04/2021",
+      "isufitStartDate": "",
+      "jobPercentage": 100,
+      "phoneNumber": "0523945161",
+      "mobileNumber": "",
+      "emailAddress": "",
+      "minimumBreak": 0,
+      "address": {
+        "full": "",
+        "street": "",
+        "houseNumber": "",
+        "apartmentNumber": "",
+        "city": "",
+        "country": "",
+        "zipcode": ""
+      },
+      "factory": {
+        "taxId": 0,
+        "address": "",
+        "id": 4,
+        "permanentId": 4,
+        "name": "חודשיים"
+      },
+      "division": {
+        "id": 0,
+        "permanentId": 1,
+        "name": "ללא אגף"
+      },
+      "subDivision": {
+        "id": 1,
+        "permanentId": 2,
+        "name": "כללי"
+      },
+      "department": {
+        "id": 3,
+        "permanentId": 4,
+        "name": "מנהלת"
+      },
+      "subDepartment": {
+        "id": 0,
+        "permanentId": 1,
+        "name": ""
+      },
+      "jobPosition": {
+        "id": 25,
+        "permanentId": 26,
+        "name": "סמנכל תפעול"
+      },
+      "contract": {
+        "id": 56,
+        "permanentId": 85,
+        "name": "גלובלי 5ימים   פתוח"
+      },
+      "directManager": {
+        "id": 0,
+        "permanentId": 0,
+        "name": ""
+      },
+      "healthInsitute": {
+        "id": 0,
+        "permanentId": 0,
+        "name": ""
+      },
+      "maritalStatus": {
+        "id": 0,
+        "permanentId": 0,
+        "name": ""
+      },
+      "jobPercentageByDate": [],
+      "isDisabled": true
+    },
+    {
+      "id": 5947,
+      "permanentId": 8351,
+      "firstName": "אינה",
+      "lastName": "קסטמברג",
+      "otherName": "חריש",
+      "fatherName": "",
+      "idNumber": "327431276",
+      "passportNumber": "",
+      "gender": "Female",
+      "birthDate": "",
+      "startDate": "25/11/2018",
+      "endDate": "15/08/2020",
+      "isufitStartDate": "",
+      "jobPercentage": 100,
+      "phoneNumber": "0546977986",
+      "mobileNumber": "",
+      "emailAddress": "",
+      "minimumBreak": 0,
+      "address": {
+        "full": "חריש",
+        "street": "",
+        "houseNumber": "",
+        "apartmentNumber": "",
+        "city": "",
+        "country": "",
+        "zipcode": ""
+      },
+      "factory": {
+        "taxId": 0,
+        "address": "",
+        "id": 4,
+        "permanentId": 4,
+        "name": "חודשיים"
+      },
+      "division": {
+        "id": 0,
+        "permanentId": 1,
+        "name": "ללא אגף"
+      },
+      "subDivision": {
+        "id": 1,
+        "permanentId": 2,
+        "name": "כללי"
+      },
+      "department": {
+        "id": 2,
+        "permanentId": 3,
+        "name": "שיווק"
+      },
+      "subDepartment": {
+        "id": 0,
+        "permanentId": 1,
+        "name": ""
+      },
+      "jobPosition": {
+        "id": 111,
+        "permanentId": 67,
+        "name": "עזב"
+      },
+      "contract": {
+        "id": 42,
+        "permanentId": 41,
+        "name": "גלובלי 5ימים"
+      },
+      "directManager": {
+        "id": 0,
+        "permanentId": 0,
+        "name": ""
+      },
+      "healthInsitute": {
+        "id": 0,
+        "permanentId": 0,
+        "name": ""
+      },
+      "maritalStatus": {
+        "id": 0,
+        "permanentId": 0,
+        "name": ""
+      },
+      "jobPercentageByDate": [],
+      "isDisabled": true
+    },
+    {
+      "id": 5990,
+      "permanentId": 8537,
+      "firstName": "לינור",
+      "lastName": "זיו",
+      "otherName": "קרית אתא",
+      "fatherName": "",
+      "idNumber": "43362474",
+      "passportNumber": "",
+      "gender": "Female",
+      "birthDate": "04/08/1981",
+      "startDate": "10/03/2019",
+      "endDate": "27/07/2021",
+      "isufitStartDate": "",
+      "jobPercentage": 100,
+      "phoneNumber": "",
+      "mobileNumber": "0509009192",
+      "emailAddress": "",
+      "minimumBreak": 0,
+      "address": {
+        "full": "ק.ביאליק",
+        "street": "",
+        "houseNumber": "",
+        "apartmentNumber": "",
+        "city": "",
+        "country": "",
+        "zipcode": ""
+      },
+      "factory": {
+        "taxId": 0,
+        "address": "",
+        "id": 4,
+        "permanentId": 4,
+        "name": "חודשיים"
+      },
+      "division": {
+        "id": 0,
+        "permanentId": 1,
+        "name": "ללא אגף"
+      },
+      "subDivision": {
+        "id": 1,
+        "permanentId": 2,
+        "name": "כללי"
+      },
+      "department": {
+        "id": 3,
+        "permanentId": 4,
+        "name": "מנהלת"
+      },
+      "subDepartment": {
+        "id": 0,
+        "permanentId": 1,
+        "name": ""
+      },
+      "jobPosition": {
+        "id": 107,
+        "permanentId": 63,
+        "name": "משאבי אנוש"
+      },
+      "contract": {
+        "id": 42,
+        "permanentId": 41,
+        "name": "גלובלי 5ימים"
+      },
+      "directManager": {
+        "id": 0,
+        "permanentId": 0,
+        "name": ""
+      },
+      "healthInsitute": {
+        "id": 0,
+        "permanentId": 0,
+        "name": ""
+      },
+      "maritalStatus": {
+        "id": 0,
+        "permanentId": 0,
+        "name": ""
+      },
+      "jobPercentageByDate": [],
+      "isDisabled": true
+    },
+    {
+      "id": 6645,
+      "permanentId": 9638,
+      "firstName": "ליאור",
+      "lastName": "שמש",
+      "otherName": "גן נר",
+      "fatherName": "",
+      "idNumber": "29083623",
+      "passportNumber": "",
+      "gender": "Male",
+      "birthDate": "22/02/1972",
+      "startDate": "21/09/2020",
+      "endDate": "",
+      "isufitStartDate": "",
+      "jobPercentage": 100,
+      "phoneNumber": "0548986706",
+      "mobileNumber": "0548986706",
+      "emailAddress": "liors@Shalam.co.il",
+      "minimumBreak": 0,
+      "address": {
+        "full": "עפולה",
+        "street": "",
+        "houseNumber": "",
+        "apartmentNumber": "",
+        "city": "",
+        "country": "",
+        "zipcode": ""
+      },
+      "factory": {
+        "taxId": 0,
+        "address": "",
+        "id": 4,
+        "permanentId": 4,
+        "name": "חודשיים"
+      },
+      "division": {
+        "id": 0,
+        "permanentId": 1,
+        "name": "ללא אגף"
+      },
+      "subDivision": {
+        "id": 1,
+        "permanentId": 2,
+        "name": "כללי"
+      },
+      "department": {
+        "id": 2,
+        "permanentId": 3,
+        "name": "שיווק"
+      },
+      "subDepartment": {
+        "id": 0,
+        "permanentId": 1,
+        "name": ""
+      },
+      "jobPosition": {
+        "id": 45,
+        "permanentId": 42,
+        "name": "שיווק"
+      },
+      "contract": {
+        "id": 42,
+        "permanentId": 41,
+        "name": "גלובלי 5ימים"
+      },
+      "directManager": {
+        "id": 0,
+        "permanentId": 0,
+        "name": ""
+      },
+      "healthInsitute": {
+        "id": 0,
+        "permanentId": 0,
+        "name": ""
+      },
+      "maritalStatus": {
+        "id": 0,
+        "permanentId": 0,
+        "name": ""
+      },
+      "jobPercentageByDate": [],
+      "isDisabled": false
+    },
+    {
+      "id": 7098,
+      "permanentId": 17218,
+      "firstName": "מירב",
+      "lastName": "כהן",
+      "otherName": "גבעת עדה",
+      "fatherName": "",
+      "idNumber": "27248988",
+      "passportNumber": "",
+      "gender": "Female",
+      "birthDate": "23/09/1974",
+      "startDate": "19/07/2021",
+      "endDate": "15/09/2022",
+      "isufitStartDate": "",
+      "jobPercentage": 100,
+      "phoneNumber": "",
+      "mobileNumber": "0525808311",
+      "emailAddress": "",
+      "minimumBreak": 0,
+      "address": {
+        "full": "",
+        "street": "",
+        "houseNumber": "",
+        "apartmentNumber": "",
+        "city": "",
+        "country": "",
+        "zipcode": ""
+      },
+      "factory": {
+        "taxId": 0,
+        "address": "",
+        "id": 4,
+        "permanentId": 4,
+        "name": "חודשיים"
+      },
+      "division": {
+        "id": 0,
+        "permanentId": 1,
+        "name": "ללא אגף"
+      },
+      "subDivision": {
+        "id": 1,
+        "permanentId": 2,
+        "name": "כללי"
+      },
+      "department": {
+        "id": 1,
+        "permanentId": 1050,
+        "name": "מנהלה"
+      },
+      "subDepartment": {
+        "id": 0,
+        "permanentId": 1,
+        "name": ""
+      },
+      "jobPosition": {
+        "id": 111,
+        "permanentId": 67,
+        "name": "עזב"
+      },
+      "contract": {
+        "id": 42,
+        "permanentId": 41,
+        "name": "גלובלי 5ימים"
+      },
+      "directManager": {
+        "id": 0,
+        "permanentId": 0,
+        "name": ""
+      },
+      "healthInsitute": {
+        "id": 0,
+        "permanentId": 0,
+        "name": ""
+      },
+      "maritalStatus": {
+        "id": 0,
+        "permanentId": 0,
+        "name": ""
+      },
+      "jobPercentageByDate": [],
+      "isDisabled": true
+    },
+    {
+      "id": 7562,
+      "permanentId": 17990,
+      "firstName": "אירית",
+      "lastName": "ברטוב בן שושן",
+      "otherName": "נתניה",
+      "fatherName": "",
+      "idNumber": "58265588",
+      "passportNumber": "",
+      "gender": "Female",
+      "birthDate": "06/08/1963",
+      "startDate": "01/09/2022",
+      "endDate": "05/01/2023",
+      "isufitStartDate": "",
+      "jobPercentage": 100,
+      "phoneNumber": "0502990092",
+      "mobileNumber": "",
+      "emailAddress": "irit.bsh@gmail.com",
+      "minimumBreak": 0,
+      "address": {
+        "full": "נתניה",
+        "street": "",
+        "houseNumber": "",
+        "apartmentNumber": "",
+        "city": "",
+        "country": "",
+        "zipcode": ""
+      },
+      "factory": {
+        "taxId": 0,
+        "address": "",
+        "id": 4,
+        "permanentId": 4,
+        "name": "חודשיים"
+      },
+      "division": {
+        "id": 0,
+        "permanentId": 1,
+        "name": "ללא אגף"
+      },
+      "subDivision": {
+        "id": 0,
+        "permanentId": 1,
+        "name": "ללא אולם אב"
+      },
+      "department": {
+        "id": 1,
+        "permanentId": 1050,
+        "name": "מנהלה"
+      },
+      "subDepartment": {
+        "id": 0,
+        "permanentId": 1,
+        "name": ""
+      },
+      "jobPosition": {
+        "id": 107,
+        "permanentId": 63,
+        "name": "משאבי אנוש"
+      },
+      "contract": {
+        "id": 42,
+        "permanentId": 41,
+        "name": "גלובלי 5ימים"
+      },
+      "directManager": {
+        "id": 0,
+        "permanentId": 0,
+        "name": ""
+      },
+      "healthInsitute": {
+        "id": 0,
+        "permanentId": 0,
+        "name": ""
+      },
+      "maritalStatus": {
+        "id": 0,
+        "permanentId": 0,
+        "name": ""
+      },
+      "jobPercentageByDate": [],
+      "isDisabled": true
+    },
+    {
+      "id": 7721,
+      "permanentId": 18326,
+      "firstName": "ליאת",
+      "lastName": "אילו לוי",
+      "otherName": "עתלית",
+      "fatherName": "",
+      "idNumber": "39455894",
+      "passportNumber": "",
+      "gender": "Female",
+      "birthDate": "17/03/1984",
+      "startDate": "01/02/2023",
+      "endDate": "",
+      "isufitStartDate": "",
+      "jobPercentage": 100,
+      "phoneNumber": "0546702801",
+      "mobileNumber": "",
+      "emailAddress": "hr4@shalam.co.il",
+      "minimumBreak": 0,
+      "address": {
+        "full": "עתלית",
+        "street": "",
+        "houseNumber": "",
+        "apartmentNumber": "",
+        "city": "",
+        "country": "",
+        "zipcode": ""
+      },
+      "factory": {
+        "taxId": 0,
+        "address": "",
+        "id": 4,
+        "permanentId": 4,
+        "name": "חודשיים"
+      },
+      "division": {
+        "id": 0,
+        "permanentId": 1,
+        "name": "ללא אגף"
+      },
+      "subDivision": {
+        "id": 1,
+        "permanentId": 2,
+        "name": "כללי"
+      },
+      "department": {
+        "id": 3,
+        "permanentId": 4,
+        "name": "מנהלת"
+      },
+      "subDepartment": {
+        "id": 0,
+        "permanentId": 1,
+        "name": ""
+      },
+      "jobPosition": {
+        "id": 107,
+        "permanentId": 63,
+        "name": "משאבי אנוש"
+      },
+      "contract": {
+        "id": 56,
+        "permanentId": 85,
+        "name": "גלובלי 5ימים   פתוח"
+      },
+      "directManager": {
+        "id": 0,
+        "permanentId": 0,
+        "name": ""
+      },
+      "healthInsitute": {
+        "id": 0,
+        "permanentId": 0,
+        "name": ""
+      },
+      "maritalStatus": {
+        "id": 0,
+        "permanentId": 0,
+        "name": ""
+      },
+      "jobPercentageByDate": [],
+      "isDisabled": false
+    },
+    {
+      "id": 7726,
+      "permanentId": 18331,
+      "firstName": "ליזי",
+      "lastName": "גלפרין",
+      "otherName": "חדרה",
+      "fatherName": "",
+      "idNumber": "312431919",
+      "passportNumber": "",
+      "gender": "Female",
+      "birthDate": "01/01/1994",
+      "startDate": "01/02/2023",
+      "endDate": "",
+      "isufitStartDate": "",
+      "jobPercentage": 100,
+      "phoneNumber": "0524543616",
+      "mobileNumber": "",
+      "emailAddress": "",
+      "minimumBreak": 0,
+      "address": {
+        "full": "חדרה",
+        "street": "",
+        "houseNumber": "",
+        "apartmentNumber": "",
+        "city": "",
+        "country": "",
+        "zipcode": ""
+      },
+      "factory": {
+        "taxId": 0,
+        "address": "",
+        "id": 4,
+        "permanentId": 4,
+        "name": "חודשיים"
+      },
+      "division": {
+        "id": 0,
+        "permanentId": 1,
+        "name": "ללא אגף"
+      },
+      "subDivision": {
+        "id": 1,
+        "permanentId": 2,
+        "name": "כללי"
+      },
+      "department": {
+        "id": 3,
+        "permanentId": 4,
+        "name": "מנהלת"
+      },
+      "subDepartment": {
+        "id": 0,
+        "permanentId": 1,
+        "name": ""
+      },
+      "jobPosition": {
+        "id": 22,
+        "permanentId": 23,
+        "name": "הנהלת חשבונות"
+      },
+      "contract": {
+        "id": 42,
+        "permanentId": 41,
+        "name": "גלובלי 5ימים"
+      },
+      "directManager": {
+        "id": 0,
+        "permanentId": 0,
+        "name": ""
+      },
+      "healthInsitute": {
+        "id": 0,
+        "permanentId": 0,
+        "name": ""
+      },
+      "maritalStatus": {
+        "id": 0,
+        "permanentId": 0,
+        "name": ""
+      },
+      "jobPercentageByDate": [],
+      "isDisabled": false
+    },
+    {
+      "id": 7766,
+      "permanentId": 18356,
+      "firstName": "מעיין",
+      "lastName": "נדלין",
+      "otherName": "חרמש",
+      "fatherName": "",
+      "idNumber": "303172621",
+      "passportNumber": "",
+      "gender": "Female",
+      "birthDate": "20/06/1989",
+      "startDate": "12/02/2023",
+      "endDate": "",
+      "isufitStartDate": "",
+      "jobPercentage": 100,
+      "phoneNumber": "0544523680",
+      "mobileNumber": "",
+      "emailAddress": "",
+      "minimumBreak": 0,
+      "address": {
+        "full": "חרמש",
+        "street": "",
+        "houseNumber": "",
+        "apartmentNumber": "",
+        "city": "",
+        "country": "",
+        "zipcode": ""
+      },
+      "factory": {
+        "taxId": 0,
+        "address": "",
+        "id": 4,
+        "permanentId": 4,
+        "name": "חודשיים"
+      },
+      "division": {
+        "id": 0,
+        "permanentId": 1,
+        "name": "ללא אגף"
+      },
+      "subDivision": {
+        "id": 0,
+        "permanentId": 1,
+        "name": "ללא אולם אב"
+      },
+      "department": {
+        "id": 1,
+        "permanentId": 1050,
+        "name": "מנהלה"
+      },
+      "subDepartment": {
+        "id": 0,
+        "permanentId": 1,
+        "name": ""
+      },
+      "jobPosition": {
+        "id": 22,
+        "permanentId": 23,
+        "name": "הנהלת חשבונות"
+      },
+      "contract": {
+        "id": 42,
+        "permanentId": 41,
+        "name": "גלובלי 5ימים"
+      },
+      "directManager": {
+        "id": 0,
+        "permanentId": 0,
+        "name": ""
+      },
+      "healthInsitute": {
+        "id": 0,
+        "permanentId": 0,
+        "name": ""
+      },
+      "maritalStatus": {
+        "id": 0,
+        "permanentId": 0,
+        "name": ""
+      },
+      "jobPercentageByDate": [],
+      "isDisabled": false
+    },
+    {
+      "id": 8223,
+      "permanentId": 19487,
+      "firstName": "מוטי",
+      "lastName": "ארושס",
+      "otherName": "גבעת עדה",
+      "fatherName": "",
+      "idNumber": "23779762",
+      "passportNumber": "",
+      "gender": "Male",
+      "birthDate": "14/09/1968",
+      "startDate": "14/01/2025",
+      "endDate": "",
+      "isufitStartDate": "",
+      "jobPercentage": 100,
+      "phoneNumber": "0546768395",
+      "mobileNumber": "",
+      "emailAddress": "moty@shalam.co.il",
+      "minimumBreak": 0,
+      "address": {
+        "full": "",
+        "street": "",
+        "houseNumber": "",
+        "apartmentNumber": "",
+        "city": "",
+        "country": "",
+        "zipcode": ""
+      },
+      "factory": {
+        "taxId": 0,
+        "address": "",
+        "id": 4,
+        "permanentId": 4,
+        "name": "חודשיים"
+      },
+      "division": {
+        "id": 0,
+        "permanentId": 1,
+        "name": "ללא אגף"
+      },
+      "subDivision": {
+        "id": 1,
+        "permanentId": 2,
+        "name": "כללי"
+      },
+      "department": {
+        "id": 3,
+        "permanentId": 4,
+        "name": "מנהלת"
+      },
+      "subDepartment": {
+        "id": 0,
+        "permanentId": 1,
+        "name": ""
+      },
+      "jobPosition": {
+        "id": 183,
+        "permanentId": 1087,
+        "name": "סמנכל תפעול ושרשרת אספקה"
+      },
+      "contract": {
+        "id": 54,
+        "permanentId": 83,
+        "name": "גלובלי 6 ימים פתוח"
+      },
+      "directManager": {
+        "id": 0,
+        "permanentId": 0,
+        "name": ""
+      },
+      "healthInsitute": {
+        "id": 0,
+        "permanentId": 0,
+        "name": ""
+      },
+      "maritalStatus": {
+        "id": 0,
+        "permanentId": 0,
+        "name": ""
+      },
+      "jobPercentageByDate": [],
+      "isDisabled": false
+    },
+    {
+      "id": 8252,
+      "permanentId": 19546,
+      "firstName": "מרים",
+      "lastName": "ישראל",
+      "otherName": "רמת ישי",
+      "fatherName": "",
+      "idNumber": "37693199",
+      "passportNumber": "",
+      "gender": "Female",
+      "birthDate": "08/10/1975",
+      "startDate": "20/02/2025",
+      "endDate": "10/03/2025",
+      "isufitStartDate": "",
+      "jobPercentage": 100,
+      "phoneNumber": "0522790095",
+      "mobileNumber": "",
+      "emailAddress": "",
+      "minimumBreak": 0,
+      "address": {
+        "full": "",
+        "street": "",
+        "houseNumber": "",
+        "apartmentNumber": "",
+        "city": "",
+        "country": "",
+        "zipcode": ""
+      },
+      "factory": {
+        "taxId": 0,
+        "address": "",
+        "id": 4,
+        "permanentId": 4,
+        "name": "חודשיים"
+      },
+      "division": {
+        "id": 0,
+        "permanentId": 1,
+        "name": "ללא אגף"
+      },
+      "subDivision": {
+        "id": 1,
+        "permanentId": 2,
+        "name": "כללי"
+      },
+      "department": {
+        "id": 3,
+        "permanentId": 4,
+        "name": "מנהלת"
+      },
+      "subDepartment": {
+        "id": 0,
+        "permanentId": 1,
+        "name": ""
+      },
+      "jobPosition": {
+        "id": 111,
+        "permanentId": 67,
+        "name": "עזב"
+      },
+      "contract": {
+        "id": 42,
+        "permanentId": 41,
+        "name": "גלובלי 5ימים"
+      },
+      "directManager": {
+        "id": 0,
+        "permanentId": 0,
+        "name": ""
+      },
+      "healthInsitute": {
+        "id": 0,
+        "permanentId": 0,
+        "name": ""
+      },
+      "maritalStatus": {
+        "id": 0,
+        "permanentId": 0,
+        "name": ""
+      },
+      "jobPercentageByDate": [],
+      "isDisabled": true
+    },
+    {
+      "id": 8269,
+      "permanentId": 19583,
+      "firstName": "ענבר",
+      "lastName": "כהן",
+      "otherName": "חיפה",
+      "fatherName": "",
+      "idNumber": "38234233",
+      "passportNumber": "",
+      "gender": "Female",
+      "birthDate": "18/11/1975",
+      "startDate": "01/04/2025",
+      "endDate": "21/05/2025",
+      "isufitStartDate": "",
+      "jobPercentage": 100,
+      "phoneNumber": "0545992055",
+      "mobileNumber": "",
+      "emailAddress": "",
+      "minimumBreak": 0,
+      "address": {
+        "full": "",
+        "street": "",
+        "houseNumber": "",
+        "apartmentNumber": "",
+        "city": "",
+        "country": "",
+        "zipcode": ""
+      },
+      "factory": {
+        "taxId": 0,
+        "address": "",
+        "id": 4,
+        "permanentId": 4,
+        "name": "חודשיים"
+      },
+      "division": {
+        "id": 0,
+        "permanentId": 1,
+        "name": "ללא אגף"
+      },
+      "subDivision": {
+        "id": 1,
+        "permanentId": 2,
+        "name": "כללי"
+      },
+      "department": {
+        "id": 3,
+        "permanentId": 4,
+        "name": "מנהלת"
+      },
+      "subDepartment": {
+        "id": 0,
+        "permanentId": 1,
+        "name": ""
+      },
+      "jobPosition": {
+        "id": 111,
+        "permanentId": 67,
+        "name": "עזב"
+      },
+      "contract": {
+        "id": 42,
+        "permanentId": 41,
+        "name": "גלובלי 5ימים"
+      },
+      "directManager": {
+        "id": 0,
+        "permanentId": 0,
+        "name": ""
+      },
+      "healthInsitute": {
+        "id": 0,
+        "permanentId": 0,
+        "name": ""
+      },
+      "maritalStatus": {
+        "id": 0,
+        "permanentId": 0,
+        "name": ""
+      },
+      "jobPercentageByDate": [],
+      "isDisabled": false
+    },
+    {
+      "id": 8271,
+      "permanentId": 19596,
+      "firstName": "ליזי",
+      "lastName": "ליף גולד",
+      "otherName": "חדרה",
+      "fatherName": "",
+      "idNumber": "205835218",
+      "passportNumber": "",
+      "gender": "Female",
+      "birthDate": "13/07/1994",
+      "startDate": "20/04/2025",
+      "endDate": "",
+      "isufitStartDate": "",
+      "jobPercentage": 100,
+      "phoneNumber": "",
+      "mobileNumber": "",
+      "emailAddress": "",
+      "minimumBreak": 0,
+      "address": {
+        "full": "",
+        "street": "",
+        "houseNumber": "",
+        "apartmentNumber": "",
+        "city": "",
+        "country": "",
+        "zipcode": ""
+      },
+      "factory": {
+        "taxId": 0,
+        "address": "",
+        "id": 4,
+        "permanentId": 4,
+        "name": "חודשיים"
+      },
+      "division": {
+        "id": 0,
+        "permanentId": 1,
+        "name": "ללא אגף"
+      },
+      "subDivision": {
+        "id": 1,
+        "permanentId": 2,
+        "name": "כללי"
+      },
+      "department": {
+        "id": 3,
+        "permanentId": 4,
+        "name": "מנהלת"
+      },
+      "subDepartment": {
+        "id": 0,
+        "permanentId": 1,
+        "name": ""
+      },
+      "jobPosition": {
+        "id": 22,
+        "permanentId": 23,
+        "name": "הנהלת חשבונות"
+      },
+      "contract": {
+        "id": 42,
+        "permanentId": 41,
+        "name": "גלובלי 5ימים"
+      },
+      "directManager": {
+        "id": 0,
+        "permanentId": 0,
+        "name": ""
+      },
+      "healthInsitute": {
+        "id": 0,
+        "permanentId": 0,
+        "name": ""
+      },
+      "maritalStatus": {
+        "id": 0,
+        "permanentId": 0,
+        "name": ""
+      },
+      "jobPercentageByDate": [],
+      "isDisabled": false
+    },
+    {
+      "id": 8777,
+      "permanentId": 9435,
+      "firstName": "אורי",
+      "lastName": "שלם",
+      "otherName": "קיסריה",
+      "fatherName": "",
+      "idNumber": "215229147",
+      "passportNumber": "",
+      "gender": "Female",
+      "birthDate": "",
+      "startDate": "01/09/2024",
+      "endDate": "",
+      "isufitStartDate": "",
+      "jobPercentage": 100,
+      "phoneNumber": "",
+      "mobileNumber": "",
+      "emailAddress": "",
+      "minimumBreak": 0,
+      "address": {
+        "full": "קיסריה",
+        "street": "",
+        "houseNumber": "",
+        "apartmentNumber": "",
+        "city": "",
+        "country": "",
+        "zipcode": ""
+      },
+      "factory": {
+        "taxId": 0,
+        "address": "",
+        "id": 4,
+        "permanentId": 4,
+        "name": "חודשיים"
+      },
+      "division": {
+        "id": 0,
+        "permanentId": 1,
+        "name": "ללא אגף"
+      },
+      "subDivision": {
+        "id": 1,
+        "permanentId": 2,
+        "name": "כללי"
+      },
+      "department": {
+        "id": 1,
+        "permanentId": 1050,
+        "name": "מנהלה"
+      },
+      "subDepartment": {
+        "id": 0,
+        "permanentId": 1,
+        "name": ""
+      },
+      "jobPosition": {
+        "id": 109,
+        "permanentId": 65,
+        "name": "מנהל מכירות"
+      },
+      "contract": {
+        "id": 56,
+        "permanentId": 85,
+        "name": "גלובלי 5ימים   פתוח"
+      },
+      "directManager": {
+        "id": 0,
+        "permanentId": 0,
+        "name": ""
+      },
+      "healthInsitute": {
+        "id": 0,
+        "permanentId": 0,
+        "name": ""
+      },
+      "maritalStatus": {
+        "id": 0,
+        "permanentId": 0,
+        "name": ""
+      },
+      "jobPercentageByDate": [],
+      "isDisabled": false
+    },
+    {
+      "id": 8878,
+      "permanentId": 9550,
+      "firstName": "איליי",
+      "lastName": "שלם",
+      "otherName": "קיסריה",
+      "fatherName": "",
+      "idNumber": "325875870",
+      "passportNumber": "",
+      "gender": "Male",
+      "birthDate": "",
+      "startDate": "01/07/2020",
+      "endDate": "",
+      "isufitStartDate": "",
+      "jobPercentage": 0,
+      "phoneNumber": "0545202044",
+      "mobileNumber": "",
+      "emailAddress": "",
+      "minimumBreak": 0,
+      "address": {
+        "full": "קיסריה",
+        "street": "",
+        "houseNumber": "",
+        "apartmentNumber": "",
+        "city": "",
+        "country": "",
+        "zipcode": ""
+      },
+      "factory": {
+        "taxId": 0,
+        "address": "",
+        "id": 4,
+        "permanentId": 4,
+        "name": "חודשיים"
+      },
+      "division": {
+        "id": 0,
+        "permanentId": 1,
+        "name": "ללא אגף"
+      },
+      "subDivision": {
+        "id": 1,
+        "permanentId": 2,
+        "name": "כללי"
+      },
+      "department": {
+        "id": 3,
+        "permanentId": 4,
+        "name": "מנהלת"
+      },
+      "subDepartment": {
+        "id": 0,
+        "permanentId": 1,
+        "name": ""
+      },
+      "jobPosition": {
+        "id": 25,
+        "permanentId": 26,
+        "name": "סמנכל תפעול"
+      },
+      "contract": {
+        "id": 138,
+        "permanentId": 82,
+        "name": "דור ג בוקר "
+      },
+      "directManager": {
+        "id": 0,
+        "permanentId": 0,
+        "name": ""
+      },
+      "healthInsitute": {
+        "id": 0,
+        "permanentId": 0,
+        "name": ""
+      },
+      "maritalStatus": {
+        "id": 0,
+        "permanentId": 0,
+        "name": ""
+      },
+      "jobPercentageByDate": [],
+      "isDisabled": false
+    }
+  ],
+  "success": true,
+  "isAuthenticated": true,
+  "messageEN": "Fetched 32 worker object(s)",
+  "messageHE": ""
+}

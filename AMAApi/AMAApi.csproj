@@ -272,6 +272,7 @@
     <Compile Include="Controllers\FilesController.cs" />
     <Compile Include="Controllers\API.cs" />
     <Compile Include="Controllers\UsersController.cs" />
+    <Compile Include="DataModels\Enums.cs" />
     <Compile Include="DataModels\Departments.cs" />
     <Compile Include="DataModels\Helper.cs" />
     <Compile Include="DataModels\Banks.cs" />

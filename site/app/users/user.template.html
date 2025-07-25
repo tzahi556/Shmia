@@ -79,7 +79,7 @@
             </div>
             <div class="form-group">
                 <label>תפקיד</label>
-                <select class="form-control" ng-options="role.id as role.name for role in $ctrl.roles | filter:{showInUsers:true} " ng-model="$ctrl.user.Role" required>
+                <select class="form-control" ng-options="role.Id as role.Name for role in $ctrl.roles" ng-model="$ctrl.user.RolesId" required>
                     <option value="">בחרי תפקיד</option>
                 </select>
             </div>

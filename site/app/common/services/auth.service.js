@@ -26,9 +26,9 @@
 
                    
                     usersService.getUser().then(function (res) {
-                      
-                        localStorage.setItem('currentRole', res.Role);
-                        localStorage.setItem('currentSubRole', res.SubRole);
+                        debugger
+                        localStorage.setItem('currentRolesId', res.RolesId);
+                        localStorage.setItem('HomePage', res.HomePage);
                         deferred.resolve(response);
                     })
                 },
@@ -46,8 +46,8 @@
 
         function _logOut() {
             localStorage.removeItem('authorizationData');
-            localStorage.removeItem('currentRole');
-            localStorage.removeItem('currentSubRole');
+            localStorage.removeItem('currentRolesId');
+            //localStorage.removeItem('currentSubRole');
         };
     }
 })();

@@ -14,9 +14,19 @@
             <input type="text" class="form-control" ng-model="$ctrl.filter.$" placeholder="חיפוש חופשי" />
         </div>
 
-        <div class="col-md-2" style="">
-            <div class="form-group"
-                 ng-if="($ctrl.departments | filter:{TypeId:1}).length > 0">
+        <div class="col-md-2" ng-if="($ctrl.departments | filter:{TypeId:0}).length > 0" style="">
+            <div class="form-group">
+
+                <label>מפעל</label>
+                <select class="form-control" ng-options="department.Id as department.Name for department in $ctrl.departments | filter:{TypeId:0}" ng-model="$ctrl.departmentId0">
+                    <option value="">-- מפעל --</option>
+                </select>
+            </div>
+        </div>
+
+
+        <div class="col-md-2" style="" ng-if="($ctrl.departments | filter:{TypeId:1}).length > 0">
+            <div class="form-group">
                 <label>אגף</label>
                 <select class="form-control" ng-options="department.Id as department.Name for department in $ctrl.departments | filter:{TypeId:1}" ng-model="$ctrl.departmentId">
                     <option value="">-- אגף --</option>
@@ -24,22 +34,33 @@
             </div>
         </div>
 
-        <div class="col-md-2" style="" >
-            <div class="form-group" 
-                ng-if="($ctrl.departments | filter:{TypeId:2}).length > 0">
-               
-                <label>מחלקה</label>
+        <div class="col-md-2" style="" ng-if="($ctrl.departments | filter:{TypeId:2}).length > 0">
+            <div class="form-group">
+
+                <label>תת אגף</label>
                 <select class="form-control" ng-options="department.Id as department.Name for department in $ctrl.departments | filter:{TypeId:2}" ng-model="$ctrl.departmentId2">
+                    <option value="">-- תת אגף --</option>
+                </select>
+            </div>
+        </div>
+
+
+
+
+        <div class="col-md-2" style="" ng-if="($ctrl.departments | filter:{TypeId:3}).length > 0">
+            <div class="form-group">
+
+                <label>מחלקה</label>
+                <select class="form-control" ng-options="department.Id as department.Name for department in $ctrl.departments | filter:{TypeId:3}" ng-model="$ctrl.departmentId3">
                     <option value="">-- מחלקה --</option>
                 </select>
             </div>
         </div>
-      
-        <div class="col-md-2" style="">
-            <div class="form-group"
-                 ng-if="($ctrl.departments | filter:{TypeId:3}).length > 0">
+
+        <div class="col-md-2" style="" ng-if="($ctrl.departments | filter:{TypeId:4}).length > 0">
+            <div class="form-group">
                 <label>תת מחלקה</label>
-                <select class="form-control" ng-options="department.Id as department.Name for department in $ctrl.departments | filter:{TypeId:3}" ng-model="$ctrl.departmentId3">
+                <select class="form-control" ng-options="department.Id as department.Name for department in $ctrl.departments | filter:{TypeId:4}" ng-model="$ctrl.departmentId4">
                     <option value="">--תת מחלקה  --</option>
                 </select>
             </div>
@@ -50,9 +71,9 @@
 
 
 
-        <div class="col-md-4" style="padding:0px">
+        <div style="padding:0px;float:left">
 
-
+            <br />
 
             <button class="btn btn-danger btn-xs" style="float:left" ng-click="$ctrl.deleteAll()">מחיקת מסומנים</button>
 
@@ -80,13 +101,26 @@
                 </thead>
                 <tbody>
                     <!--<tr>
-                        <td colspan="10">
-                           
-                        </td>
-                    </tr>-->
-                    <tr ng-repeat="worker in $ctrl.workers | filter:$ctrl.filter  | filter: ($ctrl.departmentId ? {w: {DepartmentsId: $ctrl.departmentId}} : undefined)
+        <td colspan="10">
+
+        </td>
+    </tr>-->
+                    <!--<tr ng-repeat="worker in $ctrl.workers | filter:$ctrl.filter
+                         | filter: ($ctrl.departmentId ? {w: {DepartmentsId: $ctrl.departmentId}} : undefined)
                          | filter: ($ctrl.departmentId2 ? {w: {SubDepartmentsId: $ctrl.departmentId2}} : undefined)
-                         | filter: ($ctrl.departmentId3 ? {w: {SubSubDepartmentsId: $ctrl.departmentId3}} : undefined)">
+                         | filter: ($ctrl.departmentId3 ? {w: {SubSubDepartmentsId: $ctrl.departmentId3}} : undefined)
+                         | filter: ($ctrl.departmentId0 ? {w: {FactoryId: $ctrl.departmentId0}} : undefined)">-->
+
+                    <tr ng-repeat="worker in $ctrl.workers | filter:$ctrl.filter
+     | filter: ($ctrl.departmentId ? {w: {DivisionsId: $ctrl.departmentId}} : undefined)
+     | filter: ($ctrl.departmentId2 ? {w: {SubDivisionsId: $ctrl.departmentId2}} : undefined)
+     | filter: ($ctrl.departmentId3 ? {w: {DepartmentsId: $ctrl.departmentId3}} : undefined)
+     | filter: ($ctrl.departmentId4 ? {w: {SubDepartmentsId: $ctrl.departmentId4}} : undefined)
+     | filter: ($ctrl.departmentId0 ? {w: {FactoryId: $ctrl.departmentId0}} : undefined)
+     ">
+
+
+
 
                         <td>{{worker.ManagerName}}</td>
                         <td>{{worker.w.FirstName}}</td>

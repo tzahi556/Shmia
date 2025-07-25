@@ -7,20 +7,25 @@
         $urlRouterProvider.otherwise(function ($inject) {
             $state = $inject.get('$state');
             usersService = $inject.get('usersService');
-            var roles = usersService.roles;
-            var role = localStorage.getItem('currentRole');
+            //var roles = usersService.roles;
+            var rolesId = localStorage.getItem('currentRolesId');
+            var HomePage = localStorage.getItem('HomePage');
+            debugger
 
-
-            if (role == null) {
+            if (rolesId == null) {
 
                 $state.go('login');
             }
-            for (var i in roles) {
-                if (roles[i].id == role) {
 
-                    $state.go(roles[i].homePage);
-                }
-            }
+            $state.go(HomePage);
+
+
+            //for (var i in roles) {
+            //    if (roles[i].id == role) {
+
+            //        $state.go(roles[i].homePage);
+            //    }
+            //}
         });
 
         $stateProvider.state('login', {
@@ -259,17 +264,21 @@
             url: '/users/',
             views: {
                 'main': {
-                    template: '<users users="$ctrl.users"></users>',
-                    controller: function (users) {
+                    template: '<users users="$ctrl.users" roles="$ctrl.roles"></users>',
+                    controller: function (users, roles) {
 
                         this.users = users;
-
+                        this.roles = roles;
                     },
                     controllerAs: '$ctrl',
                     resolve: {
                         users: function (usersService) {
 
                             return usersService.getUsers();
+                        },
+                        roles: function (usersService) {
+
+                            return usersService.getRoles();
                         }
                     }
                 }
@@ -280,15 +289,19 @@
             url: '/user/{id}/',
             views: {
                 'main': {
-                    template: '<user user="$ctrl.user" ></user>',
-                    controller: function (user) {
+                    template: '<user user="$ctrl.user" roles="$ctrl.roles"></user>',
+                    controller: function (user, roles) {
                         this.user = user;
-
+                        this.roles = roles;
                     },
                     controllerAs: '$ctrl',
                     resolve: {
                         user: function (usersService, $stateParams) {
                             return usersService.getUser($stateParams.id);
+                        },
+                        roles: function (usersService) {
+
+                            return usersService.getRoles();
                         }
                     }
                 }

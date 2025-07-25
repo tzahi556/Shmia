@@ -51,7 +51,9 @@
         this.actionFieldGroup = _actionFieldGroup.bind(this);
 
         this.init = _init.bind(this);
-        this.role = localStorage.getItem('currentRole');
+        this.role = localStorage.getItem('currentRolesId');
+
+      // alert(this.role);
         //this.IsPopUp = false;
         //this.IsStop = false;
 

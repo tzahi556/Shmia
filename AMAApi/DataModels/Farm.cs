@@ -7,7 +7,7 @@ namespace FarmsApi.DataModels
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public bool Deleted { get; set; }
+       // public bool Deleted { get; set; }
         public int? Style { get; set; }
         public string Address { get; set; }
         public string TikNikuim { get; set; }
@@ -18,8 +18,9 @@ namespace FarmsApi.DataModels
         public string ContactName { get; set; }
         public string ContactNumber { get; set; }
         public string ContactMail { get; set; }
+        public string RanadKey { get; set; }
         public bool ContactIsMail { get; set; }
-
+        public int StatusId { get; set; }
 
 
         [NotMapped]

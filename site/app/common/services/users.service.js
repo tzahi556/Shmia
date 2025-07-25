@@ -51,7 +51,7 @@
         this.importWorkers = _importWorkers;
 
         this.getLogsData = _getLogsData;
-
+        this.getRoles = _getRoles;
 
         function _getLogsData(userid, start, end) {
           
@@ -431,6 +431,19 @@
                 var users = res.data;
                 deferred.resolve(users);
               
+            });
+            return deferred.promise;
+        }
+
+
+        function _getRoles() {
+            var deferred = $q.defer();
+
+            $http.get(sharedValues.apiUrl + 'users/getRoles').then(function (res) {
+
+                var users = res.data;
+                deferred.resolve(users);
+
             });
             return deferred.promise;
         }

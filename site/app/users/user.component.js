@@ -21,8 +21,8 @@
         templateUrl: 'app/users/user.template.html',
         controller: UserController,
         bindings: {
-            user: '<'
-           
+            user: '<',
+           roles: '<'
         }
     });
 
@@ -34,7 +34,7 @@
         this.roles = usersService.roles;
         this.delete = _delete.bind(this);
         this.selfEdit = angular.fromJson(localStorage.getItem('authorizationData')).userName == this.user.Email;
-        this.role = localStorage.getItem('currentRole');
+        this.role = localStorage.getItem('currentRolesId');
         this.areas = sharedValues.areas;
         this.init = _init.bind(this);
       
@@ -60,8 +60,8 @@
                 this.user.FirstName = '';
                 this.user.LastName = '';
                 this.user.PhoneNumber = '';
-                this.user.Role = null;
-                    
+                this.user.RolesId = null;
+                this.user.StatusId = 1;
                    
                 
                
@@ -118,8 +118,6 @@
 
 
         this.saveNewPassword = function () {
-
-           
 
             this.user.Password = this.newpassword;
             usersService.updateUser(this.user).then(function (user) {

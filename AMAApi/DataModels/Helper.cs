@@ -135,6 +135,27 @@ namespace FarmsApi.DataModels
         }
 
 
+        public static List<Departments> GetCurrentUserPermissions()
+        {
+            var identity = HttpContext.Current.User.Identity as ClaimsIdentity;
+            // var identity = (ClaimsIdentity)User.Identity;
+
+            if (identity != null)
+            {
+
+                var CU = identity.Claims.SingleOrDefault(c => c.Type == "UserPermissions").Value;
+
+                var Departments = JsonConvert.DeserializeObject<List<Departments>>(CU);
+
+                return Departments;
+
+            }
+            return null;
+
+        }
+
+
+
         //**************************************************** Send Mails ********************************
 
 
@@ -290,6 +311,9 @@ namespace FarmsApi.DataModels
 
 
         //**************************************************** Send Mails End ********************************
+
+
+       
 
     }
 }

@@ -94,14 +94,14 @@ namespace FarmsApi.Services
         {
             using (var Context = new Context())
             {
-                var CurrentUserFarmId = GetCurrentUser().Farm_Id;
+                var CurrentUserFarmId = Helper.GetCurrentUser().FarmId;
 
 
 
                 Context.Configuration.ProxyCreationEnabled = false;
                 Context.Configuration.LazyLoadingEnabled = false;
 
-                var Users = Context.Users.Where(u => u.Farm_Id == CurrentUserFarmId).OrderBy(x => x.FirstName).ToList();
+                var Users = Context.Users.Where(u => u.FarmId == CurrentUserFarmId).OrderBy(x => x.FirstName).ToList();
 
                 if (CurrentUserFarmId == 0)
                 {
@@ -118,19 +118,19 @@ namespace FarmsApi.Services
 
         private static List<User> FilterByUser(List<User> Users)
         {
-            var CurrentUser = GetCurrentUser();
+            //var CurrentUser = GetCurrentUser();
 
-            if (CurrentUser.Role == "instructor" || CurrentUser.Role == "profAdmin")
-                return Users.Where(u => u.Role == "student" || u.Id == CurrentUser.Id).ToList();
+            //if (CurrentUser.Role == "instructor" || CurrentUser.Role == "profAdmin")
+            //    return Users.Where(u => u.Role == "student" || u.Id == CurrentUser.Id).ToList();
 
             return Users;
         }
 
         private static List<User> FilterByFarm(List<User> Users)
         {
-            var CurrentUserFarmId = GetCurrentUser().Farm_Id;
+            var CurrentUserFarmId = GetCurrentUser().FarmId;
             if (CurrentUserFarmId != 0)
-                return Users.Where(u => u.Farm_Id == CurrentUserFarmId).ToList();
+                return Users.Where(u => u.FarmId == CurrentUserFarmId).ToList();
             else
                 return Users;
         }
@@ -142,28 +142,28 @@ namespace FarmsApi.Services
                 return Users;
             }
 
-            return Users.Where(u => !u.Deleted).ToList();
+            return Users.Where(u => u.StatusId==1).ToList();
         }
 
         private static List<User> FilterRole(List<User> Users, string Role)
         {
-            if (!string.IsNullOrEmpty(Role))
-            {
-                var Roles = Role.Split(',');
-                if (Roles.Length > 1)
-                {
-                    List<User> ReturnUsers = new List<User>();
-                    foreach (var role in Roles)
-                    {
-                        ReturnUsers.AddRange(Users.Where(u => u.Role == role).ToList());
-                    }
-                    return ReturnUsers;
-                }
-                else
-                {
-                    return Users.Where(u => u.Role == Role).ToList();
-                }
-            }
+            //if (!string.IsNullOrEmpty(Role))
+            //{
+            //    var Roles = Role.Split(',');
+            //    if (Roles.Length > 1)
+            //    {
+            //        List<User> ReturnUsers = new List<User>();
+            //        foreach (var role in Roles)
+            //        {
+            //            ReturnUsers.AddRange(Users.Where(u => u.Role == role).ToList());
+            //        }
+            //        return ReturnUsers;
+            //    }
+            //    else
+            //    {
+            //        return Users.Where(u => u.Role == Role).ToList();
+            //    }
+            //}
             return Users;
         }
 
@@ -173,12 +173,12 @@ namespace FarmsApi.Services
             {
                 if (Id.HasValue)
                 {
-                    return Context.Users.SingleOrDefault(u => u.Id == Id.Value && !u.Deleted);
+                    return Context.Users.SingleOrDefault(u => u.Id == Id.Value && u.StatusId==1);
                 }
                 else
                 {
-                    var CurrentUserId = GetCurrentUser().Id;
-                    return Context.Users.SingleOrDefault(u => u.Id == CurrentUserId);
+                    var CurrentUser = Helper.GetCurrentUser();
+                    return CurrentUser;//Context.Users.SingleOrDefault(u => u.Id == CurrentUserId);
                 }
 
             }
@@ -192,7 +192,7 @@ namespace FarmsApi.Services
             {
                 if (Id.HasValue)
                 {
-                    User us = Context.Users.SingleOrDefault(u => u.Id == Id.Value && !u.Deleted);
+                    User us = Context.Users.SingleOrDefault(u => u.Id == Id.Value && u.StatusId==1);
                     if (isForCartis)
                     {
 
@@ -382,11 +382,17 @@ namespace FarmsApi.Services
                 var CurrentUser = GetCurrentUser();
 
                 var CurrentUserId = CurrentUser.Id;
-                var CurrentRole = CurrentUser.Role;
-                var CurrentFarmId = CurrentUser.Farm_Id;
+                var CurrentRolesId = CurrentUser.RolesId;
+                var CurrentFarmId = CurrentUser.FarmId;
 
 
-                if (CurrentRole == "instructor")
+                var DepartmentsList = Helper.GetCurrentUserPermissions();
+
+                var AllowedDepartmentIds = DepartmentsList.Select(x => x.Id).ToList();
+
+                var WorkersList = new List<WorkersWith101>();
+
+                if (CurrentRolesId == 0)
                 {
                     //var WorkersListToRemove = Context.Workers.Where(x => (string.IsNullOrEmpty(x.FirstName) && string.IsNullOrEmpty(x.LastName) && string.IsNullOrEmpty(x.Taz))).ToList();
 
@@ -418,7 +424,7 @@ namespace FarmsApi.Services
 
 
 
-                    var WorkersList = (from w1 in Context.Workers.Where(x => x.FarmId == CurrentFarmId && x.StatusId == 1 && (!string.IsNullOrEmpty(x.FirstName.Trim()) || !string.IsNullOrEmpty(x.LastName.Trim()) || !string.IsNullOrEmpty(x.Taz.Trim()))).DefaultIfEmpty()
+                     WorkersList = (from w1 in Context.Workers.Where(x => x.FarmId == CurrentFarmId && x.StatusId == 1 && (!string.IsNullOrEmpty(x.FirstName.Trim()) || !string.IsNullOrEmpty(x.LastName.Trim()) || !string.IsNullOrEmpty(x.Taz.Trim()))).DefaultIfEmpty()
                                        from w1011 in Context.Workers101.Where(x => x.IsNew == isnew && x.WorkersId == w1.Id && x.UserId == CurrentUserId).DefaultIfEmpty()
                                        from u in Context.Users.Where(x => x.Id == w1011.UserId).DefaultIfEmpty()
                                        select new WorkersWith101
@@ -433,7 +439,7 @@ namespace FarmsApi.Services
 
                     //.Select(x => new WorkersThin{Id =x.Id, x.FirstName,x.LastName,x.ManagerName,x.Status,x.PhoneSelular,x.DateRigster,x.IsSendSMS}).ToList();
 
-                    return WorkersList.Where(x => x.w != null).ToList();
+                    //return WorkersList.Where(x => x.w != null).ToList();
                 }
                 else
                 {
@@ -467,7 +473,7 @@ namespace FarmsApi.Services
 
 
 
-                    var WorkersList = (from w1 in Context.Workers.Where(x => x.FarmId == CurrentFarmId && x.StatusId == 1 && (!string.IsNullOrEmpty(x.FirstName.Trim()) || !string.IsNullOrEmpty(x.LastName.Trim()) || !string.IsNullOrEmpty(x.Taz.Trim()))).DefaultIfEmpty()
+                     WorkersList = (from w1 in Context.Workers.Where(x => x.FarmId == CurrentFarmId && x.StatusId == 1 && (!string.IsNullOrEmpty(x.FirstName.Trim()) || !string.IsNullOrEmpty(x.LastName.Trim()) || !string.IsNullOrEmpty(x.Taz.Trim()))).DefaultIfEmpty()
                                        from w1011 in Context.Workers101.Where(x => x.IsNew == isnew && x.WorkersId == w1.Id).DefaultIfEmpty()
                                        from u in Context.Users.Where(x => x.Id == w1011.UserId).DefaultIfEmpty()
 
@@ -480,11 +486,17 @@ namespace FarmsApi.Services
                                        }).OrderByDescending(x => x.w101.DateRigster).ToList();
 
 
-                    return WorkersList.Where(x => x.w != null).ToList();
+                   // return WorkersList.Where(x => x.w != null).ToList();
 
-                    //return Context.Workers.Include(x => x.UserManager).Where(x => x.IsNew == isnew && x.UserManager.Farm_Id == CurrentFarmId && (!string.IsNullOrEmpty(x.FirstName.Trim()) || !string.IsNullOrEmpty(x.LastName.Trim()) || !string.IsNullOrEmpty(x.Taz.Trim()))).OrderByDescending(x => x.DateRigster).ToList();
-
+                   
                 }
+
+
+
+                return WorkersList.Where(x => x.w != null &&   ((x.w.FactoryId.HasValue && AllowedDepartmentIds.Contains(x.w.FactoryId.Value))
+                                                                || (x.w.DepartmentsId.HasValue && AllowedDepartmentIds.Contains(x.w.DepartmentsId.Value)))).ToList();
+
+
 
             }
         }
@@ -527,7 +539,7 @@ namespace FarmsApi.Services
                         //newWork.UserId = user.Id;
                         //newWork.IsNew = true;
                         //newWork.DateRigster = DateTime.Now;
-                        newWork.FarmId = user.Farm_Id;
+                        newWork.FarmId = user.FarmId;
                         newWork.StatusId = 1;
                         Context.Workers.Add(newWork);
                         Context.SaveChanges();
@@ -1307,12 +1319,12 @@ namespace FarmsApi.Services
         {
             using (var Context = new Context())
             {
-                var CurrentUserFarmId = GetCurrentUser().Farm_Id;
-                User.Farm_Id = CurrentUserFarmId != 0 ? CurrentUserFarmId : User.Farm_Id;
-                if (User.Role == "sysAdmin")
-                {
-                    User.Farm_Id = 0;
-                }
+                var CurrentUserFarmId = GetCurrentUser().FarmId;
+                User.FarmId = CurrentUserFarmId != 0 ? CurrentUserFarmId : User.FarmId;
+                //if (User.Role == "sysAdmin")
+                //{
+                //    User.Farm_Id = 0;
+                //}
 
 
 
@@ -1385,7 +1397,7 @@ namespace FarmsApi.Services
                 var User = Context.Users.SingleOrDefault(u => u.Id == Id);
                 if (User != null)
                 {
-                    User.Deleted = true;
+                    User.StatusId = 0;
                 }
                 //  Context.Notifications.RemoveRange(Context.Notifications.Where(n => n.EntityId == Id && n.EntityType == "student"));
                 Context.SaveChanges();
@@ -1412,7 +1424,7 @@ namespace FarmsApi.Services
             using (var Context = new Context())
             {
 
-                var User = Context.Users.SingleOrDefault(u => u.Email.ToLower() == Email.ToLower() && (CurrentUserFarmId == 0 || u.Farm_Id == CurrentUserFarmId));
+                var User = Context.Users.SingleOrDefault(u => u.Email.ToLower() == Email.ToLower() && (CurrentUserFarmId == 0 || u.FarmId == CurrentUserFarmId));
                 if (User != null)
                     return User.Id;
                 return 0;

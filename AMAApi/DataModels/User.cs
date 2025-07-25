@@ -9,23 +9,24 @@ namespace FarmsApi.DataModels
     {
         [Key]
         public int Id { get; set; }
-        public string Role { get; set; }
-      
+    
+        public int RolesId { get; set; }
         public string Email { get; set; }
-        //public string Password { get; set; }
+      
         public string FirstName { get; set; }
         public string LastName { get; set; }
 
         public string PhoneNumber { get; set; }
-        public string Active { get; set; }
-        public int Farm_Id { get; set; }
-        public bool Deleted { get; set; }
+       
+        public int FarmId { get; set; }
 
-        public string AreaId { get; set; }
-        public string AreaId2 { get; set; }
+        public int StatusId { get; set; }
 
         [NotMapped]
         public string Password { get; set; }
+
+        [NotMapped]
+        public string HomePage { get; set; }
         public string FullName
         {
             get
@@ -38,6 +39,78 @@ namespace FarmsApi.DataModels
             }
         }
 
+
+    }
+
+    public class UserDto
+    {
+       
+        public int Id { get; set; }
+
+        public int RolesId { get; set; }
+        public string Email { get; set; }
+
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+
+        public string PhoneNumber { get; set; }
+
+        public int FarmId { get; set; }
+
+        public int StatusId { get; set; }
+
+        public string HomePage { get; set; }
+
+        public string FullName
+        {
+            get
+            {
+
+
+                if (this.FirstName == null) return null;
+                return this.FirstName + ' ' + this.LastName;
+
+            }
+        }
+
+
+    }
+
+    public class UserResult
+    {
+        public UserDto User { get; set; }
+        public List<Departments> Departments { get; set; } = new List<Departments>();
+    }
+
+
+
+    [Table("Roles")]
+    public class Roles
+    {
+        public int Id { get; set; }
+
+        public string Name { get; set; }
+
+        public int? FarmId { get; set; }
+
+        public string HomePage { get; set; }
+        
+        public int StatusId { get; set; }
+
+    }
+
+
+
+    [Table("UsersDepartments")]
+    public class UsersDepartments
+    {
+        public int Id { get; set; }
+
+        public int UsersId { get; set; }
+
+        public int DepartmentsId { get; set; }
+
+        public int StatusId { get; set; }
 
     }
 }

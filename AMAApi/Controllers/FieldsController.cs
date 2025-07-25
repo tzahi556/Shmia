@@ -497,7 +497,7 @@ namespace FarmsApi.Services
 
                     var Worker = Context.Workers.Where(x => x.Id == WorkerId).FirstOrDefault();
 
-                    var CurrentFarmId = (Worker != null) ? Worker.FarmId : UsersService.GetCurrentUser().Farm_Id;
+                    var CurrentFarmId = (Worker != null) ? Worker.FarmId : UsersService.GetCurrentUser().FarmId;
 
 
 
@@ -805,7 +805,7 @@ namespace FarmsApi.Services
                 {
                     var Worker = Context.Workers.Where(x => x.Id == WorkerId).FirstOrDefault();
 
-                    var CurrentFarmId = (Worker != null) ? Worker.FarmId : UsersService.GetCurrentUser().Farm_Id;
+                    var CurrentFarmId = (Worker != null) ? Worker.FarmId : UsersService.GetCurrentUser().FarmId;
 
                     var Farm = Context.Farms.Where(x => x.Id == CurrentFarmId).FirstOrDefault();
 
@@ -872,7 +872,7 @@ namespace FarmsApi.Services
                         Campains c = new Campains();
                         c.DateRigster = DateTime.Now;
                         c.StatusId = 1;
-                        c.FarmId = user.Farm_Id;
+                        c.FarmId = user.FarmId;
                         c.CountSign = 0;
                         c.CountSend = 0;
                         c.MustSign = false;
@@ -925,12 +925,30 @@ namespace FarmsApi.Services
                 if (type == 4)
                 {
 
+
+                  
+
+
+
                     Campains c = Context.Campains.Where(x => x.Id.ToString() == id && x.StatusId == 1).FirstOrDefault();
 
                     if (c != null)
                     {
 
-                        var Results = (from w in Context.Workers.Where(x => x.FarmId == c.FarmId && !string.IsNullOrEmpty(x.FirstName) && x.StatusId == 1).DefaultIfEmpty()
+                        var DepartmentsList = Helper.GetCurrentUserPermissions();
+
+                        var AllowedDepartmentIds = DepartmentsList.Select(x => x.Id).ToList();
+
+                        //var WorkersList = Context.Workers.Where(x => x.FarmId == c.FarmId && !string.IsNullOrEmpty(x.FirstName) && x.StatusId == 1
+                        //                                     && ((x.FactoryId.HasValue && AllowedDepartmentIds.Contains(x.FactoryId.Value))
+                        //                                        || (x.DepartmentsId.HasValue && AllowedDepartmentIds.Contains(x.DepartmentsId.Value)))
+
+                        //).ToList();
+
+
+                        var Results = (from w in Context.Workers.Where(x => x.FarmId == c.FarmId && !string.IsNullOrEmpty(x.FirstName) && x.StatusId == 1
+                                                             && ((x.FactoryId.HasValue && AllowedDepartmentIds.Contains(x.FactoryId.Value))
+                                                                || (x.DepartmentsId.HasValue && AllowedDepartmentIds.Contains(x.DepartmentsId.Value)))).DefaultIfEmpty()
                                        from cs in Context.CampainsStatus.Where(x => x.CampainsId == c.Id && x.WorkersId == w.Id).DefaultIfEmpty()
                                        from m in Context.CampainsStatusType.Where(x => x.Id == cs.MediaId && x.Type == 1).DefaultIfEmpty()
                                        from css in Context.CampainsStatusType.Where(x => x.Id == cs.StatusId && x.Type == 2).DefaultIfEmpty()
@@ -1016,7 +1034,27 @@ namespace FarmsApi.Services
                 if (type == 9)
                 {
 
-                    var DepartmentsList = Context.Departments.Where(x => x.FarmId.ToString() == id && x.StatusId == 1).ToList();
+                    //var user = Helper.GetCurrentUser();
+
+
+                    //var DepartmentsList = new List<Departments>();
+                    //if (user!=null && user.RolesId==(int)EnumRoles.ManagerSystem)
+                    //{
+                    //    DepartmentsList = Context.Departments.Where(x => x.FarmId.ToString() == id && x.StatusId == 1).ToList();
+
+                    //}
+
+                    //else //if (user != null && user.RolesId == (int)EnumRoles.ManagerFactories)
+                    //{
+
+                    //    var UsersDepartmentsIdsList = Context.UsersDepartments.Where(x => x.UsersId == user.Id && x.StatusId==1).Select(x => x.DepartmentsId).ToList();
+
+                    //    DepartmentsList = Context.Departments.Where(x => x.FarmId.ToString() == id && x.StatusId == 1 && UsersDepartmentsIdsList.Contains(x.Id)).ToList();
+
+                    //}
+
+                    var DepartmentsList = Helper.GetCurrentUserPermissions();
+
 
                     return Ok(DepartmentsList);
 

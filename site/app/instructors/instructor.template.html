@@ -36,7 +36,7 @@
             </div>
             <div class="form-group" ng-show="$ctrl.role=='sysAdmin'">
                 <label>חווה</label>
-                <select class="form-control" ng-options="farm.Id as farm.Name for farm in $ctrl.farms" ng-model="$ctrl.user.Farm_Id" required>
+                <select class="form-control" ng-options="farm.Id as farm.Name for farm in $ctrl.farms" ng-model="$ctrl.user.FarmId" required>
                     <option value="">בחר חווה</option>
                 </select>
             </div>

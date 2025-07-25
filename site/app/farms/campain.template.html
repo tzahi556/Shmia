@@ -560,7 +560,7 @@
 
 
         <!--פרטי קמפיין-->
-        <uib-tab index="0" id="tab1" heading="פרטי קמפיין">
+        <uib-tab index="0" id="tab1" heading="פרטי קמפיין" ng-if="$ctrl.role==2">
 
             <div class="col-md-12">
                 <div class="panel panel-primary">
@@ -670,7 +670,7 @@
         </uib-tab>
 
         <!--הוספת קבצים-->
-        <uib-tab index="1" id="tab2" heading="הוספת קבצים">
+        <uib-tab index="1" id="tab2" heading="הוספת קבצים" ng-if="$ctrl.role==2">
 
             <div class="col-md-12">
                 <div class="panel panel-primary">
@@ -759,7 +759,7 @@
         </uib-tab>
 
         <!--עריכת PDF-->
-        <uib-tab index="5" id="tab3" heading="עריכת PDF">
+        <uib-tab index="5" id="tab3" heading="עריכת PDF" ng-if="$ctrl.role==2">
 
             <div class="col-md-5 colPadding0">
 
@@ -960,7 +960,7 @@
 
 
         <!--תצוגת-->
-        <uib-tab id="tab4" index="7" heading="תצוגת סופית של PDF">
+        <uib-tab id="tab4" index="7" heading="תצוגת סופית של PDF" ng-if="$ctrl.role==2">
 
             <div class="col-md-12">
                 <div class="panel panel-primary">
@@ -1023,9 +1023,20 @@
                             <input type="text" class="form-control" ng-model="$ctrl.filter.$" placeholder="חיפוש חופשי" />
                         </div>
 
-                        <div class="col-md-2" style="">
-                            <div class="form-group"
-                                 ng-if="($ctrl.departments | filter:{TypeId:1}).length > 0">
+
+                        <div class="col-md-2" style="" ng-if="($ctrl.departments | filter:{TypeId:0}).length > 0">
+                            <div class="form-group">
+                                <label>מפעל</label>
+                                <select class="form-control" ng-options="department.Id as department.Name for department in $ctrl.departments | filter:{TypeId:0}" ng-model="$ctrl.departmentId0">
+                                    <option value="">-- מפעל --</option>
+                                </select>
+                            </div>
+                        </div>
+
+
+
+                        <div class="col-md-2" style="" ng-if="($ctrl.departments | filter:{TypeId:1}).length > 0">
+                            <div class="form-group">
                                 <label>אגף</label>
                                 <select class="form-control" ng-options="department.Id as department.Name for department in $ctrl.departments | filter:{TypeId:1}" ng-model="$ctrl.departmentId">
                                     <option value="">-- אגף --</option>
@@ -1033,9 +1044,8 @@
                             </div>
                         </div>
 
-                        <div class="col-md-2" style="">
-                            <div class="form-group"
-                                 ng-if="($ctrl.departments | filter:{TypeId:2}).length > 0">
+                        <div class="col-md-2" style="" ng-if="($ctrl.departments | filter:{TypeId:2}).length > 0">
+                            <div class="form-group">
 
                                 <label>תת אגף</label>
                                 <select class="form-control" ng-options="department.Id as department.Name for department in $ctrl.departments | filter:{TypeId:2}" ng-model="$ctrl.departmentId2">
@@ -1044,9 +1054,8 @@
                             </div>
                         </div>
 
-                        <div class="col-md-2" style="">
-                            <div class="form-group"
-                                 ng-if="($ctrl.departments | filter:{TypeId:3}).length > 0">
+                        <div class="col-md-2" style="" ng-if="($ctrl.departments | filter:{TypeId:3}).length > 0">
+                            <div class="form-group">
                                 <label>מחלקה</label>
                                 <select class="form-control" ng-options="department.Id as department.Name for department in $ctrl.departments | filter:{TypeId:3}" ng-model="$ctrl.departmentId3">
                                     <option value="">-- מחלקה  --</option>
@@ -1054,9 +1063,12 @@
                             </div>
                         </div>
 
-                        <div class="col-md-2" style="">
-                            <div class="form-group"
-                                 ng-if="($ctrl.departments | filter:{TypeId:4}).length > 0">
+
+
+
+
+                        <div class="col-md-2" style="" ng-if="($ctrl.departments | filter:{TypeId:4}).length > 0">
+                            <div class="form-group">
                                 <label>תת מחלקה</label>
                                 <select class="form-control" ng-options="department.Id as department.Name for department in $ctrl.departments | filter:{TypeId:4}" ng-model="$ctrl.departmentId4">
                                     <option value="">-- תת מחלקה  --</option>
@@ -1120,6 +1132,7 @@
                                     | filter: ($ctrl.departmentId2 ? {w: {SubDivisionsId: $ctrl.departmentId2}} : undefined)
                                     | filter: ($ctrl.departmentId3 ? {w: {DepartmentsId: $ctrl.departmentId3}} : undefined)
                                     | filter: ($ctrl.departmentId4 ? {w: {SubDepartmentsId: $ctrl.departmentId4}} : undefined)
+                                    | filter: ($ctrl.departmentId0 ? {w: {FactoryId: $ctrl.departmentId0}} : undefined)
                                     ">
 
                                     <td>{{worker.w.Id}}</td>

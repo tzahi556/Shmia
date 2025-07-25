@@ -9,10 +9,7 @@ namespace FarmsApi.DataModels
         [Key]
         public int Id { get; set; }
 
-        //public int? WorkersId { get; set; }
-
       
-        //public Workers Workers { get; set; }
         public string Action { get; set; }
         public DateTime DateTime { get; set; }
         public string Device { get; set; }
@@ -27,4 +24,5 @@ namespace FarmsApi.DataModels
       
 
     }
+
 }

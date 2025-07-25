@@ -283,7 +283,7 @@ namespace FarmsApi.Services
         [HttpGet]
         public IHttpActionResult GetMangerInstructorFarm()
         {
-            return Ok(FarmsService.GetMangerInstructorFarm());
+            return Ok();//FarmsService.GetMangerInstructorFarm()
         }
 
 
@@ -309,7 +309,7 @@ namespace FarmsApi.Services
         [HttpGet]
         public IHttpActionResult GetFarmsMainUser(int FarmId)
         {
-            return Ok(FarmsService.GetFarmsMainUser(FarmId));
+            return Ok(); //FarmsService.GetFarmsMainUser(FarmId)
         }
 
 

@@ -16,15 +16,18 @@ namespace FarmsApi.Services
     {
         public static List<Farm> GetFarms(bool deleted)
         {
+
+            int StatusId = (deleted) ? 0 : 1;
+
             using (var Context = new Context())
             {
                 var CurrentUser = UsersService.GetCurrentUser();
-                if (CurrentUser.Role == "sysAdmin")
-                    return Context.Farms.Where(f => f.Deleted == deleted).ToList();
-                else if (CurrentUser.Role == "vetrinar" || CurrentUser.Role == "shoeing")
-                    return GetFarmsByRole(Context, CurrentUser);//Context.Farms.Where(f => f.Deleted == deleted).ToList();
+                if (CurrentUser.RolesId == 0)
+                    return Context.Farms.Where(f => f.StatusId == StatusId).ToList();
+                //else if (CurrentUser.Role == "vetrinar" || CurrentUser.Role == "shoeing")
+                //    return GetFarmsByRole(Context, CurrentUser);//Context.Farms.Where(f => f.Deleted == deleted).ToList();
                 else
-                    return Context.Farms.Where(f => f.Deleted == deleted && f.Id == CurrentUser.Farm_Id).ToList();
+                    return Context.Farms.Where(f => f.StatusId == StatusId && f.Id == CurrentUser.FarmId).ToList();
             }
         }
 
@@ -34,23 +37,23 @@ namespace FarmsApi.Services
             var FarmList = context.FarmManagers.Where(x => x.MefarzelUser == currentUser.Email || x.VetrinarUser == currentUser.Email).ToList();
 
             var Farms = context.Farms.ToList();
-            var ReturnFarms = Farms.Where(y => y.Id == currentUser.Farm_Id || FarmList.Any(f => f.FarmId == y.Id)).ToList();
+            var ReturnFarms = Farms.Where(y => y.Id == currentUser.FarmId || FarmList.Any(f => f.FarmId == y.Id)).ToList();
 
             return ReturnFarms;
 
 
         }
 
-        public static User GetFarmsMainUser(int FarmId)
-        {
-            using (var Context = new Context())
-            {
+        //public static User GetFarmsMainUser(int FarmId)
+        //{
+        //    using (var Context = new Context())
+        //    {
 
-                return Context.Users.Where(x => x.Farm_Id == FarmId && (x.Role == "farmAdmin" || x.Role == "farmAdminHorse" || x.Role == "vetrinar" || x.Role == "shoeing")).FirstOrDefault();
+        //        return Context.Users.Where(x => x.Farm_Id == FarmId && (x.Role == "farmAdmin" || x.Role == "farmAdminHorse" || x.Role == "vetrinar" || x.Role == "shoeing")).FirstOrDefault();
 
 
-            }
-        }
+        //    }
+        //}
 
 
 
@@ -59,10 +62,10 @@ namespace FarmsApi.Services
             using (var Context = new Context())
             {
                 var Farm = Context.Farms.SingleOrDefault(f => f.Id == id);
-                Farm.Deleted = true;
-                foreach (var User in Context.Users.Where(u => u.Farm_Id == id))
+                Farm.StatusId = 0;
+                foreach (var User in Context.Users.Where(u => u.FarmId == id))
                 {
-                    User.Deleted = true;
+                    User.StatusId = 0;
                 }
                 //foreach (var Horse in Context.Horses.Where(h => h.Farm_Id == id))
                 //{
@@ -124,32 +127,32 @@ namespace FarmsApi.Services
             {
                 var CurrentUser = UsersService.GetCurrentUser();
 
-                return Context.FarmManagers.SingleOrDefault(u => u.FarmId == CurrentUser.Farm_Id);
+                return Context.FarmManagers.SingleOrDefault(u => u.FarmId == CurrentUser.FarmId);
 
             }
 
         }
 
-        public static IEnumerable<FarmInstructors> GetMangerInstructorFarm()
-        {
-            using (var Context = new Context())
-            {
-                var CurrentUser = UsersService.GetCurrentUser();
-                var CurrentUserFarmId = CurrentUser.Farm_Id;
+        //public static IEnumerable<FarmInstructors> GetMangerInstructorFarm()
+        //{
+        //    using (var Context = new Context())
+        //    {
+        //        var CurrentUser = UsersService.GetCurrentUser();
+        //        var CurrentUserFarmId = CurrentUser.Farm_Id;
 
-                var InstructorList = from u in Context.Users
-                                     from um in Context.FarmInstructors.Where(x => x.UserId == u.Id).DefaultIfEmpty()//  on u.Id equals um.UserId
-                                     where (u.Role == "instructor" || u.Role == "profAdmin") && u.Farm_Id == CurrentUserFarmId && !u.Deleted
-                                     select new { Id = u.Id, ClalitNumber = um.ClalitNumber, UserId = u.Id, InstructorName = u.FirstName + " " + u.LastName };
+        //        var InstructorList = from u in Context.Users
+        //                             from um in Context.FarmInstructors.Where(x => x.UserId == u.Id).DefaultIfEmpty()//  on u.Id equals um.UserId
+        //                             where (u.Role == "instructor" || u.Role == "profAdmin") && u.Farm_Id == CurrentUserFarmId && !u.Deleted
+        //                             select new { Id = u.Id, ClalitNumber = um.ClalitNumber, UserId = u.Id, InstructorName = u.FirstName + " " + u.LastName };
 
 
-                var l = InstructorList.ToList().Select(x => new FarmInstructors { Id = x.Id, ClalitNumber = x.ClalitNumber, UserId = x.UserId, InstructorName = x.InstructorName });
+        //        var l = InstructorList.ToList().Select(x => new FarmInstructors { Id = x.Id, ClalitNumber = x.ClalitNumber, UserId = x.UserId, InstructorName = x.InstructorName });
 
-                return l;
+        //        return l;
 
-            }
+        //    }
 
-        }
+        //}
 
         public static FarmManagers SetMangerFarm(FarmManagers farmmanger)
         {
@@ -160,7 +163,7 @@ namespace FarmsApi.Services
 
                 if (farmmanger.Id == 0)
                 {
-                    farmmanger.FarmId = CurrentUser.Farm_Id;
+                    farmmanger.FarmId = CurrentUser.FarmId;
                     Context.FarmManagers.Add(farmmanger);
 
 
@@ -174,7 +177,7 @@ namespace FarmsApi.Services
 
                 Context.SaveChanges();
 
-                return Context.FarmManagers.Where(x => x.FarmId == CurrentUser.Farm_Id).FirstOrDefault();
+                return Context.FarmManagers.Where(x => x.FarmId == CurrentUser.FarmId).FirstOrDefault();
 
             }
 

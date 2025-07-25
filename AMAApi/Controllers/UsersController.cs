@@ -245,8 +245,8 @@ namespace FarmsApi.Services
         [HttpPost]
         public IHttpActionResult SetUserDevice(JObject dataobj)
         {
-            //dataobj["DeviceEnter"].ToString();
-            UsersService.AddEnterLog(dataobj);
+            
+            //UsersService.AddEnterLog(dataobj);
             return Ok();
         }
 
@@ -333,6 +333,29 @@ namespace FarmsApi.Services
         {
 
             return Ok(UsersService.GetLogsData(userid, start, end));
+        }
+
+
+
+        [Authorize]
+        [Route("getRoles")]
+        [HttpGet]
+        public IHttpActionResult GetRoles()
+        {
+
+            using (var Context = new Context())
+            {
+
+                var FarmId = Helper.GetCurrentUser().FarmId;
+
+                var Roles = Context.Roles.Where(x=>x.StatusId==1 && x.Id!=0 &&  (x.FarmId==null || x.FarmId==FarmId)).ToList();
+
+                return Ok(Roles);
+
+
+            }
+
+               
         }
     }
 }
