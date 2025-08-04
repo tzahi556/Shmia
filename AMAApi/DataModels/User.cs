@@ -9,7 +9,8 @@ namespace FarmsApi.DataModels
     {
         [Key]
         public int Id { get; set; }
-    
+
+        public int? RanadId { get; set; }//מפעל
         public int RolesId { get; set; }
         public string Email { get; set; }
       

@@ -50,6 +50,19 @@ namespace FarmsApi.DataModels
 
         }
 
+        internal static DateTime? ConvertToDatetime(string value)
+        {
+            DateTime myDate;
+
+            if (DateTime.TryParse(value, out myDate))
+            {
+                return myDate;
+            }
+
+            return null;
+        }
+
+
         public static string SendSMSEndPoint(string Phone, string message, string From = null)
         {
 
@@ -309,11 +322,12 @@ namespace FarmsApi.DataModels
 
         }
 
+     
 
         //**************************************************** Send Mails End ********************************
 
 
-       
+
 
     }
 }

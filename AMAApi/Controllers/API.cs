@@ -4,6 +4,8 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity.Migrations;
+using System.Data.SqlClient;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -75,14 +77,26 @@ namespace FarmsApi.Services
 
 
                 string RanadKey = DataObj.client.apiKey;
-                
+
                 Farm farm = Context.Farms.Where(x => x.RanadKey == RanadKey).FirstOrDefault();
-                if(farm == null)
+                if (farm == null)
                 {
 
                     farm = new Farm();
                     farm.Id = 0;
                     farm.Name = DataObj.client.name;
+                    farm.Address = DataObj.client.address;
+                    farm.IdNumber = DataObj.client.taxId;
+
+                    farm.OfficeNumber = DataObj.client.phoneNumber;
+                    farm.OfficeMail = DataObj.client.emailAddress;
+
+                    farm.ContactNumber = DataObj.client.contactPhoneNumber;
+                    farm.ContactName = DataObj.client.contactName;
+
+                    farm.Logo = DataObj.client.logoURL;
+
+                    farm.RanadKey = RanadKey;
                     farm.StatusId = 1;
 
                     Context.Farms.Add(farm);
@@ -93,7 +107,9 @@ namespace FarmsApi.Services
                 int FarmId = farm.Id;
 
 
-                var WorkersExistList = Context.Workers.Where(x=>x.FarmId== FarmId).ToList();
+                var WorkersExistList = Context.Workers.Where(x => x.FarmId == FarmId).ToList();
+                var DepartmentsExistList = Context.Departments.Where(x => x.FarmId == FarmId).ToList();
+
 
                 var WorkersExistIds = WorkersExistList.Select(x => x.Taz).ToList();
 
@@ -101,11 +117,118 @@ namespace FarmsApi.Services
 
                 foreach (var Worker in Workers)
                 {
-                    //כבר קיים עובד כזה
-                    if (WorkersExistIds.Contains(Worker.idNumber))
+                    var IsNew = false;
+
+                    var ExistsWorker = WorkersExistList.Where(x => x.RanadId == Worker.id).FirstOrDefault();
+
+                    if (ExistsWorker == null)
+                    {
+                        ExistsWorker = new Workers();
+                        IsNew = true;
+                    }
+
+                    ExistsWorker.FirstName = Worker.firstName;
+                    ExistsWorker.LastName = Worker.lastName;
+                    ExistsWorker.RanadId = Worker.id;
+                    ExistsWorker.Taz = Worker.idNumber;
+                    ExistsWorker.FarmId = FarmId;
+                    ExistsWorker.BirthDate = Helper.ConvertToDatetime(Worker.birthDate);
+                    ExistsWorker.Email = Worker.emailAddress;
+                    ExistsWorker.PhoneSelular = Worker.phoneNumber;
+
+                    ExistsWorker.City = Worker.address.city;
+                    ExistsWorker.Mikud = Worker.address.zipcode;
+                    ExistsWorker.Street = Worker.address.street;
+                    ExistsWorker.HouseNumber = Worker.address.houseNumber;
+                    ExistsWorker.StatusId = (Worker.isDisabled) ? 0 : 1;
+
+
+                    if (string.IsNullOrEmpty(ExistsWorker.City) && string.IsNullOrEmpty(ExistsWorker.Mikud) && string.IsNullOrEmpty(ExistsWorker.Street) && string.IsNullOrEmpty(ExistsWorker.HouseNumber))
+                    {
+                        ExistsWorker.Street = Worker.address.full;
+                    }
+
+                    // מחלקות ואגפים
+                    int EntityId = GetEntityId(FarmId, 0, Worker, DepartmentsExistList);
+                    if (EntityId != 0) ExistsWorker.FactoryId = EntityId;
+
+                    EntityId = GetEntityId(FarmId, 1, Worker, DepartmentsExistList);
+                    if (EntityId != 0) ExistsWorker.DivisionsId = EntityId;
+
+                    EntityId = GetEntityId(FarmId, 2, Worker, DepartmentsExistList);
+                    if (EntityId != 0) ExistsWorker.SubDivisionsId = EntityId;
+
+                    EntityId = GetEntityId(FarmId, 3, Worker, DepartmentsExistList);
+                    if (EntityId != 0) ExistsWorker.DepartmentsId = EntityId;
+
+                    EntityId = GetEntityId(FarmId, 4, Worker, DepartmentsExistList);
+                    if (EntityId != 0) ExistsWorker.SubDepartmentsId = EntityId;
+
+
+                    Context.Workers.AddOrUpdate(ExistsWorker);
+
+                    // משתמשים והרשאות
+                    var RolesIds = Context.Roles.Where(x => x.Id > 1).Select(x => x.Id).ToList();
+
+                    var CurrentRolesId = Worker.user.role.id;
+
+                    if (RolesIds.Any(x => x == CurrentRolesId))
                     {
 
+                        var ExistsUser = Context.Users.Where(x => x.RanadId == Worker.id).FirstOrDefault();
+
+                        if (ExistsUser == null)
+                        {
+                            ExistsUser = new User();
+                        }
+
+                       
+                        ExistsUser.FirstName = Worker.firstName;
+                        ExistsUser.LastName = Worker.lastName;
+                        ExistsUser.RolesId = CurrentRolesId;
+
+                        ExistsUser.Email = Worker.emailAddress;
+
+                        Context.Users.AddOrUpdate(ExistsUser);
+                        Context.SaveChanges();
+
+                        Context.Database.ExecuteSqlCommand(
+                          "EXEC dbo.[SetUser] @UserId, @Password",
+                          new SqlParameter("@UserId", ExistsUser.Id),
+                          new SqlParameter("@Password", Worker.user.password)
+                         );
+
+                        // מנהל מחלקות
+                        if (CurrentRolesId == 6)
+                        {
+                           // List<int> DepartmentsIds = new List<int>();
+
+                           // DepartmentsIds = DepartmentsExistList.Select(x => x.Id).Any().ToList();
+
+
+                           // DepartmentsIds.Add((int)ExistsWorker.DepartmentsId);
+
+                            List<int> DepartmentsRanadIds = DepartmentsExistList.Select(x => x.RanadId ?? 0).ToList();
+
+
+                            var set = new HashSet<int>(DepartmentsRanadIds);
+
+                            List<int> commonIds = DepartmentsRanadIds
+                                                                    .Where(id => set.Contains(id))
+                                                                    .ToList();
+
+                            //   DepartmentsIds.AddRange(Worker.user.role.filters.departmentIds);
+
+
+
+                        }
+
+
                     }
+
+
+                    //שמירה סופית
+                    Context.SaveChanges();
                 }
             }
 
@@ -117,6 +240,143 @@ namespace FarmsApi.Services
                 Success = true,
                 Message = "העדכון בוצע בהצלחה"
             });
+
+        }
+
+        private int GetEntityId(int FarmId, int TypeId, Worker Worker, List<Departments> DepartmentsExistList)
+        {
+            using (var Context = new Context())
+            {
+                int Res = 0;
+
+                if (TypeId == 0 && Worker.factory.id > 0)
+                {
+
+                    var ExistsFactory = DepartmentsExistList.Where(x => x.RanadId == Worker.factory.id && x.TypeId == TypeId).FirstOrDefault();
+
+                    if (ExistsFactory == null)
+                    {
+                        ExistsFactory = new Departments();
+                    }
+
+
+                    ExistsFactory.FarmId = FarmId;
+                    ExistsFactory.TypeId = 0;
+                    ExistsFactory.Name = Worker.factory.name;
+                    ExistsFactory.StatusId = 1;
+                    ExistsFactory.RanadId = Worker.factory.id;
+
+                    Context.Departments.AddOrUpdate(ExistsFactory);
+                    Context.SaveChanges();
+
+                    Res = ExistsFactory.Id;
+
+
+                }
+
+                if (TypeId == 1 && Worker.division.id > 0)
+                {
+
+                    var ExistsEntity = DepartmentsExistList.Where(x => x.RanadId == Worker.division.id && x.TypeId == TypeId).FirstOrDefault();
+
+                    if (ExistsEntity == null)
+                    {
+                        ExistsEntity = new Departments();
+                    }
+
+
+                    ExistsEntity.FarmId = FarmId;
+                    ExistsEntity.TypeId = TypeId;
+                    ExistsEntity.Name = Worker.division.name;
+                    ExistsEntity.StatusId = 1;
+                    ExistsEntity.RanadId = Worker.division.id;
+
+                    Context.Departments.AddOrUpdate(ExistsEntity);
+                    Context.SaveChanges();
+
+                    Res = ExistsEntity.Id;
+
+
+                }
+
+                if (TypeId == 2 && Worker.subDivision.id > 0)
+                {
+
+                    var ExistsEntity = DepartmentsExistList.Where(x => x.RanadId == Worker.subDivision.id && x.TypeId == TypeId).FirstOrDefault();
+
+                    if (ExistsEntity == null)
+                    {
+                        ExistsEntity = new Departments();
+                    }
+
+
+                    ExistsEntity.FarmId = FarmId;
+                    ExistsEntity.TypeId = TypeId;
+                    ExistsEntity.Name = Worker.subDivision.name;
+                    ExistsEntity.StatusId = 1;
+                    ExistsEntity.RanadId = Worker.subDivision.id;
+
+                    Context.Departments.AddOrUpdate(ExistsEntity);
+                    Context.SaveChanges();
+
+                    Res = ExistsEntity.Id;
+
+
+                }
+
+                if (TypeId == 3 && Worker.department.id > 0)
+                {
+
+                    var ExistsEntity = DepartmentsExistList.Where(x => x.RanadId == Worker.department.id && x.TypeId == TypeId).FirstOrDefault();
+
+                    if (ExistsEntity == null)
+                    {
+                        ExistsEntity = new Departments();
+                    }
+
+
+                    ExistsEntity.FarmId = FarmId;
+                    ExistsEntity.TypeId = TypeId;
+                    ExistsEntity.Name = Worker.department.name;
+                    ExistsEntity.StatusId = 1;
+                    ExistsEntity.RanadId = Worker.department.id;
+
+                    Context.Departments.AddOrUpdate(ExistsEntity);
+                    Context.SaveChanges();
+
+                    Res = ExistsEntity.Id;
+
+
+                }
+
+                if (TypeId == 4 && Worker.subDepartment.id > 0)
+                {
+
+                    var ExistsEntity = DepartmentsExistList.Where(x => x.RanadId == Worker.subDepartment.id && x.TypeId == TypeId).FirstOrDefault();
+
+                    if (ExistsEntity == null)
+                    {
+                        ExistsEntity = new Departments();
+                    }
+
+
+                    ExistsEntity.FarmId = FarmId;
+                    ExistsEntity.TypeId = TypeId;
+                    ExistsEntity.Name = Worker.subDepartment.name;
+                    ExistsEntity.StatusId = 1;
+                    ExistsEntity.RanadId = Worker.subDepartment.id;
+
+                    Context.Departments.AddOrUpdate(ExistsEntity);
+                    Context.SaveChanges();
+
+                    Res = ExistsEntity.Id;
+
+
+                }
+
+                return Res;
+            }
+
 
         }
 
@@ -325,8 +585,17 @@ namespace FarmsApi.Services
     public class Client
     {
         public string id { get; set; }
+        public string taxId { get; set; }
         public string apiKey { get; set; }
         public string name { get; set; }
+        public string address { get; set; }
+        public string phoneNumber { get; set; }
+        public string contactPhoneNumber { get; set; }
+        public string contactName { get; set; }
+        public string emailAddress { get; set; }
+        public string logoURL { get; set; }
+
+
     }
 
     public class Worker
@@ -381,7 +650,7 @@ namespace FarmsApi.Services
 
     public class Factory
     {
-        public int taxId { get; set; }
+        public string taxId { get; set; }
         public string address { get; set; }
         public int id { get; set; }
         public int permanentId { get; set; }

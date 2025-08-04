@@ -10,7 +10,8 @@ namespace FarmsApi.DataModels
         public string Name { get; set; }
 
         public int FarmId { get; set; }
-
+        public int? RanadId { get; set; }
+        
         public int TypeId { get; set; }
         // מפעל 0 
         // 1 אגף
