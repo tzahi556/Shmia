@@ -129,7 +129,7 @@
                         <td>{{worker.w101.DateRigster | ildate: 'HH:mm DD/MM/YYYY '}}</td>
                         <td>{{worker.w101.Status}}</td>
                         <td>{{worker.w101.IsSendSMS==1 ? 'נשלח':'' }}</td>
-                        <td><a class="btn  btn-success" ng-href="{{$ctrl.uploadsUri + worker.Id + '/OfekAllPdf.pdf'}}" target="_blank">PDF</a></td>
+                        <td><a  ng-if="worker.HasPdf" class="btn  btn-success" ng-href="{{$ctrl.uploadsUri+ 'Workers/' + worker.w.Id.toString() + '/-1/AllPdfTemp.pdf'}}" target="_blank">PDF</a></td>
                         <td> <button class="btn  btn-warning" ui-sref="worker({id:worker.w.Id})">עדכון</button></td>
                         <td> <button class="btn  btn-danger" ng-click="$ctrl.delete(worker.w.Id)">מחק עובד</button></td>
                         <td width="5%"><input style="width:52px;height:20px" type="checkbox" ng-model="worker.IsSelected" /></td>

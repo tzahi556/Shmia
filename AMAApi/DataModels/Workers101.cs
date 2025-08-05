@@ -153,5 +153,7 @@ namespace FarmsApi.DataModels
         public Workers101 w101 { get; set; }
 
         public string ManagerName { get; set; }
+
+        public bool HasPdf { get; set; }
     }
 }

@@ -13,7 +13,7 @@
         }
     });
 
-    function WorkersController(usersService, sharedValues, $state) {
+    function WorkersController(usersService, sharedValues, $state, $http) {
 
 
         this.roles = usersService.roles;
@@ -25,11 +25,13 @@
 
         this.delete = _delete.bind(this);
         this.downloadExcel = _downloadExcel.bind(this);
-        this.uploadsUri = sharedValues.apiUrl + '/uploads/';
+        this.uploadsUri = sharedValues.apiUrl + 'uploads/';
 
         this.role = localStorage.getItem('currentRole');
         this.farmStyle = localStorage.getItem('FarmStyle');
 
+
+      
 
        
 

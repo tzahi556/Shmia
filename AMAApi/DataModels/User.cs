@@ -107,6 +107,14 @@ namespace FarmsApi.DataModels
     {
         public int Id { get; set; }
 
+        public int TypeId { get; set; }
+        // מפעל 0 
+        // 1 אגף
+        // 2 אגף תת
+        // 3 מחלקה
+        // 4 תת מחלקה
+
+        public int RanadId { get; set; }
         public int UsersId { get; set; }
 
         public int DepartmentsId { get; set; }

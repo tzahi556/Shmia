@@ -392,7 +392,11 @@ namespace FarmsApi.Services
 
                 var WorkersList = new List<WorkersWith101>();
 
-                if (CurrentRolesId == 0)
+
+                string basePath = HttpContext.Current.Server.MapPath("~/uploads/Workers");
+
+                //סופר אדמין או מנהל מערכת
+                if (CurrentRolesId == 0 || CurrentRolesId == 2)
                 {
                     //var WorkersListToRemove = Context.Workers.Where(x => (string.IsNullOrEmpty(x.FirstName) && string.IsNullOrEmpty(x.LastName) && string.IsNullOrEmpty(x.Taz))).ToList();
 
@@ -429,6 +433,7 @@ namespace FarmsApi.Services
                                        from u in Context.Users.Where(x => x.Id == w1011.UserId).DefaultIfEmpty()
                                        select new WorkersWith101
                                        {
+                                           HasPdf=false,
                                            w = w1,
                                            w101 = w1011,
                                            ManagerName = (u != null) ? (u.FirstName + " " + u.LastName) : null
@@ -437,39 +442,28 @@ namespace FarmsApi.Services
 
 
 
-                    //.Select(x => new WorkersThin{Id =x.Id, x.FirstName,x.LastName,x.ManagerName,x.Status,x.PhoneSelular,x.DateRigster,x.IsSendSMS}).ToList();
+                  
 
-                    //return WorkersList.Where(x => x.w != null).ToList();
+                    foreach (var item in WorkersList)
+                    {
+                        if (item?.w == null) continue;
+
+                        string filePath = Path.Combine(basePath, item.w.Id.ToString(), "-1", "AllPdfTemp.pdf");
+                        item.HasPdf = System.IO.File.Exists(filePath);
+                    }
+
+
+
+
+
+                    return WorkersList.Where(x => x.w != null).ToList();
                 }
                 else
                 {
 
 
 
-                    //var WorkersListToRemove = Context.Workers.Where(x => x.IsNew == isnew && x.UserManager.Farm_Id == CurrentFarmId && (string.IsNullOrEmpty(x.FirstName) && string.IsNullOrEmpty(x.LastName) && string.IsNullOrEmpty(x.Taz))).ToList();
-
-
-
-                    //foreach (var item in WorkersListToRemove)
-                    //{
-
-                    //    DeleteDirectory(item.Id.ToString());
-
-                    //    Context.Workers.Remove(item);
-
-                    //}
-                    //try
-                    //{
-
-
-                    //    Context.SaveChanges();
-
-                    //}
-                    //catch (Exception ex)
-                    //{
-
-
-                    //}
+                  
 
 
 
@@ -491,6 +485,15 @@ namespace FarmsApi.Services
                    
                 }
 
+               
+
+                foreach (var item in WorkersList)
+                {
+                    if (item?.w == null) continue;
+
+                    string filePath = Path.Combine(basePath, item.w.Id.ToString(), "-1", "AllPdfTemp.pdf");
+                    item.HasPdf = System.IO.File.Exists(filePath);
+                }
 
 
                 return WorkersList.Where(x => x.w != null &&   ((x.w.FactoryId.HasValue && AllowedDepartmentIds.Contains(x.w.FactoryId.Value))
