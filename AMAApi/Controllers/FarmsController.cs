@@ -309,7 +309,16 @@ namespace FarmsApi.Services
         [HttpGet]
         public IHttpActionResult GetFarmsMainUser(int FarmId)
         {
-            return Ok(); //FarmsService.GetFarmsMainUser(FarmId)
+
+            using (var Context = new Context())
+            {
+                var User = Context.Users.Where(x => x.FarmId == FarmId).OrderBy(x => x.RolesId==2).FirstOrDefault();
+
+
+                return Ok(User);
+            }
+
+           
         }
 
 

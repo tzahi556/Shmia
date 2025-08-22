@@ -21,8 +21,9 @@ namespace FarmsApi.DataModels
         public string RanadKey { get; set; }
         public bool ContactIsMail { get; set; }
         public int StatusId { get; set; }
-
-
+      
+       
+        
         [NotMapped]
         public string UserName { get; set; }
         [NotMapped]

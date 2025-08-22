@@ -16,6 +16,7 @@ using System.Text.Json;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Web;
 using System.Web.Http;
 using static Google.Apis.Requests.BatchRequest;
 
@@ -24,19 +25,26 @@ namespace FarmsApi.Services
     [RoutePrefix("api")]
     public class APIController : ApiController
     {
-
-
         [HttpGet]
-        [Route("GetToken4API/{username}/{password}")]
-        public async Task<IHttpActionResult> GetToken4API(string username, string password)
+        [Route("GetToken4APITest/{username}/{password}")]
+        public async Task<IHttpActionResult> GetToken4APITest(string username, string password)
         {
 
+
+            return Ok(username + " " + password);
+        }
+
+        [HttpPost]
+        [Route("GetToken4API")]
+        public async Task<IHttpActionResult> GetToken4API(UserAPIENTER u)
+        {
+            
             var baseUrl = Request.RequestUri.GetLeftPart(UriPartial.Authority);
             var authService = new AuthService(baseUrl);
             string token = "";
             try
             {
-                token = await authService.LoginAndGetTokenAsync(username, password);
+                token = await authService.LoginAndGetTokenAsync(u.username, u.password);
                 // token = await authService.LoginAndGetTokenAsync("tzahi556@gmail.com", "123");
 
                 if (string.IsNullOrEmpty(token))
@@ -46,7 +54,7 @@ namespace FarmsApi.Services
             }
             catch (Exception ex)
             {
-                return InternalServerError(new Exception("שגיאה בקבלת טוקן: " + ex.Message));
+                return InternalServerError(new Exception("שגיאה בקבלת טוקן: "  + baseUrl +" " + ex.Message));
             }
 
             return Ok(new
@@ -88,7 +96,7 @@ namespace FarmsApi.Services
                 };
 
 
-
+              //  bool IsNewCompany = true;
 
                 string RanadKey = DataObj.client.apiKey;
 
@@ -98,6 +106,8 @@ namespace FarmsApi.Services
 
                     farm = new Farm();
                     farm.Id = 0;
+
+
                     farm.Name = DataObj.client.name;
                     farm.Address = DataObj.client.address;
                     farm.IdNumber = DataObj.client.taxId;
@@ -108,18 +118,67 @@ namespace FarmsApi.Services
                     farm.ContactNumber = DataObj.client.contactPhoneNumber;
                     farm.ContactName = DataObj.client.contactName;
 
-                    farm.Logo = DataObj.client.logoURL;
-
                     farm.RanadKey = RanadKey;
+                    farm.Style = 0;
                     farm.StatusId = 1;
 
-                    Context.Farms.Add(farm);
+                    Context.Farms.AddOrUpdate(farm);
                     Context.SaveChanges();
 
+
+                    if (!string.IsNullOrEmpty(DataObj.client.logoURL))
+                    {
+
+                        try
+                        {
+                            // תמיכה בפרוטוקול TLS מודרני
+                            System.Net.ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
+
+                            // הגדרת נתיב התיקייה והקובץ
+                            var root = HttpContext.Current.Server.MapPath("~/Uploads/Companies/" + farm.Id + "/");
+                            var logoFolder = Path.Combine(root, "Logo");
+
+                            if (!Directory.Exists(logoFolder))
+                            {
+                                Directory.CreateDirectory(logoFolder);
+                            }
+
+                            // הפקת שם קובץ מתוך ה־URL
+                            var fileName = Path.GetFileName(new Uri(DataObj.client.logoURL).LocalPath);
+                            var filePath = Path.Combine(logoFolder, fileName);
+
+                            // הורדת הקובץ
+                            using (HttpClient client = new HttpClient())
+                            {
+                                // הגדרת User-Agent כדי לא להיחסם ע"י שרתים מסוימים
+                                client.DefaultRequestHeaders.Add("User-Agent", "Mozilla/5.0");
+
+                                // קריאה סינכרונית (אם אתה בפרויקט async אפשר להשתמש ב־await)
+                                var fileBytes = client.GetByteArrayAsync(DataObj.client.logoURL).Result;
+
+                                // שמירת הקובץ
+                                File.WriteAllBytes(filePath, fileBytes);
+                            }
+
+                            // אופציונלי: שמירת הנתיב בבסיס נתונים
+                            // DataObj.client.logoSavedPath = "/Uploads/Companies/" + FarmId + "/Logo/" + fileName;
+                        }
+                        catch (Exception ex)
+                        {
+                            // טיפול בשגיאה – תוכל לשים כאן לוג או הודעת שגיאה
+                            Console.WriteLine("שגיאה בהורדת לוגו: " + ex.Message);
+                            // או רישום ללוג מערכת
+                        }
+                    }
                 }
+
+            
+
 
                 int FarmId = farm.Id;
 
+
+             
 
                 CreateDepartmentsFromAPI(FarmId, DataObj);
 
@@ -337,6 +396,7 @@ namespace FarmsApi.Services
                                     CurrentUsersDepartments = new UsersDepartments();
                                     CurrentUsersDepartments.StatusId = 1;
                                     CurrentUsersDepartments.TypeId = 0;
+                                    CurrentUsersDepartments.FarmId = FarmId;
                                     CurrentUsersDepartments.RanadId = DepartmentsRanadId;
                                     CurrentUsersDepartments.UsersId = ExistsUser.Id;
                                     CurrentUsersDepartments.DepartmentsId = (CurrentDepartment != null) ? CurrentDepartment.Id : 0;
@@ -736,7 +796,7 @@ namespace FarmsApi.Services
 
 
 
-            var json = await WorkerApiService.GetWorkersAsync("V4NUTC8N4KF6PRA12ATNXV", new List<int>(), new List<int> { 0, 1, 2, 11, 4, 5, 100, 101 }, false); //new List<int> { 1,2,3,4,5,6 }
+            var json = await WorkerApiService.GetWorkersAsync("V4NUTC8N4KF6PRA12ATNXV", new List<int>(), new List<int> (), false); //new List<int> { 1,2,3,4,5,6 }
             ApiResponse result = JsonConvert.DeserializeObject<ApiResponse>(json, settings);
             // List<Worker> workers = JsonConvert.DeserializeObject<List<Worker>>(json, settings);
 
@@ -785,6 +845,14 @@ namespace FarmsApi.Services
             using (HttpClient client = new HttpClient())
             {
                 var tokenEndpoint = _baseUrl.TrimEnd('/') + "/token";
+                if (_baseUrl.Contains("shmiatech.co.il"))
+                {
+
+                     tokenEndpoint = _baseUrl.TrimEnd('/') + "/api/token";
+
+                }
+
+                
 
                 var content = new FormUrlEncodedContent(new[]
                 {

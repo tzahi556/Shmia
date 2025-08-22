@@ -52,6 +52,19 @@
         //this.IsPopUp = false;
         //this.IsStop = false;
 
+
+        this.setStyle = _setStyle.bind(this);
+
+        function _setStyle() {
+
+            //alert(this.farm.Style)
+           
+            localStorage.setItem('FarmStyle', this.farm.Style);
+
+
+        }
+
+
         function _deleteLogo(type) {
 
 

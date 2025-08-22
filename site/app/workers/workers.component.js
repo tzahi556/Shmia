@@ -264,7 +264,7 @@
         function _checkAll() {
 
 
-            this.workers.forEach(x => x.IsSelected = this.checkAllc);
+            this.workers.Items.forEach(x => x.IsSelected = this.checkAllc);
         }
         function _getHebRole(id) {
 
@@ -320,16 +320,56 @@
           
         }
 
-        function _sendSMS() {
+        //function _sendSMS() {
 
 
+        //    var ctrl = this;
+           
+        //    var selected = this.workers.filter(x => x.IsSelected);
+
+        //    ctrl.checkAllc = false;
+        //    ctrl.checkAll();
+
+
+        //    for (var i = 0; i < selected.length; i++) {
+        //        selected[i].IsSelected = true;
+        //    }
+
+        //    if (selected.length > 0) {
+        //        var confirmBox = alertMessage("האם לשלוח SMS לכל העובדים המסומנים?", 4);
+        //        confirmBox.click(function () {
+        //            usersService.sendSMS(selected, 1).then(function (res) {
+
+
+        //                ctrl.workers = res;
+        //                ctrl.checkAllc = false;
+        //                ctrl.checkAll();
+        //            });
+        //        });
+        //    }
+
+
+
+        //}
+
+        function _sendSMS(type) {
+
+            
             var ctrl = this;
 
 
 
 
             //var selected = this.workers.filter(x => x.IsSelected && (x.IsValid || this.farmStyle != 1));
-            var selected = this.workers.filter(x => x.IsSelected);
+            var selected = this.workers.Items.filter(x => x.IsSelected);
+
+            if (selected.length == 0) {
+
+                alertMessage(`לא נבחר עובד/ת למשלוח`, 3);
+
+                return;
+            }
+
 
             ctrl.checkAllc = false;
             ctrl.checkAll();
@@ -339,22 +379,218 @@
                 selected[i].IsSelected = true;
             }
 
-            if (selected.length > 0) {
-                var confirmBox = alertMessage("האם לשלוח SMS לכל העובדים המסומנים?", 4);
-                confirmBox.click(function () {
-                    usersService.sendSMS(selected, 1).then(function (res) {
 
+            const workersSelected = selected.map(selected => selected);
+
+            let typename = "SMS";
+
+            if (type == 2) {
+
+                typename = "מייל";
+            }
+
+            if (type == 3) {
+
+                typename = "ווטסאפ";
+
+                if (workersSelected.length == 1) {
+
+                    const phone = "972" + workersSelected[0].w.PhoneSelular;
+
+                    usersService.sendSMS(workersSelected, true, ctrl.currentPage, ctrl.pageSize, ctrl.filterText, 4).then(function (res) {
+                        debugger
+                        const message = res;
+
+                        const encodedMessage = encodeURIComponent(message);
+
+                        const url = `https://wa.me/${phone}?text=${encodedMessage}`;
+
+                        window.open(url, '_blank');
+
+                        
+                        usersService.sendSMS(workersSelected, true, ctrl.currentPage, ctrl.pageSize, ctrl.filterText, type, ctrl.statusid, ctrl.factoryid, ctrl.divisionid, ctrl.subdivisionid, ctrl.departmentsid, ctrl.subdepartmentsid, ctrl.status101).then(function (res) {
+
+                            ctrl.workers = res;
+                            ctrl.checkAllc = false;
+                            ctrl.checkAll();
+                        });
+
+                    });
+
+                }
+
+                return;
+
+            }
+
+            if (selected.length > 0) {
+                var confirmBox = alertMessage(`האם לשלוח ${typename} לכל העובדים המסומנים?`, 4);
+                confirmBox.click(function () {
+                   
+                    usersService.sendSMS(workersSelected, true, ctrl.currentPage, ctrl.pageSize, ctrl.filterText, type, ctrl.statusid, ctrl.factoryid, ctrl.divisionid, ctrl.subdivisionid, ctrl.departmentsid, ctrl.subdepartmentsid, ctrl.status101).then(function (res) {
 
                         ctrl.workers = res;
                         ctrl.checkAllc = false;
                         ctrl.checkAll();
                     });
+
+
+
                 });
             }
 
 
 
         }
+        //********************************************* */
+
+        this.currentPage = 1;
+        this.pageSize = 10;
+
+
+        
+
+        this.getPagedWorkers = function () {
+           
+            var start = (this.currentPage - 1) * this.pageSize;
+            return this.workers.Items.slice(start, start + this.pageSize);
+        };
+
+        this.totalPages = function () {
+            return Math.ceil(this.workers.TotalCount / this.pageSize);
+        };
+
+        this.getPages = function () {
+            const total = this.totalPages();
+            const current = this.currentPage;
+            const delta = 3; // כמה עמודים לפני ואחרי להציג
+
+            const range = [];
+            const rangeWithDots = [];
+            let l;
+
+            for (let i = 1; i <= total; i++) {
+                if (i === 1 || i === total || (i >= current - delta && i <= current + delta)) {
+                    range.push(i);
+                }
+            }
+
+            for (let i of range) {
+                if (l) {
+                    if (i - l === 2) {
+                        rangeWithDots.push(l + 1);
+                    } else if (i - l > 1) {
+                        rangeWithDots.push('...');
+                    }
+                }
+                rangeWithDots.push(i);
+                l = i;
+            }
+
+            return rangeWithDots;
+        };
+
+        this.onSearchChange = function () {
+            if (this.filterText && this.filterText.length >= 2) {
+                this.currentPage = 1;
+
+                // alert(this.filterText);
+                this.loadWorkers();
+            }
+
+            // אם המשתמש מחק את הכל – נטען הכול מחדש (אופציונלי)
+            if (!this.filterText || this.filterText.length === 0) {
+                this.currentPage = 1;
+                this.loadWorkers();
+            }
+
+
+           
+
+
+
+        };
+
+        this.loadWorkers = function () {
+
+            //alert(this.currentPage);
+
+            var ctrl = this;
+
+            var statusid = this.statusid;
+            var factoryid = this.departmentId0;
+            var divisionid = this.departmentId;
+            var subdivisionid = this.departmentId2;
+            var departmentsid = this.departmentId3;
+            var subdepartmentsid = this.departmentId4;
+            var status101 = "";
+
+          
+            
+
+            usersService.getWorkers(true, ctrl.currentPage, ctrl.pageSize, ctrl.filterText, statusid, factoryid, divisionid, subdivisionid, departmentsid, subdepartmentsid, status101).then(function (res) {
+
+
+                ctrl.workers = res;
+                //ctrl.getPagedWorkers();
+            });
+
+
+            //var start = (this.currentPage - 1) * this.pageSize;
+            //return this.workers.Items.slice(start, start + this.pageSize);
+
+        }
+
+        this.goToFirstPage = function () {
+            if (this.currentPage > 1) {
+                this.currentPage = 1;
+                this.loadWorkers();
+            }
+        };
+
+        this.goToLastPage = function () {
+            if (this.currentPage < this.totalPages()) {
+                this.currentPage = this.totalPages();
+                this.loadWorkers();
+            }
+        };
+
+        this.goToPage = function (n) {
+            if (n !== '...' && n !== this.currentPage) {
+                this.currentPage = n;
+                this.loadWorkers();
+            }
+        };
+
+        this.goToNextPage = function () {
+            if (this.currentPage < this.totalPages()) {
+                this.currentPage++;
+                this.loadWorkers();
+            }
+        };
+
+        this.goToPreviousPage = function () {
+            if (this.currentPage > 1) {
+                this.currentPage--;
+                this.loadWorkers();
+            }
+        };
+
+
+
+
+
+        //********************************************** */
+
+
+
+
+
+
+
+
+
+
     }
 
 })();

@@ -9,7 +9,7 @@
 
     function FarmName(usersService, farmsService, $rootScope) {
 
-
+      
         var DEFAULT_NAME = 'מערכת להפצת טפסים';
         var self = this;
         var authData = angular.fromJson(localStorage.getItem('authorizationData'));
@@ -22,7 +22,7 @@
                 localStorage.setItem('userLogin', res.FirstName + " " + res.LastName);
                 localStorage.setItem('userLoginId', res.Id);
                 farmsService.getFarm(res.FarmId).then(function (data) {
-                    debugger
+                   
                     self.farmName = data.Name ? data.Name : DEFAULT_NAME;
                     authData.farmName = self.farmName;
                    /* localStorage.setItem('FarmObj', data);*/

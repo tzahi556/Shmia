@@ -12,9 +12,9 @@
         function _login(loginData) {
 
 
-            var data = "grant_type=password&username=" + loginData.userName + "&password=" + loginData.password;
+            var data = "grant_type=password&username=" + loginData.userName + "&password=" + loginData.password + "&isfakeuser=" + loginData.isfakeuser;
             var deferred = $q.defer();
-
+            debugger
            
             $http.post(sharedValues.apiUrl + 'token', data, { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } }).then(
               
@@ -26,7 +26,7 @@
 
                    
                     usersService.getUser().then(function (res) {
-                        debugger
+                      
                         localStorage.setItem('currentRolesId', res.RolesId);
                         localStorage.setItem('HomePage', res.HomePage);
                         deferred.resolve(response);

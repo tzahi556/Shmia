@@ -7,6 +7,7 @@ using Owin;
 using System;
 using System.Data;
 using System.Data.SqlClient;
+using System.IO;
 using System.Linq;
 using System.Security.Claims;
 using System.Text.Json;
@@ -55,9 +56,19 @@ namespace FarmsApi
 
         public override async Task GrantResourceOwnerCredentials(OAuthGrantResourceOwnerCredentialsContext context)
         {
+
+           
+
+            var form = await context.Request.ReadFormAsync();
+            var isfakeuser = form["isfakeuser"];
+
             //context.OwinContext.Response.Headers.Add("Access-Control-Allow-Origin", new[] { "*" });
             await Task.Run(() =>
             {
+
+
+            
+
 
                 var UserResult = GetUserWithDepartments(context.UserName, context.Password);
 

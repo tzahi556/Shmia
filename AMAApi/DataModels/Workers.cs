@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -73,6 +74,10 @@ namespace FarmsApi.DataModels
         }
     }
 
-    
+    public class WorkersResult
+    {
+        public int TotalCount { get; set; }
+        public List<WorkersWith101> Items { get; set; }
+    }
 
 }

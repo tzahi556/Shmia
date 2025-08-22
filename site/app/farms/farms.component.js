@@ -17,10 +17,12 @@
            
 
             farmsService.getFarmsMainUser(farmId).then(function (res) {
+
+                
                 localStorage.setItem('isSystemEnter', true);
 
              
-                authenticationService.login({ userName: res.Email, password: res.Password }).then(function (res) {
+                authenticationService.login({ userName: res.Email, password: res.Password,isfakeuser:res.Id }).then(function (res) {
 
                     location.href = './';
                 },

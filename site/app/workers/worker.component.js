@@ -16,7 +16,8 @@
             banksbrunchs: '<',
             users: '<',
             screendata: '<',
-            farm: '<'
+            farm: '<',
+            campainsstatustype: '<'
 
         }
     });
@@ -29,10 +30,15 @@
         this.roles = usersService.roles;
         this.delete = _delete.bind(this);
         // this.selfEdit = angular.fromJson(localStorage.getItem('authorizationData')).userName == this.user.Email;
-        this.role = localStorage.getItem('currentRole');
+        this.role = localStorage.getItem('currentRolesId');
         this.farmStyle = localStorage.getItem('FarmStyle');
         this.farmid = localStorage.getItem('FarmId');
+
+
         
+
+
+
       
         this.uploadFile = _uploadFile.bind(this);
         this.uploadFileParud = _uploadFileParud.bind(this);
@@ -72,11 +78,11 @@
         // this.childs = [];
 
         this.ImageSignuture;
-       // this.image;
+       
         this.init();
 
 
-
+      
         $scope.getGroupsDetails = function (groupId) {
 
             return self.screendata.filter(x => x.f2g != null && x.f2g.FieldsGroupsId == groupId);
@@ -127,6 +133,8 @@
 
             }
 
+
+           
             this.groupsonly = [];
            
             uniqueBy(this.screendata, "fg", "Id", this.groupsonly);
@@ -151,14 +159,13 @@
             }
 
 
-            //debugger
-           // var obj = this.worker;
+           
 
 
             if (!this.worker.w.FarmId)
                  this.worker.farmid = this.farmid;
 
-         //   this.image = this.uploadsUri + "/" + this.worker.Id + "/Signature.png";
+       
             
             if ((this.worker.w101 && !this.worker.w101.ShnatMas))
                 this.worker.w101.ShnatMas = moment().format('YYYY');
@@ -166,13 +173,7 @@
                
             if (this.worker.w) setDateForArray(this.worker.w);
             if (this.worker.w101) setDateForArray(this.worker.w101);
-            //$('.date').inputmask("datetime", {
-            //    mask: "1/2/y",
-            //    placeholder: "dd/mm/yyyy",
-            //    leapday: "-02-29",
-            //    separator: "/",
-            //    alias: "dd/mm/yyyy"
-            //});
+          
 
 
         
@@ -794,15 +795,20 @@
                         usersService.updateWorker(this.worker, this.files, this.childs, type).then(function (worker) {
 
 
+                            var m = this.campainsstatustype.filter(x => x.Id == worker.w101.StatusId);
+                            if (m.length > 0) {
 
-                        
-                            if (worker.Status == "נשלח למשרד") {
-                                
-                                alertMessage('הנתונים נשלחו למשרד בהצלחה!');
+                                if (worker.w101.StatusId == 10) {
+
+                                    alertMessage(m[0].Name);
+                                } else {
+
+                                    alertMessage(m[0].Name, 3);
+
+                                }
                             }
-                                
-                            else
-                                alertMessage(worker.Status);
+                            
+                           
 
                         }.bind(this));
                     }

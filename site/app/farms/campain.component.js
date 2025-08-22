@@ -97,6 +97,14 @@
 
         function _init() {
 
+            if (this.role == 2) {
+                this.active = 0;   // טאב ראשון
+            } else {
+                this.active = 4;   // טאב עובדים (האחרון)
+            }
+
+
+
 
             if (this.campain.Name) {
 
@@ -701,8 +709,6 @@
             }
 
 
-
-
             const workersSelected = selected.map(selected => selected.w);
 
             let typename = "SMS";
@@ -711,15 +717,13 @@
 
                 typename = "מייל";
             }
+
             if (type == 3) {
 
                 typename = "ווטסאפ";
 
                 if (workersSelected.length == 1) {
-                    //var confirmBox = alertMessage(`האם לשלוח ${typename} לכל העובדים המסומנים?`, 4);
-                    //confirmBox.click(function () {
-
-
+                   
                     const phone = "972" + workersSelected[0].PhoneSelular;
 
                     farmsService.sendLinktoWorkers(workersSelected, 4, ctrl.campain.Id).then(function (res) {
@@ -742,30 +746,11 @@
 
                     });
 
-
-
-
-                    //phoneNumbers.forEach(phone => {
-                    //    const url = `https://wa.me/${phone}?text=${encodedMessage}`;
-                    //    window.open(url, '_blank');
-                    //});
-
-
-
-
-
-
-                    // });
                 }
-
 
                 return;
 
             }
-
-
-
-
 
             if (selected.length > 0) {
                 var confirmBox = alertMessage(`האם לשלוח ${typename} לכל העובדים המסומנים?`, 4);

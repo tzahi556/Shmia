@@ -3,14 +3,14 @@
     var app = angular.module('app', ['ui.router', 'angular-loading-bar', 'ui.bootstrap']);
 
     app.config(function ($urlRouterProvider, $stateProvider) {
-       
+        
         $urlRouterProvider.otherwise(function ($inject) {
             $state = $inject.get('$state');
             usersService = $inject.get('usersService');
             //var roles = usersService.roles;
             var rolesId = localStorage.getItem('currentRolesId');
             var HomePage = localStorage.getItem('HomePage');
-            debugger
+           
 
             if (rolesId == null) {
 
@@ -43,6 +43,7 @@
                     resolve: {
 
                         farm: function (farmsService, $stateParams) {
+                            if (localStorage.getItem('FarmId') == "0") return null;
 
                             if (localStorage.getItem('FarmId'))
                                 return farmsService.getFarm(localStorage.getItem('FarmId'));
@@ -150,8 +151,8 @@
             url: '/worker/{id}/',
             views: {
                 'main': {
-                    template: '<worker farm="$ctrl.farm" screendata="$ctrl.screendata" users="$ctrl.users" worker="$ctrl.worker" files="$ctrl.files" childs="$ctrl.childs" cities="$ctrl.cities" banks="$ctrl.banks"  banksbrunchs="$ctrl.banksbrunchs"   ></worker>',
-                    controller: function (worker, files, childs, cities, banks, banksbrunchs, users, screendata, farm) {
+                    template: '<worker farm="$ctrl.farm" campainsstatustype="$ctrl.campainsstatustype" screendata="$ctrl.screendata" users="$ctrl.users" worker="$ctrl.worker" files="$ctrl.files" childs="$ctrl.childs" cities="$ctrl.cities" banks="$ctrl.banks"  banksbrunchs="$ctrl.banksbrunchs"   ></worker>',
+                    controller: function (worker, files, childs, cities, banks, banksbrunchs, users, screendata, farm, campainsstatustype) {
                         this.worker = worker;
                         this.files = files;
                         this.childs = childs;
@@ -161,7 +162,7 @@
                         this.users = users;
                         this.screendata = screendata;
                         this.farm = farm;
-                      
+                        this.campainsstatustype = campainsstatustype;
 
                     },
                     controllerAs: '$ctrl',
@@ -205,6 +206,9 @@
                         farm: function (farmsService, $stateParams) {
 
                             return farmsService.getSetWorkerAndCompanyData(3,$stateParams.id, null);
+                        },
+                        campainsstatustype: function (farmsService) {
+                            return farmsService.getSetCampainsData(10, localStorage.getItem('FarmId'), null);
                         }
 
                     }

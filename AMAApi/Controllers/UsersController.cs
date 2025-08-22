@@ -1,8 +1,10 @@
 ﻿using FarmsApi.DataModels;
 using Google.Rpc;
+using Grpc.Core;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading;
@@ -53,7 +55,7 @@ namespace FarmsApi.Services
                 UsersService.DeleteDirectory(Id.ToString());
 
 
-               
+
             }
         }
 
@@ -210,12 +212,16 @@ namespace FarmsApi.Services
         [Authorize]
         [Route("getWorkers/{isnew}")]
         [HttpGet]
-        public IHttpActionResult GetWorkers(bool isnew)
+
+
+        public IHttpActionResult GetWorkers(bool isnew, int page = 1, int pageSize = 10, string filterText = null, int statusid = -1, int factoryid = 0, int divisionsid = 0,
+            int subdivisionsid = 0, int departmentsid = 0, int subdepartmentsid = 0, string status101 = null)
         {
-            return Ok(UsersService.GetWorkers(isnew));
+            return Ok(UsersService.GetWorkers(isnew, page, pageSize, filterText, statusid, factoryid, divisionsid,
+             subdivisionsid, departmentsid, subdepartmentsid, status101));
         }
 
-     
+
 
 
 
@@ -229,10 +235,10 @@ namespace FarmsApi.Services
         }
 
 
-     
 
 
-       // [Authorize]
+
+        // [Authorize]
         [Route("updateWorker/{type}")]
         [HttpPost]
         public IHttpActionResult UpdateWorkerAndFiles(JArray dataobj, int type)
@@ -240,26 +246,216 @@ namespace FarmsApi.Services
             return Ok(UsersService.UpdateWorkerAndFiles(dataobj, type));
         }
 
-       // [Authorize]
+        // [Authorize]
         [Route("setUserDevice")]
         [HttpPost]
         public IHttpActionResult SetUserDevice(JObject dataobj)
         {
-            
+
             //UsersService.AddEnterLog(dataobj);
             return Ok();
         }
 
 
         [Authorize]
-        [Route("sendSMS/{IsNew}")]
+        [Route("sendSMS")]
         [HttpPost]
-        public IHttpActionResult SendSMS(List<DataModels.WorkersWith101> WorkersItems,int IsNew)
+        public IHttpActionResult SendSMS(List<DataModels.WorkersWith101> WorkersItems, int type, bool isnew = true, int page = 1, int pageSize = 10, string filterText = null,
+            int statusid = -1, int factoryid = 0, int divisionsid = 0,
+            int subdivisionsid = 0, int departmentsid = 0, int subdepartmentsid = 0, string status101 = null
+
+            )
         {
 
-            return Ok(UsersService.SendSMS(WorkersItems, IsNew));
-         
+
+            // קבלת אך ורק את ההודעה מהשרת בשביל ווטסאפ
+            if (type == 4)
+            {
+                var firstWorker = WorkersItems.FirstOrDefault();
+
+                if (firstWorker != null)
+                {
+
+                    var Phone = firstWorker.w.PhoneSelular;
+                    var Id = firstWorker.w.Id;
+                    var FullName = firstWorker.w.FullName;
+                    var Email = firstWorker.w.Email;
+                    var FarmId = firstWorker.w.FarmId;
+
+
+                    string EncryptId = AesOperation.EncryptString(Id.ToString());
+
+                    EncryptId = EncryptId.Replace("+", "@@").Replace("/", "ofekslash");
+                    string SiteRegisterLink = ConfigurationSettings.AppSettings["SiteRegisterLink"].ToString();
+
+                    var Message = string.Format("שלום רב {0}\r\nלהשלמת הטופס ולחתימה על 101 לחץ כאן:\r\n{1}\r\n", FullName, SiteRegisterLink + EncryptId + "/");
+                    return Ok(Message);
+                }
+
+
+
+            }
+
+
+
+            return Ok(UsersService.SendSMS(WorkersItems, type, true, page, pageSize, filterText, statusid, factoryid, divisionsid,
+             subdivisionsid, departmentsid, subdepartmentsid, status101));
+
         }
+
+
+        //[Route("sendLinktoWorkers/{type}/{campainid}/")]
+        //[HttpPost]
+        //public IHttpActionResult sendLinktoWorkers(int type, int campainid, List<Workers> workers)
+        //{
+
+
+        //    using (var Context = new Context())
+        //    {
+
+        //        var CurrentDate = DateTime.Now;
+
+        //        foreach (Workers worker in workers)
+        //        {
+
+        //            var Phone = worker.PhoneSelular;
+        //            var Id = worker.Id;
+        //            var FullName = worker.FullName;
+        //            var Email = worker.Email;
+        //            var FarmId = worker.FarmId;
+
+
+        //            string EncryptId = AesOperation.EncryptString(Id.ToString());
+
+        //            EncryptId = EncryptId.Replace("+", "@@").Replace("/", "ofekslash");
+
+        //            //string DecryptId = AesOperation.DecryptString(EncryptId);
+
+
+
+        //            if (!string.IsNullOrEmpty(Phone) && Phone.Length > 7)
+        //            {
+
+        //                string SiteRegisterCampain = Helper.GetConfigureValue("SiteRegisterCampain");
+
+        //                var Message = string.Format("שלום {0}\r\nלהשלמת הטופס ולחתימה לחצ/י כאן:\r\n{1}\r\n", FullName, SiteRegisterCampain + EncryptId + "/" + campainid.ToString() + "/");
+
+        //                Campains c = Context.Campains.Where(x => x.Id == campainid).FirstOrDefault();
+
+        //                bool IsSendWorkers = false;
+
+        //                // SMS
+        //                if (type == 1)
+        //                {
+
+
+        //                    string Title = "";
+        //                    if (!string.IsNullOrEmpty(c.NameEn))
+        //                        Title = c.NameEn;
+
+        //                    var res = Helper.SendSMSEndPoint(Phone, Message, Title);
+
+        //                    var resObj = Helper.ResAsJson(res);
+
+        //                    if (resObj["success"] == "true")
+        //                    {
+        //                        IsSendWorkers = true;
+
+
+        //                    }
+
+        //                }
+        //                //מייל
+        //                if (type == 2 && !string.IsNullOrEmpty(Email))
+        //                {
+
+        //                    bool Res = Helper.SendMail(c.Name, Message.Replace("\r\n", "<br>"), Email, "", FarmId.ToString());
+
+        //                    if (Res)
+        //                    {
+        //                        IsSendWorkers = true;
+
+        //                    }
+
+        //                }
+        //                if (type == 3)
+        //                {
+        //                    IsSendWorkers = true;
+
+        //                }
+        //                // קבלת אך ורק את ההודעה מהשרת
+        //                if (type == 4)
+        //                {
+        //                    return Ok(Message);
+
+        //                }
+
+        //                if (IsSendWorkers)
+        //                {
+
+        //                    CampainsStatus cs = Context.CampainsStatus.Where(x => x.CampainsId == campainid && x.WorkersId == Id).FirstOrDefault();
+
+        //                    if (cs != null)
+        //                    {
+
+        //                        if (cs.DateSend == null)
+        //                        {
+
+        //                            c.CountSend++;
+
+        //                        }
+
+
+        //                        cs.StatusId = 5;
+        //                        cs.CampainsId = campainid;
+        //                        cs.MediaId = type;
+        //                        cs.WorkersId = Id;
+        //                        cs.DateSend = CurrentDate;
+        //                        Context.Entry(cs).State = System.Data.Entity.EntityState.Modified;
+        //                    }
+        //                    else
+        //                    {
+
+        //                        cs = new CampainsStatus();
+
+        //                        cs.StatusId = 5;
+        //                        cs.CampainsId = campainid;
+        //                        cs.MediaId = type;
+        //                        cs.WorkersId = Id;
+        //                        cs.DateSend = CurrentDate;
+
+        //                        Context.CampainsStatus.Add(cs);
+
+        //                        c.CountSend++;
+
+
+        //                    }
+
+        //                    Context.Entry(c).State = System.Data.Entity.EntityState.Modified;
+
+
+        //                    Context.SaveChanges();
+
+        //                }
+
+
+
+        //            }
+
+
+        //        }
+
+
+
+        //    }
+        //    return GetSetCampainsData(4, campainid.ToString(), null);
+
+
+
+        //}
+
+
+
 
 
         //******************************************** End Workers *****************************
@@ -348,14 +544,14 @@ namespace FarmsApi.Services
 
                 var FarmId = Helper.GetCurrentUser().FarmId;
 
-                var Roles = Context.Roles.Where(x=>x.StatusId==1 && x.Id!=0 &&  (x.FarmId==null || x.FarmId==FarmId)).ToList();
+                var Roles = Context.Roles.Where(x => x.StatusId == 1 && x.Id != 0 && (x.FarmId == null || x.FarmId == FarmId)).ToList();
 
                 return Ok(Roles);
 
 
             }
 
-               
+
         }
     }
 }

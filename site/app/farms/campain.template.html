@@ -47,7 +47,7 @@
 
             // for dev
 
-            
+
 
             $('#tab2,#tab3,#tab4,#tab5').click(function (e) {
 
@@ -55,7 +55,7 @@
 
                 //if (!Name || !IsSave) {
 
-                    
+
 
                 //}
 
@@ -65,7 +65,7 @@
                 if (!CurrentName || !IsSave) {
 
 
-                    
+
 
 
                     angular.element(document.getElementById('mainControllerHorse')).scope().$apply(function (scope) {
@@ -75,7 +75,7 @@
                     //$('#tab1').click();
 
                 }
-                   
+
 
                 //txtName
                 // alert(Name);
@@ -84,7 +84,7 @@
 
             $('#tab3').click(function (e) {
                 CurrentPage = 1;
-               // RefreshComboFiles();
+                // RefreshComboFiles();
 
                 if (firstLoad) {
 
@@ -552,7 +552,7 @@
 
     </script>
 
-    <uib-tabset active="active" class="tab-form-demo" ng-show="!$ctrl.IsPopUp">
+    <uib-tabset active="$ctrl.active" class="tab-form-demo" ng-show="!$ctrl.IsPopUp">
 
         <div class="alert alert-info alertCampainName" role="alert">
             {{$ctrl.campain.Name}}
@@ -759,7 +759,7 @@
         </uib-tab>
 
         <!--עריכת PDF-->
-        <uib-tab index="5" id="tab3" heading="עריכת PDF" ng-if="$ctrl.role==2">
+        <uib-tab index="2" id="tab3" heading="עריכת PDF" ng-if="$ctrl.role==2">
 
             <div class="col-md-5 colPadding0">
 
@@ -960,7 +960,7 @@
 
 
         <!--תצוגת-->
-        <uib-tab id="tab4" index="7" heading="תצוגת סופית של PDF" ng-if="$ctrl.role==2">
+        <uib-tab id="tab4" index="3" heading="תצוגת סופית של PDF" ng-if="$ctrl.role==2">
 
             <div class="col-md-12">
                 <div class="panel panel-primary">
@@ -1006,7 +1006,7 @@
 
 
         <!--עובדים קמפיין-->
-        <uib-tab index="-1" id="tab5" heading="עובדים">
+        <uib-tab index="4" id="tab5" heading="עובדים">
 
             <div class="col-md-12">
                 <div class="panel panel-primary">
@@ -1085,9 +1085,6 @@
                                 <i class="icon icon-sms" ng-click="$ctrl.sendSMS(1)"></i>
                                 <i class="icon icon-email" ng-click="$ctrl.sendSMS(2)"></i>
                                 <i class="icon icon-whatsapp" title="באופציה זו יש לבחור עובד/ת בודד/ת" ng-click="$ctrl.sendSMS(3)"></i>
-
-
-
                             </div>
                         </div>
 
@@ -1109,6 +1106,7 @@
                                     <th>#</th>
                                     <th>שם פרטי</th>
                                     <th>שם משפחה</th>
+                                    <th>טלפון</th>
                                     <th>אימייל</th>
                                     <th>סוג שליחה</th>
                                     <th>תאריך שליחה</th>
@@ -1123,11 +1121,11 @@
                             </thead>
                             <tbody>
                                 <!--<tr>
-        <td colspan="10">
-            <input type="text" class="form-control" ng-model="$ctrl.filter.$" placeholder="חיפוש חופשי" />
-        </td>
-    </tr>-->
-                                <tr ng-repeat="worker in $ctrl.workers | filter:$ctrl.filter  
+                                    <td colspan="10">
+                                        <input type="text" class="form-control" ng-model="$ctrl.filter.$" placeholder="חיפוש חופשי" />
+                                    </td>
+                                </tr>-->
+                                <tr ng-repeat="worker in $ctrl.workers | filter:$ctrl.filter
                                     | filter: ($ctrl.departmentId ? {w: {DivisionsId: $ctrl.departmentId}} : undefined)
                                     | filter: ($ctrl.departmentId2 ? {w: {SubDivisionsId: $ctrl.departmentId2}} : undefined)
                                     | filter: ($ctrl.departmentId3 ? {w: {DepartmentsId: $ctrl.departmentId3}} : undefined)
@@ -1138,6 +1136,7 @@
                                     <td>{{worker.w.Id}}</td>
                                     <td>{{worker.w.FirstName}}</td>
                                     <td>{{worker.w.LastName}}</td>
+                                    <td>{{worker.w.PhoneSelular}}</td>
                                     <td>{{worker.w.Email}}</td>
                                     <td>{{worker.m.Name}}</td>
 

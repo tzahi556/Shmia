@@ -106,7 +106,7 @@ namespace FarmsApi.DataModels
     public class UsersDepartments
     {
         public int Id { get; set; }
-
+        public int FarmId { get; set; }
         public int TypeId { get; set; }
         // מפעל 0 
         // 1 אגף
@@ -121,5 +121,12 @@ namespace FarmsApi.DataModels
 
         public int StatusId { get; set; }
 
+    }
+
+
+    public class UserAPIENTER
+    {
+        public string username { get; set; }
+        public string password { get; set; }
     }
 }

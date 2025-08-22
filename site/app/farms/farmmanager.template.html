@@ -556,7 +556,7 @@
 
                             <div class="form-group">
                                 <label>שיטת הצגה נתונים לעובד/ת</label>
-                                <select class="form-control" ng-model="$ctrl.farm.Style">
+                                <select class="form-control" ng-model="$ctrl.farm.Style" ng-change="$ctrl.setStyle()">
                                     <option value="0">הצגה רגילה</option>
                                     <option value="1">הצגת חתימה בלבד</option>
                                 </select>

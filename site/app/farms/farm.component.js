@@ -19,15 +19,22 @@
         this.removeTags = _removeTags.bind(this);
         this.initNewTags = _initNewTags.bind(this);
 
+        //this.setStyle = _setStyle.bind(this);
+
+        //function _setStyle() {
+
+        //    alert(self.farm.Style)
+
+        //}
 
         function init() {
-            self.farm.Meta = self.farm.Meta || {};
-            self.farm.Meta.StartDate = self.farm.Meta.StartDate ? new Date(self.farm.Meta.StartDate) : null;
-            self.farm.Meta.EndDate = self.farm.Meta.EndDate ? new Date(self.farm.Meta.EndDate) : null;
-            self.farm.IsHiyuvInHashlama = (self.farm.IsHiyuvInHashlama) ? self.farm.IsHiyuvInHashlama.toString() : "0";
+         ////   self.farm.Meta = self.farm.Meta || {};
+         //  // self.farm.Meta.StartDate = self.farm.Meta.StartDate ? new Date(self.farm.Meta.StartDate) : null;
+         //   self.farm.Meta.EndDate = self.farm.Meta.EndDate ? new Date(self.farm.Meta.EndDate) : null;
+         //   self.farm.IsHiyuvInHashlama = (self.farm.IsHiyuvInHashlama) ? self.farm.IsHiyuvInHashlama.toString() : "0";
             self.farm.Style = (self.farm.Style) ? self.farm.Style.toString() : "0";
 
-            self.initNewTags();
+           // self.initNewTags();
 
         }
 

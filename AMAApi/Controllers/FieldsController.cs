@@ -1028,7 +1028,6 @@ namespace FarmsApi.Services
 
                 }
 
-               
 
                 // שליפה של הנתונים
                 if (type == 9)
@@ -1060,6 +1059,18 @@ namespace FarmsApi.Services
 
                 }
 
+
+                // שליפה של הסטטוסים
+                if (type == 10)
+                {
+
+
+                    var CampainsStatusTypeList = Context.CampainsStatusType.ToList();
+
+
+                    return Ok(CampainsStatusTypeList);
+
+                }
             }
 
 

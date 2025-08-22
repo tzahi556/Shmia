@@ -41,8 +41,8 @@
 
 
 
-    <div ng-if="$ctrl.farmStyle!=1 || $ctrl.role=='farmAdmin' ||  $ctrl.role=='instructor'">
-
+    <div ng-if="$ctrl.farmStyle!='1'">
+       
         <!--פרטי מעביד - 101-->
         <div class="col-md-12 nopadding">
 
@@ -77,7 +77,7 @@
 
                         </div>
 
-                        <div class="col-md-3" ng-if="$ctrl.role!=null && $ctrl.role!='instructor'">
+                        <div class="col-md-3" ng-if="$ctrl.role==2">
                             <div class="form-group">
                                 <label>מנהל אזור</label>
                                 <select class="form-control" ng-options="user.Id as user.FullName for user in $ctrl.users" ng-model="$ctrl.worker.w101.UserId">
@@ -1851,7 +1851,7 @@
 
         <!--טופס הסכם-->
         <div class="col-md-12">
-
+          
             <div class="row" ng-repeat="group in $ctrl.groupsonly">
                 <div ng-if="group.TitleTypeId!=2 && !group.ParentId">
 
@@ -1926,8 +1926,8 @@
                                 <label>{{group2.Name}}</label>
                             </div>
 
-                             <div ng-if="group2.TitleTypeId==3" class="col-md-12">
-                                
+                            <div ng-if="group2.TitleTypeId==3" class="col-md-12">
+
                             </div>
 
                             <div ng-if="screend.f2g.IsWorkerHide!=1" class="col-md-{{12/group2.CountFieldsInRow}}" ng-repeat="screend in getGroupsDetails(group2.Id)">
@@ -2028,7 +2028,7 @@
             </div>
 
         </div>
-      
+
     </div>
 
 

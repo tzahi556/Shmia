@@ -147,19 +147,71 @@
 
 
 
-        function _getWorkers(isnew) {
+        function _getWorkers(isnew, page, pageSize, filterText, statusid, factoryid, divisionsid, subdivisionsid, departmentsid, subdepartmentsid,status101) {
             
-            ///if (isnew == -1) isnew = true;
-            var deferred = $q.defer();
-         
-            $http.get(sharedValues.apiUrl + 'users/getWorkers/' + isnew).then(function (res) {
-               
-                var res = res.data;
-                deferred.resolve(res);
+            /////if (isnew == -1) isnew = true;
+            //var deferred = $q.defer();
 
+            //$http.get(sharedValues.apiUrl + 'users/getWorkers/' + isnew).then(function (res) {
+
+            //    var res = res.data;
+            //    deferred.resolve(res);
+
+            //});
+            //return deferred.promise;
+
+
+            var deferred = $q.defer();
+
+            $http.get(sharedValues.apiUrl + 'users/getWorkers/' + isnew, {
+                params: {
+                    page: page,
+                    pageSize: pageSize,
+                    filterText: filterText,
+                    statusid: statusid,
+                    factoryid: factoryid,
+                    divisionsid: divisionsid,
+                    subdivisionsid: subdivisionsid,
+                    departmentsid: departmentsid,
+                    subdepartmentsid: subdepartmentsid,
+                    status101: status101
+                }
+            }).then(function (res) {
+                deferred.resolve(res.data);
             });
+
             return deferred.promise;
         }
+
+        function _sendSMS(workers, isnew, page, pageSize, filterText, type, statusid, factoryid, divisionsid, subdivisionsid, departmentsid, subdepartmentsid, status101) {
+            debugger
+            if (!filterText) filterText = null;
+            if (!type) type = 1;
+            var deferred = $q.defer();
+            $http.post(sharedValues.apiUrl + 'users/sendSMS/', workers,
+                {
+                    params: {
+                        type: type,
+                        isnew: isnew,
+                        page: page,
+                        pageSize: pageSize,
+                        filterText: filterText,
+                        statusid: statusid,
+                        factoryid: factoryid,
+                        divisionsid: divisionsid,
+                        subdivisionsid: subdivisionsid,
+                        departmentsid: departmentsid,
+                        subdepartmentsid: subdepartmentsid,
+                        status101: status101
+                    }
+                })
+                .then(function (res) {
+                    var res = res.data;
+                    deferred.resolve(res);
+                });
+            return deferred.promise;
+        }
+
 
         function _getWorker(id) {
 
@@ -219,15 +271,18 @@
 
 
 
-        function _sendSMS(workers, isnew) {
+        //function _sendSMS(workers, isnew) {
 
-            var deferred = $q.defer();
-            $http.post(sharedValues.apiUrl + 'users/sendSMS/' + isnew, workers).then(function (res) {
-                var res = res.data;
-                deferred.resolve(res);
-            });
-            return deferred.promise;
-        }
+        //    var deferred = $q.defer();
+        //    $http.post(sharedValues.apiUrl + 'users/sendSMS/' + isnew, workers).then(function (res) {
+        //        var res = res.data;
+        //        deferred.resolve(res);
+        //    });
+        //    return deferred.promise;
+        //}
+
+
+  
 
 
 

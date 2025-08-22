@@ -203,6 +203,8 @@
         }
 
         function _getFarm(id) {
+
+            
             var deferred = $q.defer();
             if (id == 0) {
                 $http.get(sharedValues.apiUrl + 'farms/newfarm/').then(function (res) {
@@ -214,7 +216,7 @@
 
                    
                     var farm = res.data;
-                    farm.Meta = angular.fromJson(farm.Meta);
+                    //farm.Meta = angular.fromJson(farm.Meta);
                     deferred.resolve(farm);
                 });
             }

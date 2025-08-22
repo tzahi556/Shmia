@@ -1,4 +1,8 @@
-﻿<div class="panel panel-default">
+﻿
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-multiselect@1.1.0/dist/css/bootstrap-multiselect.css">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap-multiselect@1.1.0/dist/js/bootstrap-multiselect.min.js"></script>
+
+<div class="panel panel-default">
     <div class="panel-heading">
         קליטת עובדים חדשים
 
@@ -11,8 +15,24 @@
 
         <div class="col-md-2">
             <label>חיפוש חופשי</label>
-            <input type="text" class="form-control" ng-model="$ctrl.filter.$" placeholder="חיפוש חופשי" />
+            <input type="text" class="form-control" ng-model="$ctrl.filterText" placeholder="חיפוש חופשי"  ng-change="$ctrl.onSearchChange()"/>
         </div>
+
+
+
+        <div class="col-md-2">
+            <div class="form-group">
+
+                <label>פעילים\לא פעילים</label>
+                <select class="form-control" ng-model="$ctrl.statusid">
+                    <option value="">-- הכל --</option>
+                    <option value="1">-- פעילים --</option>
+                    <option value="0">-- לא פעילים --</option>
+
+                </select>
+            </div>
+        </div>
+
 
         <div class="col-md-2" ng-if="($ctrl.departments | filter:{TypeId:0}).length > 0" style="">
             <div class="form-group">
@@ -28,7 +48,9 @@
         <div class="col-md-2" style="" ng-if="($ctrl.departments | filter:{TypeId:1}).length > 0">
             <div class="form-group">
                 <label>אגף</label>
-                <select class="form-control" ng-options="department.Id as department.Name for department in $ctrl.departments | filter:{TypeId:1}" ng-model="$ctrl.departmentId">
+                <select class="form-control"  ng-change="$ctrl.onSearchChange()"
+                      
+                        ng-options="department.Id as department.Name for department in $ctrl.departments | filter:{TypeId:1}" ng-model="$ctrl.departmentId">
                     <option value="">-- אגף --</option>
                 </select>
             </div>
@@ -77,65 +99,156 @@
 
             <button class="btn btn-danger btn-xs" style="float:left" ng-click="$ctrl.deleteAll()">מחיקת מסומנים</button>
 
-            <button class="btn btn-success btn-xs" style="float:left;margin-left:10px;" ng-click="$ctrl.sendSMS()">שליחת SMS למסומנים</button>
+
+            <div class="tooltip-container">
+                <button class="btn btn-success btn-xs" style="float:left;margin-left:10px;">שליחת קישור למסומנים</button>
+                <div class="tooltip-text">
+                    <i class="icon icon-sms" ng-click="$ctrl.sendSMS(1)"></i>
+                    <i class="icon icon-email" ng-click="$ctrl.sendSMS(2)"></i>
+                    <i class="icon icon-whatsapp" title="באופציה זו יש לבחור עובד/ת בודד/ת" ng-click="$ctrl.sendSMS(3)"></i>
+                </div>
+            </div>
+
+
+
+            <!--<button class="btn btn-success btn-xs" style="float:left;margin-left:10px;" ng-click="$ctrl.sendSMS()">שליחת SMS למסומנים</button>-->
         </div>
     </div>
-        <div class="table-responsive">
+    <div class="table-responsive">
 
-            <table class="table table-hover">
-                <thead>
-                    <tr>
+        <table class="table table-hover">
+            <thead>
+                <tr>
 
-                        <th>מנהל אזור</th>
-                        <th>שם פרטי</th>
-                        <th>שם משפחה</th>
-                        <th>אימייל</th>
-                        <th>ת.עדכון</th>
-                        <th>סטטוס</th>
-                        <th>SMS</th>
-                        <th>PDF</th>
-                        <th></th>
-                        <th></th>
-                        <th width="5%"><input type="checkbox" ng-model="$ctrl.checkAllc" style="width:52px;height:20px" ng-click="$ctrl.checkAll()"></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <!--<tr>
-        <td colspan="10">
+                    <!--<th>מנהל</th>-->
+                    <th>שם פרטי</th>
+                    <th>שם משפחה</th>
+                    <th>אימייל</th>
+                    <th>טלפון</th>
+                    <th>ת.עדכון</th>
+                    <th>סטטוס</th>
+                    <th>סוג שליחה</th>
+                    <th>ת.שליחה</th>
+                    <th>PDF</th>
+                    <th></th>
+                    <th></th>
+                    <th width="5%"><input type="checkbox" ng-model="$ctrl.checkAllc" style="width:52px;height:20px" ng-click="$ctrl.checkAll()"></th>
+                </tr>
+            </thead>
+            <tbody>
 
-        </td>
-    </tr>-->
-                    <!--<tr ng-repeat="worker in $ctrl.workers | filter:$ctrl.filter
-                         | filter: ($ctrl.departmentId ? {w: {DepartmentsId: $ctrl.departmentId}} : undefined)
-                         | filter: ($ctrl.departmentId2 ? {w: {SubDepartmentsId: $ctrl.departmentId2}} : undefined)
-                         | filter: ($ctrl.departmentId3 ? {w: {SubSubDepartmentsId: $ctrl.departmentId3}} : undefined)
-                         | filter: ($ctrl.departmentId0 ? {w: {FactoryId: $ctrl.departmentId0}} : undefined)">-->
 
-                    <tr ng-repeat="worker in $ctrl.workers | filter:$ctrl.filter
-     | filter: ($ctrl.departmentId ? {w: {DivisionsId: $ctrl.departmentId}} : undefined)
-     | filter: ($ctrl.departmentId2 ? {w: {SubDivisionsId: $ctrl.departmentId2}} : undefined)
-     | filter: ($ctrl.departmentId3 ? {w: {DepartmentsId: $ctrl.departmentId3}} : undefined)
-     | filter: ($ctrl.departmentId4 ? {w: {SubDepartmentsId: $ctrl.departmentId4}} : undefined)
-     | filter: ($ctrl.departmentId0 ? {w: {FactoryId: $ctrl.departmentId0}} : undefined)
-     ">
+                <tr ng-repeat="worker in $ctrl.workers.Items">
+                    <!--| filter:$ctrl.filter
+    | filter: ($ctrl.departmentId ? {w: {DivisionsId: $ctrl.departmentId}} : undefined)
+    | filter: ($ctrl.departmentId2 ? {w: {SubDivisionsId: $ctrl.departmentId2}} : undefined)
+    | filter: ($ctrl.departmentId3 ? {w: {DepartmentsId: $ctrl.departmentId3}} : undefined)
+    | filter: ($ctrl.departmentId4 ? {w: {SubDepartmentsId: $ctrl.departmentId4}} : undefined)
+    | filter: ($ctrl.departmentId0 ? {w: {FactoryId: $ctrl.departmentId0}} : undefined)
+    | filter: ($ctrl.statusid ? {w: {StatusId: $ctrl.statusid}} : undefined)-->
 
 
 
 
-                        <td>{{worker.ManagerName}}</td>
-                        <td>{{worker.w.FirstName}}</td>
-                        <td>{{worker.w.LastName}}</td>
-                        <td>{{worker.w.Email}}</td>
-                        <td>{{worker.w101.DateRigster | ildate: 'HH:mm DD/MM/YYYY '}}</td>
-                        <td>{{worker.w101.Status}}</td>
-                        <td>{{worker.w101.IsSendSMS==1 ? 'נשלח':'' }}</td>
-                        <td><a  ng-if="worker.HasPdf" class="btn  btn-success" ng-href="{{$ctrl.uploadsUri+ 'Workers/' + worker.w.Id.toString() + '/-1/AllPdfTemp.pdf'}}" target="_blank">PDF</a></td>
-                        <td> <button class="btn  btn-warning" ui-sref="worker({id:worker.w.Id})">עדכון</button></td>
-                        <td> <button class="btn  btn-danger" ng-click="$ctrl.delete(worker.w.Id)">מחק עובד</button></td>
-                        <td width="5%"><input style="width:52px;height:20px" type="checkbox" ng-model="worker.IsSelected" /></td>
 
-                    </tr>
-                </tbody>
-            </table>
+                    <!--<td>{{worker.ManagerName}}</td>-->
+                    <td>{{worker.w.FirstName}}</td>
+                    <td>{{worker.w.LastName}}</td>
+                    <td>{{worker.w.Email}}</td>
+                    <td>{{worker.w.PhoneSelular}}</td>
+                    <td>{{(worker.w101.DateRigster) ? (worker.w101.DateRigster | ildate: 'HH:mm DD/MM/YYYY ') :''}}</td>
+                
+                    <td>{{worker.Status}}</td>
+                    <td>{{worker.Media}}</td>
+                
+                    <td>{{(worker.w101.DateSend) ? (worker.w101.DateSend | ildate: 'HH:mm DD/MM/YYYY ') :''}}</td>
+                  
+                    <td><a ng-if="worker.HasPdf" class="btn  btn-success" ng-href="{{$ctrl.uploadsUri+ 'Workers/' + worker.w.Id.toString() + '/-1/AllPdfTemp.pdf'}}" target="_blank">PDF</a></td>
+                    <td> <button class="btn  btn-warning" ui-sref="worker({id:worker.w.Id})">עדכון</button></td>
+                    <td> <button class="btn  btn-danger" ng-click="$ctrl.delete(worker.w.Id)">מחק עובד</button></td>
+                    <td width="5%"><input style="width:52px;height:20px" type="checkbox" ng-model="worker.IsSelected" /></td>
+
+                </tr>
+                <tr>
+                    <td colspan="12" style="text-align:center; padding:10px;">
+                        סך הכל: <strong>{{$ctrl.workers.TotalCount | number}}</strong> רשומות
+                    </td>
+                </tr>
+
+
+            </tbody>
+        </table>
+
+        <style>
+            .pagination > li > button.page-link {
+                position: relative;
+                float: right;
+                padding: 6px 12px;
+                margin-left: -1px;
+                line-height: 1.42857143;
+                color: #337ab7;
+                background-color: #fff;
+                border: 1px solid #ddd;
+                cursor: pointer;
+            }
+
+            .pagination > li.active > button.page-link {
+                z-index: 2;
+                color: #fff;
+                background-color: #337ab7;
+                border-color: #337ab7;
+            }
+
+            .pagination > li.disabled > button.page-link {
+                color: #777;
+                background-color: #fff;
+                border-color: #ddd;
+                cursor: not-allowed;
+            }
+
+            .pagination > li > button.page-link:focus {
+                outline: none;
+            }
+        </style>
+
+        <div class="text-center">
+            <ul class="pagination pagination-sm">
+
+                <!-- ראשון -->
+                <li ng-class="{disabled: $ctrl.currentPage === 1}">
+                    <button class="page-link" ng-click="$ctrl.goToFirstPage()" ng-disabled="$ctrl.currentPage === 1">ראשון</button>
+                </li>
+
+                <!-- קודם -->
+                <li ng-class="{disabled: $ctrl.currentPage === 1}">
+                    <button class="page-link" ng-click="$ctrl.goToPreviousPage()" ng-disabled="$ctrl.currentPage === 1">&laquo;</button>
+                </li>
+
+                <!-- מספרי עמודים -->
+                <li ng-repeat="n in $ctrl.getPages() track by $index"
+                    ng-class="{active: n === $ctrl.currentPage, disabled: n === '...'}">
+                    <button class="page-link"
+                            ng-click="$ctrl.goToPage(n)"
+                            ng-disabled="n === '...'">
+                        {{n}}
+                    </button>
+                </li>
+
+                <!-- הבא -->
+                <li ng-class="{disabled: $ctrl.currentPage === $ctrl.totalPages()}">
+                    <button class="page-link" ng-click="$ctrl.goToNextPage()" ng-disabled="$ctrl.currentPage === $ctrl.totalPages()">&raquo;</button>
+                </li>
+
+                <!-- אחרון -->
+                <li ng-class="{disabled: $ctrl.currentPage === $ctrl.totalPages()}">
+                    <button class="page-link" ng-click="$ctrl.goToLastPage()" ng-disabled="$ctrl.currentPage === $ctrl.totalPages()">אחרון</button>
+                </li>
+
+            </ul>
         </div>
+
+
+
+
     </div>
+</div>

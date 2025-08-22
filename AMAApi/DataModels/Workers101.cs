@@ -17,7 +17,12 @@ namespace FarmsApi.DataModels
         [ForeignKey("UserId")]
         public User UserManager{ get; set; }
         public string ShnatMas { get; set; }
-   
+
+
+        public int? StatusId { get; set; }
+        public int? MediaId { get; set; }
+        public DateTime? DateSend { get; set; }
+
         public DateTime? AliaDate { get; set; }
         
       
@@ -96,7 +101,7 @@ namespace FarmsApi.DataModels
 
         public bool Deleted { get; set; }
       
-        public string Status { get; set; }
+       // public string Status { get; set; }
       
         public DateTime? DateRigster { get; set; }
 
@@ -108,7 +113,7 @@ namespace FarmsApi.DataModels
         public string Comments { get; set; }
         public string UniqNumber { get; set; }
         public bool IsNew { get; set; }
-        public bool IsSendSMS { get; set; }
+       // public bool IsSendSMS { get; set; }
 
         public bool IsValid { get; set; }
 
@@ -155,5 +160,11 @@ namespace FarmsApi.DataModels
         public string ManagerName { get; set; }
 
         public bool HasPdf { get; set; }
+
+        public string Status { get; set; }
+
+        public string Media { get; set; }
+        //public int TotalCount { get; set; }
+
     }
 }
