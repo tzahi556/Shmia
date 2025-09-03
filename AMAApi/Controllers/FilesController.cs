@@ -232,6 +232,7 @@ namespace FarmsApi.Controllers
 
                 if (File.Exists(dest))
                 {
+                   
                     File.Delete(dest);
                 }
 

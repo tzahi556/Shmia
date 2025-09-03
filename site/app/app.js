@@ -125,6 +125,45 @@
             }
         });
 
+        $stateProvider.state('workers.modal', {
+            // שים לב ל-^ כדי שה-URL יהיה מוחלט ולא יחובר ל-/workers/
+            url: '^/worker/:id/modal',
+            onEnter: function ($stateParams, $state, $uibModal, usersService, farmsService) {
+
+                var modalInstance = $uibModal.open({
+                    templateUrl: 'worker.modal.html',
+                    controller: 'WorkerModalCtrl as vm',
+                    backdrop: 'static',
+                    size: 'lg',
+                    resolve: {
+                        worker: function () { return usersService.getWorker($stateParams.id); },
+                        files: function () { return usersService.getFiles($stateParams.id); },
+                        childs: function () { return usersService.getWorkerChilds($stateParams.id); },
+                        cities: function () { return usersService.getMasterTable(1); },
+                        banks: function () { return usersService.getMasterTable(2); },
+                        banksbrunchs: function () { return usersService.getMasterTable(3); },
+                        users: function () {
+                            return (localStorage.getItem('currentRole') == "farmAdmin")
+                                ? usersService.getUsers("instructor")
+                                : null;
+                        },
+                        screendata: function () { return farmsService.getSetWorkerAndCompanyData(1, $stateParams.id, null); },
+                        farm: function () { return farmsService.getSetWorkerAndCompanyData(3, $stateParams.id, null); },
+                        campainsstatustype: function () {
+                            return farmsService.getSetCampainsData(10, localStorage.getItem('FarmId'), null);
+                        }
+                    }
+                });
+
+                // חזרה ל-parent (workers) בלי רענון נתונים/קונטרולר
+                modalInstance.result.finally(function () {
+                    $state.go('^', {}, { reload: false, inherit: true, notify: false });
+                });
+            }
+        });
+
+
+
         $stateProvider.state('workersnew', {
             url: '/workersnew/',
             views: {
@@ -816,6 +855,7 @@
         //});
 
     });
+
 
 
     app.filter('orderByDateDesc', function () {

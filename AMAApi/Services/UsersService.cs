@@ -374,7 +374,7 @@ namespace FarmsApi.Services
             {
 
 
-                var CurrentUser = GetCurrentUser();
+                var CurrentUser =Helper.GetCurrentUser();
 
                 var CurrentUserId = CurrentUser.Id;
                 var CurrentRolesId = CurrentUser.RolesId;
@@ -390,9 +390,9 @@ namespace FarmsApi.Services
 
                 string basePath = HttpContext.Current.Server.MapPath("~/uploads/Workers");
 
-                //סופר אדמין או מנהל מערכת
-                if (CurrentRolesId == 0 || CurrentRolesId == 2)
-                {
+                ////סופר אדמין או מנהל מערכת
+                //if (CurrentRolesId == 0 || CurrentRolesId == 2)
+                //{
 
 
                     var CurrentTotalCount = Context.Workers.Where(x =>
@@ -405,7 +405,17 @@ namespace FarmsApi.Services
                                                                   (subdivisionsid == 0 || (x.SubDivisionsId == subdivisionsid)) &&
                                                                   (departmentsid == 0 || (x.DepartmentsId == departmentsid)) &&
                                                                   (subdepartmentsid == 0 || (x.SubDepartmentsId == subdepartmentsid)) &&
+                                                                  
+                                                                  
+                                                                  // אם מדובר במנהל מערכת
+                                                                  // או בסופר אדמין
+                                                                  // אחרת תביא לי רק את העובדים שתחת הרשאה של מנהל מפעל או מחלקה
+                                                                  (CurrentRolesId == 0 ||
+                                                                   CurrentRolesId == 2 || 
+                                                                   AllowedDepartmentIds.Contains(x.FactoryId ?? -1) ||
+                                                                   AllowedDepartmentIds.Contains(x.DepartmentsId ?? -1)
 
+                                                                   ) &&
 
                                                                   (!string.IsNullOrEmpty(x.FirstName.Trim()) || !string.IsNullOrEmpty(x.LastName.Trim()) || !string.IsNullOrEmpty(x.Taz.Trim()))
 
@@ -425,8 +435,16 @@ namespace FarmsApi.Services
                                                                     (departmentsid == 0 || (x.DepartmentsId == departmentsid)) &&
                                                                     (subdepartmentsid == 0 || (x.SubDepartmentsId == subdepartmentsid)) &&
 
+                                                                   (CurrentRolesId == 0 ||
+                                                                   CurrentRolesId == 2 ||
+                                                                   AllowedDepartmentIds.Contains(x.FactoryId ?? -1) ||
+                                                                   AllowedDepartmentIds.Contains(x.DepartmentsId ?? -1)
+
+                                                                   ) &&
+
+
                                                                     (!string.IsNullOrEmpty(x.FirstName.Trim()) || !string.IsNullOrEmpty(x.LastName.Trim()) || !string.IsNullOrEmpty(x.Taz.Trim()))
-                                                                ).DefaultIfEmpty()
+                                                                )
 
                                    from w1011 in Context.Workers101.Where(x => x.IsNew == isnew && x.WorkersId == w1.Id && x.UserId == CurrentUserId).DefaultIfEmpty()
 
@@ -470,10 +488,10 @@ namespace FarmsApi.Services
 
 
                     //return WorkersList.Where(x => x.w != null).ToList();
-                }
+                //}
 
-                else
-                    return null;
+                //else
+                //    return null;
                 //else
                 //{
 

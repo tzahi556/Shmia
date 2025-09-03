@@ -830,9 +830,10 @@ namespace FarmsApi.Services
         }
 
         // [Authorize]
-        [Route("getSetCampainsData/{type}/{id}")]
+        [Route("getSetCampainsData")]
         [HttpPost]
-        public IHttpActionResult GetSetCampainsData(int type, string id, dynamic objs)
+        public IHttpActionResult GetSetCampainsData(int type, string id, dynamic objs, int page = 1, int pageSize = 10, string filterText = null, int statusid = -1, int factoryid = 0, int divisionsid = 0,
+            int subdivisionsid = 0, int departmentsid = 0, int subdepartmentsid = 0, string Status101 = null)
         {
 
           
@@ -935,37 +936,100 @@ namespace FarmsApi.Services
                     if (c != null)
                     {
 
+                        var CurrentUser = Helper.GetCurrentUser();
+
+                        var CurrentUserId = CurrentUser.Id;
+                        var CurrentRolesId = CurrentUser.RolesId;
+                        var CurrentFarmId = CurrentUser.FarmId;
+
+
                         var DepartmentsList = Helper.GetCurrentUserPermissions();
 
                         var AllowedDepartmentIds = DepartmentsList.Select(x => x.Id).ToList();
 
-                        //var WorkersList = Context.Workers.Where(x => x.FarmId == c.FarmId && !string.IsNullOrEmpty(x.FirstName) && x.StatusId == 1
-                        //                                     && ((x.FactoryId.HasValue && AllowedDepartmentIds.Contains(x.FactoryId.Value))
-                        //                                        || (x.DepartmentsId.HasValue && AllowedDepartmentIds.Contains(x.DepartmentsId.Value)))
-
-                        //).ToList();
 
 
-                        var Results = (from w in Context.Workers.Where(x => x.FarmId == c.FarmId && !string.IsNullOrEmpty(x.FirstName) && x.StatusId == 1
-                                                             && ((x.FactoryId.HasValue && AllowedDepartmentIds.Contains(x.FactoryId.Value))
-                                                                || (x.DepartmentsId.HasValue && AllowedDepartmentIds.Contains(x.DepartmentsId.Value)))).DefaultIfEmpty()
+                        var CurrentTotalCount = Context.Workers.Where(x =>
+                                                                 x.FarmId == CurrentFarmId &&
+
+                                                                 (filterText == null || ((x.FirstName + " " + x.LastName).Contains(filterText) || x.Taz.Contains(filterText) || x.Phone.Contains(filterText))) &&
+                                                                 (statusid == -1 || (x.StatusId == statusid)) &&
+                                                                 (factoryid == 0 || (x.FactoryId == factoryid)) &&
+                                                                 (divisionsid == 0 || (x.DivisionsId == divisionsid)) &&
+                                                                 (subdivisionsid == 0 || (x.SubDivisionsId == subdivisionsid)) &&
+                                                                 (departmentsid == 0 || (x.DepartmentsId == departmentsid)) &&
+                                                                 (subdepartmentsid == 0 || (x.SubDepartmentsId == subdepartmentsid)) &&
+
+
+                                                                 // אם מדובר במנהל מערכת
+                                                                 // או בסופר אדמין
+                                                                 // אחרת תביא לי רק את העובדים שתחת הרשאה של מנהל מפעל או מחלקה
+                                                                 (CurrentRolesId == 0 ||
+                                                                  CurrentRolesId == 2 ||
+                                                                  AllowedDepartmentIds.Contains(x.FactoryId ?? -1) ||
+                                                                  AllowedDepartmentIds.Contains(x.DepartmentsId ?? -1)
+
+                                                                  ) &&
+
+                                                                 (!string.IsNullOrEmpty(x.FirstName.Trim()) || !string.IsNullOrEmpty(x.LastName.Trim()) || !string.IsNullOrEmpty(x.Taz.Trim()))
+
+                                   ).Count(); // או לפי Date
+
+
+
+
+
+
+                        var Results = (from w in Context.Workers.Where(x =>
+                                                                          x.FarmId == CurrentFarmId &&
+                                                                    //x.StatusId == 1 &&
+                                                                    (filterText == null || ((x.FirstName + " " + x.LastName).Contains(filterText) || x.Taz.Contains(filterText) || x.Phone.Contains(filterText))) &&
+
+                                                                    (statusid == -1 || (x.StatusId == statusid)) &&
+                                                                    (factoryid == 0 || (x.FactoryId == factoryid)) &&
+                                                                    (divisionsid == 0 || (x.DivisionsId == divisionsid)) &&
+                                                                    (subdivisionsid == 0 || (x.SubDivisionsId == subdivisionsid)) &&
+                                                                    (departmentsid == 0 || (x.DepartmentsId == departmentsid)) &&
+                                                                    (subdepartmentsid == 0 || (x.SubDepartmentsId == subdepartmentsid)) &&
+
+                                                                   (CurrentRolesId == 0 ||
+                                                                   CurrentRolesId == 2 ||
+                                                                   AllowedDepartmentIds.Contains(x.FactoryId ?? -1) ||
+                                                                   AllowedDepartmentIds.Contains(x.DepartmentsId ?? -1)
+
+                                                                   ) &&
+
+                                                                     (!string.IsNullOrEmpty(x.FirstName.Trim()) || !string.IsNullOrEmpty(x.LastName.Trim()) || !string.IsNullOrEmpty(x.Taz.Trim()))
+                                                                )
+
                                        from cs in Context.CampainsStatus.Where(x => x.CampainsId == c.Id && x.WorkersId == w.Id).DefaultIfEmpty()
                                        from m in Context.CampainsStatusType.Where(x => x.Id == cs.MediaId && x.Type == 1).DefaultIfEmpty()
                                        from css in Context.CampainsStatusType.Where(x => x.Id == cs.StatusId && x.Type == 2).DefaultIfEmpty()
 
 
-                                       select new
+                                       select new WorkerCampainItem
                                        {
-                                           w,
-                                           cs,
-                                           m,
-                                           css
+                                           w=w,
+                                           cs=cs,
+                                           m=m,
+                                           css=css
 
 
-                                       }).Where(x => x.w != null).ToList();
+                                       }).OrderByDescending(x => x.w.Id)
+                                       .Skip((page - 1) * pageSize)
+                                       .Take(pageSize)
+                                       .ToList();
 
 
-                        return Ok(Results);
+                        WorkersCampainResult workersResult = new WorkersCampainResult();
+                        workersResult.TotalCount = CurrentTotalCount;
+                        workersResult.Items = Results;
+
+                        return Ok(workersResult);
+
+
+
+                      //  return Ok(Results);
 
                     }
 
@@ -1080,9 +1144,10 @@ namespace FarmsApi.Services
 
 
         // [Authorize]
-        [Route("sendLinktoWorkers/{type}/{campainid}/")]
+        [Route("sendLinktoWorkers")]
         [HttpPost]
-        public IHttpActionResult sendLinktoWorkers(int type, int campainid, List<Workers> workers)
+        public IHttpActionResult sendLinktoWorkers(List<Workers> workers,int type,int campainid, int page = 1, int pageSize = 10, string filterText = null, int statusid = -1, int factoryid = 0, int divisionsid = 0,
+            int subdivisionsid = 0, int departmentsid = 0, int subdepartmentsid = 0, string Status101 = null)
         {
 
 
@@ -1243,7 +1308,8 @@ namespace FarmsApi.Services
 
 
             }
-            return GetSetCampainsData(4, campainid.ToString(), null);
+            return GetSetCampainsData(4, campainid.ToString(), null, page,  pageSize ,  filterText ,  statusid,  factoryid,  divisionsid,
+             subdivisionsid,  departmentsid ,  subdepartmentsid ,  Status101 );
 
 
             //return Ok();

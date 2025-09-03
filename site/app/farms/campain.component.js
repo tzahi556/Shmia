@@ -53,7 +53,7 @@
         this.init = _init.bind(this);
         this.role = localStorage.getItem('currentRolesId');
 
-      // alert(this.role);
+        // alert(this.role);
         //this.IsPopUp = false;
         //this.IsStop = false;
 
@@ -95,15 +95,16 @@
 
 
 
-        function _init() {
+        function _init(isfromRefresh) {
 
-            if (this.role == 2) {
-                this.active = 0;   // טאב ראשון
-            } else {
-                this.active = 4;   // טאב עובדים (האחרון)
+
+            if (!isfromRefresh) {
+                if (this.role == 2) {
+                    this.active = 0;   // טאב ראשון
+                } else {
+                    this.active = 4;   // טאב עובדים (האחרון)
+                }
             }
-
-
 
 
             if (this.campain.Name) {
@@ -159,7 +160,7 @@
                 farmsService.updateFarmsPdfFiles(3, Id, self.campain.Id, self.farmspdffiles).then(function (farmspdffiles) {
 
                     self.farmspdffiles = farmspdffiles;
-                    self.init();
+                    self.init(true);
 
                     const myTimeout = setTimeout(RefreshPage, 300);
                     /*   RefreshPage();*/
@@ -184,7 +185,7 @@
 
 
                 self.farmspdffiles = farmspdffiles;
-                self.init();
+                self.init(true);
                 const myTimeout = setTimeout(RefreshPage, 300);
 
 
@@ -558,7 +559,7 @@
                 var confirmBox = alertMessage("האם אתה בטוח שברצונך להסיר את השדה?", 4);
                 confirmBox.click(function () {
 
-                    thisCtrl.farmsService.actionFieldGroup(5, thisCtrl.farm.Id, Objects, this.campain.Id).then(function (btns) {
+                    thisCtrl.farmsService.actionFieldGroup(5, thisCtrl.farm.Id, Objects, thisCtrl.campain.Id).then(function (btns) {
 
                         self.btns = btns;
 
@@ -679,7 +680,7 @@
         function _checkAll() {
 
 
-            this.workers.forEach(x => x.IsSelected = this.checkAllc);
+            this.workers.Items.forEach(x => x.IsSelected = this.checkAllc);
         }
         function _sendSMS(type) {
 
@@ -690,7 +691,7 @@
 
 
             //var selected = this.workers.filter(x => x.IsSelected && (x.IsValid || this.farmStyle != 1));
-            var selected = this.workers.filter(x => x.IsSelected);
+            var selected = this.workers.Items.filter(x => x.IsSelected);
 
             if (selected.length == 0) {
 
@@ -723,7 +724,7 @@
                 typename = "ווטסאפ";
 
                 if (workersSelected.length == 1) {
-                   
+
                     const phone = "972" + workersSelected[0].PhoneSelular;
 
                     farmsService.sendLinktoWorkers(workersSelected, 4, ctrl.campain.Id).then(function (res) {
@@ -755,8 +756,8 @@
             if (selected.length > 0) {
                 var confirmBox = alertMessage(`האם לשלוח ${typename} לכל העובדים המסומנים?`, 4);
                 confirmBox.click(function () {
-
-                    farmsService.sendLinktoWorkers(workersSelected, type, ctrl.campain.Id).then(function (res) {
+                    
+                    farmsService.sendLinktoWorkers(workersSelected, type, ctrl.campain.Id, ctrl.currentPage, ctrl.pageSize, ctrl.filterText, ctrl.statusid, ctrl.factoryid, ctrl.divisionid, ctrl.subdivisionid, ctrl.departmentsid, ctrl.subdepartmentsid, ctrl.status101).then(function (res) {
 
                         ctrl.workers = res;
                         ctrl.checkAllc = false;
@@ -771,6 +772,152 @@
 
 
         }
+
+
+
+
+        //********************************************* */
+
+        this.currentPage = 1;
+        this.pageSize = 10;
+
+
+
+
+        this.getPagedWorkers = function () {
+
+            var start = (this.currentPage - 1) * this.pageSize;
+            return this.workers.Items.slice(start, start + this.pageSize);
+        };
+
+        this.totalPages = function () {
+            return Math.ceil(this.workers.TotalCount / this.pageSize);
+        };
+
+        this.getPages = function () {
+            const total = this.totalPages();
+            const current = this.currentPage;
+            const delta = 3; // כמה עמודים לפני ואחרי להציג
+
+            const range = [];
+            const rangeWithDots = [];
+            let l;
+
+            for (let i = 1; i <= total; i++) {
+                if (i === 1 || i === total || (i >= current - delta && i <= current + delta)) {
+                    range.push(i);
+                }
+            }
+
+            for (let i of range) {
+                if (l) {
+                    if (i - l === 2) {
+                        rangeWithDots.push(l + 1);
+                    } else if (i - l > 1) {
+                        rangeWithDots.push('...');
+                    }
+                }
+                rangeWithDots.push(i);
+                l = i;
+            }
+
+            return rangeWithDots;
+        };
+
+        this.onSearchChange = function () {
+            if (this.filterText && this.filterText.length >= 2) {
+                this.currentPage = 1;
+
+                // alert(this.filterText);
+                this.loadWorkers();
+            }
+
+            // אם המשתמש מחק את הכל – נטען הכול מחדש (אופציונלי)
+            if (!this.filterText || this.filterText.length === 0) {
+                this.currentPage = 1;
+                this.loadWorkers();
+            }
+
+
+
+
+
+
+        };
+
+        this.loadWorkers = function () {
+
+            //alert(this.currentPage);
+
+            var ctrl = this;
+
+            var statusid = this.statusid;
+            var factoryid = this.departmentId0;
+            var divisionid = this.departmentId;
+            var subdivisionid = this.departmentId2;
+            var departmentsid = this.departmentId3;
+            var subdepartmentsid = this.departmentId4;
+            var status101 = "";
+
+
+
+
+            farmsService.getSetCampainsData(4, ctrl.campain.Id,null, ctrl.currentPage, ctrl.pageSize, ctrl.filterText, statusid, factoryid, divisionid, subdivisionid, departmentsid, subdepartmentsid, status101).then(function (res) {
+
+
+                ctrl.workers = res;
+                //ctrl.getPagedWorkers();
+            });
+
+
+            //var start = (this.currentPage - 1) * this.pageSize;
+            //return this.workers.Items.slice(start, start + this.pageSize);
+
+        }
+
+        this.goToFirstPage = function () {
+            if (this.currentPage > 1) {
+                this.currentPage = 1;
+                this.loadWorkers();
+            }
+        };
+
+        this.goToLastPage = function () {
+            if (this.currentPage < this.totalPages()) {
+                this.currentPage = this.totalPages();
+                this.loadWorkers();
+            }
+        };
+
+        this.goToPage = function (n) {
+            if (n !== '...' && n !== this.currentPage) {
+                this.currentPage = n;
+                this.loadWorkers();
+            }
+        };
+
+        this.goToNextPage = function () {
+            if (this.currentPage < this.totalPages()) {
+                this.currentPage++;
+                this.loadWorkers();
+            }
+        };
+
+        this.goToPreviousPage = function () {
+            if (this.currentPage > 1) {
+                this.currentPage--;
+                this.loadWorkers();
+            }
+        };
+
+
+
+
+
+        //********************************************** */
+
+
+
 
 
 

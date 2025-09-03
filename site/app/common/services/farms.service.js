@@ -28,11 +28,35 @@
         this.sendLinktoWorkers = _sendLinktoWorkers;
         
 
-        function _sendLinktoWorkers(workers, type, campainsId) {
+        function _sendLinktoWorkers(workers, type, campainsId, page, pageSize, filterText, statusid, factoryid, divisionsid, subdivisionsid, departmentsid, subdepartmentsid, status101) {
 
+          
             if (!campainsId) campainsId = -1;
             var deferred = $q.defer();
-            $http.post(sharedValues.apiUrl + 'fields/sendLinktoWorkers/' + type + "/" + campainsId, workers).then(function (res) {
+            $http.post(sharedValues.apiUrl + 'fields/sendLinktoWorkers/', workers,
+
+
+                {
+                    params: {
+                        type: type,
+                        campainid: campainsId,
+                        page: page,
+                        pageSize: pageSize,
+                        filterText: filterText,
+                        statusid: statusid,
+                        factoryid: factoryid,
+                        divisionsid: divisionsid,
+                        subdivisionsid: subdivisionsid,
+                        departmentsid: departmentsid,
+                        subdepartmentsid: subdepartmentsid,
+                        status101: status101
+                    }
+                }
+
+
+
+
+                ).then(function (res) {
                 var res = res.data;
                 deferred.resolve(res);
             });
@@ -56,9 +80,31 @@
         }
 
 
-        function _getSetCampainsData(type, campainid, objects) {
+        function _getSetCampainsData(type, campainid, objects, page, pageSize, filterText, statusid, factoryid, divisionsid, subdivisionsid, departmentsid, subdepartmentsid, status101) {
+
+           
             var deferred = $q.defer();
-            $http.post(sharedValues.apiUrl + 'fields/getSetCampainsData/' + type + "/" + campainid, objects).then(function (res) {
+            $http.post(sharedValues.apiUrl + 'fields/getSetCampainsData/', objects,
+                {
+                    params: {
+                        type: type,
+                        id: campainid,
+                        page: page,
+                        pageSize: pageSize,
+                        filterText: filterText,
+                        statusid: statusid,
+                        factoryid: factoryid,
+                        divisionsid: divisionsid,
+                        subdivisionsid: subdivisionsid,
+                        departmentsid: departmentsid,
+                        subdepartmentsid: subdepartmentsid,
+                        status101: status101
+                    }
+                }
+
+
+
+            ).then(function (res) {
 
                 deferred.resolve(res.data);
             });
@@ -68,6 +114,7 @@
 
 
 
+   
 
 
         function _actionFieldGroup(type, farmid, objects, campainsId) {

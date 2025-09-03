@@ -202,5 +202,22 @@ namespace FarmsApi.DataModels
 
     }
 
+    // DTO חזק לפריט יחיד
+    public class WorkerCampainItem
+    {
+        public Workers w { get; set; }                 // או טיפוס ה-Worker שלך
+        public CampainsStatus cs { get; set; }          // יכול להיות null (בגלל LEFT JOIN)
+        public CampainsStatusType m { get; set; }       // Type == 1, יכול להיות null
+        public CampainsStatusType css { get; set; }  // Type == 2, יכול להיות null
+    }
+
+    public class WorkersCampainResult
+    {
+        public int TotalCount { get; set; }
+        public List<WorkerCampainItem> Items { get; set; }
+
+
+    }
+
 
 }

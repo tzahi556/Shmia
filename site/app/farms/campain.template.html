@@ -164,8 +164,9 @@
 
         function RefreshPage() {
 
-            PdfList = [];
+            
 
+            PdfList = [];
 
             $(".dvSeq").each(function (item) {
 
@@ -1020,14 +1021,27 @@
 
                         <div class="col-md-2">
                             <label>חיפוש חופשי</label>
-                            <input type="text" class="form-control" ng-model="$ctrl.filter.$" placeholder="חיפוש חופשי" />
+                            <input type="text" class="form-control" ng-model="$ctrl.filterText" placeholder="חיפוש חופשי" ng-change="$ctrl.onSearchChange()" />
+                        </div>
+                       
+                        <div class="col-md-2">
+                            <div class="form-group">
+
+                                <label>פעילים\לא פעילים</label>
+                                <select class="form-control" ng-init="$ctrl.statusid = '-1'" ng-change="$ctrl.onSearchChange()" ng-model="$ctrl.statusid">
+                                    <option value="-1">-- הכל --</option>
+                                    <option value="1">-- פעילים --</option>
+                                    <option value="0">-- לא פעילים --</option>
+
+                                </select>
+                            </div>
                         </div>
 
 
                         <div class="col-md-2" style="" ng-if="($ctrl.departments | filter:{TypeId:0}).length > 0">
                             <div class="form-group">
                                 <label>מפעל</label>
-                                <select class="form-control" ng-options="department.Id as department.Name for department in $ctrl.departments | filter:{TypeId:0}" ng-model="$ctrl.departmentId0">
+                                <select class="form-control" ng-change="$ctrl.onSearchChange()" ng-options="department.Id as department.Name for department in $ctrl.departments | filter:{TypeId:0}" ng-model="$ctrl.departmentId0">
                                     <option value="">-- מפעל --</option>
                                 </select>
                             </div>
@@ -1038,7 +1052,7 @@
                         <div class="col-md-2" style="" ng-if="($ctrl.departments | filter:{TypeId:1}).length > 0">
                             <div class="form-group">
                                 <label>אגף</label>
-                                <select class="form-control" ng-options="department.Id as department.Name for department in $ctrl.departments | filter:{TypeId:1}" ng-model="$ctrl.departmentId">
+                                <select class="form-control" ng-change="$ctrl.onSearchChange()" ng-options="department.Id as department.Name for department in $ctrl.departments | filter:{TypeId:1}" ng-model="$ctrl.departmentId">
                                     <option value="">-- אגף --</option>
                                 </select>
                             </div>
@@ -1048,7 +1062,7 @@
                             <div class="form-group">
 
                                 <label>תת אגף</label>
-                                <select class="form-control" ng-options="department.Id as department.Name for department in $ctrl.departments | filter:{TypeId:2}" ng-model="$ctrl.departmentId2">
+                                <select class="form-control" ng-change="$ctrl.onSearchChange()" ng-options="department.Id as department.Name for department in $ctrl.departments | filter:{TypeId:2}" ng-model="$ctrl.departmentId2">
                                     <option value="">-- תת אגף --</option>
                                 </select>
                             </div>
@@ -1057,7 +1071,7 @@
                         <div class="col-md-2" style="" ng-if="($ctrl.departments | filter:{TypeId:3}).length > 0">
                             <div class="form-group">
                                 <label>מחלקה</label>
-                                <select class="form-control" ng-options="department.Id as department.Name for department in $ctrl.departments | filter:{TypeId:3}" ng-model="$ctrl.departmentId3">
+                                <select class="form-control" ng-change="$ctrl.onSearchChange()" ng-options="department.Id as department.Name for department in $ctrl.departments | filter:{TypeId:3}" ng-model="$ctrl.departmentId3">
                                     <option value="">-- מחלקה  --</option>
                                 </select>
                             </div>
@@ -1070,7 +1084,7 @@
                         <div class="col-md-2" style="" ng-if="($ctrl.departments | filter:{TypeId:4}).length > 0">
                             <div class="form-group">
                                 <label>תת מחלקה</label>
-                                <select class="form-control" ng-options="department.Id as department.Name for department in $ctrl.departments | filter:{TypeId:4}" ng-model="$ctrl.departmentId4">
+                                <select class="form-control" ng-change="$ctrl.onSearchChange()" ng-options="department.Id as department.Name for department in $ctrl.departments | filter:{TypeId:4}" ng-model="$ctrl.departmentId4">
                                     <option value="">-- תת מחלקה  --</option>
                                 </select>
                             </div>
@@ -1121,19 +1135,21 @@
                             </thead>
                             <tbody>
                                 <!--<tr>
-                                    <td colspan="10">
-                                        <input type="text" class="form-control" ng-model="$ctrl.filter.$" placeholder="חיפוש חופשי" />
-                                    </td>
-                                </tr>-->
-                                <tr ng-repeat="worker in $ctrl.workers | filter:$ctrl.filter
-                                    | filter: ($ctrl.departmentId ? {w: {DivisionsId: $ctrl.departmentId}} : undefined)
-                                    | filter: ($ctrl.departmentId2 ? {w: {SubDivisionsId: $ctrl.departmentId2}} : undefined)
-                                    | filter: ($ctrl.departmentId3 ? {w: {DepartmentsId: $ctrl.departmentId3}} : undefined)
-                                    | filter: ($ctrl.departmentId4 ? {w: {SubDepartmentsId: $ctrl.departmentId4}} : undefined)
-                                    | filter: ($ctrl.departmentId0 ? {w: {FactoryId: $ctrl.departmentId0}} : undefined)
-                                    ">
+                <td colspan="10">
+                    <input type="text" class="form-control" ng-model="$ctrl.filter.$" placeholder="חיפוש חופשי" />
+                </td>
+            </tr>-->
+                                <tr ng-repeat="worker in $ctrl.workers.Items">
 
-                                    <td>{{worker.w.Id}}</td>
+                                    <!--| filter:$ctrl.filter
+    | filter: ($ctrl.departmentId ? {w: {DivisionsId: $ctrl.departmentId}} : undefined)
+    | filter: ($ctrl.departmentId2 ? {w: {SubDivisionsId: $ctrl.departmentId2}} : undefined)
+    | filter: ($ctrl.departmentId3 ? {w: {DepartmentsId: $ctrl.departmentId3}} : undefined)
+    | filter: ($ctrl.departmentId4 ? {w: {SubDepartmentsId: $ctrl.departmentId4}} : undefined)
+    | filter: ($ctrl.departmentId0 ? {w: {FactoryId: $ctrl.departmentId0}} : undefined)-->
+
+                                    <td> <a class="btn btn-default" ui-sref="worker({id:worker.w.Id})">{{worker.w.Id}}</a></td>
+                                    <!--<td> {{worker.w.Id}}</td>-->
                                     <td>{{worker.w.FirstName}}</td>
                                     <td>{{worker.w.LastName}}</td>
                                     <td>{{worker.w.PhoneSelular}}</td>
@@ -1153,8 +1169,89 @@
                                     <td width="5%"><input style="width:52px;height:20px" type="checkbox" ng-model="worker.IsSelected" /></td>
 
                                 </tr>
+
+                                <tr>
+                                    <td colspan="12" style="text-align:center; padding:10px;">
+                                        סך הכל: <strong>{{$ctrl.workers.TotalCount | number}}</strong> רשומות
+                                    </td>
+                                </tr>
                             </tbody>
                         </table>
+
+
+
+                        <style>
+                            .pagination > li > button.page-link {
+                                position: relative;
+                                float: right;
+                                padding: 6px 12px;
+                                margin-left: -1px;
+                                line-height: 1.42857143;
+                                color: #337ab7;
+                                background-color: #fff;
+                                border: 1px solid #ddd;
+                                cursor: pointer;
+                            }
+
+                            .pagination > li.active > button.page-link {
+                                z-index: 2;
+                                color: #fff;
+                                background-color: #337ab7;
+                                border-color: #337ab7;
+                            }
+
+                            .pagination > li.disabled > button.page-link {
+                                color: #777;
+                                background-color: #fff;
+                                border-color: #ddd;
+                                cursor: not-allowed;
+                            }
+
+                            .pagination > li > button.page-link:focus {
+                                outline: none;
+                            }
+                        </style>
+
+                        <div class="text-center">
+                            <ul class="pagination pagination-sm">
+
+                                <!-- ראשון -->
+                                <li ng-class="{disabled: $ctrl.currentPage === 1}">
+                                    <button class="page-link" ng-click="$ctrl.goToFirstPage()" ng-disabled="$ctrl.currentPage === 1">ראשון</button>
+                                </li>
+
+                                <!-- קודם -->
+                                <li ng-class="{disabled: $ctrl.currentPage === 1}">
+                                    <button class="page-link" ng-click="$ctrl.goToPreviousPage()" ng-disabled="$ctrl.currentPage === 1">&laquo;</button>
+                                </li>
+
+                                <!-- מספרי עמודים -->
+                                <li ng-repeat="n in $ctrl.getPages() track by $index"
+                                    ng-class="{active: n === $ctrl.currentPage, disabled: n === '...'}">
+                                    <button class="page-link"
+                                            ng-click="$ctrl.goToPage(n)"
+                                            ng-disabled="n === '...'">
+                                        {{n}}
+                                    </button>
+                                </li>
+
+                                <!-- הבא -->
+                                <li ng-class="{disabled: $ctrl.currentPage === $ctrl.totalPages()}">
+                                    <button class="page-link" ng-click="$ctrl.goToNextPage()" ng-disabled="$ctrl.currentPage === $ctrl.totalPages()">&raquo;</button>
+                                </li>
+
+                                <!-- אחרון -->
+                                <li ng-class="{disabled: $ctrl.currentPage === $ctrl.totalPages()}">
+                                    <button class="page-link" ng-click="$ctrl.goToLastPage()" ng-disabled="$ctrl.currentPage === $ctrl.totalPages()">אחרון</button>
+                                </li>
+
+                            </ul>
+                        </div>
+
+
+
+
+
                     </div>
                     <div class="panel-footer">
 
