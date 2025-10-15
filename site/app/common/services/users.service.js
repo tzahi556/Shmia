@@ -32,7 +32,11 @@
         this.MWSService = _MWSService;
         this.setStatusForTerm = _setStatusForTerm;
         this.getWorkers = _getWorkers;
+        this.getWorkersAll = _getWorkersAll;
         this.getWorker = _getWorker;
+        this.getWorkerAll = _getWorkerAll;
+
+        
         this.getCitiesList = _getCitiesList;
         this.deleteWorker = _deleteWorker;
 
@@ -40,6 +44,10 @@
         
 
         this.updateWorker = _updateWorker;
+        this.updateWorkerAll = _updateWorkerAll;
+
+        
+
         this.getFiles = _getFiles;
         this.getWorkerChilds = _getWorkerChilds;
         this.bindData = _bindData;
@@ -144,7 +152,30 @@
 
         //************************** Worker ****************
 
+        function _getWorkersAll(isnew, page, pageSize, filterText, statusid, factoryid, divisionsid, subdivisionsid, departmentsid, subdepartmentsid, status101) {
 
+            
+            var deferred = $q.defer();
+
+            $http.get(sharedValues.apiUrl + 'users/getWorkersAll/' + isnew, {
+                params: {
+                    page: page,
+                    pageSize: pageSize,
+                    filterText: filterText,
+                    statusid: statusid,
+                    factoryid: factoryid,
+                    divisionsid: divisionsid,
+                    subdivisionsid: subdivisionsid,
+                    departmentsid: departmentsid,
+                    subdepartmentsid: subdepartmentsid,
+                    status101: status101
+                }
+            }).then(function (res) {
+                deferred.resolve(res.data);
+            });
+
+            return deferred.promise;
+        }
 
 
         function _getWorkers(isnew, page, pageSize, filterText, statusid, factoryid, divisionsid, subdivisionsid, departmentsid, subdepartmentsid,status101) {
@@ -227,6 +258,23 @@
             return deferred.promise;
         }
 
+
+        function _getWorkerAll(id,type) {
+
+            if (!type) type = 1;
+
+            var deferred = $q.defer();
+
+            $http.get(sharedValues.apiUrl + 'users/getWorkerAll/' + id + '/' + type ).then(function (res) {
+
+                var res = res.data;
+                deferred.resolve(res);
+
+            });
+            return deferred.promise;
+        }
+
+
         function _deleteWorker(id,isnew) {
             var deferred = $q.defer();
 
@@ -253,7 +301,20 @@
             });
             return deferred.promise;
         }
+        function _updateWorkerAll(worker, type) {
 
+            debugger
+            var deferred = $q.defer();
+
+
+
+            $http.post(sharedValues.apiUrl + 'users/updateWorkerAll/' + type, worker).then(function (res) {
+
+                var worker = res.data;
+                deferred.resolve(worker);
+            });
+            return deferred.promise;
+        }
         function _getWorkerChilds(workerid) {
 
 

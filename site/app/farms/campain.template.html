@@ -618,48 +618,54 @@
 
 
                         <div class="col-md-6">
+                            <div class="col-md-6" style="padding: 0px; padding-left: 3px !important ">
+                                <div class="form-group">
+                                    <label>תאריך הקמה</label>
+                                    <input type="date" disabled class="form-control date" ng-model="$ctrl.campain.DateRigster" />
+                                </div>
 
-                            <div class="form-group">
-                                <label>תאריך הקמה</label>
-                                <input type="date" disabled class="form-control date" ng-model="$ctrl.campain.DateRigster" />
                             </div>
+                            <div class="col-md-6" style="padding: 0px; padding-right: 3px !important; ">
+                                <div class="form-group">
+                                    <label>תאריך תפוגה</label>
+                                    <input type="date" class="form-control date" ng-model="$ctrl.campain.DateValidity" ng-model-options="{ timezone: 'UTC' }"  />
+                                </div>
 
-
-
+                            </div>
 
                         </div>
 
-                        <div class="col-md-3">
+                            <div class="col-md-3">
 
-                            <div class="form-group">
-
-
-                                <label>
-                                    האם בקמפיין זה צריך לחייב חתימה מחודשת ?
-                                </label><br />
-                                <input type="checkbox" ng-model="$ctrl.campain.MustSign">
+                                <div class="form-group">
 
 
+                                    <label>
+                                        האם בקמפיין זה צריך לחייב חתימה מחודשת ?
+                                    </label><br />
+                                    <input type="checkbox" ng-model="$ctrl.campain.MustSign">
+
+
+                                </div>
                             </div>
-                        </div>
 
 
-                        <div class="col-md-3">
+                            <div class="col-md-3">
 
-                            <div class="form-group">
-
-
-                                <label>
-                                    האם לשלוח קובץ סופי גם לעובד ?
-                                </label><br />
-                                <input type="checkbox" ng-model="$ctrl.campain.IsSendToWorker">
+                                <div class="form-group">
 
 
+                                    <label>
+                                        האם לשלוח קובץ סופי גם לעובד ?
+                                    </label><br />
+                                    <input type="checkbox" ng-model="$ctrl.campain.IsSendToWorker">
+
+
+                                </div>
                             </div>
+
+
                         </div>
-
-
-                    </div>
                     <div class="panel-footer colAlignLeft">
 
                         <button class="btn btn-primary" ng-click="$ctrl.SaveData(1)">שמירת נתונים</button>

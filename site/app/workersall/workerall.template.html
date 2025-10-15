@@ -1,0 +1,328 @@
+﻿
+<style>
+    .nopadding {
+        padding: 0px !important;
+        margin: 0px !important;
+    }
+
+    .signature {
+        height: 140px;
+        border: 1px solid gray;
+        border-radius: 5px;
+    }
+
+        .signature canvas {
+            height: 100%;
+            width: 100%;
+        }
+
+    .date {
+        direction: ltr;
+        text-align: right;
+    }
+
+    input[type="file"] {
+        display: none;
+    }
+
+    .custom-file-upload {
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        background: #5bc0de;
+        display: inline-block;
+        padding: 6px 12px;
+        cursor: pointer;
+        color: white;
+    }
+</style>
+
+
+<form name="workerForm">
+
+
+
+    <div ng-if="$ctrl.farmStyle!='1'">
+
+
+        <!--פרטי העובד\ת - 101-->
+        <div class="col-md-12 nopadding">
+
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    פרטי העובד\ת
+                </div>
+                <div class="panel-body">
+
+                    <div class="col-md-12 alert-info">
+                        <label>מיקום עובד/ת</label>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="form-group">
+
+                                <label>פעיל\לא פעיל</label>
+                                <select class="form-control" ng-model="$ctrl.worker.w.StatusId">
+
+                                    <option value="1">-- פעיל --</option>
+                                    <option value="0">-- לא פעיל --</option>
+
+                                </select>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3" ng-if="($ctrl.departments | filter:{TypeId:0}).length > 0" style="">
+                            <div class="form-group">
+
+                                <label>מפעל</label>
+                                <select class="form-control" ng-options="department.Id as department.Name for department in $ctrl.departments | filter:{TypeId:0}" ng-model="$ctrl.worker.w.FactoryId">
+                                    <option value="">-- מפעל --</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-md-3" style="" ng-if="($ctrl.departments | filter:{TypeId:1}).length > 0">
+                            <div class="form-group">
+                                <label>אגף</label>
+                                <select class="form-control"
+                                        ng-options="department.Id as department.Name for department in $ctrl.departments | filter:{TypeId:1}" ng-model="$ctrl.worker.w.DivisionsId">
+                                    <option value="">-- אגף --</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-md-3" style="" ng-if="($ctrl.departments | filter:{TypeId:2}).length > 0">
+                            <div class="form-group">
+
+                                <label>תת אגף</label>
+                                <select class="form-control" ng-options="department.Id as department.Name for department in $ctrl.departments | filter:{TypeId:2}" ng-model="$ctrl.worker.w.SubDivisionsId">
+                                    <option value="">-- תת אגף --</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-md-3" style="" ng-if="($ctrl.departments | filter:{TypeId:3}).length > 0">
+                            <div class="form-group">
+
+                                <label>מחלקה</label>
+                                <select class="form-control" ng-options="department.Id as department.Name for department in $ctrl.departments | filter:{TypeId:3}" ng-model="$ctrl.worker.w.DepartmentsId">
+                                    <option value="">-- מחלקה --</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-md-3" style="" ng-if="($ctrl.departments | filter:{TypeId:4}).length > 0">
+                            <div class="form-group">
+                                <label>תת מחלקה</label>
+                                <select class="form-control" ng-options="department.Id as department.Name for department in $ctrl.departments | filter:{TypeId:4}" ng-model="$ctrl.worker.w.SubDepartmentsId">
+                                    <option value="">--תת מחלקה  --</option>
+                                </select>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="col-md-12 alert-info">
+                        <label>פרטים כלליים</label>
+                    </div>
+
+                    <div class="row">
+
+
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label>שם פרטי</label>
+                                <input type="text" class="form-control" ng-model="$ctrl.worker.w.FirstName" required /> <!--ng-change="$ctrl.worker.HeskemWorkerName=$ctrl.worker.FirstName + ' ' + $ctrl.worker.LastName"-->
+                                <label class="tp-help-below">
+                                    ע"פ הרשום בת.ז.
+                                </label>
+                            </div>
+
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label>שם משפחה</label>
+                                <input type="text" class="form-control" ng-model="$ctrl.worker.w.LastName" required />
+                                <label class="tp-help-below">
+                                    ע"פ הרשום בת.ז.
+                                </label>
+                            </div>
+
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label>תעודת זהות</label>
+                                <input type="text" class="form-control" ng-model="$ctrl.worker.w.Taz" required />
+                                <label class="tp-help-below">
+                                    ע"פ הרשום בת.ז.
+                                </label>
+                            </div>
+
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label>מין</label>
+                                <select class="form-control" ng-model="$ctrl.worker.w.Gender" required>
+                                    <option value="">--בחר מין--</option>
+                                    <option value="1">זכר</option>
+                                    <option value="2">נקבה</option>
+                                </select>
+                            </div>
+
+                        </div>
+
+
+
+                    </div>
+
+                    <div class="row">
+
+
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label>תאריך לידה</label>
+                                <input type="date" class="form-control date" ng-model="$ctrl.worker.w.BirthDate" required />
+
+                            </div>
+
+                        </div>
+
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label>מס' טלפון נייד</label>
+                                <input type="text" name="Taz" class="form-control" ng-model="$ctrl.worker.w.PhoneSelular" required />
+
+                            </div>
+
+                        </div>
+
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label>מס' טלפון </label>
+                                <input type="text" name="Taz" class="form-control" ng-model="$ctrl.worker.w.Phone" />
+
+                            </div>
+
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label>כתובת דואר אלקטרוני</label>
+                                <input class="form-control" type="email" ng-model="$ctrl.worker.w.Email" required>
+
+                            </div>
+
+                        </div>
+
+
+
+
+                    </div>
+
+                    <div class="row">
+
+
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label>יישוב</label>
+
+
+
+                                <input id="txtCity" class="form-control autocomplete" type="text" autocomplete="off" ng-model="$ctrl.worker.w.City" required>
+
+                            </div>
+
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label>רחוב</label>
+                                <input type="text" class="form-control" ng-model="$ctrl.worker.w.Street" required />
+
+                            </div>
+
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label>מס' בית</label>
+                                <input type="text" class="form-control" ng-model="$ctrl.worker.w.HouseNumber" required />
+
+                            </div>
+
+                        </div>
+
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label>
+                                    מיקוד  <span class="tp-help-below">
+                                        ( ניתן להיעזר ב<a href="https://doar.israelpost.co.il/locatezip" target="_blank">אתר הדואר</a>)
+                                    </span>
+                                </label>
+                                <input type="text" class="form-control" ng-model="$ctrl.worker.w.Mikud" />
+
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+
+
+
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-12 nopadding">
+
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    רשימת מסמכים
+                </div>
+                <div class="panel-body">
+
+                    <div class="table-responsive">
+
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+
+                                   
+                                    <th>שם מסמך</th>
+                                    <th>סטטוס</th>
+                                    <th></th>
+                                   
+                                </tr>
+                            </thead>
+                            <tbody>
+
+
+                                <tr ng-repeat="worker in $ctrl.workers.Items">
+
+                                    <td>{{worker.w.FirstName}}</td>
+                                    <td>{{worker.w.FirstName}}</td>
+                                    <td> <button class="btn  btn-warning" ui-sref="workerall({id:worker.w.Id})">עדכון</button></td>
+
+                                </tr>
+                            </tbody>
+                        </table>
+
+
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+        <!--הצהרה - 101-->
+        <div class="row">
+            <div class="col-md-12">
+                <div ng-if="$ctrl.farmStyle!=1 || $ctrl.role=='farmAdmin' ||  $ctrl.role=='instructor'" style="width:100%;margin-top:2px" class="btn  btn-primary" ng-click="$ctrl.saveWorker(1)">שמור נתונים</div>
+            </div>
+        </div>
+
+</form>

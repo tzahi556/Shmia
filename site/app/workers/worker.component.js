@@ -117,6 +117,11 @@
 
         function _init() {
 
+            debugger
+            if (!this.worker.w101) {
+                this.worker.w101 = {ShnatMas:"2025"};
+            }
+
             function setDateForArray(obj) {
 
                 Object.keys(obj).forEach(function (key, index) {
@@ -200,7 +205,7 @@
                 
             }, 1000);
 
-
+            if (this.worker.w101)
             this.worker.w101.ZikuyToshavIsrael = (this.worker.w101.ToshavIsrael == 1 ? true : false)
               
 
@@ -722,7 +727,7 @@
             try {
 
                 
-
+               
               
 
                 var obj = this.worker.w; //angular.copy(this.worker.w);

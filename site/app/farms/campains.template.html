@@ -20,15 +20,15 @@
             <thead>
                 <tr>
 
-                   
+
                     <th>שם קמפיין</th>
                     <th>תאריך הקמה</th>
+                    <th>תאריך תפוגה</th>
                     <th>כמות עובדים שנשלח קישור</th>
                     <th>כמות עובדים שאישרו</th>
                     <!--<th>ת.עדכון</th>
-                    <th>סטטוס</th>
-                    <th>SMS</th>-->
-
+    <th>סטטוס</th>
+    <th>SMS</th>-->
                     <!--<th>PDF</th>-->
                     <th></th>
                     <th></th>
@@ -45,6 +45,9 @@
 
                     <td style="width:50%">{{campain.Name}}</td>
                     <td>{{campain.DateRigster | ildate: 'DD/MM/YYYY'}}</td>
+
+                    <td>{{(campain.DateValidity) ? (campain.DateValidity | ildate: 'DD/MM/YYYY ') :''}}</td>
+                    <!--<td>{{campain.DateValidity | ildate: 'DD/MM/YYYY'}}</td>-->
                     <td>{{campain.CountSend}}</td>
                     <td>{{campain.CountSign}}</td>
                     <!--<td>{{campain.w101.Status}}</td>

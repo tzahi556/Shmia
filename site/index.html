@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>ניהול עובדים (101)</title>
+    <title>מערכת עובדים</title>
 
     <!--<script src="https://code.jquery.com/jquery-3.5.0.js"></script>-->
     <!--<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
@@ -133,6 +133,9 @@
     <script src="app/awshistory/awsmangershistory.component.js"></script>
     <script src="app/awshistory/awsmangershistoryphrase.component.js"></script>
     <script src="app/workers/workers.component.js"></script>
+    <script src="app/workersall/workersall.component.js"></script>
+    <script src="app/workersall/workerall.component.js"></script>
+
     <script src="app/workersnew/workers.component.js?v=3"></script>
     <script src="app/workers/worker.component.js?v=3"></script>
     <script src="app/workersnew/workernew.component.js"></script>
@@ -147,7 +150,7 @@
     <script src="app/farms/campain.component.js"></script>
     <script src="app/farms/workercampains.component.js"></script>
 
-    
+
 
     <link href="css/jquery.toast.css" rel="stylesheet" />
 
@@ -309,7 +312,7 @@
             loadingTask.promise.then(function (pdf) {
 
 
-              
+
                 console.log('PDF loaded');
 
                 CurrentPage = 1;
@@ -368,7 +371,7 @@
             var scale = CurrentWidth / viewport.width;
 
 
-           
+
 
             // var scaleY = CurrentHeight / viewport.height;
 
@@ -414,11 +417,11 @@
 
             //.length>0 && Currentfield2pdf[0].f2p
             if (Currentfield2pdf) {
-                
+
                 AddParamsToPDF(Currentfield2pdf);
 
             }
-             //alert(CurrentScale);
+            //alert(CurrentScale);
 
 
 

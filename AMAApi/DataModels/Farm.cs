@@ -68,6 +68,8 @@ namespace FarmsApi.DataModels
         public string NameEn { get; set; }
         public DateTime DateRigster { get; set; }
 
+        public DateTime? DateValidity { get; set; }
+        
         public int CountSend { get; set; }
 
         public int CountSign { get; set; }

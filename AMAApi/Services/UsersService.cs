@@ -374,7 +374,7 @@ namespace FarmsApi.Services
             {
 
 
-                var CurrentUser =Helper.GetCurrentUser();
+                var CurrentUser = Helper.GetCurrentUser();
 
                 var CurrentUserId = CurrentUser.Id;
                 var CurrentRolesId = CurrentUser.RolesId;
@@ -395,99 +395,105 @@ namespace FarmsApi.Services
                 //{
 
 
-                    var CurrentTotalCount = Context.Workers.Where(x =>
-                                                                  x.FarmId == CurrentFarmId &&
+                var CurrentTotalCount = Context.Workers.Where(x =>
+                                                              x.FarmId == CurrentFarmId &&
 
-                                                                  (filterText == null || ((x.FirstName + " " + x.LastName).Contains(filterText) || x.Taz.Contains(filterText) || x.Phone.Contains(filterText))) &&
-                                                                  (statusid == -1 || (x.StatusId == statusid)) &&
-                                                                  (factoryid == 0 || (x.FactoryId == factoryid)) &&
-                                                                  (divisionsid == 0 || (x.DivisionsId == divisionsid)) &&
-                                                                  (subdivisionsid == 0 || (x.SubDivisionsId == subdivisionsid)) &&
-                                                                  (departmentsid == 0 || (x.DepartmentsId == departmentsid)) &&
-                                                                  (subdepartmentsid == 0 || (x.SubDepartmentsId == subdepartmentsid)) &&
-                                                                  
-                                                                  
-                                                                  // אם מדובר במנהל מערכת
-                                                                  // או בסופר אדמין
-                                                                  // אחרת תביא לי רק את העובדים שתחת הרשאה של מנהל מפעל או מחלקה
-                                                                  (CurrentRolesId == 0 ||
-                                                                   CurrentRolesId == 2 || 
-                                                                   AllowedDepartmentIds.Contains(x.FactoryId ?? -1) ||
-                                                                   AllowedDepartmentIds.Contains(x.DepartmentsId ?? -1)
-
-                                                                   ) &&
-
-                                                                  (!string.IsNullOrEmpty(x.FirstName.Trim()) || !string.IsNullOrEmpty(x.LastName.Trim()) || !string.IsNullOrEmpty(x.Taz.Trim()))
-
-                                    ).Count(); // או לפי Date
+                                                              (filterText == null || ((x.FirstName + " " + x.LastName).Contains(filterText) || x.Taz.Contains(filterText) || x.Phone.Contains(filterText))) &&
+                                                              (statusid == -1 || (x.StatusId == statusid)) &&
+                                                              (factoryid == 0 || (x.FactoryId == factoryid)) &&
+                                                              (divisionsid == 0 || (x.DivisionsId == divisionsid)) &&
+                                                              (subdivisionsid == 0 || (x.SubDivisionsId == subdivisionsid)) &&
+                                                              (departmentsid == 0 || (x.DepartmentsId == departmentsid)) &&
+                                                              (subdepartmentsid == 0 || (x.SubDepartmentsId == subdepartmentsid)) &&
 
 
+                                                              // אם מדובר במנהל מערכת
+                                                              // או בסופר אדמין
+                                                              // אחרת תביא לי רק את העובדים שתחת הרשאה של מנהל מפעל או מחלקה
+                                                              (CurrentRolesId == 0 ||
+                                                               CurrentRolesId == 2 ||
+                                                               AllowedDepartmentIds.Contains(x.FactoryId ?? -1) ||
+                                                               AllowedDepartmentIds.Contains(x.DepartmentsId ?? -1)
 
-                    WorkersList = (from w1 in Context.Workers.Where(x =>
-                                                                    x.FarmId == CurrentFarmId &&
-                                                                    //x.StatusId == 1 &&
-                                                                    (filterText == null || ((x.FirstName + " " + x.LastName).Contains(filterText) || x.Taz.Contains(filterText) || x.Phone.Contains(filterText))) &&
-                                                                    
-                                                                    (statusid == -1 || (x.StatusId == statusid)) &&
-                                                                    (factoryid == 0 || (x.FactoryId == factoryid)) &&
-                                                                    (divisionsid == 0 || (x.DivisionsId == divisionsid)) &&
-                                                                    (subdivisionsid == 0 || (x.SubDivisionsId == subdivisionsid)) &&
-                                                                    (departmentsid == 0 || (x.DepartmentsId == departmentsid)) &&
-                                                                    (subdepartmentsid == 0 || (x.SubDepartmentsId == subdepartmentsid)) &&
+                                                               ) &&
 
-                                                                   (CurrentRolesId == 0 ||
-                                                                   CurrentRolesId == 2 ||
-                                                                   AllowedDepartmentIds.Contains(x.FactoryId ?? -1) ||
-                                                                   AllowedDepartmentIds.Contains(x.DepartmentsId ?? -1)
+                                                              (!string.IsNullOrEmpty(x.FirstName.Trim()) || !string.IsNullOrEmpty(x.LastName.Trim()) || !string.IsNullOrEmpty(x.Taz.Trim()))
 
-                                                                   ) &&
-
-
-                                                                    (!string.IsNullOrEmpty(x.FirstName.Trim()) || !string.IsNullOrEmpty(x.LastName.Trim()) || !string.IsNullOrEmpty(x.Taz.Trim()))
-                                                                )
-
-                                   from w1011 in Context.Workers101.Where(x => x.IsNew == isnew && x.WorkersId == w1.Id && x.UserId == CurrentUserId).DefaultIfEmpty()
-
-                                   from m in Context.CampainsStatusType.Where(x => x.Id == w1011.MediaId && x.Type == 1).DefaultIfEmpty()
-                                   from s in Context.CampainsStatusType.Where(x => x.Id == w1011.StatusId).DefaultIfEmpty()
-
-                                   from u in Context.Users.Where(x => x.Id == w1011.UserId).DefaultIfEmpty()
-                                   select new WorkersWith101
-                                   {
-                                       Status = s.Name,
-                                       Media=m.Name,
-                                       HasPdf = false,
-                                       w = w1,
-                                       w101 = w1011,
-                                       ManagerName = (u != null) ? (u.FirstName + " " + u.LastName) : null
-
-                                   }).OrderByDescending(x => x.w101.DateRigster)
-                                       .Skip((page - 1) * pageSize)
-                                       .Take(pageSize)
-                                       .ToList();
+                                ).Count(); // או לפי Date
 
 
 
+                WorkersList = (from w1 in Context.Workers.Where(x =>
+                                                                x.FarmId == CurrentFarmId &&
+                                                                //x.StatusId == 1 &&
+                                                                (filterText == null || ((x.FirstName + " " + x.LastName).Contains(filterText) || x.Taz.Contains(filterText) || x.Phone.Contains(filterText))) &&
+
+                                                                (statusid == -1 || (x.StatusId == statusid)) &&
+                                                                (factoryid == 0 || (x.FactoryId == factoryid)) &&
+                                                                (divisionsid == 0 || (x.DivisionsId == divisionsid)) &&
+                                                                (subdivisionsid == 0 || (x.SubDivisionsId == subdivisionsid)) &&
+                                                                (departmentsid == 0 || (x.DepartmentsId == departmentsid)) &&
+                                                                (subdepartmentsid == 0 || (x.SubDepartmentsId == subdepartmentsid)) &&
+
+                                                               (CurrentRolesId == 0 ||
+                                                               CurrentRolesId == 2 ||
+                                                               AllowedDepartmentIds.Contains(x.FactoryId ?? -1) ||
+                                                               AllowedDepartmentIds.Contains(x.DepartmentsId ?? -1)
+
+                                                               ) &&
 
 
-                    foreach (var item in WorkersList)
+                                                                (!string.IsNullOrEmpty(x.FirstName.Trim()) || !string.IsNullOrEmpty(x.LastName.Trim()) || !string.IsNullOrEmpty(x.Taz.Trim()))
+                                                            )
+
+                               from w1011 in Context.Workers101.Where(x => x.IsNew == isnew && x.WorkersId == w1.Id && x.UserId == CurrentUserId).DefaultIfEmpty()
+
+                               from m in Context.CampainsStatusType.Where(x => x.Id == w1011.MediaId && x.Type == 1).DefaultIfEmpty()
+                               from s in Context.CampainsStatusType.Where(x => x.Id == w1011.StatusId).DefaultIfEmpty()
+
+                               from u in Context.Users.Where(x => x.Id == w1011.UserId).DefaultIfEmpty()
+                               select new WorkersWith101
+                               {
+                                   Status = s.Name,
+                                   Media = m.Name,
+                                   HasPdf = false,
+                                   w = w1,
+                                   w101 = w1011,
+                                   ManagerName = (u != null) ? (u.FirstName + " " + u.LastName) : null
+
+                               }).OrderByDescending(x => x.w101.DateRigster)
+                                   .Skip((page - 1) * pageSize)
+                                   .Take(pageSize)
+                                   .ToList();
+
+
+
+
+
+                foreach (var item in WorkersList)
+                {
+                    if (item?.w == null) continue;
+
+                    if (item?.w101 == null)
                     {
-                        if (item?.w == null) continue;
-
-                        string filePath = Path.Combine(basePath, item.w.Id.ToString(), "-1", "AllPdfTemp.pdf");
-                        item.HasPdf = System.IO.File.Exists(filePath);
+                        item.w101 = new Workers101();
+                        item.w101.UserId = item.w.Id;
+                        item.w101.ShnatMas = "2025";
                     }
+                    string filePath = Path.Combine(basePath, item.w.Id.ToString(), "-1", "AllPdfTemp.pdf");
+                    item.HasPdf = System.IO.File.Exists(filePath);
+                }
 
-                    WorkersResult workersResult = new WorkersResult();
-                    workersResult.TotalCount = CurrentTotalCount;
-                    workersResult.Items = WorkersList;
+                WorkersResult workersResult = new WorkersResult();
+                workersResult.TotalCount = CurrentTotalCount;
+                workersResult.Items = WorkersList;
 
-                    return workersResult;
-
-
+                return workersResult;
 
 
-                    //return WorkersList.Where(x => x.w != null).ToList();
+
+
+                //return WorkersList.Where(x => x.w != null).ToList();
                 //}
 
                 //else
@@ -790,17 +796,17 @@ namespace FarmsApi.Services
                                 // צחי עדכן שזה יישלח לעובד עצמו במידה ויש לו מייל
                                 if (!string.IsNullOrEmpty(workersWith101.w.Email))
                                 {
-                                    MailTo = MailTo +  workersWith101.w.Email;
+                                    MailTo = MailTo + workersWith101.w.Email;
                                 }
                                 else
                                 {
-                                     MailTo = MailTo.Remove(MailTo.Length - 1);
+                                    MailTo = MailTo.Remove(MailTo.Length - 1);
 
                                 }
 
 
 
-                                    string SmtpHost = ConfigurationSettings.AppSettings["SmtpHost"].ToString();
+                                string SmtpHost = ConfigurationSettings.AppSettings["SmtpHost"].ToString();
                                 string MailUser = ConfigurationSettings.AppSettings["MailUser"].ToString();
                                 string MailPassword = ConfigurationSettings.AppSettings["MailPassword"].ToString();
 
@@ -830,7 +836,7 @@ namespace FarmsApi.Services
                                 actMSG.Attachments.Add(attachment);
                                 client.Send(actMSG);
                                 //"נשלח למשרד"
-                                workersWith101.w101.StatusId =10;
+                                workersWith101.w101.StatusId = 10;
 
                                 AddToLogDB("", "", " שליחה למשרד של עובד/ת חדשה  " + workersWith101.w.Id, null, "", workersWith101.w.Id);
                             }
@@ -838,7 +844,7 @@ namespace FarmsApi.Services
                             else
                             {
 
-                                
+
                                 //var BaseLinkSite101 = System.Web.HttpContext.Current.Server.MapPath("~/Uploads/Workers/Years_" + workersWith101.w101.ShnatMas.ToString());
                                 //if (!Directory.Exists(BaseLinkSite101))
                                 //{
@@ -857,7 +863,7 @@ namespace FarmsApi.Services
                                 //}
 
                                 //File.Copy(BaseLinkSite + "/-1/AllPdfTemp.pdf", WorkerPath + "/" + workersWith101.w.Id + ".pdf", true);
-                            
+
 
                                 //workersWith101.w101.StatusId = 10;
 
@@ -1084,9 +1090,28 @@ namespace FarmsApi.Services
                 //נתונים נשמרו
                 w101.StatusId = 12;
 
-                w101.UserManager = Context.Users.Where(x => x.Id == w101.UserId).FirstOrDefault();
+                if (w101.Id == 0)
+                {
 
-                Context.Entry(w101).State = System.Data.Entity.EntityState.Modified;
+                    var CurrentUser = Helper.GetCurrentUser();
+                    w101.WorkersId = w.Id;
+                    if (CurrentUser != null)
+                        w101.UserId = CurrentUser.Id;
+
+                    Context.Workers101.Add(w101);
+
+                }
+                else
+                {
+                    Context.Entry(w101).State = System.Data.Entity.EntityState.Modified;
+                    w101.UserManager = Context.Users.Where(x => x.Id == w101.UserId).FirstOrDefault();
+
+                }
+
+
+
+
+
                 Context.Entry(w).State = System.Data.Entity.EntityState.Modified;
                 Context.SaveChanges();
                 AddToLogDB("", "", " שמירת נתונים לעובדת " + w.Id, null, "", w.Id);
@@ -1128,7 +1153,7 @@ namespace FarmsApi.Services
         }
 
 
-        public static WorkersResult SendSMS(List<WorkersWith101> WorkersItems, int Type, bool IsNew=true, int page=1, int pageSize=10, string filterText = null,
+        public static WorkersResult SendSMS(List<WorkersWith101> WorkersItems, int Type, bool IsNew = true, int page = 1, int pageSize = 10, string filterText = null,
              int statusid = -1, int factoryid = 0, int divisionsid = 0,
             int subdivisionsid = 0, int departmentsid = 0, int subdepartmentsid = 0, string status101 = null
             )
@@ -1138,7 +1163,7 @@ namespace FarmsApi.Services
 
             using (var Context = new Context())
             {
-              
+
                 foreach (var item in WorkersItems)
                 {
 
@@ -1153,8 +1178,43 @@ namespace FarmsApi.Services
 
                     EncryptId = EncryptId.Replace("+", "@@").Replace("/", "ofekslash");
 
-
                     var Message = string.Format("שלום רב {0}\r\nלהשלמת הטופס ולחתימה על 101 לחץ כאן:\r\n{1}\r\n", FullName, SiteRegisterLink + EncryptId + "/");
+
+                    if (Type > 10)
+                    {
+                        string SiteUsersCampains = ConfigurationSettings.AppSettings["SiteUsersCampains"].ToString();
+
+                        Message = string.Format("שלום רב {0}\r\nלצפיה בכל המסמכים שלך לחצ/י כאן:\r\n{1}\r\n", FullName, SiteUsersCampains + EncryptId + "/");
+
+                        // SMS
+                        if (Type == 11)
+                        {
+                            string Title = "Forms";
+
+                            var res = Helper.SendSMSEndPoint(Phone, Message, Title);
+
+                            // var resObj = Helper.ResAsJson(res);
+                        }
+
+                        // מייל
+                        if (Type == 22)
+                        {
+                            string Title = "מסמכים לחתימה";
+                            bool Res = Helper.SendMail(Title, Message.Replace("\r\n", "<br>"), Email, "", FarmId.ToString());
+                        }
+
+                      
+                        
+
+
+                            return GetWorkers(true, page, pageSize, filterText, statusid, factoryid, divisionsid,
+                                              subdivisionsid, departmentsid, subdepartmentsid, status101);
+
+                    }
+
+
+
+
 
 
                     // SMS
@@ -1163,7 +1223,7 @@ namespace FarmsApi.Services
 
 
                         string Title = "Form101";
-                       
+
                         var res = Helper.SendSMSEndPoint(Phone, Message, Title);
 
                         var resObj = Helper.ResAsJson(res);
@@ -1207,7 +1267,7 @@ namespace FarmsApi.Services
                     }
 
 
-                   
+
 
                     //if (!string.IsNullOrEmpty(Phone) && Phone.Length > 7)
                     //{
@@ -1231,7 +1291,7 @@ namespace FarmsApi.Services
                 Context.SaveChanges();
             }
 
-            return GetWorkers(true, page, pageSize, filterText,statusid, factoryid, divisionsid,
+            return GetWorkers(true, page, pageSize, filterText, statusid, factoryid, divisionsid,
              subdivisionsid, departmentsid, subdepartmentsid, status101);
 
         }

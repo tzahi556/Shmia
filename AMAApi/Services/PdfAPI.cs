@@ -521,7 +521,7 @@ namespace FarmsApi.Services
 
                     if (item.FieldsDataTypesId == 4 || item.FieldsDataTypesId == 6)
                     {
-                        if (res == "true")
+                        if (res.ToString() == "true")
                             res = "True";
                         else
                             res = "False";
@@ -687,7 +687,7 @@ namespace FarmsApi.Services
                 else if (res != null && ((PropertyValue == null) || PropertyValue == res.ToString() || res.ToString() == "True") && res.ToString() != "False")
                 {
                     if (item.Word.Contains("x"))
-                        item.Word = "x";
+                        item.Word = "x"; //"✓"
                     else
                         item.Word = res.ToString();
 

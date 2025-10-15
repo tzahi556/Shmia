@@ -4,7 +4,7 @@
 
 <div class="panel panel-default">
     <div class="panel-heading">
-        קליטת עובדים חדשים
+        רשימת עובדים
 
         <div style="float:left">
             <button ng-click="$ctrl.downloadExcel()" class="btn btn-success btn-xs">הורדת פרטי עובדים</button>
@@ -34,7 +34,7 @@
         </div>
 
 
-        <div class="col-md-2" ng-if="($ctrl.departments | filter:{TypeId:0}).length > 0" style="">
+        <div class="col-md-2" ng-if="($ctrl.departments | filter:{TypeId:0}).length>0" style="">
             <div class="form-group">
 
                 <label>מפעל</label>
@@ -43,6 +43,7 @@
                 </select>
             </div>
         </div>
+
 
         <div class="col-md-2" style="" ng-if="($ctrl.departments | filter:{TypeId:1}).length > 0">
             <div class="form-group">
@@ -63,6 +64,9 @@
                 </select>
             </div>
         </div>
+
+
+
 
         <div class="col-md-2" style="" ng-if="($ctrl.departments | filter:{TypeId:3}).length > 0">
             <div class="form-group">
@@ -98,9 +102,9 @@
             <div class="tooltip-container">
                 <button class="btn btn-success btn-xs" style="float:left;margin-left:10px;">שליחת קישור למסומנים</button>
                 <div class="tooltip-text">
-                    <i class="icon icon-sms" ng-click="$ctrl.sendSMS(1)"></i>
-                    <i class="icon icon-email" ng-click="$ctrl.sendSMS(2)"></i>
-                    <i class="icon icon-whatsapp" title="באופציה זו יש לבחור עובד/ת בודד/ת" ng-click="$ctrl.sendSMS(3)"></i>
+                    <i class="icon icon-sms" ng-click="$ctrl.sendSMS(11)"></i>
+                    <i class="icon icon-email" ng-click="$ctrl.sendSMS(22)"></i>
+                    <i class="icon icon-whatsapp" title="באופציה זו יש לבחור עובד/ת בודד/ת" ng-click="$ctrl.sendSMS(33)"></i>
                 </div>
             </div>
 
@@ -120,11 +124,18 @@
                     <th>שם משפחה</th>
                     <th>אימייל</th>
                     <th>טלפון</th>
-                    <th>ת.רישום</th>
+                    <th>מפעל</th>
+                    <th>אגף</th>
+                    <th>מחלקה</th>
                     <th>סטטוס</th>
-                    <th>סוג שליחה</th>
-                    <th>ת.שליחה</th>
-                    <th>PDF</th>
+
+
+
+                    <!--<th>ת.רישום</th>
+    <th>סטטוס</th>
+    <th>סוג שליחה</th>
+    <th>ת.שליחה</th>
+    <th>PDF</th>-->
                     <th></th>
                     <th></th>
                     <th width="5%"><input type="checkbox" ng-model="$ctrl.checkAllc" style="width:52px;height:20px" ng-click="$ctrl.checkAll()"></th>
@@ -134,32 +145,19 @@
 
 
                 <tr ng-repeat="worker in $ctrl.workers.Items">
-                    <!--| filter:$ctrl.filter
-    | filter: ($ctrl.departmentId ? {w: {DivisionsId: $ctrl.departmentId}} : undefined)
-    | filter: ($ctrl.departmentId2 ? {w: {SubDivisionsId: $ctrl.departmentId2}} : undefined)
-    | filter: ($ctrl.departmentId3 ? {w: {DepartmentsId: $ctrl.departmentId3}} : undefined)
-    | filter: ($ctrl.departmentId4 ? {w: {SubDepartmentsId: $ctrl.departmentId4}} : undefined)
-    | filter: ($ctrl.departmentId0 ? {w: {FactoryId: $ctrl.departmentId0}} : undefined)
-    | filter: ($ctrl.statusid ? {w: {StatusId: $ctrl.statusid}} : undefined)-->
 
 
 
-
-
-                    <!--<td>{{worker.ManagerName}}</td>-->
                     <td>{{worker.w.FirstName}}</td>
                     <td>{{worker.w.LastName}}</td>
                     <td>{{worker.w.Email}}</td>
                     <td>{{worker.w.PhoneSelular}}</td>
-                    <td>{{(worker.w101.DateRigster) ? (worker.w101.DateRigster | ildate: 'HH:mm DD/MM/YYYY ') :''}}</td>
-                
-                    <td>{{worker.Status}}</td>
-                    <td>{{worker.Media}}</td>
-                
-                    <td>{{(worker.w101.DateSend) ? (worker.w101.DateSend | ildate: 'HH:mm DD/MM/YYYY ') :''}}</td>
-                  
-                    <td><a ng-if="worker.HasPdf" class="btn  btn-success" ng-href="{{$ctrl.uploadsUri+ 'Workers/' + worker.w.Id.toString() + '/-1/AllPdfTemp.pdf'}}" target="_blank">PDF</a></td>
-                    <td> <button class="btn  btn-warning" ui-sref="worker({id:worker.w.Id})">עדכון</button></td>
+                    <td>{{(($ctrl.departments | filter:{Id: worker.w.FactoryId})[0] || {}).Name || ''}}</td>
+                    <td>{{(($ctrl.departments | filter:{Id: worker.w.DivisionsId})[0] || {}).Name || ''}}</td>
+                    <td>{{(($ctrl.departments | filter:{Id: worker.w.DepartmentsId})[0] || {}).Name || ''}}</td>
+                    <td>{{worker.w.StatusId == 1 ? 'פעיל' : 'לא פעיל'}}</td>
+
+                    <td> <button class="btn  btn-warning" ui-sref="workerall({id:worker.w.Id})">עדכון</button></td>
                     <td> <button class="btn  btn-danger" ng-click="$ctrl.delete(worker.w.Id)">מחק עובד</button></td>
                     <td width="5%"><input style="width:52px;height:20px" type="checkbox" ng-model="worker.IsSelected" /></td>
 

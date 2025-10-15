@@ -84,9 +84,12 @@
 
             for (var i = 0; i < this.screendata.length; i++) {
 
+
+              
+
                 if (!this.screendata[i].f2g) continue;
 
-                if (this.screendata[i].f2g.FieldsDataTypesId == 4 && this.screendata[i].f2gwd.Value) {
+                if ((this.screendata[i].f2g.FieldsDataTypesId == 4 || this.screendata[i].f2g.FieldsDataTypesId == 6) && this.screendata[i].f2gwd.Value) {
                     this.screendata[i].f2gwd.Value = eval(this.screendata[i].f2gwd.Value);
                 }
 
@@ -184,10 +187,14 @@
 
                 //    }.bind(self));
                 //}
+
                
                 self.screendata = screendata;
 
-                //self.init();
+
+                self.init();
+
+
                 if (type == 1)
                     alertMessage('הנתונים נשמרו בהצלחה!');
 
@@ -266,7 +273,7 @@
                 if (type == 1) {
 
 
-
+                    
 
 
 

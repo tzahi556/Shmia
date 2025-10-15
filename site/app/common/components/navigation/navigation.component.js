@@ -34,6 +34,7 @@
             this.awsmangers = ['0', '2', '13', '6'].indexOf(role) != -1 ? true : false;
 
             this.workers = ['0', '2', '13','6'].indexOf(role) != -1 ? true : false;
+            this.workersall = ['0', '2', '13', '6'].indexOf(role) != -1 ? true : false;
 
             this.bindtodata = ['0'].indexOf(role) != -1 ? true : false;
 
