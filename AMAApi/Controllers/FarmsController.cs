@@ -437,32 +437,38 @@ namespace FarmsApi.Services
         }
 
 
-      
 
 
 
 
 
 
-            //[Authorize]
-            //[Route("getKlalitHistoris")]
-            //[HttpGet]
 
-            //public IHttpActionResult GetKlalitHistoris(int FarmId , string startDate = null, string endDate = null,int? type=null,int? klalitId = null)
-            //{
-            //    return Ok(FarmsService.GetKlalitHistoris(FarmId, startDate, endDate,type,klalitId));
-            //}
+        
+        [Route("getFarmtypes")]
+        [HttpGet]
 
+        public IHttpActionResult GetFarmtypes(int FarmId)
+        {
+            using (var Context = new Context())
+            {
+                var FarmsTypesList = Context.FarmsTypes.ToList();
 
-            //[Authorize]
-            //[Route("setKlalitHistoris")]
-            //[HttpPost]
-
-            //public IHttpActionResult SetKlalitHistoris(KlalitHistoris kh)
-            //{
-            //    return Ok(FarmsService.SetKlalitHistoris(kh));
-            //}
-
+                return Ok(FarmsTypesList);
+            }
 
         }
+
+
+        //[Authorize]
+        //[Route("setKlalitHistoris")]
+        //[HttpPost]
+
+        //public IHttpActionResult SetKlalitHistoris(KlalitHistoris kh)
+        //{
+        //    return Ok(FarmsService.SetKlalitHistoris(kh));
+        //}
+
+
+    }
 }

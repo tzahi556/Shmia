@@ -370,7 +370,7 @@
                             return usersService.getMasterTable(1);
                         },
                         departments: function (farmsService) {
-                            return farmsService.getSetCampainsData(9, localStorage.getItem('FarmId'), null);
+                            return farmsService.getSetCampainsData(9, 0, null);
                         },
                         campains: function (usersService, $stateParams) {
 
@@ -496,15 +496,20 @@
             url: '/farm/{id}',
             views: {
                 'main': {
-                    template: '<farm farm="$ctrl.farm"></farm>',
-                    controller: function (farm) {
+                    template: '<farm farm="$ctrl.farm" farmstypes="$ctrl.farmstypes" ></farm>',
+                    controller: function (farm, farmstypes) {
                         this.farm = farm;
+                        this.farmstypes = farmstypes;
                     },
                     controllerAs: '$ctrl',
                     resolve: {
                         farm: function (farmsService, $stateParams) {
                             return farmsService.getFarm($stateParams.id);
+                        },
+                        farmstypes: function (farmsService, $stateParams) {
+                            return farmsService.getFarmtypes($stateParams.id);
                         }
+
                     }
                 }
             }

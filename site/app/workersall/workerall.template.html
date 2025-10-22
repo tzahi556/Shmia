@@ -45,7 +45,7 @@
 
 
         <!--פרטי העובד\ת - 101-->
-        <div class="col-md-12 nopadding">
+        <div class="col-md-12 nopadding" ng-if="$ctrl.role>0">
 
             <div class="panel panel-primary">
                 <div class="panel-heading">
@@ -53,8 +53,8 @@
                 </div>
                 <div class="panel-body">
 
-                    <div class="col-md-12 alert-info">
-                        <label>מיקום עובד/ת</label>
+                    <div class="row alert-info">
+                      &nbsp;  <label>מיקום עובד/ת</label>
                     </div>
                     <div class="row">
                         <div class="col-md-3">
@@ -123,8 +123,8 @@
 
                     </div>
 
-                    <div class="col-md-12 alert-info">
-                        <label>פרטים כלליים</label>
+                    <div class="row alert-info">
+                        &nbsp; <label>פרטים כלליים</label>
                     </div>
 
                     <div class="row">
@@ -288,22 +288,23 @@
                             <thead>
                                 <tr>
 
-                                   
+
                                     <th>שם מסמך</th>
                                     <th>סטטוס</th>
                                     <th></th>
-                                   
+                                 
                                 </tr>
                             </thead>
                             <tbody>
 
 
-                                <tr ng-repeat="worker in $ctrl.workers.Items">
+                                <tr ng-repeat="campain in $ctrl.campains">
 
-                                    <td>{{worker.w.FirstName}}</td>
-                                    <td>{{worker.w.FirstName}}</td>
-                                    <td> <button class="btn  btn-warning" ui-sref="workerall({id:worker.w.Id})">עדכון</button></td>
-
+                                    <td>{{campain.c.Name}}</td>
+                                    <td>{{campain.cst.Name}}</td>
+                                    <!--<td> <button class="btn  btn-warning" ui-sref="workerall({id:worker.w.Id})">עדכון</button></td>-->
+                                    <td ng-if="campain.cs.StatusId==5"> <button class="btn  btn-warning" ui-sref="workercampains({id:campain.cs.WorkersId,campainid:campain.c.Id})">חתימה</button></td>
+                                    <td ng-if="campain.cs.StatusId==6"><a  class="btn  btn-success" ng-href="{{$ctrl.uploadsUri + campain.cs.WorkersId +'/' + campain.c.Id +'/AllPdfTemp.pdf'}}" target="_blank">PDF</a></td>
                                 </tr>
                             </tbody>
                         </table>
@@ -319,7 +320,7 @@
 
 
         <!--הצהרה - 101-->
-        <div class="row">
+        <div class="row" ng-if="$ctrl.role>0">
             <div class="col-md-12">
                 <div ng-if="$ctrl.farmStyle!=1 || $ctrl.role=='farmAdmin' ||  $ctrl.role=='instructor'" style="width:100%;margin-top:2px" class="btn  btn-primary" ng-click="$ctrl.saveWorker(1)">שמור נתונים</div>
             </div>

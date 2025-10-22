@@ -1,4 +1,5 @@
-﻿using System;
+﻿using FarmsApi.Services;
+using System;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace FarmsApi.DataModels
@@ -20,6 +21,17 @@ namespace FarmsApi.DataModels
         public string ContactMail { get; set; }
         public string RanadKey { get; set; }
         public bool ContactIsMail { get; set; }
+
+
+
+        public int? FarmsTypesId { get; set; }
+        public string Factory { get; set; }
+        public string Divisions { get; set; }
+        public string SubDivisions { get; set; }
+        public string Departments { get; set; }
+        public string SubDepartments { get; set; }
+
+
         public int StatusId { get; set; }
       
        
@@ -35,9 +47,18 @@ namespace FarmsApi.DataModels
 
     }
 
+    public class FarmsTypes
+    {
+        public int Id { get; set; }
+
+        public string Name { get; set; }
+        public string NameOne { get; set; }
+    }
 
 
-    public class FarmPDFFiles
+
+
+        public class FarmPDFFiles
     {
         public int Id { get; set; }
         public int FarmId { get; set; }

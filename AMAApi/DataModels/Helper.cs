@@ -150,20 +150,31 @@ namespace FarmsApi.DataModels
 
         public static List<Departments> GetCurrentUserPermissions()
         {
-            var identity = HttpContext.Current.User.Identity as ClaimsIdentity;
-            // var identity = (ClaimsIdentity)User.Identity;
 
-            if (identity != null)
+            try
             {
 
-                var CU = identity.Claims.SingleOrDefault(c => c.Type == "UserPermissions").Value;
+                var identity = HttpContext.Current.User.Identity as ClaimsIdentity;
+                // var identity = (ClaimsIdentity)User.Identity;
 
-                var Departments = JsonConvert.DeserializeObject<List<Departments>>(CU);
+                if (identity != null)
+                {
 
-                return Departments;
+                    var CU = identity.Claims.SingleOrDefault(c => c.Type == "UserPermissions").Value;
+
+                    var Departments = JsonConvert.DeserializeObject<List<Departments>>(CU);
+
+                    return Departments;
+
+                }
+
+                return null;
 
             }
-            return null;
+            catch (Exception ex)
+            {
+                return null;
+            }
 
         }
 

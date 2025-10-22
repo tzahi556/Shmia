@@ -85,7 +85,7 @@
             for (var i = 0; i < this.screendata.length; i++) {
 
 
-              
+               debugger
 
                 if (!this.screendata[i].f2g) continue;
 

@@ -5,7 +5,8 @@
         templateUrl: 'app/farms/farm.template.html',
         controller: FarmController,
         bindings: {
-            farm: '<'
+            farm: '<',
+            farmstypes,
         }
     });
 

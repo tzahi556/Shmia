@@ -12,8 +12,8 @@
             //files: '<',
             //childs: '<',
             cities: '<',
-            departments: '<'
-            //banks: '<',
+            departments: '<',
+            campains: '<',
             //banksbrunchs: '<',
             //users: '<',
             //screendata: '<',
@@ -37,8 +37,8 @@
 
 
         
-
-
+        this.uploadsUri = sharedValues.apiUrl + 'uploads/Workers/';
+        
 
       
      
@@ -52,7 +52,7 @@
 
         
 
-        this.uploadsUri = sharedValues.apiUrl + '/uploads/'
+       // this.uploadsUri = sharedValues.apiUrl + '/uploads/'
       
         this.foldertaz = "taz";
 
@@ -100,6 +100,11 @@
         }
 
         function _init() {
+
+
+           // http://localhost:61957/#/workerall/lbaHSDZwHnyXA3y2v9E@@4g==/
+           // alert(this.role);
+
            this.worker.w.StatusId = this.worker.w.StatusId.toString();
            // alert(this.worker.w.StatusId);
             //if (!this.worker.w101) {

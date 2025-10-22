@@ -7,7 +7,10 @@
     function FarmsService(sharedValues, $http, $q) {
         this.getFarms = _getFarms;
         this.getFarm = _getFarm;
-        this.getFarmPDFFiles = _getFarmPDFFiles
+        this.getFarmPDFFiles = _getFarmPDFFiles;
+
+        this.getFarmtypes = _getFarmtypes;
+        
 
         this.updateFarm = _updateFarm;
         this.deleteFarm = _deleteFarm;
@@ -248,6 +251,23 @@
             
             return deferred.promise;
         }
+
+        function _getFarmtypes(id) {
+            var deferred = $q.defer();
+
+            $http.get(sharedValues.apiUrl + 'farms/getFarmtypes/' + id).then(function (res) {
+
+                var farmstypes = res.data;
+
+                deferred.resolve(farmstypes);
+            });
+
+            return deferred.promise;
+        }
+
+
+
+
 
         function _getFarm(id) {
 

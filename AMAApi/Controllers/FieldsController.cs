@@ -829,7 +829,7 @@ namespace FarmsApi.Services
             return Convert.FromBase64String(s);
         }
 
-        // [Authorize]
+        //[Authorize]
         [Route("getSetCampainsData")]
         [HttpPost]
         public IHttpActionResult GetSetCampainsData(int type, string id, dynamic objs, int page = 1, int pageSize = 10, string filterText = null, int statusid = -1, int factoryid = 0, int divisionsid = 0,
@@ -1219,6 +1219,7 @@ namespace FarmsApi.Services
                             }
 
                         }
+                        
                         if (type == 3)
                         {
                             IsSendWorkers = true;

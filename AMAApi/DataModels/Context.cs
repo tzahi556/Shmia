@@ -52,6 +52,10 @@ namespace FarmsApi.DataModels
 
         public DbSet<Roles> Roles { get; set; }
         public DbSet<UsersDepartments> UsersDepartments { get; set; }
+
+
+        public DbSet<FarmsTypes> FarmsTypes { get; set; }
+
         public Context() : base("Farms") {
 
             // this.Configuration.ProxyCreationEnabled = false;

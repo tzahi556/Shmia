@@ -1,10 +1,12 @@
 ﻿using FarmsApi.DataModels;
 using Google.Rpc;
 using Grpc.Core;
+using iTextSharp.tool.xml.html;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Data.Entity;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading;
@@ -232,9 +234,29 @@ namespace FarmsApi.Services
                 if (type == 2)
                 {
 
-                    //todo
+                     var CurrentDate =  DateTime.Now;
 
 
+                    var Company = Context.Workers.Where(x => x.Id == newId).FirstOrDefault();
+
+
+                    var CampainsUsers = (
+                                         from c in Context.Campains.Where(x => x.FarmId == Company.FarmId && x.StatusId==1 && (!x.DateValidity.HasValue || (x.DateValidity.HasValue && x.DateValidity.Value >= CurrentDate)))
+                                         from cs in Context.CampainsStatus.Where(x => x.WorkersId == newId && c.Id==x.CampainsId)
+                                         from cst in Context.CampainsStatusType.Where(x => x.Id == cs.StatusId).DefaultIfEmpty()
+
+                                        // where  !c.DateValidity.HasValue || (c.DateValidity.HasValue && c.DateValidity <= CurrentDate)
+
+                                         select new 
+                                  {
+                                      cs,
+                                      c,
+                                      cst
+
+
+                                  }).OrderByDescending(x => x.c.DateRigster).ToList();
+
+                    return Ok(CampainsUsers);
                 }
 
 

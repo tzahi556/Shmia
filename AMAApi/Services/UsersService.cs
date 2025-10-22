@@ -1087,6 +1087,7 @@ namespace FarmsApi.Services
 
                 Workers w = WorkersWith101.w;
                 Workers101 w101 = WorkersWith101.w101;
+
                 //נתונים נשמרו
                 w101.StatusId = 12;
 
