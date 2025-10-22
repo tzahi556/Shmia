@@ -25,7 +25,9 @@
                    
                     self.farmName = data.Name ? data.Name : DEFAULT_NAME;
                     authData.farmName = self.farmName;
-                   /* localStorage.setItem('FarmObj', data);*/
+
+                    localStorage.setItem('FarmObj', JSON.stringify(data));
+                  
                     localStorage.setItem('FarmName', self.farmName);
                     localStorage.setItem('authorizationData', angular.toJson(authData));
                 //    localStorage.setItem('FarmInstractorPolicy', data.Meta.IsInstractorPolicy);

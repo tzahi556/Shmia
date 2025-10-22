@@ -14,7 +14,7 @@
 
             var data = "grant_type=password&username=" + loginData.userName + "&password=" + loginData.password + "&isfakeuser=" + loginData.isfakeuser;
             var deferred = $q.defer();
-            debugger
+           
            
             $http.post(sharedValues.apiUrl + 'token', data, { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } }).then(
               

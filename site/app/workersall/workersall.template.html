@@ -4,11 +4,11 @@
 
 <div class="panel panel-default">
     <div class="panel-heading">
-        רשימת עובדים
+        רשימת {{$ctrl.currentFarm.FarmsTypeName}}
 
         <div style="float:left">
-            <button ng-click="$ctrl.downloadExcel()" class="btn btn-success btn-xs">הורדת פרטי עובדים</button>
-            <a class="btn btn-primary btn-xs" ui-sref="worker({id:0})">עובד חדש</a>
+            <!--<button ng-click="$ctrl.downloadExcel()" class="btn btn-success btn-xs">הורדת פרטי עובדים</button>-->
+            <a class="btn btn-primary btn-xs" ui-sref="workerall({id:0})">{{$ctrl.currentFarm.FarmsTypeNameOne}} חדש/ה</a>
         </div>
     </div>
     <div class="panel-body">
@@ -37,9 +37,9 @@
         <div class="col-md-2" ng-if="($ctrl.departments | filter:{TypeId:0}).length>0" style="">
             <div class="form-group">
 
-                <label>מפעל</label>
+                <label>{{$ctrl.currentFarm.Factory}}</label>
                 <select class="form-control" ng-change="$ctrl.onSearchChange()" ng-options="department.Id as department.Name for department in $ctrl.departments | filter:{TypeId:0}" ng-model="$ctrl.departmentId0">
-                    <option value="">-- מפעל --</option>
+                    <option value="">-- {{$ctrl.currentFarm.Factory}} --</option>
                 </select>
             </div>
         </div>
@@ -47,10 +47,10 @@
 
         <div class="col-md-2" style="" ng-if="($ctrl.departments | filter:{TypeId:1}).length > 0">
             <div class="form-group">
-                <label>אגף</label>
+                <label>{{$ctrl.currentFarm.Divisions}}</label>
                 <select class="form-control" ng-change="$ctrl.onSearchChange()"
                         ng-options="department.Id as department.Name for department in $ctrl.departments | filter:{TypeId:1}" ng-model="$ctrl.departmentId">
-                    <option value="">-- אגף --</option>
+                    <option value="">-- {{$ctrl.currentFarm.Divisions}} --</option>
                 </select>
             </div>
         </div>
@@ -58,9 +58,9 @@
         <div class="col-md-2" style="" ng-if="($ctrl.departments | filter:{TypeId:2}).length > 0">
             <div class="form-group">
 
-                <label>תת אגף</label>
+                <label>{{$ctrl.currentFarm.SubDivisions}}</label>
                 <select class="form-control" ng-change="$ctrl.onSearchChange()" ng-options="department.Id as department.Name for department in $ctrl.departments | filter:{TypeId:2}" ng-model="$ctrl.departmentId2">
-                    <option value="">-- תת אגף --</option>
+                    <option value="">-- {{$ctrl.currentFarm.SubDivisions}} --</option>
                 </select>
             </div>
         </div>
@@ -71,18 +71,18 @@
         <div class="col-md-2" style="" ng-if="($ctrl.departments | filter:{TypeId:3}).length > 0">
             <div class="form-group">
 
-                <label>מחלקה</label>
+                <label>{{$ctrl.currentFarm.Departments}}</label>
                 <select class="form-control" ng-change="$ctrl.onSearchChange()" ng-options="department.Id as department.Name for department in $ctrl.departments | filter:{TypeId:3}" ng-model="$ctrl.departmentId3">
-                    <option value="">-- מחלקה --</option>
+                    <option value="">-- {{$ctrl.currentFarm.Departments}} --</option>
                 </select>
             </div>
         </div>
 
         <div class="col-md-2" style="" ng-if="($ctrl.departments | filter:{TypeId:4}).length > 0">
             <div class="form-group">
-                <label>תת מחלקה</label>
+                <label>{{$ctrl.currentFarm.SubDepartments}}</label>
                 <select class="form-control" ng-change="$ctrl.onSearchChange()" ng-options="department.Id as department.Name for department in $ctrl.departments | filter:{TypeId:4}" ng-model="$ctrl.departmentId4">
-                    <option value="">--תת מחלקה  --</option>
+                    <option value="">--{{$ctrl.currentFarm.SubDepartments}}--</option>
                 </select>
             </div>
         </div>
@@ -124,9 +124,9 @@
                     <th>שם משפחה</th>
                     <th>אימייל</th>
                     <th>טלפון</th>
-                    <th>מפעל</th>
-                    <th>אגף</th>
-                    <th>מחלקה</th>
+                    <th>{{$ctrl.currentFarm.Factory}}</th>
+                    <th>{{$ctrl.currentFarm.Divisions}}</th>
+                    <th> {{$ctrl.currentFarm.Departments}}</th>
                     <th>סטטוס</th>
 
 
@@ -158,7 +158,7 @@
                     <td>{{worker.w.StatusId == 1 ? 'פעיל' : 'לא פעיל'}}</td>
 
                     <td> <button class="btn  btn-warning" ui-sref="workerall({id:worker.w.Id})">עדכון</button></td>
-                    <td> <button class="btn  btn-danger" ng-click="$ctrl.delete(worker.w.Id)">מחק עובד</button></td>
+                    <td> <button class="btn  btn-danger" ng-click="$ctrl.delete(worker.w.Id)">מחק {{$ctrl.currentFarm.FarmsTypeNameOne}}</button></td>
                     <td width="5%"><input style="width:52px;height:20px" type="checkbox" ng-model="worker.IsSelected" /></td>
 
                 </tr>

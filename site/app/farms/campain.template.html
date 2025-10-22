@@ -599,7 +599,7 @@
                         <div class="col-md-6">
 
                             <div class="form-group">
-                                <label>מס' עובדים שנשלח להם הודעה</label>
+                                <label>מס' {{$ctrl.currentFarm.FarmsTypeName}} שנשלח להם הודעה</label>
                                 <input type="text" disabled class="form-control" ng-model="$ctrl.campain.CountSend" />
                             </div>
                         </div>
@@ -608,7 +608,7 @@
                         <div class="col-md-6">
 
                             <div class="form-group">
-                                <label>מס' עובדים שאישרו</label>
+                                <label>מס' {{$ctrl.currentFarm.FarmsTypeName}} שאישרו</label>
                                 <input type="text" disabled class="form-control" ng-model="$ctrl.campain.CountSign" />
                             </div>
                         </div>
@@ -656,7 +656,7 @@
 
 
                                     <label>
-                                        האם לשלוח קובץ סופי גם לעובד ?
+                                        האם לשלוח קובץ סופי גם ל{{$ctrl.currentFarm.FarmsTypeNameOne}} ?
                                     </label><br />
                                     <input type="checkbox" ng-model="$ctrl.campain.IsSendToWorker">
 
@@ -687,11 +687,9 @@
                     </div>
                     <div class="panel-body">
 
-
-                        <!--<div class="col-md-2">
-                        <button class="btnAddPdf btn btn-default" ng-click="$ctrl.SaveData(2)">הוספת קובץ 101</button>-->
-                        <!--<input type="file" accept="application/pdf" name="avatar" class="hideUpload" filename="" folder="'PDFS_101'" workerid="$ctrl.farm.Id" filename-callback="$ctrl.uploadFile">-->
-                        <!--</div>-->
+                        <div class="col-md-2" ng-if="$ctrl.currentFarm.FarmsTypesId==1"> <!--רק לעובדים-->
+                            <button class="btnAddPdf btn btn-default" ng-click="$ctrl.SaveData(2)">הוספת קובץ 101</button>
+                        </div>
 
                         <div class="col-md-12">
 
@@ -734,7 +732,7 @@
 
                     </div>
                     <div class="panel-footer">
-                        <label>במסך זה ניתן להגדיר את קבצי הPDF שישלחו לעובד. </label>
+                        <label>במסך זה ניתן להגדיר את קבצי הPDF שישלחו ל{{$ctrl.currentFarm.FarmsTypeNameOne}}. </label>
 
                     </div>
                 </div>
@@ -1013,13 +1011,16 @@
 
 
         <!--עובדים קמפיין-->
-        <uib-tab index="4" id="tab5" heading="עובדים">
+        <uib-tab index="4" id="tab5" heading="{{$ctrl.currentFarm.FarmsTypeName}}">
 
             <div class="col-md-12">
                 <div class="panel panel-primary">
                     <div class="panel-heading">
-                        עובדים
-
+                        {{$ctrl.currentFarm.FarmsTypeName}}
+                        <div style="float:left" ng-if="$ctrl.currentFarm.FarmsTypesId==1"> <!--רק לעובדים אפשרות להקים מפה חדש-->
+                            <!--<button ng-click="$ctrl.downloadExcel()" class="btn btn-success btn-xs">הורדת פרטי עובדים</button>-->
+                            <a class="btn btn-success btn-xs" ui-sref="worker({id:0,campainid:$ctrl.campain.Id})">{{$ctrl.currentFarm.FarmsTypeNameOne}} חדש/ה</a>
+                        </div>
                     </div>
                     <div class="panel-body">
 
@@ -1046,9 +1047,9 @@
 
                         <div class="col-md-2" style="" ng-if="($ctrl.departments | filter:{TypeId:0}).length > 0">
                             <div class="form-group">
-                                <label>מפעל</label>
+                                <label>{{$ctrl.currentFarm.Factory}}</label>
                                 <select class="form-control" ng-change="$ctrl.onSearchChange()" ng-options="department.Id as department.Name for department in $ctrl.departments | filter:{TypeId:0}" ng-model="$ctrl.departmentId0">
-                                    <option value="">-- מפעל --</option>
+                                    <option value="">-- {{$ctrl.currentFarm.Factory}} --</option>
                                 </select>
                             </div>
                         </div>
@@ -1057,9 +1058,9 @@
 
                         <div class="col-md-2" style="" ng-if="($ctrl.departments | filter:{TypeId:1}).length > 0">
                             <div class="form-group">
-                                <label>אגף</label>
+                                <label>{{$ctrl.currentFarm.Divisions}}</label>
                                 <select class="form-control" ng-change="$ctrl.onSearchChange()" ng-options="department.Id as department.Name for department in $ctrl.departments | filter:{TypeId:1}" ng-model="$ctrl.departmentId">
-                                    <option value="">-- אגף --</option>
+                                    <option value="">-- {{$ctrl.currentFarm.Divisions}} --</option>
                                 </select>
                             </div>
                         </div>
@@ -1067,18 +1068,18 @@
                         <div class="col-md-2" style="" ng-if="($ctrl.departments | filter:{TypeId:2}).length > 0">
                             <div class="form-group">
 
-                                <label>תת אגף</label>
+                                <label>{{$ctrl.currentFarm.SubDivisions}}</label>
                                 <select class="form-control" ng-change="$ctrl.onSearchChange()" ng-options="department.Id as department.Name for department in $ctrl.departments | filter:{TypeId:2}" ng-model="$ctrl.departmentId2">
-                                    <option value="">-- תת אגף --</option>
+                                    <option value="">-- {{$ctrl.currentFarm.SubDivisions}} --</option>
                                 </select>
                             </div>
                         </div>
 
                         <div class="col-md-2" style="" ng-if="($ctrl.departments | filter:{TypeId:3}).length > 0">
                             <div class="form-group">
-                                <label>מחלקה</label>
+                                <label>{{$ctrl.currentFarm.Departments}}</label>
                                 <select class="form-control" ng-change="$ctrl.onSearchChange()" ng-options="department.Id as department.Name for department in $ctrl.departments | filter:{TypeId:3}" ng-model="$ctrl.departmentId3">
-                                    <option value="">-- מחלקה  --</option>
+                                    <option value="">-- {{$ctrl.currentFarm.Departments}} --</option>
                                 </select>
                             </div>
                         </div>
@@ -1089,9 +1090,9 @@
 
                         <div class="col-md-2" style="" ng-if="($ctrl.departments | filter:{TypeId:4}).length > 0">
                             <div class="form-group">
-                                <label>תת מחלקה</label>
+                                <label>{{$ctrl.currentFarm.SubDepartments}}</label>
                                 <select class="form-control" ng-change="$ctrl.onSearchChange()" ng-options="department.Id as department.Name for department in $ctrl.departments | filter:{TypeId:4}" ng-model="$ctrl.departmentId4">
-                                    <option value="">-- תת מחלקה  --</option>
+                                    <option value="">-- {{$ctrl.currentFarm.SubDepartments}} --</option>
                                 </select>
                             </div>
                         </div>
@@ -1130,7 +1131,7 @@
                                     <th>אימייל</th>
                                     <th>סוג שליחה</th>
                                     <th>תאריך שליחה</th>
-                                    <th>תאריך אישור עובד/ת</th>
+                                    <th>תאריך אישור   {{$ctrl.currentFarm.FarmsTypeNameOne}}</th>
                                     <th>סטטוס</th>
                                     <!--<th>SMS</th>-->
                                     <th>PDF</th>
@@ -1140,22 +1141,12 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <!--<tr>
-                <td colspan="10">
-                    <input type="text" class="form-control" ng-model="$ctrl.filter.$" placeholder="חיפוש חופשי" />
-                </td>
-            </tr>-->
+                               
                                 <tr ng-repeat="worker in $ctrl.workers.Items">
 
-                                    <!--| filter:$ctrl.filter
-    | filter: ($ctrl.departmentId ? {w: {DivisionsId: $ctrl.departmentId}} : undefined)
-    | filter: ($ctrl.departmentId2 ? {w: {SubDivisionsId: $ctrl.departmentId2}} : undefined)
-    | filter: ($ctrl.departmentId3 ? {w: {DepartmentsId: $ctrl.departmentId3}} : undefined)
-    | filter: ($ctrl.departmentId4 ? {w: {SubDepartmentsId: $ctrl.departmentId4}} : undefined)
-    | filter: ($ctrl.departmentId0 ? {w: {FactoryId: $ctrl.departmentId0}} : undefined)-->
 
                                     <td> <a class="btn btn-default" ui-sref="workerall({id:worker.w.Id})">{{worker.w.Id}}</a></td>
-                                    <!--<td> {{worker.w.Id}}</td>-->
+
                                     <td>{{worker.w.FirstName}}</td>
                                     <td>{{worker.w.LastName}}</td>
                                     <td>{{worker.w.PhoneSelular}}</td>
@@ -1170,7 +1161,8 @@
 
 
                                     <td><a ng-if="worker.css.Id==6" class="btn  btn-success" ng-href="{{$ctrl.uploadsUri + worker.w.Id +'/' + worker.cs.CampainsId +'/AllPdfTemp.pdf'}}" target="_blank">PDF</a></td>
-                                    <td> <button class="btn  btn-warning" ui-sref="workercampains({id:worker.w.Id,campainid:$ctrl.campain.Id})">עדכון</button></td>
+                                    <td ng-if="($ctrl.farmspdffiles | filter:{ Is101: true }).length == 0"> <button class="btn  btn-warning" ui-sref="workercampains({id:worker.w.Id,campainid:$ctrl.campain.Id})">עדכון</button></td>
+                                    <td ng-if="($ctrl.farmspdffiles | filter:{ Is101: true }).length > 0"> <button class="btn  btn-warning" ui-sref="worker({id:worker.w.Id,campainid:$ctrl.campain.Id})">עדכון</button></td>
 
                                     <td width="5%"><input style="width:52px;height:20px" type="checkbox" ng-model="worker.IsSelected" /></td>
 
@@ -1261,7 +1253,7 @@
                     </div>
                     <div class="panel-footer">
 
-                        <label>במסך זה ניתן להגדיר את השליחה של הקמפיין לעובדים. </label>
+                        <label>במסך זה ניתן להגדיר את השליחה של הקמפיין ל  {{$ctrl.currentFarm.FarmsTypeName}}. </label>
 
 
                     </div>

@@ -252,10 +252,12 @@
             return deferred.promise;
         }
 
-        function _getFarmtypes(id) {
+        function _getFarmtypes() {
+
+          
             var deferred = $q.defer();
 
-            $http.get(sharedValues.apiUrl + 'farms/getFarmtypes/' + id).then(function (res) {
+            $http.get(sharedValues.apiUrl + 'farms/getFarmtypes/').then(function (res) {
 
                 var farmstypes = res.data;
 

@@ -187,11 +187,11 @@
         });
 
         $stateProvider.state('worker', {
-            url: '/worker/{id}/',
+            url: '/worker/{id}/{campainid}/',
             views: {
                 'main': {
-                    template: '<worker farm="$ctrl.farm" campainsstatustype="$ctrl.campainsstatustype" screendata="$ctrl.screendata" users="$ctrl.users" worker="$ctrl.worker" files="$ctrl.files" childs="$ctrl.childs" cities="$ctrl.cities" banks="$ctrl.banks"  banksbrunchs="$ctrl.banksbrunchs"   ></worker>',
-                    controller: function (worker, files, childs, cities, banks, banksbrunchs, users, screendata, farm, campainsstatustype) {
+                    template: '<worker farm="$ctrl.farm" campainsstatustype="$ctrl.campainsstatustype" screendata="$ctrl.screendata" campainid="$ctrl.campainid" users="$ctrl.users" worker="$ctrl.worker" files="$ctrl.files" childs="$ctrl.childs" cities="$ctrl.cities" banks="$ctrl.banks"  banksbrunchs="$ctrl.banksbrunchs"   ></worker>',
+                    controller: function (worker, files, childs, cities, banks, banksbrunchs, users, screendata, farm, campainsstatustype,campainid) {
                         this.worker = worker;
                         this.files = files;
                         this.childs = childs;
@@ -202,6 +202,7 @@
                         this.screendata = screendata;
                         this.farm = farm;
                         this.campainsstatustype = campainsstatustype;
+                        this.campainid = campainid;
 
                     },
                     controllerAs: '$ctrl',
@@ -238,9 +239,15 @@
                         },
 
                         screendata: function (farmsService, $stateParams) {
-                           
-                            return farmsService.getSetWorkerAndCompanyData(1,$stateParams.id,null);
+                          
+                            return farmsService.getSetWorkerAndCompanyData(1, $stateParams.id,null, $stateParams.campainid);
                         },
+
+                        campainid: function (farmsService, $stateParams) {
+
+                            return $stateParams.campainid;
+                        },
+
 
                         farm: function (farmsService, $stateParams) {
 

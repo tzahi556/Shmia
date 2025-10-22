@@ -49,12 +49,12 @@
 
             <div class="panel panel-primary">
                 <div class="panel-heading">
-                    פרטי העובד\ת
+                    פרטי ה{{$ctrl.currentFarm.FarmsTypeNameOne}}
                 </div>
                 <div class="panel-body">
 
                     <div class="row alert-info">
-                      &nbsp;  <label>מיקום עובד/ת</label>
+                      &nbsp;  <label>מיקום {{$ctrl.currentFarm.FarmsTypeNameOne}}</label>
                     </div>
                     <div class="row">
                         <div class="col-md-3">
@@ -75,19 +75,19 @@
                         <div class="col-md-3" ng-if="($ctrl.departments | filter:{TypeId:0}).length > 0" style="">
                             <div class="form-group">
 
-                                <label>מפעל</label>
+                                <label>{{$ctrl.currentFarm.Factory}}</label>
                                 <select class="form-control" ng-options="department.Id as department.Name for department in $ctrl.departments | filter:{TypeId:0}" ng-model="$ctrl.worker.w.FactoryId">
-                                    <option value="">-- מפעל --</option>
+                                    <option value="">-- {{$ctrl.currentFarm.Factory}} --</option>
                                 </select>
                             </div>
                         </div>
 
                         <div class="col-md-3" style="" ng-if="($ctrl.departments | filter:{TypeId:1}).length > 0">
                             <div class="form-group">
-                                <label>אגף</label>
+                                <label>{{$ctrl.currentFarm.Divisions}}</label>
                                 <select class="form-control"
                                         ng-options="department.Id as department.Name for department in $ctrl.departments | filter:{TypeId:1}" ng-model="$ctrl.worker.w.DivisionsId">
-                                    <option value="">-- אגף --</option>
+                                    <option value="">-- {{$ctrl.currentFarm.Divisions}} --</option>
                                 </select>
                             </div>
                         </div>
@@ -95,9 +95,9 @@
                         <div class="col-md-3" style="" ng-if="($ctrl.departments | filter:{TypeId:2}).length > 0">
                             <div class="form-group">
 
-                                <label>תת אגף</label>
+                                <label>{{$ctrl.currentFarm.SubDivisions}}</label>
                                 <select class="form-control" ng-options="department.Id as department.Name for department in $ctrl.departments | filter:{TypeId:2}" ng-model="$ctrl.worker.w.SubDivisionsId">
-                                    <option value="">-- תת אגף --</option>
+                                    <option value="">-- {{$ctrl.currentFarm.SubDivisions}} --</option>
                                 </select>
                             </div>
                         </div>
@@ -105,18 +105,18 @@
                         <div class="col-md-3" style="" ng-if="($ctrl.departments | filter:{TypeId:3}).length > 0">
                             <div class="form-group">
 
-                                <label>מחלקה</label>
+                                <label>{{$ctrl.currentFarm.Departments}}</label>
                                 <select class="form-control" ng-options="department.Id as department.Name for department in $ctrl.departments | filter:{TypeId:3}" ng-model="$ctrl.worker.w.DepartmentsId">
-                                    <option value="">-- מחלקה --</option>
+                                    <option value="">-- {{$ctrl.currentFarm.Departments}} --</option>
                                 </select>
                             </div>
                         </div>
 
                         <div class="col-md-3" style="" ng-if="($ctrl.departments | filter:{TypeId:4}).length > 0">
                             <div class="form-group">
-                                <label>תת מחלקה</label>
+                                <label>{{$ctrl.currentFarm.SubDepartments}}</label>
                                 <select class="form-control" ng-options="department.Id as department.Name for department in $ctrl.departments | filter:{TypeId:4}" ng-model="$ctrl.worker.w.SubDepartmentsId">
-                                    <option value="">--תת מחלקה  --</option>
+                                    <option value="">-- {{$ctrl.currentFarm.SubDepartments}} --</option>
                                 </select>
                             </div>
                         </div>

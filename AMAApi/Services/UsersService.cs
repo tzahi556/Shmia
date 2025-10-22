@@ -698,7 +698,7 @@ namespace FarmsApi.Services
             }
         }
 
-        public static WorkersWith101 UpdateWorkerAndFiles(JArray dataObj, int type)
+        public static WorkersWith101 UpdateWorkerAndFiles(JArray dataObj, int type,int campainid=-1)
         {
 
             WorkersWith101 workersWith101 = UpdateWorker(dataObj[0].ToObject<WorkersWith101>());
@@ -725,7 +725,7 @@ namespace FarmsApi.Services
                         {
                             if (type == 2) AddToLogDB("", "", " יצירת פדפ לעובד/ת חדשה  " + workersWith101.w.Id, null, "", workersWith101.w.Id);
                             //pa.CreatePDF(workersWith101);
-                            pa.CreateNewCompanyPDF(workersWith101.w.FarmId, -1, workersWith101);
+                            pa.CreateNewCompanyPDF(workersWith101.w.FarmId, campainid, workersWith101);
                         }
 
                         //else
@@ -831,7 +831,7 @@ namespace FarmsApi.Services
 
                                 actMSG.IsBodyHtml = true;
                                 //  var BaseLinkSite = System.Web.HttpContext.Current.Server.MapPath("~/Uploads/" + w.Id);
-                                Attachment attachment = new Attachment(BaseLinkSite + "/-1/AllPdfTemp.pdf");
+                                Attachment attachment = new Attachment(BaseLinkSite + "/"+ campainid + "/AllPdfTemp.pdf");
 
                                 actMSG.Attachments.Add(attachment);
                                 client.Send(actMSG);

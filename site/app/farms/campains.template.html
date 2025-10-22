@@ -24,8 +24,8 @@
                     <th>שם קמפיין</th>
                     <th>תאריך הקמה</th>
                     <th>תאריך תפוגה</th>
-                    <th>כמות עובדים שנשלח קישור</th>
-                    <th>כמות עובדים שאישרו</th>
+                    <th>כמות {{$ctrl.currentFarm.FarmsTypeName}} שנשלח קישור</th>
+                    <th>כמות {{$ctrl.currentFarm.FarmsTypeName}} שאישרו</th>
                     <!--<th>ת.עדכון</th>
     <th>סטטוס</th>
     <th>SMS</th>-->
@@ -51,7 +51,7 @@
                     <td>{{campain.CountSend}}</td>
                     <td>{{campain.CountSign}}</td>
                     <!--<td>{{campain.w101.Status}}</td>
-    <td>{{campain.w101.IsSendSMS==1 ? 'נשלח':'' }}</td>-->
+                    <td>{{campain.w101.IsSendSMS==1 ? 'נשלח':'' }}</td>-->
                     <!--<td><a class="btn  btn-success" ng-href="{{$ctrl.uploadsUri + campain.Id + '/OfekAllPdf.pdf'}}" target="_blank">PDF</a></td>-->
                     <td> <button class="btn  btn-warning" ui-sref="campain({id:campain.Id})">עדכון</button></td>
                     <td> <button class="btn  btn-danger" ng-click="$ctrl.delete(campain.Id)">מחק קמפיין</button></td>

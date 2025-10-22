@@ -39,7 +39,7 @@
         
         this.uploadsUri = sharedValues.apiUrl + 'uploads/Workers/';
         
-
+        this.currentFarm = JSON.parse(localStorage.getItem('FarmObj'));
       
      
         this.init = _init.bind(this);

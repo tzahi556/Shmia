@@ -240,6 +240,9 @@ namespace FarmsApi.Services
                     var Company = Context.Workers.Where(x => x.Id == newId).FirstOrDefault();
 
 
+                    if (Company == null) return Ok();
+
+
                     var CampainsUsers = (
                                          from c in Context.Campains.Where(x => x.FarmId == Company.FarmId && x.StatusId==1 && (!x.DateValidity.HasValue || (x.DateValidity.HasValue && x.DateValidity.Value >= CurrentDate)))
                                          from cs in Context.CampainsStatus.Where(x => x.WorkersId == newId && c.Id==x.CampainsId)
@@ -462,11 +465,11 @@ namespace FarmsApi.Services
 
 
         // [Authorize]
-        [Route("updateWorker/{type}")]
+        [Route("updateWorker/{type}/{campainid?}/")]
         [HttpPost]
-        public IHttpActionResult UpdateWorkerAndFiles(JArray dataobj, int type)
+        public IHttpActionResult UpdateWorkerAndFiles(JArray dataobj, int type, int campainid=-1)
         {
-            return Ok(UsersService.UpdateWorkerAndFiles(dataobj, type));
+            return Ok(UsersService.UpdateWorkerAndFiles(dataobj, type, campainid));
         }
 
         // [Authorize]

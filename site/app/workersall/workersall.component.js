@@ -31,6 +31,11 @@
         this.farmStyle = localStorage.getItem('FarmStyle');
         this.init = _init.bind(this);
 
+
+      
+        this.currentFarm = JSON.parse(localStorage.getItem('FarmObj'));
+
+
         this.init();
 
         function _init() {

@@ -6,7 +6,7 @@
         controller: FarmController,
         bindings: {
             farm: '<',
-            farmstypes,
+            farmstypes: '<',
         }
     });
 

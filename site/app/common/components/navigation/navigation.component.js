@@ -11,7 +11,15 @@
     });
 
     function NavigationController($scope, $state, $rootScope) {
+
+
+
+
         this.init = _init.bind(this);
+       
+        this.currentFarm = JSON.parse(localStorage.getItem('FarmObj'));
+
+       
 
         $rootScope.$on('$stateChangeSuccess', this.init);
 

@@ -56,6 +56,7 @@
         // alert(this.role);
         //this.IsPopUp = false;
         //this.IsStop = false;
+        this.currentFarm = JSON.parse(localStorage.getItem('FarmObj'));
 
         this.uploadsUri = sharedValues.apiUrl + '/uploads/Workers/'
 
@@ -107,6 +108,10 @@
             }
 
 
+
+
+
+
             if (this.campain.Name) {
 
 
@@ -118,6 +123,8 @@
 
             for (var i in this.farmspdffiles) {
 
+
+               
                 var f = this.farmspdffiles[i];
 
 
@@ -466,12 +473,10 @@
 
 
                     self.farmspdffiles = farmspdffiles;
-                    self.init();
+                    self.init(true);
                     const myTimeout = setTimeout(RefreshPage, 300);
 
-                    // 
-
-                    // $state.reload();
+                   
 
                 });
 

@@ -45,6 +45,12 @@ namespace FarmsApi.DataModels
         [NotMapped]
         public string Sign { get; set; }
 
+        [NotMapped]
+        public string FarmsTypeName { get; set; }
+
+        [NotMapped]
+        public string FarmsTypeNameOne { get; set; }
+
     }
 
     public class FarmsTypes

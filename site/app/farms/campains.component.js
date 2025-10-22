@@ -33,6 +33,8 @@
         this.role = localStorage.getItem('currentRole');
         this.farmStyle = localStorage.getItem('FarmStyle');
 
+        this.currentFarm = JSON.parse(localStorage.getItem('FarmObj'));
+
         function _downloadExcel() {
 
             var data = [];

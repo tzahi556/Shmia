@@ -447,8 +447,7 @@ namespace FarmsApi.Services
         
         [Route("getFarmtypes")]
         [HttpGet]
-
-        public IHttpActionResult GetFarmtypes(int FarmId)
+        public IHttpActionResult GetFarmtypes()
         {
             using (var Context = new Context())
             {

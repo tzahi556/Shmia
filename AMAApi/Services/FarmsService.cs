@@ -79,7 +79,7 @@ namespace FarmsApi.Services
 
 
 
-       
+
 
         public static Farm GetFarm(int Id)
         {
@@ -94,7 +94,7 @@ namespace FarmsApi.Services
 
                     var root = HttpContext.Current.Server.MapPath("~/Uploads/Companies/" + Id.ToString());
 
-                    
+
 
 
                     if (Directory.Exists(root + "/Logo/"))
@@ -108,11 +108,21 @@ namespace FarmsApi.Services
                     }
                     if (File.Exists(root + "/PDFS/SignatureAmuta.png"))
                     {
-                        
 
-                            farm.Sign = "SignatureAmuta.png";
-                        
+
+                        farm.Sign = "SignatureAmuta.png";
+
                     }
+
+
+                    FarmsTypes FarmsTypes = Context.FarmsTypes.SingleOrDefault(u => u.Id == (farm.FarmsTypesId ?? 1));
+
+                    if (FarmsTypes != null)
+                    {
+                        farm.FarmsTypeName = FarmsTypes.Name;
+                        farm.FarmsTypeNameOne = FarmsTypes.NameOne;
+                    }
+
                 }
 
                 return farm;
@@ -371,19 +381,19 @@ namespace FarmsApi.Services
 
         //        string xml = @"
         //                            <XMLInput>
-	       //                             <ActionCode>11</ActionCode>
-	       //                             <UserName>" + fm.UserName + @"</UserName>
-	       //                             <Password>" + fm.Password + @"</Password>
-	       //                             <SupplierID>" + fm.SupplierID + @"</SupplierID>
-	       //                             <ClinicID>0</ClinicID>
-	       //                             <InsuredID>" + item.Taz + @"</InsuredID>
-	       //                             <InsuredFirstName>" + FirstName.Trim() + @"</InsuredFirstName>
-	       //                             <InsuredLastName>" + LastName.Trim() + @"</InsuredLastName>
-	       //                             <SectionCode>" + fm.SectionCode + @"</SectionCode>
-	       //                             <CareCode>" + fm.CareCode + @"</CareCode>
-	       //                             <CareDate>" + DateStart + @"</CareDate>
-	       //                             <DoctorID>" + fs.ClalitNumber + @"</DoctorID>
-	       //                             <OnlineServiceType>0</OnlineServiceType>
+        //                             <ActionCode>11</ActionCode>
+        //                             <UserName>" + fm.UserName + @"</UserName>
+        //                             <Password>" + fm.Password + @"</Password>
+        //                             <SupplierID>" + fm.SupplierID + @"</SupplierID>
+        //                             <ClinicID>0</ClinicID>
+        //                             <InsuredID>" + item.Taz + @"</InsuredID>
+        //                             <InsuredFirstName>" + FirstName.Trim() + @"</InsuredFirstName>
+        //                             <InsuredLastName>" + LastName.Trim() + @"</InsuredLastName>
+        //                             <SectionCode>" + fm.SectionCode + @"</SectionCode>
+        //                             <CareCode>" + fm.CareCode + @"</CareCode>
+        //                             <CareDate>" + DateStart + @"</CareDate>
+        //                             <DoctorID>" + fs.ClalitNumber + @"</DoctorID>
+        //                             <OnlineServiceType>0</OnlineServiceType>
         //                            </XMLInput>";
         //        //  var resXML = kp.SendXML(xml); //203700003 //203700007
 
@@ -471,19 +481,19 @@ namespace FarmsApi.Services
 
         //            string xml = @"
         //                            <XMLInput>
-	       //                             <ActionCode>11</ActionCode>
-	       //                             <UserName>" + fm.UserName + @"</UserName>
-	       //                             <Password>" + fm.Password + @"</Password>
-	       //                             <SupplierID>" + fm.SupplierID + @"</SupplierID>
-	       //                             <ClinicID>0</ClinicID>
-	       //                             <InsuredID>" + item.Taz + @"</InsuredID>
-	       //                             <InsuredFirstName>" + FirstName.Trim() + @"</InsuredFirstName>
-	       //                             <InsuredLastName>" + LastName.Trim() + @"</InsuredLastName>
-	       //                             <SectionCode>" + fm.SectionCode + @"</SectionCode>
-	       //                             <CareCode>" + fm.CareCode + @"</CareCode>
-	       //                             <CareDate>" + DateStart + @"</CareDate>
-	       //                             <DoctorID>" + fs.ClalitNumber + @"</DoctorID>
-	       //                             <OnlineServiceType>0</OnlineServiceType>
+        //                             <ActionCode>11</ActionCode>
+        //                             <UserName>" + fm.UserName + @"</UserName>
+        //                             <Password>" + fm.Password + @"</Password>
+        //                             <SupplierID>" + fm.SupplierID + @"</SupplierID>
+        //                             <ClinicID>0</ClinicID>
+        //                             <InsuredID>" + item.Taz + @"</InsuredID>
+        //                             <InsuredFirstName>" + FirstName.Trim() + @"</InsuredFirstName>
+        //                             <InsuredLastName>" + LastName.Trim() + @"</InsuredLastName>
+        //                             <SectionCode>" + fm.SectionCode + @"</SectionCode>
+        //                             <CareCode>" + fm.CareCode + @"</CareCode>
+        //                             <CareDate>" + DateStart + @"</CareDate>
+        //                             <DoctorID>" + fs.ClalitNumber + @"</DoctorID>
+        //                             <OnlineServiceType>0</OnlineServiceType>
         //                            </XMLInput>";
         //            //   var resXML = kp.SendXML(xml); //203700003 //203700007
 

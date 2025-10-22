@@ -17,7 +17,7 @@
 
         <li data-ui-sref-active="active" ng-if="$ctrl.users"><a ui-sref="users">משתמשים</a></li>
         <li data-ui-sref-active="active" ng-if="$ctrl.workers"><a ui-sref="workers">קליטת עובדים (101)</a></li>
-        <li data-ui-sref-active="active" ng-if="$ctrl.workersall"><a ui-sref="workersall">עובדים</a></li>
+        <li data-ui-sref-active="active" ng-if="$ctrl.workersall"><a ui-sref="workersall">{{$ctrl.currentFarm.FarmsTypeName}}</a></li>
         <li data-ui-sref-active="active" ng-if="$ctrl.campains"><a ui-sref="campains">מחולל טפסים</a></li>
         <!--<li data-ui-sref-active="active" ng-if="$ctrl.workersnew">
         <a ui-sref="workersnew">

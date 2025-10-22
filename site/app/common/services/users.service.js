@@ -215,7 +215,7 @@
         }
 
         function _sendSMS(workers, isnew, page, pageSize, filterText, type, statusid, factoryid, divisionsid, subdivisionsid, departmentsid, subdepartmentsid, status101) {
-            debugger
+           
             if (!filterText) filterText = null;
             if (!type) type = 1;
             var deferred = $q.defer();
@@ -287,14 +287,14 @@
             return deferred.promise;
         }
 
-        function _updateWorker(worker, files, childs,type) {
+        function _updateWorker(worker, files, childs, type, campainid) {
 
             var dataobj = [worker, files, childs];
             var deferred = $q.defer();
 
            
 
-            $http.post(sharedValues.apiUrl + 'users/updateWorker/' + type ,  angular.toJson(dataobj)).then(function (res) {
+            $http.post(sharedValues.apiUrl + 'users/updateWorker/' + type + '/' + campainid,  angular.toJson(dataobj)).then(function (res) {
 
                 var worker = res.data;
                 deferred.resolve(worker);

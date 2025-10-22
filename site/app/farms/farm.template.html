@@ -63,34 +63,34 @@
 
             <div class="form-group">
                 <label>סוג ארגון</label>
-                <select id="ddlFiles" class="form-control" required ng-model="$ctrl.farm.FarmsTypesId" ng-options="farmstype.Id as farmstype.Name for farmstype in $ctrl.farmstypes">
+                <select id="ddlFiles" class="form-control" required ng-model="$ctrl.farm.FarmsTypesId" ng-init="$ctrl.farm.FarmsTypesId = $ctrl.farm.FarmsTypesId || 1" ng-options="farmstype.Id as farmstype.Name for farmstype in $ctrl.farmstypes">
                 </select>
             </div>
 
 
             <div class="form-group">
                 <label>מפעל</label>
-                <input type="text" name="name" class="form-control" ng-model="$ctrl.farm.Factory"    ng-init="$ctrl.farm.Factory = $ctrl.farm.Factory || מפעל" required />
+                <input type="text" name="name" class="form-control" ng-model="$ctrl.farm.Factory" ng-init="$ctrl.farm.Factory = $ctrl.farm.Factory || 'מפעל'" required />
             </div>
 
             <div class="form-group">
                 <label>אגף</label>
-                <input type="text" name="name" class="form-control" ng-model="$ctrl.farm.Divisions" required />
+                <input type="text" name="name" class="form-control" ng-model="$ctrl.farm.Divisions" ng-init="$ctrl.farm.Divisions = $ctrl.farm.Divisions || 'אגף'" required />
             </div>
 
             <div class="form-group">
                 <label>תת אגף</label>
-                <input type="text" name="name" class="form-control" ng-model="$ctrl.farm.SubDivisions" required />
+                <input type="text" name="name" class="form-control" ng-model="$ctrl.farm.SubDivisions" ng-init="$ctrl.farm.SubDivisions = $ctrl.farm.SubDivisions || 'תת אגף'" required />
             </div>
 
             <div class="form-group">
                 <label>מחלקה</label>
-                <input type="text" name="name" class="form-control" ng-model="$ctrl.farm.Departments" required />
+                <input type="text" name="name" class="form-control" ng-model="$ctrl.farm.Departments" ng-init="$ctrl.farm.Departments = $ctrl.farm.Departments || 'מחלקה'" required />
             </div>
 
             <div class="form-group">
                 <label>תת מחלקה</label>
-                <input type="text" name="name" class="form-control" ng-model="$ctrl.farm.SubDepartments" required />
+                <input type="text" name="name" class="form-control" ng-model="$ctrl.farm.SubDepartments" ng-init="$ctrl.farm.SubDepartments = $ctrl.farm.SubDepartments || 'תת מחלקה'" required />
             </div>
 
 

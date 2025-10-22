@@ -17,7 +17,8 @@
             users: '<',
             screendata: '<',
             farm: '<',
-            campainsstatustype: '<'
+            campainsstatustype: '<',
+            campainid: '<'
 
         }
     });
@@ -117,7 +118,7 @@
 
         function _init() {
 
-            debugger
+           
             if (!this.worker.w101) {
                 this.worker.w101 = {ShnatMas:"2025"};
             }
@@ -149,6 +150,8 @@
 
             for (var i = 0; i < this.screendata.length; i++) {
 
+               
+
                 if (!this.screendata[i].f2g) continue;
 
                 if (this.screendata[i].f2g.FieldsDataTypesId == 4 && this.screendata[i].f2gwd.Value)
@@ -156,13 +159,14 @@
                     this.screendata[i].f2gwd.Value = eval(this.screendata[i].f2gwd.Value);
                 }
 
-
                 if (this.screendata[i].f2g.FieldsDataTypesId == 3 && this.screendata[i].f2gwd.Value) {
                     
                     this.screendata[i].f2gwd.Value = new Date(moment(this.screendata[i].f2gwd.Value).format("YYYY-MM-DD"));
 
                     
                 }
+
+                
 
             }
 
@@ -680,8 +684,8 @@
             }
 
 
-            
-            farmsService.getSetWorkerAndCompanyData(2, self.worker.w.Id, fields2GroupsWorkerDataList).then(function (screendata) {
+
+            farmsService.getSetWorkerAndCompanyData(2, self.worker.w.Id, fields2GroupsWorkerDataList, self.campainid).then(function (screendata) {
 
                self.screendata = screendata;
 
@@ -727,7 +731,8 @@
             try {
 
                 
-               
+                
+                this.worker.w101.IsNew = true;
               
 
                 var obj = this.worker.w; //angular.copy(this.worker.w);
@@ -769,7 +774,7 @@
 
                 
 
-                    usersService.updateWorker(this.worker, this.files, this.childs, type).then(function (worker) {
+                    usersService.updateWorker(this.worker, this.files, this.childs, type, this.campainid).then(function (worker) {
                         //  this.worker = worker;
                         SaveDynamicData(worker);
                         alertMessage('הנתונים נשמרו בהצלחה!');
@@ -800,7 +805,7 @@
 
                        
                         SaveDynamicData(this.worker);
-                        usersService.updateWorker(this.worker, this.files, this.childs, type).then(function (worker) {
+                        usersService.updateWorker(this.worker, this.files, this.childs, type, this.campainid).then(function (worker) {
 
 
                             var m = this.campainsstatustype.filter(x => x.Id == worker.w101.StatusId);
@@ -841,11 +846,14 @@
                     }
 
 
+                    
+
+
                     SaveDynamicData(this.worker);
-                    usersService.updateWorker(this.worker, this.files, this.childs, type).then(function (worker) {
-                        
+                    usersService.updateWorker(this.worker, this.files, this.childs, type, this.campainid).then(function (worker) {
+                       
                        //$.unblockUI();
-                        $window.open(this.uploadsUri + "Workers/" + this.worker.w.Id + "/-1/"+  "/AllPdfTemp.pdf", '_blank');
+                        $window.open(this.uploadsUri + "Workers/" + this.worker.w.Id + "/" + this.campainid +"/AllPdfTemp.pdf", '_blank');
                         //$window.open(this.uploadsUri + "Workers/2/AllPdfTemp.pdf", '_blank');
                     }.bind(this));
 
