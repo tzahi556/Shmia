@@ -149,7 +149,7 @@
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label>שם פרטי</label>
-                                <input type="text" class="form-control" ng-model="$ctrl.worker.w.FirstName" required /> <!--ng-change="$ctrl.worker.HeskemWorkerName=$ctrl.worker.FirstName + ' ' + $ctrl.worker.LastName"-->
+                                <input type="text" class="form-control" ng-model="$ctrl.worker.w.FirstName" ng-change="$ctrl.refreshFields()" required /> <!--ng-change="$ctrl.worker.HeskemWorkerName=$ctrl.worker.FirstName + ' ' + $ctrl.worker.LastName"-->
                                 <label class="tp-help-below">
                                     ע"פ הרשום בת.ז.
                                 </label>
@@ -159,7 +159,7 @@
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label>שם משפחה</label>
-                                <input type="text" class="form-control" ng-model="$ctrl.worker.w.LastName" required />
+                                <input type="text" class="form-control" ng-model="$ctrl.worker.w.LastName" ng-change="$ctrl.refreshFields()" required />
                                 <label class="tp-help-below">
                                     ע"פ הרשום בת.ז.
                                 </label>
@@ -169,7 +169,7 @@
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label>תעודת זהות</label>
-                                <input type="text" class="form-control" ng-model="$ctrl.worker.w.Taz" required />
+                                <input type="text" class="form-control" ng-model="$ctrl.worker.w.Taz" ng-change="$ctrl.refreshFields()" required />
                                 <label class="tp-help-below">
                                     ע"פ הרשום בת.ז.
                                 </label>
@@ -218,7 +218,7 @@
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label>תאריך לידה</label>
-                                <input type="date" class="form-control date" ng-model="$ctrl.worker.w.BirthDate" required />
+                                <input type="date" class="form-control date" ng-model="$ctrl.worker.w.BirthDate" ng-change="$ctrl.refreshFields()" required />
 
                             </div>
 
@@ -226,7 +226,7 @@
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label>תאריך עליה</label>
-                                <input type="date" name="LastName" class="form-control date" ng-model="$ctrl.worker.w101.AliaDate" />
+                                <input type="date" name="LastName" class="form-control date"  ng-model="$ctrl.worker.w101.AliaDate" />
 
                             </div>
 
@@ -234,7 +234,7 @@
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label>מס' טלפון נייד</label>
-                                <input type="text" name="Taz" class="form-control" ng-model="$ctrl.worker.w.PhoneSelular" required />
+                                <input type="text" name="Taz" class="form-control" ng-model="$ctrl.worker.w.PhoneSelular" ng-change="$ctrl.refreshFields()" required />
 
                             </div>
 
@@ -243,7 +243,7 @@
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label>מס' טלפון </label>
-                                <input type="text" name="Taz" class="form-control" ng-model="$ctrl.worker.w.Phone" />
+                                <input type="text" name="Taz" class="form-control" ng-change="$ctrl.refreshFields()" ng-model="$ctrl.worker.w.Phone" />
 
                             </div>
 
@@ -260,7 +260,7 @@
 
 
 
-                                <input id="txtCity" class="form-control autocomplete" type="text" autocomplete="off" ng-model="$ctrl.worker.w.City" required>
+                                <input id="txtCity" class="form-control autocomplete" type="text" ng-change="$ctrl.refreshFields()" autocomplete="off" ng-model="$ctrl.worker.w.City" required>
 
                             </div>
 
@@ -268,7 +268,7 @@
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label>רחוב</label>
-                                <input type="text" class="form-control" ng-model="$ctrl.worker.w.Street" required />
+                                <input type="text" class="form-control" ng-model="$ctrl.worker.w.Street" ng-change="$ctrl.refreshFields()" required />
 
                             </div>
 
@@ -276,7 +276,7 @@
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label>מס' בית</label>
-                                <input type="text" class="form-control" ng-model="$ctrl.worker.w.HouseNumber" required />
+                                <input type="text" class="form-control" ng-model="$ctrl.worker.w.HouseNumber" ng-change="$ctrl.refreshFields()" required />
 
                             </div>
 
@@ -289,7 +289,7 @@
                                         ( ניתן להיעזר ב<a href="https://doar.israelpost.co.il/locatezip" target="_blank">אתר הדואר</a>)
                                     </span>
                                 </label>
-                                <input type="text" class="form-control" ng-model="$ctrl.worker.w.Mikud" />
+                                <input type="text" class="form-control" ng-model="$ctrl.worker.w.Mikud" ng-change="$ctrl.refreshFields()" />
 
 
                             </div>
@@ -304,7 +304,7 @@
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label>כתובת דואר אלקטרוני</label>
-                                <input class="form-control" type="email" ng-model="$ctrl.worker.w.Email" required>
+                                <input class="form-control" type="email" ng-model="$ctrl.worker.w.Email" ng-change="$ctrl.refreshFields()" required>
 
                             </div>
 
@@ -312,7 +312,7 @@
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label>מין</label>
-                                <select class="form-control" ng-model="$ctrl.worker.w.Gender" required>
+                                <select class="form-control" ng-model="$ctrl.worker.w.Gender" ng-change="$ctrl.refreshFields()" required>
                                     <option value="">--בחר מין--</option>
                                     <option value="1">זכר</option>
                                     <option value="2">נקבה</option>
@@ -1872,7 +1872,7 @@
                             <input ng-if="screend.f2g.FieldsDataTypesId==2" type="number" class="form-control" ng-model="screend.f2gwd.Value" />
                             <input ng-if="screend.f2g.FieldsDataTypesId==3" type="date" class="form-control date" ng-model="screend.f2gwd.Value" />
                             <!--<input ng-if="screend.f2g.FieldsDataTypesId==4" type="checkbox" class="form-check-input" />-->
-                            <textarea ng-if="screend.f2g.FieldsDataTypesId==5" type="text" class="form-control" ng-model="screend.f2gwd.Value" ng-disabled="$ctrl.role!='farmAdmin' && $ctrl.role!='instructor'" rows="4"></textarea>
+                            <textarea ng-if="screend.f2g.FieldsDataTypesId==5" type="text" class="form-control" ng-model="screend.f2gwd.Value" rows="4"></textarea> <!--ng-disabled="$ctrl.role!='farmAdmin' && $ctrl.role!='instructor'"-->
                         </div>
                         <div class="col-md-12" ng-if="screend.f2g.FieldsDataTypesId==4">
 

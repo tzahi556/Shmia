@@ -19,7 +19,7 @@
        
         this.currentFarm = JSON.parse(localStorage.getItem('FarmObj'));
 
-       
+       // alert(this.currentFarm.FarmsTypeName);
 
         $rootScope.$on('$stateChangeSuccess', this.init);
 

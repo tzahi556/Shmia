@@ -329,7 +329,22 @@ namespace FarmsApi.Services
         {
             using (var Context = new Context())
             {
-                List<FarmPDFFiles> FarmPDFFiles = Context.FarmPDFFiles.Where(x => x.FarmId == id && x.StatusId == 1 && x.CampainsId== CampainsId).OrderBy(x => x.Seq).ToList();
+
+                if (CampainsId == -1)
+                {
+                   
+                       string shnatmas = DateTime.Now.ToString("yyyy");
+
+                        Campains c = Context.Campains.Where(x => x.ShnatMas == shnatmas && x.FarmId == -1).FirstOrDefault();
+
+                        CampainsId = c.Id;
+
+                }
+
+
+
+
+                List<FarmPDFFiles> FarmPDFFiles = Context.FarmPDFFiles.Where(x =>  x.StatusId == 1 && x.CampainsId== CampainsId).OrderBy(x => x.Seq).ToList(); //x.FarmId == id &&
 
 
                 return Ok(FarmPDFFiles);

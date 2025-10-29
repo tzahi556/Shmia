@@ -267,7 +267,7 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Controllers\Schedular.cs" />
+    <Compile Include="Controllers\SchedularController.cs" />
     <Compile Include="Controllers\FieldsController.cs" />
     <Compile Include="Controllers\FarmsController.cs" />
     <Compile Include="Controllers\FilesController.cs" />

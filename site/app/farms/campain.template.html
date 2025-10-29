@@ -19,6 +19,10 @@
 
         $(function () {
 
+           
+           
+
+
             $("#sortable").sortable({
                 items: ".ui-state-default",
                 placeholder: "portlet-placeholder ui-corner-all",
@@ -49,30 +53,40 @@
 
 
 
-            $('#tab2,#tab3,#tab4,#tab5').click(function (e) {
+            $('#tab1,#tab2,#tab3,#tab4,#tab5').click(function (e) {
 
-                //var Name = $("#txtName").val();
-
-                //if (!Name || !IsSave) {
+                
 
 
+                var CurrentTab = $(this).attr("id");
+                if (CurrentTab == "tab5") {
 
-                //}
 
-                //alert(IsSave);
+                    localStorage.setItem('selectedTab', 3);
+
+                } else {
+
+                    localStorage.setItem('selectedTab', null);
+
+                    if ((CurrentTab == "tab1")) return;
+
+                }
+
+
+
+
+
 
                 var CurrentName = (angular.element(document.getElementById('mainControllerHorse')).scope().$ctrl.campain.Name);
                 if (!CurrentName || !IsSave) {
 
-
-
-
+                    
 
                     angular.element(document.getElementById('mainControllerHorse')).scope().$apply(function (scope) {
-                        scope.active = 0;
+
+                        scope.$ctrl.active = 0;
                     });
                     alertMessage("חובה לשמור שם קמפיין", 3);
-                    //$('#tab1').click();
 
                 }
 
@@ -101,6 +115,9 @@
             $('#tab4').click(function (e) {
                 angular.element(document.getElementById('mainControllerHorse')).scope().setNewPdfGenerator();
             });
+
+
+         
 
 
             const myTimeout = setTimeout(setCurrentFontSizeDrag
@@ -554,7 +571,7 @@
     </script>
 
     <uib-tabset active="$ctrl.active" class="tab-form-demo" ng-show="!$ctrl.IsPopUp">
-
+        <div id="mainControllerHorse"></div>
         <div class="alert alert-info alertCampainName" role="alert">
             {{$ctrl.campain.Name}}
         </div>
@@ -628,47 +645,47 @@
                             <div class="col-md-6" style="padding: 0px; padding-right: 3px !important; ">
                                 <div class="form-group">
                                     <label>תאריך תפוגה</label>
-                                    <input type="date" class="form-control date" ng-model="$ctrl.campain.DateValidity" ng-model-options="{ timezone: 'UTC' }"  />
+                                    <input type="date" class="form-control date" ng-model="$ctrl.campain.DateValidity" ng-model-options="{ timezone: 'UTC' }" />
                                 </div>
 
                             </div>
 
                         </div>
 
-                            <div class="col-md-3">
+                        <div class="col-md-3">
 
-                                <div class="form-group">
-
-
-                                    <label>
-                                        האם בקמפיין זה צריך לחייב חתימה מחודשת ?
-                                    </label><br />
-                                    <input type="checkbox" ng-model="$ctrl.campain.MustSign">
+                            <div class="form-group">
 
 
-                                </div>
+                                <label>
+                                    האם בקמפיין זה צריך לחייב חתימה מחודשת ?
+                                </label><br />
+                                <input type="checkbox" ng-model="$ctrl.campain.MustSign">
+
+
                             </div>
-
-
-                            <div class="col-md-3">
-
-                                <div class="form-group">
-
-
-                                    <label>
-                                        האם לשלוח קובץ סופי גם ל{{$ctrl.currentFarm.FarmsTypeNameOne}} ?
-                                    </label><br />
-                                    <input type="checkbox" ng-model="$ctrl.campain.IsSendToWorker">
-
-
-                                </div>
-                            </div>
-
-
                         </div>
+
+
+                        <div class="col-md-3">
+
+                            <div class="form-group">
+
+
+                                <label>
+                                    האם לשלוח קובץ סופי גם ל{{$ctrl.currentFarm.FarmsTypeNameOne}} ?
+                                </label><br />
+                                <input type="checkbox" ng-model="$ctrl.campain.IsSendToWorker">
+
+
+                            </div>
+                        </div>
+
+
+                    </div>
                     <div class="panel-footer colAlignLeft">
 
-                        <button class="btn btn-primary" ng-click="$ctrl.SaveData(1)">שמירת נתונים</button>
+                        <div class="btn btn-primary" ng-click="$ctrl.SaveData(1);">שמירת נתונים</div>
 
                     </div>
                 </div>
@@ -687,7 +704,8 @@
                     </div>
                     <div class="panel-body">
 
-                        <div class="col-md-2" ng-if="$ctrl.currentFarm.FarmsTypesId==1"> <!--רק לעובדים-->
+                        <div class="col-md-2" ng-if="$ctrl.currentFarm.FarmsTypesId==1">
+                            <!--רק לעובדים-->
                             <button class="btnAddPdf btn btn-default" ng-click="$ctrl.SaveData(2)">הוספת קובץ 101</button>
                         </div>
 
@@ -944,8 +962,8 @@
 
                     <!--<span id="spxx"></span> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span id="spyy"></span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span id="spScale"></span>-->
                     <!--<br />
-                    <span id="spx"></span> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span id="spy"></span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-                    <br />W-<span id="spWidth"></span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<br />H-<span id="spHeight"></span>-->
+                <span id="spx"></span> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span id="spy"></span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+                <br />W-<span id="spWidth"></span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<br />H-<span id="spHeight"></span>-->
                 </div>
 
 
@@ -963,7 +981,6 @@
 
         </uib-tab>
 
-
         <!--תצוגת-->
         <uib-tab id="tab4" index="3" heading="תצוגת סופית של PDF" ng-if="$ctrl.role==2">
 
@@ -977,13 +994,13 @@
 
                         <div class="panel panel-primary">
                             <!--<div class="panel-heading">
-                                תצוגת קובץ PDF
+                            תצוגת קובץ PDF
 
-                                <div style="float:left;cursor:pointer" class="panelClose">
-                                    <img src="../../images/_notArrive.png" width="24px" />
-                                </div>
+                            <div style="float:left;cursor:pointer" class="panelClose">
+                                <img src="../../images/_notArrive.png" width="24px" />
+                            </div>
 
-                            </div>-->
+                        </div>-->
                             <div class="panel-body" id="panelBody">
                                 <div id="divContainerEnd"
                                      style="border:2px solid black;height:100%;overflow:auto;">
@@ -1017,20 +1034,42 @@
                 <div class="panel panel-primary">
                     <div class="panel-heading">
                         {{$ctrl.currentFarm.FarmsTypeName}}
-                        <div style="float:left" ng-if="$ctrl.currentFarm.FarmsTypesId==1"> <!--רק לעובדים אפשרות להקים מפה חדש-->
+                        <div style="float:left" ng-if="$ctrl.currentFarm.FarmsTypesId==1">
+                            <!--רק לעובדים אפשרות להקים מפה חדש-->
                             <!--<button ng-click="$ctrl.downloadExcel()" class="btn btn-success btn-xs">הורדת פרטי עובדים</button>-->
-                            <a class="btn btn-success btn-xs" ui-sref="worker({id:0,campainid:$ctrl.campain.Id})">{{$ctrl.currentFarm.FarmsTypeNameOne}} חדש/ה</a>
+                            <a ng-if="($ctrl.farmspdffiles | filter:{ Is101: true }).length > 0" class="btn btn-success btn-xs" ui-sref="worker({id:0,campainid:$ctrl.campain.Id,shnatmas:$ctrl.ShnatMas})">{{$ctrl.currentFarm.FarmsTypeNameOne}} חדש/ה</a>
+                            <a ng-if="($ctrl.farmspdffiles | filter:{ Is101: true }).length == 0" class="btn btn-success btn-xs" ui-sref="workerall({id:0,campainid:$ctrl.campain.Id})">{{$ctrl.currentFarm.FarmsTypeNameOne}} חדש/ה</a>
                         </div>
                     </div>
                     <div class="panel-body">
 
+                       
+                            <div class="col-md-2" ng-if="($ctrl.farmspdffiles | filter:{ Is101: true }).length > 0">
+                                <div class="form-group">
+                                    <label>שנת מס</label>
+                                    <select class="form-control" ng-model="$ctrl.ShnatMas" ng-change="$ctrl.onSearchChange()">
+                                        <option value="">--בחר שנת מס--</option>
+                                        <option value="2021">2021</option>
+                                        <option value="2022">2022</option>
+                                        <option value="2023">2023</option>
+                                        <option value="2024">2024</option>
+                                        <option value="2025">2025</option>
+                                        <option value="2026">2026</option>
+                                        <option value="2027">2027</option>
+                                        <option value="2028">2028</option>
+                                        <option value="2029">2029</option>
 
+                                    </select>
+                                </div>
+
+                            </div>
+                            
 
                         <div class="col-md-2">
                             <label>חיפוש חופשי</label>
                             <input type="text" class="form-control" ng-model="$ctrl.filterText" placeholder="חיפוש חופשי" ng-change="$ctrl.onSearchChange()" />
                         </div>
-                       
+
                         <div class="col-md-2">
                             <div class="form-group">
 
@@ -1125,6 +1164,7 @@
                                 <tr>
 
                                     <th>#</th>
+                                    <th ng-if="($ctrl.farmspdffiles | filter:{ Is101: true }).length > 0"> שנת מס</th>
                                     <th>שם פרטי</th>
                                     <th>שם משפחה</th>
                                     <th>טלפון</th>
@@ -1141,12 +1181,12 @@
                                 </tr>
                             </thead>
                             <tbody>
-                               
+
                                 <tr ng-repeat="worker in $ctrl.workers.Items">
 
 
                                     <td> <a class="btn btn-default" ui-sref="workerall({id:worker.w.Id})">{{worker.w.Id}}</a></td>
-
+                                    <td ng-if="($ctrl.farmspdffiles | filter:{ Is101: true }).length > 0"> {{worker.shnatmas}}</td>
                                     <td>{{worker.w.FirstName}}</td>
                                     <td>{{worker.w.LastName}}</td>
                                     <td>{{worker.w.PhoneSelular}}</td>
@@ -1162,14 +1202,14 @@
 
                                     <td><a ng-if="worker.css.Id==6" class="btn  btn-success" ng-href="{{$ctrl.uploadsUri + worker.w.Id +'/' + worker.cs.CampainsId +'/AllPdfTemp.pdf'}}" target="_blank">PDF</a></td>
                                     <td ng-if="($ctrl.farmspdffiles | filter:{ Is101: true }).length == 0"> <button class="btn  btn-warning" ui-sref="workercampains({id:worker.w.Id,campainid:$ctrl.campain.Id})">עדכון</button></td>
-                                    <td ng-if="($ctrl.farmspdffiles | filter:{ Is101: true }).length > 0"> <button class="btn  btn-warning" ui-sref="worker({id:worker.w.Id,campainid:$ctrl.campain.Id})">עדכון</button></td>
+                                    <td ng-if="($ctrl.farmspdffiles | filter:{ Is101: true }).length > 0"> <button class="btn  btn-warning" ui-sref="worker({id:worker.w.Id,campainid:$ctrl.campain.Id,shnatmas:$ctrl.ShnatMas})">עדכון</button></td>
 
-                                    <td width="5%"><input style="width:52px;height:20px" type="checkbox" ng-model="worker.IsSelected" /></td>
+                                    <td width="5%"><input style="width:52px;height:20px" type="checkbox" ng-model="worker.IsSelected"/></td>
 
                                 </tr>
 
                                 <tr>
-                                    <td colspan="12" style="text-align:center; padding:10px;">
+                                    <td colspan="13" style="text-align:center; padding:10px;">
                                         סך הכל: <strong>{{$ctrl.workers.TotalCount | number}}</strong> רשומות
                                     </td>
                                 </tr>
@@ -1253,7 +1293,7 @@
                     </div>
                     <div class="panel-footer">
 
-                        <label>במסך זה ניתן להגדיר את השליחה של הקמפיין ל  {{$ctrl.currentFarm.FarmsTypeName}}. </label>
+                        <label>במסך זה ניתן להגדיר את השליחה של הקמפיין ל{{$ctrl.currentFarm.FarmsTypeName}}. </label>
 
 
                     </div>
@@ -1265,7 +1305,7 @@
 
     </uib-tabset>
 
-    <div id="mainControllerHorse"></div>
+   
 
 
     <div id="dialogContainerEditGroup" style="display:none">
@@ -1369,7 +1409,7 @@
                     </div>
 
                     <div class="form-group">
-                        <label><br /><input type="checkbox" ng-model="$ctrl.btns2grp.IsWorkerShow" />  האם להסתיר מהעובד/ת  </label>
+                        <label><br /><input type="checkbox" ng-model="$ctrl.btns2grp.IsWorkerHide" />  האם להסתיר מהעובד/ת  </label>
                     </div>
 
 

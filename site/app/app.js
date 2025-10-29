@@ -98,32 +98,108 @@
         });
 
 
-
-
-
         $stateProvider.state('workers', {
             url: '/workers/',
             views: {
                 'main': {
-                    template: '<workers workers="$ctrl.workers" departments="$ctrl.departments"></workers>',
-                    controller: function (workers, departments) {
+                    template: '<workers workers="$ctrl.workers" campain="$ctrl.campain"  farm="$ctrl.farm" farmspdffiles="$ctrl.farmspdffiles" departments="$ctrl.departments"></workers>',
 
+                  /*  btns="$ctrl.btns"  grps="$ctrl.grps"  btns2grps="$ctrl.btns2grps"*/
+                    controller: function (campain, farm, farmspdffiles, workers, departments) {
+                       /* farmspdffiles, btns, grps, btns2grps,*/
+                        this.farm = farm;
+                        this.campain = campain;
+                        this.farmspdffiles = farmspdffiles;
+                        //this.btns = btns;
+                        //this.grps = grps;
+                        //this.btns2grps = btns2grps;
                         this.workers = workers;
                         this.departments = departments;
 
                     },
                     controllerAs: '$ctrl',
                     resolve: {
-                        workers: function (usersService) {
-                            return usersService.getWorkers(true);
+                        campain: function (farmsService, $stateParams) {
+                            return farmsService.getSetCampainsData(2, -1, null);
                         },
-                        departments: function (farmsService) {
+
+                        farm: function (farmsService, $stateParams) {
+
+                            return farmsService.getFarm(localStorage.getItem('FarmId'));
+                        },
+
+                        farmspdffiles: function (farmsService, $stateParams) {
+
+                            return farmsService.getFarmPDFFiles(localStorage.getItem('FarmId'), -1);
+                        },
+
+                        //btns: function (farmsService, $stateParams) {
+
+                        //    return farmsService.actionFieldGroup(1, localStorage.getItem('FarmId'), null,-1);
+                        //},
+
+                        //grps: function (farmsService, $stateParams) {
+
+                        //    return farmsService.actionFieldGroup(2, localStorage.getItem('FarmId'), null, -1);
+                        //},
+
+                        //btns2grps: function (farmsService, $stateParams) {
+
+                        //    return farmsService.actionFieldGroup(3, localStorage.getItem('FarmId'), null, -1);
+                        //},
+
+                        workers: function (farmsService, $stateParams) {
+
+                            var workersFilters = JSON.parse(localStorage.getItem('workersFilters'));
+
+                            
+                            if (workersFilters) {
+                                return farmsService.getSetCampainsData(44, -1, null, 1, 10, workersFilters.filterText, workersFilters.statusid, workersFilters.departmentId0, workersFilters.departmentId,
+                                    workersFilters.departmentId2, workersFilters.departmentId3, workersFilters.departmentId4, null, workersFilters.ShnatMas);
+                            } else {
+
+                                return farmsService.getSetCampainsData(44,-1, null);
+                            }
+
+
+                            //return farmsService.getSetCampainsData(44, -1, null);
+                        },
+
+
+                        departments: function (farmsService, $stateParams) {
                             return farmsService.getSetCampainsData(9, localStorage.getItem('FarmId'), null);
                         }
+
                     }
                 }
             }
         });
+
+
+        //$stateProvider.state('workers', {
+        //    url: '/workers/',
+        //    views: {
+        //        'main': {
+        //            template: '<workers workers="$ctrl.workers" departments="$ctrl.departments"></workers>',
+        //            controller: function (workers, departments) {
+
+        //                this.workers = workers;
+        //                this.departments = departments;
+
+        //            },
+        //            controllerAs: '$ctrl',
+        //            resolve: {
+                      
+        //                workers: function (usersService) {
+        //                    return usersService.getWorkers(true);
+        //                },
+        //                departments: function (farmsService) {
+        //                    return farmsService.getSetCampainsData(9, localStorage.getItem('FarmId'), null);
+        //                }
+        //            }
+        //        }
+        //    }
+        //});
 
         $stateProvider.state('workers.modal', {
             // שים לב ל-^ כדי שה-URL יהיה מוחלט ולא יחובר ל-/workers/
@@ -187,7 +263,7 @@
         });
 
         $stateProvider.state('worker', {
-            url: '/worker/{id}/{campainid}/',
+            url: '/worker/{id}/{campainid}/{shnatmas}/{fromshnati}/',
             views: {
                 'main': {
                     template: '<worker farm="$ctrl.farm" campainsstatustype="$ctrl.campainsstatustype" screendata="$ctrl.screendata" campainid="$ctrl.campainid" users="$ctrl.users" worker="$ctrl.worker" files="$ctrl.files" childs="$ctrl.childs" cities="$ctrl.cities" banks="$ctrl.banks"  banksbrunchs="$ctrl.banksbrunchs"   ></worker>',
@@ -209,7 +285,7 @@
                     resolve: {
                         worker: function (usersService, $stateParams) {
 
-                            return usersService.getWorker($stateParams.id);
+                            return usersService.getWorker($stateParams.id, $stateParams.campainid, $stateParams.shnatmas);
                         },
                         files: function (usersService, $stateParams) {
 
@@ -815,7 +891,18 @@
                         },
 
                         workers: function (farmsService, $stateParams) {
-                             return farmsService.getSetCampainsData(4, $stateParams.id, null);
+
+
+                            var workersFilters = JSON.parse(localStorage.getItem('workersFilters'));
+                       
+
+                            if (workersFilters) {
+                                return farmsService.getSetCampainsData(4, $stateParams.id,null, 1, 10, workersFilters.filterText, workersFilters.statusid, workersFilters.departmentId0, workersFilters.departmentId,
+                                    workersFilters.departmentId2, workersFilters.departmentId3, workersFilters.departmentId4, null, workersFilters.ShnatMas);
+                            } else {
+
+                                return farmsService.getSetCampainsData(4, $stateParams.id, null);
+                            }
                         },
                        
 
@@ -1024,6 +1111,29 @@
         });
 
 
+        $rootScope.$on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams) {
+
+
+            if (["campains", "farmmanager", "users","workersall"].includes(toState.name)) {
+            //if (toState.name == "campains" || toState.name == "farmmanager") {
+
+                localStorage.setItem('selectedTab', null);
+                localStorage.setItem('workersFilters', null);
+               // alert('מעבר מ-', fromState.name, 'אל', toState.name);
+
+            }
+
+
+           
+
+              // alert('מעבר מ-', fromState.name, 'אל', toState.name);
+                // כאן תוכל לשמור ערכים, לנקות, לוודא הרשאות וכו'
+            });
+
+
+
+
+
         //document.addEventListener("dragstart", onOnline, false);
         //document.addEventListener("drop", onOffline, false);
 
@@ -1149,6 +1259,18 @@
 
 
     });
+
+
+    //app.run(function ($rootScope) {
+    //    $rootScope.$on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams) {
+    //        console.log('מעבר מ-', fromState.name, 'אל', toState.name);
+    //        // כאן תוכל לשמור ערכים, לנקות, לוודא הרשאות וכו'
+    //    });
+    //});
+
+
+
+
 
     if (window.location.hostname.indexOf('giddyup') != -1 && window.location.protocol != 'https:') {
         window.location.href = 'https://www.giddyup.co.il';

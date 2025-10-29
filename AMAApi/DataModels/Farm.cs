@@ -92,6 +92,8 @@ namespace FarmsApi.DataModels
 
         public string Name { get; set; }
 
+        public string ShnatMas { get; set; }
+        
         public string NameEn { get; set; }
         public DateTime DateRigster { get; set; }
 
@@ -117,6 +119,7 @@ namespace FarmsApi.DataModels
 
         public int CampainsId { get; set; }
 
+        public string ShnatMas { get; set; }
         public int WorkersId { get; set; }
 
         public DateTime? DateSend { get; set; }

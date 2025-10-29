@@ -94,7 +94,7 @@ namespace FarmsApi.Services
                     }
                 }
 
-                var FarmPDFFilesList = Context.FarmPDFFiles.Where(x => x.FarmId == FarmId && x.StatusId == 1 && x.CampainsId == CampainsId).OrderBy(x => x.Seq).ToList();
+                var FarmPDFFilesList = Context.FarmPDFFiles.Where(x => (x.FarmId == FarmId || x.FarmId ==-1) && x.StatusId == 1 && x.CampainsId == CampainsId).OrderBy(x => x.Seq).ToList();
 
                 int Counter = 0;
 
@@ -299,6 +299,7 @@ namespace FarmsApi.Services
 
 
 
+                string sourceDirFilesUpload = BaseLinkWorker + "-1";   // BaseLinkSite;
                 string sourceDir = BaseLinkSite;
                 string targetPDF = BaseLinkSite + "AllPdfTemp.pdf";
                 // string OutputFileDestination = BaseLinkSite + "AllPdf.pdf";
@@ -334,14 +335,14 @@ namespace FarmsApi.Services
                     {
 
 
-                        if (workersWith101 != null)
+                        if (workersWith101 != null && FarmPDFFilesList.Count>0 && FarmPDFFilesList[0].FarmId!=-1 && FarmPDFFilesList.Any(x=>x.Is101))
                         {
 
 
 
-                            sourceDir = BaseLinkSite;
-                            files = Directory.GetFiles(sourceDir);
-
+                            //sourceDir = BaseLinkSite;
+                            //files = Directory.GetFiles(sourceDir);
+                            files = Directory.GetFiles(sourceDirFilesUpload);
 
                             var filesImages = files.Where(x => !x.Contains("Signature.png") && ImageExtensions.Contains(System.IO.Path.GetExtension(x).ToUpperInvariant())).ToList();
                             if (filesImages.Count > 0)
@@ -521,10 +522,10 @@ namespace FarmsApi.Services
 
                     if (item.FieldsDataTypesId == 4 || item.FieldsDataTypesId == 6)
                     {
-                        if (res.ToString() == "true")
-                            res = "True";
-                        else
-                            res = "False";
+                        if (res.ToString() == "false")
+                            res = null;
+                        //else
+                        //    res = "False";
                     }
 
 
@@ -686,7 +687,7 @@ namespace FarmsApi.Services
 
                 else if (res != null && ((PropertyValue == null) || PropertyValue == res.ToString() || res.ToString() == "True") && res.ToString() != "False")
                 {
-                    if (item.Word.Contains("x"))
+                    if (item.Word.Contains("x") || res.ToString()=="true")
                         item.Word = "x"; //"✓"
                     else
                         item.Word = res.ToString();

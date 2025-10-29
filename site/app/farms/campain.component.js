@@ -59,6 +59,10 @@
         this.currentFarm = JSON.parse(localStorage.getItem('FarmObj'));
 
         this.uploadsUri = sharedValues.apiUrl + '/uploads/Workers/'
+       // this.ShnatMas = moment().format('YYYY');
+
+      // this.ShnatMas = moment().format('YYYY');
+
 
         function _deleteLogo(type) {
 
@@ -95,10 +99,10 @@
         };
 
 
-
+     
         function _init(isfromRefresh) {
 
-
+           
             if (!isfromRefresh) {
                 if (this.role == 2) {
                     this.active = 0;   // טאב ראשון
@@ -107,10 +111,44 @@
                 }
             }
 
+          
+
+            if (localStorage.getItem('selectedTab') == "3" && this.campain.Name) {
+
+                this.active = 4;
+
+            }
+
+
+            //******************************************************** */
+            var workersFilters = JSON.parse(localStorage.getItem('workersFilters'));
+            if (workersFilters) {
+                self.statusid = workersFilters.statusid;
+                self.ShnatMas = workersFilters.ShnatMas;
+                self.departmentId0 = workersFilters.departmentId0;
+                self.departmentId = workersFilters.departmentId;
+                self.departmentId2 = workersFilters.departmentId2;
+                self.departmentId3 = workersFilters.departmentId3;
+                self.departmentId4 = workersFilters.departmentId4;
+                self.filterText = workersFilters.filterText;
+
+              
+
+            } else {
+                //// ערכים דיפולטיביים
+                //vm.selectedYear = new Date().getFullYear();
+                //vm.selectedStatus = '';
+            }
 
 
 
 
+
+
+
+
+
+          
 
             if (this.campain.Name) {
 
@@ -148,7 +186,7 @@
 
             });
 
-
+         
 
             //
             //var sddsds = this.farmspdffiles;
@@ -437,7 +475,7 @@
 
         function _SaveData(type) {
 
-
+           
 
             //שמירת פרטי חברה
             if (type == 1) {
@@ -830,6 +868,9 @@
         };
 
         this.onSearchChange = function () {
+
+
+          
             if (this.filterText && this.filterText.length >= 2) {
                 this.currentPage = 1;
 
@@ -844,7 +885,23 @@
             }
 
 
+          
+         
 
+            var workersFilters = {
+                statusid: self.statusid,
+                ShnatMas: self.ShnatMas,
+                departmentId0: self.departmentId0,
+                departmentId: self.departmentId,
+                departmentId2: self.departmentId2,
+                departmentId3: self.departmentId3,
+                departmentId4: self.departmentId4,
+                filterText: self.filterText
+                
+            };
+
+
+            localStorage.setItem('workersFilters', JSON.stringify(workersFilters));
 
 
 
@@ -862,12 +919,12 @@
             var subdivisionid = this.departmentId2;
             var departmentsid = this.departmentId3;
             var subdepartmentsid = this.departmentId4;
-            var status101 = "";
+            var statuscampain = "";
+            var shnatmas = this.ShnatMas;
 
 
 
-
-            farmsService.getSetCampainsData(4, ctrl.campain.Id,null, ctrl.currentPage, ctrl.pageSize, ctrl.filterText, statusid, factoryid, divisionid, subdivisionid, departmentsid, subdepartmentsid, status101).then(function (res) {
+            farmsService.getSetCampainsData(4, ctrl.campain.Id, null, ctrl.currentPage, ctrl.pageSize, ctrl.filterText, statusid, factoryid, divisionid, subdivisionid, departmentsid, subdepartmentsid, statuscampain, shnatmas).then(function (res) {
 
 
                 ctrl.workers = res;

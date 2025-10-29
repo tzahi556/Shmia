@@ -303,8 +303,16 @@
                                     <td>{{campain.c.Name}}</td>
                                     <td>{{campain.cst.Name}}</td>
                                     <!--<td> <button class="btn  btn-warning" ui-sref="workerall({id:worker.w.Id})">עדכון</button></td>-->
-                                    <td ng-if="campain.cs.StatusId==5"> <button class="btn  btn-warning" ui-sref="workercampains({id:campain.cs.WorkersId,campainid:campain.c.Id})">חתימה</button></td>
-                                    <td ng-if="campain.cs.StatusId==6"><a  class="btn  btn-success" ng-href="{{$ctrl.uploadsUri + campain.cs.WorkersId +'/' + campain.c.Id +'/AllPdfTemp.pdf'}}" target="_blank">PDF</a></td>
+                                    <td ng-if="campain.cs.StatusId==5 && campain.Is101"> <button class="btn  btn-warning" ui-sref="worker({id:campain.cs.WorkersId,campainid:campain.c.Id,shnatmas:campain.cs.shnatmas,fromshnati:true})">חתימה</button></td>
+                                    <td ng-if="campain.cs.StatusId==5 && !campain.Is101"> <button class="btn  btn-warning" ui-sref="workercampains({id:campain.cs.WorkersId,campainid:campain.c.Id})">חתימה</button></td>
+
+                                    <td ng-if="campain.cs.StatusId==6"><a class="btn  btn-success" ng-href="{{$ctrl.uploadsUri + campain.cs.WorkersId +'/' + campain.c.Id +'/AllPdfTemp.pdf'}}" target="_blank">PDF</a></td>
+
+                                    <!--<td ng-if="($ctrl.farmspdffiles | filter:{ Is101: true }).length == 0"> <button class="btn  btn-warning" ui-sref="workercampains({id:campain.cs.WorkersId,campainid:campain.c.Id})">עדכון</button></td>
+    <td ng-if="($ctrl.farmspdffiles | filter:{ Is101: true }).length > 0"> <button class="btn  btn-warning" ui-sref="worker({id:campain.cs.WorkersId,campainid:campain.c.Id})">עדכון</button></td>-->
+
+
+
                                 </tr>
                             </tbody>
                         </table>
@@ -320,9 +328,9 @@
 
 
         <!--הצהרה - 101-->
-        <div class="row" ng-if="$ctrl.role>0">
-            <div class="col-md-12">
-                <div ng-if="$ctrl.farmStyle!=1 || $ctrl.role=='farmAdmin' ||  $ctrl.role=='instructor'" style="width:100%;margin-top:2px" class="btn  btn-primary" ng-click="$ctrl.saveWorker(1)">שמור נתונים</div>
+        <div class="row" ng-if="$ctrl.role>0" >
+            <div class="col-md-2" style="float:left">
+                <div ng-if="$ctrl.farmStyle!=1 || $ctrl.role=='farmAdmin' ||  $ctrl.role=='instructor'" style="width:100%;margin-top:2px" class="btn  btn-primary" ng-click="$ctrl.saveWorker(1)">שמירת נתונים</div>
             </div>
         </div>
 

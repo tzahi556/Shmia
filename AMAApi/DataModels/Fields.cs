@@ -209,6 +209,10 @@ namespace FarmsApi.DataModels
         public CampainsStatus cs { get; set; }          // יכול להיות null (בגלל LEFT JOIN)
         public CampainsStatusType m { get; set; }       // Type == 1, יכול להיות null
         public CampainsStatusType css { get; set; }  // Type == 2, יכול להיות null
+
+        public bool isworker101done { get; set; }
+        public string shnatmas { get; set; }
+        
     }
 
     public class WorkersCampainResult

@@ -80,7 +80,13 @@
 
             this.groupsonly = [];
 
-            uniqueBy(this.screendata, "fg", "Id", this.groupsonly);
+
+            try {
+
+                uniqueBy(this.screendata, "fg", "Id", this.groupsonly);
+
+            } catch { }
+
 
             for (var i = 0; i < this.screendata.length; i++) {
 

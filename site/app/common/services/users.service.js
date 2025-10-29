@@ -244,12 +244,12 @@
         }
 
 
-        function _getWorker(id) {
+        function _getWorker(id,campainid,shnatmas) {
 
           
             var deferred = $q.defer();
 
-            $http.get(sharedValues.apiUrl + 'users/getWorker/' + id).then(function (res) {
+            $http.get(sharedValues.apiUrl + 'users/getWorker/' + id + '/' + campainid + '/' + shnatmas).then(function (res) {
 
                 var res = res.data;
                 deferred.resolve(res);

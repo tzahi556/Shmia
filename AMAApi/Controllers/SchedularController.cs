@@ -33,7 +33,15 @@ namespace FarmsApi.Services
             using (var Context = new Context())
             {
                 var WorkersToRemove = Context.Workers.Where(x=>string.IsNullOrEmpty(x.FirstName) && string.IsNullOrEmpty(x.LastName) && string.IsNullOrEmpty(x.Taz) && string.IsNullOrEmpty(x.PhoneSelular)).ToList();
+
+                var WorkersToRemoveIds = WorkersToRemove.Select(x => x.Id).ToList();
+
+                var Workers101ToRemove = Context.Workers101.Where(x => WorkersToRemoveIds.Contains(x.WorkersId)).ToList();
+
+
+
                 Context.Workers.RemoveRange(WorkersToRemove);
+                Context.Workers101.RemoveRange(Workers101ToRemove);
 
                 var CampainsToRemove = Context.Campains.Where(x => string.IsNullOrEmpty(x.Name)).ToList();
                 Context.Campains.RemoveRange(CampainsToRemove);

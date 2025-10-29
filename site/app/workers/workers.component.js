@@ -7,358 +7,246 @@
         templateUrl: 'app/workers/workers.template.html?v=2',
         controller: WorkersController,
         bindings: {
+            campain: '<',
+            farm: '<',
+            farmspdffiles: '<',
+            //btns: '<',
+            //grps: '<',
+            //btns2grps: '<',
             workers: '<',
             departments: '<'
 
         }
     });
 
-    function WorkersController(usersService, sharedValues, $state, $http) {
+    function WorkersController($scope, farmsService, filesService, $state, sharedValues, $http) {
 
 
-        this.roles = usersService.roles;
-        this.sharedValues = sharedValues;
-        this.getHebRole = _getHebRole.bind(this);
+        var self = this;
+
+        $scope.farm = this.farm;
+        this.scope = $scope;
         this.checkAll = _checkAll.bind(this);
-        this.deleteAll = _deleteAll.bind(this);
         this.sendSMS = _sendSMS.bind(this);
-
-        this.delete = _delete.bind(this);
-        this.downloadExcel = _downloadExcel.bind(this);
-        this.uploadsUri = sharedValues.apiUrl + 'uploads/';
-
-        this.role = localStorage.getItem('currentRole');
-        this.farmStyle = localStorage.getItem('FarmStyle');
-
-
+        
+        this.farmsService = farmsService;
+        this.SaveData = _SaveData.bind(this);
       
+        this.init = _init.bind(this);
+        this.role = localStorage.getItem('currentRolesId');
 
-       
+   
+        this.currentFarm = JSON.parse(localStorage.getItem('FarmObj'));
 
-        function _downloadExcel() {
+     
+        this.ShnatMas = moment().format('YYYY');
 
-            var data = [];
-            data.push([
-
-                'ת.ז.',
-                'מין',
-                'שם פרטי',
-                'שם משפחה',
-                'טלפון',
-                'טלפון נייד',
-                'כתובת',
-                'מייל',
-                'חבר קופת חולים',
-                'קופת חולים',
-
-                'שכר שעתי',
-                'שכר חודשי',
-                'מצב משפחתי',
-                'תחילת עבודה',
-                'תאריך לידה',
-                'עיר',
-                'סוג משרה',
-                'בנק',
-                'סניף',
-                'חשבון'
+     
 
 
-                /*  שכר שעתי, שכר חודשי, נסיעות, מספר עובד, מצב משפחתי, מספר הנהלח, תחילת עבודה, תאריך לידה, עיר, סוג משרה, דרוג, דרגה, תת מפעל, בנק, סניף, חשבון*/
+   
 
 
 
-            ]);
+        function _init(isfromRefresh) {
 
-            this.workers.forEach(function (worker) {
-                data.push([
-                    worker.Taz,
-                    (worker.Gender == 1) ? "זכר" : "נקבה",
-                    worker.FirstName,
-                    worker.LastName,
-                    worker.Phone,
-                    worker.PhoneSelular,
-                    worker.FullAddress,
-                    worker.Email,
-                    (worker.KupatHolim == 1) ? "כן" : "לא",
-                    getKupaName(worker.Kupa),
-                    worker.HeskemWorkerMaskuert3,
-                    worker.HeskemWorkerMaskuert4,
-                    getMatzavMish(worker.StatusFamely),
-                    getFormatDate(worker.StartWorkDate),
-                    getFormatDate(worker.BirthDate),
-                    worker.City,
-                    getSugMisra(worker.SugMaskuret),
-                    worker.BankNumName,
-                    worker.BrunchNumName,
-                    worker.BankAccountNumber
+          
+            if (!isfromRefresh) {
+                if (this.role == 2) {
+                    this.active = 0;   // טאב ראשון
+                } else {
+                    this.active = 4;   // טאב עובדים (האחרון)
+                }
+            }
 
 
-                ]);
+
+            if (localStorage.getItem('selectedTab') == "3" && this.campain.Name) {
+
+                this.active = 4;
+
+            }
+
+
+
+            //******************************************************** */
+
+         
+            var workersFilters = JSON.parse(localStorage.getItem('workersFilters'));
+            if (workersFilters) {
+                self.statusid = workersFilters.statusid;
+                self.ShnatMas = workersFilters.ShnatMas;
+                self.departmentId0 = workersFilters.departmentId0;
+                self.departmentId = workersFilters.departmentId;
+                self.departmentId2 = workersFilters.departmentId2;
+                self.departmentId3 = workersFilters.departmentId3;
+                self.departmentId4 = workersFilters.departmentId4;
+                self.filterText = workersFilters.filterText;
+
+
+
+            } else {
+                //// ערכים דיפולטיביים
+                //vm.selectedYear = new Date().getFullYear();
+                //vm.selectedStatus = '';
+            }
+
+
+           
+            var campainLast = JSON.parse(localStorage.getItem('campainLast'));
+            if (campainLast) {
+               
+                //$scope.$applyAsync(() => { self.campain = campainLast; });
+                this.campain.Id = campainLast.Id;
+                //$scope.$apply(() => {
+                //    self.campain = campainLast;
+                //});
+
+            }
+
+
+
+            if (this.campain.Name) {
+
+
+                IsSave = true;
+
+            }
+
+            for (var i in this.farmspdffiles) {
+
+
+
+                var f = this.farmspdffiles[i];
+
+
+                f.FullLink = sharedValues.apiUrl + "/Uploads/Companies/" + self.farm.Id + "/PDFS/" + f.CampainsId + "/" + f.FileName;
+
+                if (eval(f.Is101)) f.FullLink = sharedValues.apiUrl + "/Uploads/Companies/101.pdf";
+
+
+            }
+
+            var obj = this.campain;
+            Object.keys(obj).forEach(function (key, index) {
+
+                if (key.indexOf("Date") != -1) {
+
+                    obj[key] = new Date(moment(obj[key]).format("YYYY-MM-DD"));// .startOf('day').toDate();
+
+
+                }
+
+
             });
 
-            _getReport(data);
 
-
-            function getFormatDate(date) {
-                if (date)
-                    return moment(date).format("DD-MM-YYYY");
-                else
-                    return "";
-
-            }
-
-            function getSugMisra(SugMaskuret) {
-
-                switch (SugMaskuret) {
-                    case '1':
-                        return "משכורת חודש";
-                        break;
-                    case '2':
-                        return "שכר עבודה (עובד יומי)";
-                        break;
-                    case '3':
-                        return "משכורת נוספת";
-                        break;
-                    case '4':
-                        return "קצבה";
-                        break;
-                    case '5':
-                        return "משכורת חלקית";
-                        break;
-
-                    case '6':
-                        return "מלגה";
-                        break;
-                    default:
-                        return "";
-                }
-
-
-
-
-            }
-
-            function getMatzavMish(StatusFamely) {
-
-                switch (StatusFamely) {
-                    case '1':
-                        return "רווק/ה";
-                        break;
-                    case '2':
-                        return "נשוי/אה";
-                        break;
-                    case '3':
-                        return "גרוש/ה";
-                        break;
-                    case '4':
-                        return "אלמן/ה";
-                        break;
-                    case '5':
-                        return "פרוד/ה";
-                        break;
-                    default:
-                        return "";
-                }
-
-
-            }
-
-            function getKupaName(Kupa) {
-
-                switch (Kupa) {
-                    case '1':
-                        return "כללית";
-                        break;
-                    case '2':
-                        return "מכבי";
-                        break;
-                    case '3':
-                        return "מאוחדת";
-                        break;
-                    case '4':
-                        return "לאומית";
-                        break;
-
-                    default:
-                        return "";
-                }
-
-
-            }
+           // alert(this.campain.Id);
+           
 
         }
-        function _getReport(rows) {
-            function s2ab(s) {
-                var buf = new ArrayBuffer(s.length);
-                var view = new Uint8Array(buf);
-                for (var i = 0; i != s.length; ++i) view[i] = s.charCodeAt(i) & 0xFF;
-                return buf;
-            }
 
-            var data = rows;
+     
+       
+        this.init();
 
-            var ws_name = "SheetJS";
+        function _SaveData(type) {
 
-            var wscols = [];
 
-            /*console.log("Sheet Name: " + ws_name);
-            console.log("Data: "); for (var i = 0; i != data.length; ++i) console.log(data[i]);
-            console.log("Columns :"); for (i = 0; i != wscols.length; ++i) console.log(wscols[i]);*/
 
-            /* dummy workbook constructor */
-            function Workbook() {
-                if (!(this instanceof Workbook)) return new Workbook();
-                this.SheetNames = [];
-                this.Sheets = {};
-            }
-            var wb = new Workbook();
+            //שמירת פרטי חברה
+            if (type == 1) {
 
-            /* TODO: date1904 logic */
-            function datenum(v, date1904) {
-                if (date1904) v += 1462;
-                var epoch = Date.parse(v);
-                return (epoch - new Date(Date.UTC(1899, 11, 30))) / (24 * 60 * 60 * 1000);
-            }
-            /* convert an array of arrays in JS to a CSF spreadsheet */
-            function sheet_from_array_of_arrays(data, opts) {
-                var ws = {};
-                var range = { s: { c: 10000000, r: 10000000 }, e: { c: 0, r: 0 } };
-                for (var R = 0; R != data.length; ++R) {
-                    for (var C = 0; C != data[R].length; ++C) {
-                        if (range.s.r > R) range.s.r = R;
-                        if (range.s.c > C) range.s.c = C;
-                        if (range.e.r < R) range.e.r = R;
-                        if (range.e.c < C) range.e.c = C;
-                        var cell = { v: data[R][C] };
-                        if (cell.v == null) continue;
-                        var cell_ref = XLSX.utils.encode_cell({ c: C, r: R });
 
-                        /* TEST: proper cell types and value handling */
-                        if (typeof cell.v === 'number') cell.t = 'n';
-                        else if (typeof cell.v === 'boolean') cell.t = 'b';
-                        else if (cell.v instanceof Date) {
-                            cell.t = 'n'; cell.z = XLSX.SSF._table[14];
-                            cell.v = datenum(cell.v);
-                        }
-                        else cell.t = 's';
-                        ws[cell_ref] = cell;
-                    }
+                if (!this.campain.Name) {
+
+                    alertMessage("שדה שם קמפיין הינו שדה חובה", 3)
+
+                    return;
                 }
 
-                /* TEST: proper range */
-                if (range.s.c < 10000000) ws['!ref'] = XLSX.utils.encode_range(range);
-                return ws;
+
+                this.farmsService.getSetCampainsData(3, 0, this.campain).then(function (farm) {
+                    alertMessage('הנתונים נשמרו בהצלחה!', 1);
+
+                    IsSave = true;
+
+                }.bind(this));
+
+
             }
-            var ws = sheet_from_array_of_arrays(data);
 
-            /* TEST: add worksheet to workbook */
-            wb.SheetNames.push(ws_name);
-            wb.Sheets[ws_name] = ws;
 
-            /* TEST: column widths */
-            ws['!cols'] = wscols;
+            // הוספת קובץ 101 בלבד
+            if (type == 2) {
 
-            var wbout = XLSX.write(wb, { bookType: 'xlsx', bookSST: true, type: 'binary', cellStyles: true });
-            saveAs(new Blob([s2ab(wbout)], { type: "application/octet-stream" }), "report.xlsx");
+
+
+                farmsService.updateFarmsPdfFiles(2, self.farm.Id, this.campain.Id, self.farmspdffiles).then(function (farmspdffiles) {
+
+
+
+
+                    self.farmspdffiles = farmspdffiles;
+                    self.init(true);
+                    const myTimeout = setTimeout(RefreshPage, 300);
+
+
+
+                });
+
+
+            }
+
+            //עריכת קבוצה
+            if (type == 3) {
+
+
+                var Objects = this.grp;
+                this.farmsService.actionFieldGroup(11, this.farm.Id, Objects, this.campain.Id).then(function (grps) {
+
+                    self.grps = grps;
+                    const myTimeout = setTimeout(BuildEditPDF, 300);
+
+                }.bind(this));
+
+
+            }
+
+            //עריכת שדה
+            if (type == 4) {
+
+
+                var Objects = this.btns2grp;
+                this.farmsService.actionFieldGroup(12, this.farm.Id, Objects, this.campain.Id).then(function (btns2grps) {
+
+                    self.btns2grps = btns2grps;
+                    const myTimeout = setTimeout(BuildEditPDF, 300);
+
+                }.bind(this));
+
+
+            }
+
+
+
+
         }
         function _checkAll() {
 
 
             this.workers.Items.forEach(x => x.IsSelected = this.checkAllc);
         }
-        function _getHebRole(id) {
-
-
-            return this.sharedValues.roles.filter(x => x.id == id)[0].name;//(users[i].Role);
-        }
-
-        function _deleteAll() {
-
-          //if (confirm('האם למחוק את כל העובדים המסומנים?')) {
-               var selected = this.workers.filter(x => x.IsSelected);
-
-               
-
-                if (selected.length>0)
-                var confirmBox = alertMessage("האם למחוק את כל העובדים המסומנים?", 4);
-                confirmBox.click(function () {
-
-
-                   
-
-                    for (var i in selected) {
-                        var ctrl = this;
-                        usersService.deleteWorker(selected[i].Id, true).then(function (res) {
-
-
-                            ctrl.workers = res;
-
-                        });
-
-                    }
-
-
-                });
-
-        }
-
-        function _delete(workerid) {
-
-            var ctrl = this;
-            var confirmBox = alertMessage("האם למחוק את העובד?", 4);
-            confirmBox.click(function () {
-               
-                usersService.deleteWorker(workerid, true).then(function (res) {
-
-
-                    ctrl.workers = res;
-                 
-                });
-
-            })
-
-          
-        }
-
-        //function _sendSMS() {
-
-
-        //    var ctrl = this;
-           
-        //    var selected = this.workers.filter(x => x.IsSelected);
-
-        //    ctrl.checkAllc = false;
-        //    ctrl.checkAll();
-
-
-        //    for (var i = 0; i < selected.length; i++) {
-        //        selected[i].IsSelected = true;
-        //    }
-
-        //    if (selected.length > 0) {
-        //        var confirmBox = alertMessage("האם לשלוח SMS לכל העובדים המסומנים?", 4);
-        //        confirmBox.click(function () {
-        //            usersService.sendSMS(selected, 1).then(function (res) {
-
-
-        //                ctrl.workers = res;
-        //                ctrl.checkAllc = false;
-        //                ctrl.checkAll();
-        //            });
-        //        });
-        //    }
-
-
-
-        //}
-
         function _sendSMS(type) {
 
-            
+
             var ctrl = this;
 
 
+            //alert(ctrl.campain.Id);
 
+
+            //return;
 
             //var selected = this.workers.filter(x => x.IsSelected && (x.IsValid || this.farmStyle != 1));
             var selected = this.workers.Items.filter(x => x.IsSelected);
@@ -380,7 +268,7 @@
             }
 
 
-            const workersSelected = selected.map(selected => selected);
+            const workersSelected = selected.map(selected => selected.w);
 
             let typename = "SMS";
 
@@ -395,10 +283,10 @@
 
                 if (workersSelected.length == 1) {
 
-                    const phone = "972" + workersSelected[0].w.PhoneSelular;
+                    const phone = "972" + workersSelected[0].PhoneSelular;
 
-                    usersService.sendSMS(workersSelected, true, ctrl.currentPage, ctrl.pageSize, ctrl.filterText, 4).then(function (res) {
-                        debugger
+                    farmsService.sendLinktoWorkers(workersSelected, 4, ctrl.campain.Id).then(function (res) {
+
                         const message = res;
 
                         const encodedMessage = encodeURIComponent(message);
@@ -407,8 +295,8 @@
 
                         window.open(url, '_blank');
 
-                        
-                        usersService.sendSMS(workersSelected, true, ctrl.currentPage, ctrl.pageSize, ctrl.filterText, type, ctrl.statusid, ctrl.factoryid, ctrl.divisionid, ctrl.subdivisionid, ctrl.departmentsid, ctrl.subdepartmentsid, ctrl.status101).then(function (res) {
+                       
+                        farmsService.sendLinktoWorkers(workersSelected, type, ctrl.campain.Id).then(function (res) {
 
                             ctrl.workers = res;
                             ctrl.checkAllc = false;
@@ -426,8 +314,8 @@
             if (selected.length > 0) {
                 var confirmBox = alertMessage(`האם לשלוח ${typename} לכל העובדים המסומנים?`, 4);
                 confirmBox.click(function () {
-                   
-                    usersService.sendSMS(workersSelected, true, ctrl.currentPage, ctrl.pageSize, ctrl.filterText, type, ctrl.statusid, ctrl.factoryid, ctrl.divisionid, ctrl.subdivisionid, ctrl.departmentsid, ctrl.subdepartmentsid, ctrl.status101).then(function (res) {
+
+                    farmsService.sendLinktoWorkers(workersSelected, type, ctrl.campain.Id, ctrl.currentPage, ctrl.pageSize, ctrl.filterText, ctrl.statusid, ctrl.factoryid, ctrl.divisionid, ctrl.subdivisionid, ctrl.departmentsid, ctrl.subdepartmentsid, ctrl.status101, ctrl.ShnatMas).then(function (res) {
 
                         ctrl.workers = res;
                         ctrl.checkAllc = false;
@@ -442,16 +330,17 @@
 
 
         }
+
+
+
+
         //********************************************* */
 
         this.currentPage = 1;
         this.pageSize = 10;
 
-
-        
-
         this.getPagedWorkers = function () {
-           
+
             var start = (this.currentPage - 1) * this.pageSize;
             return this.workers.Items.slice(start, start + this.pageSize);
         };
@@ -506,10 +395,47 @@
 
 
            
+            var workersFilters = {
+                statusid: self.statusid,
+                ShnatMas: self.ShnatMas,
+                departmentId0: self.departmentId0,
+                departmentId: self.departmentId,
+                departmentId2: self.departmentId2,
+                departmentId3: self.departmentId3,
+                departmentId4: self.departmentId4,
+                filterText: self.filterText
+
+            };
 
 
+            localStorage.setItem('workersFilters', JSON.stringify(workersFilters));
 
         };
+
+        this.onShnatmasChange = function () {
+          
+            var ctrl = this;
+
+            var statusid = this.statusid;
+            var factoryid = this.departmentId0;
+            var divisionid = this.departmentId;
+            var subdivisionid = this.departmentId2;
+            var departmentsid = this.departmentId3;
+            var subdepartmentsid = this.departmentId4;
+            var statuscampain = "";
+            var shnatmas = this.ShnatMas;
+
+
+            farmsService.getSetCampainsData(444, "-1", null, ctrl.currentPage, ctrl.pageSize, ctrl.filterText, statusid, factoryid, divisionid, subdivisionid, departmentsid, subdepartmentsid, statuscampain, shnatmas).then(function (res) {
+
+               
+                ctrl.campain = res;
+                localStorage.setItem('campainLast', JSON.stringify(ctrl.campain));
+            });
+
+        };
+
+
 
         this.loadWorkers = function () {
 
@@ -523,21 +449,20 @@
             var subdivisionid = this.departmentId2;
             var departmentsid = this.departmentId3;
             var subdepartmentsid = this.departmentId4;
-            var status101 = "";
+            var statuscampain = "";
+            var shnatmas = this.ShnatMas;
 
-          
+
             
-
-            usersService.getWorkers(true, ctrl.currentPage, ctrl.pageSize, ctrl.filterText, statusid, factoryid, divisionid, subdivisionid, departmentsid, subdepartmentsid, status101).then(function (res) {
+            farmsService.getSetCampainsData(44, ctrl.campain.Id, null, ctrl.currentPage, ctrl.pageSize, ctrl.filterText, statusid, factoryid, divisionid, subdivisionid, departmentsid, subdepartmentsid, statuscampain, shnatmas).then(function (res) {
 
 
                 ctrl.workers = res;
-                //ctrl.getPagedWorkers();
+               
             });
 
 
-            //var start = (this.currentPage - 1) * this.pageSize;
-            //return this.workers.Items.slice(start, start + this.pageSize);
+        
 
         }
 
@@ -576,15 +501,7 @@
             }
         };
 
-
-
-
-
         //********************************************** */
-
-
-
-
 
 
 

@@ -1,23 +1,25 @@
 ﻿using FarmsApi.DataModels;
+using FarmsApi.DataModels;
+using Google.Protobuf.WellKnownTypes;
+using iTextSharp.text.xml.xmp;
+using iTextSharp.tool.xml.css;
+using Newtonsoft.Json;
+using Spire.Pdf;
+using Spire.Pdf.Graphics;
+using System;
 //using iTextSharp.text.pdf;
 //using iTextSharp.text;
 using System.Collections.Generic;
-using System.IO;
-using System.Threading;
-using System.Web.Http;
-using Spire.Pdf;
-using System.Drawing.Imaging;
-using System;
+using System.Configuration;
 using System.Drawing;
-using Spire.Pdf.Graphics;
+using System.Drawing.Imaging;
+using System.IO;
 using System.Linq;
-using FarmsApi.DataModels;
-using System.Web;
-using iTextSharp.text.xml.xmp;
 using System.Reflection;
-using Newtonsoft.Json;
 using System.Text.RegularExpressions;
-using Google.Protobuf.WellKnownTypes;
+using System.Threading;
+using System.Web;
+using System.Web.Http;
 using static System.Net.WebRequestMethods;
 
 namespace FarmsApi.Services
@@ -742,8 +744,6 @@ namespace FarmsApi.Services
                                         Campain.CountSign++;
                                         Context.Entry(Campain).State = System.Data.Entity.EntityState.Modified;
 
-
-
                                     }
                                     else
                                     {
@@ -833,7 +833,7 @@ namespace FarmsApi.Services
         [Route("getSetCampainsData")]
         [HttpPost]
         public IHttpActionResult GetSetCampainsData(int type, string id, dynamic objs, int page = 1, int pageSize = 10, string filterText = null, int statusid = -1, int factoryid = 0, int divisionsid = 0,
-            int subdivisionsid = 0, int departmentsid = 0, int subdepartmentsid = 0, string Status101 = null)
+            int subdivisionsid = 0, int departmentsid = 0, int subdepartmentsid = 0, string statuscampain = null, string shnatmas = null)
         {
 
           
@@ -849,15 +849,39 @@ namespace FarmsApi.Services
 
             //int WorkerId = Convert.ToInt32(res);
 
-
+           
 
             using (var Context = new Context())
             {
+
+                if (res == "-1")
+                {
+                    if (shnatmas == null)
+                    {
+                        shnatmas = DateTime.Now.ToString("yyyy");
+                    }
+
+
+                    Campains c = Context.Campains.Where(x => x.ShnatMas == shnatmas && x.FarmId == -1).FirstOrDefault();
+
+                    if (c != null)
+                    {
+                        id= c.Id.ToString();
+                        res = c.Id.ToString();
+
+                    }
+
+                }
+
+
+               
+
                 // שליפה של הנתונים
                 if (type == 1)
                 {
 
-                    var CampainsList = Context.Campains.Where(x => x.FarmId.ToString() == id && x.StatusId == 1).OrderByDescending(x => x.DateRigster).ToList();
+
+                    var CampainsList = Context.Campains.Where(x => x.FarmId.ToString() == id && x.StatusId == 1 && x.Name!=null).OrderByDescending(x => x.DateRigster).ToList();
 
                     return Ok(CampainsList);
 
@@ -926,11 +950,6 @@ namespace FarmsApi.Services
                 if (type == 4)
                 {
 
-
-                  
-
-
-
                     Campains c = Context.Campains.Where(x => x.Id.ToString() == id && x.StatusId == 1).FirstOrDefault();
 
                     if (c != null)
@@ -949,7 +968,7 @@ namespace FarmsApi.Services
 
 
 
-                        var CurrentTotalCount = Context.Workers.Where(x =>
+                        var CurrentTotalCount = (from w in Context.Workers.Where(x =>
                                                                  x.FarmId == CurrentFarmId &&
 
                                                                  (filterText == null || ((x.FirstName + " " + x.LastName).Contains(filterText) || x.Taz.Contains(filterText) || x.Phone.Contains(filterText))) &&
@@ -972,8 +991,20 @@ namespace FarmsApi.Services
                                                                   ) &&
 
                                                                  (!string.IsNullOrEmpty(x.FirstName.Trim()) || !string.IsNullOrEmpty(x.LastName.Trim()) || !string.IsNullOrEmpty(x.Taz.Trim()))
+                                                                 )
+                                                                 from w101 in Context.Workers101.Where(x => x.WorkersId == w.Id && x.IsNew && (shnatmas == null || (shnatmas != null && x.ShnatMas == shnatmas))).DefaultIfEmpty()
 
-                                   ).Count(); // או לפי Date
+                                                 select new WorkerCampainItem
+                                                 {
+                                                     w = w,
+                                                     shnatmas = (w101 == null) ? null : w101.ShnatMas
+
+
+
+                                                 }).Where(y => (shnatmas == null || (shnatmas != null && y.shnatmas == shnatmas))).Count();
+
+
+                                                               //  ).Count(); // או לפי Date
 
 
 
@@ -1006,18 +1037,21 @@ namespace FarmsApi.Services
                                        from m in Context.CampainsStatusType.Where(x => x.Id == cs.MediaId && x.Type == 1).DefaultIfEmpty()
                                        from css in Context.CampainsStatusType.Where(x => x.Id == cs.StatusId && x.Type == 2).DefaultIfEmpty()
 
+                                       from w101 in Context.Workers101.Where(x => x.WorkersId == w.Id && x.IsNew && (shnatmas == null || (shnatmas !=null && x.ShnatMas==shnatmas))).DefaultIfEmpty()
 
                                        select new WorkerCampainItem
                                        {
                                            w=w,
                                            cs=cs,
                                            m=m,
-                                           css=css
+                                           css=css,
+                                           shnatmas = (w101==null)?null: w101.ShnatMas
 
 
-                                       }).OrderByDescending(x => x.w.Id)
+                                       }).Where(y=> (shnatmas == null || (shnatmas != null && y.shnatmas == shnatmas))).OrderByDescending(x => x.w.Id)
                                        .Skip((page - 1) * pageSize)
                                        .Take(pageSize)
+
                                        .ToList();
 
 
@@ -1036,6 +1070,138 @@ namespace FarmsApi.Services
                     return Ok();
                 }
 
+
+                // שליפה של עובדים 101 שנתי
+                if (type == 44)
+                {
+
+                    Campains c = Context.Campains.Where(x => x.FarmId == -1 && x.ShnatMas == shnatmas && x.StatusId == 1).FirstOrDefault();
+
+                    if (c != null)
+                    {
+
+                        var CurrentUser = Helper.GetCurrentUser();
+
+                        var CurrentUserId = CurrentUser.Id;
+                        var CurrentRolesId = CurrentUser.RolesId;
+                        var CurrentFarmId = CurrentUser.FarmId;
+
+
+                        var DepartmentsList = Helper.GetCurrentUserPermissions();
+
+                        var AllowedDepartmentIds = DepartmentsList.Select(x => x.Id).ToList();
+
+
+
+                        var CurrentTotalCount =  Context.Workers.Where(x =>
+                                                                 x.FarmId == CurrentFarmId &&
+
+                                                                 (filterText == null || ((x.FirstName + " " + x.LastName).Contains(filterText) || x.Taz.Contains(filterText) || x.Phone.Contains(filterText))) &&
+                                                                 (statusid == -1 || (x.StatusId == statusid)) &&
+                                                                 (factoryid == 0 || (x.FactoryId == factoryid)) &&
+                                                                 (divisionsid == 0 || (x.DivisionsId == divisionsid)) &&
+                                                                 (subdivisionsid == 0 || (x.SubDivisionsId == subdivisionsid)) &&
+                                                                 (departmentsid == 0 || (x.DepartmentsId == departmentsid)) &&
+                                                                 (subdepartmentsid == 0 || (x.SubDepartmentsId == subdepartmentsid)) &&
+
+
+                                                                 // אם מדובר במנהל מערכת
+                                                                 // או בסופר אדמין
+                                                                 // אחרת תביא לי רק את העובדים שתחת הרשאה של מנהל מפעל או מחלקה
+                                                                 (CurrentRolesId == 0 ||
+                                                                  CurrentRolesId == 2 ||
+                                                                  AllowedDepartmentIds.Contains(x.FactoryId ?? -1) ||
+                                                                  AllowedDepartmentIds.Contains(x.DepartmentsId ?? -1)
+
+                                                                  ) &&
+
+                                                                 (!string.IsNullOrEmpty(x.FirstName.Trim()) || !string.IsNullOrEmpty(x.LastName.Trim()) || !string.IsNullOrEmpty(x.Taz.Trim()))
+                                                               
+
+                                                 ).Count();
+
+
+                        //  ).Count(); // או לפי Date
+
+
+
+
+
+
+                        var Results = (from w in Context.Workers.Where(x =>
+                                                                          x.FarmId == CurrentFarmId &&
+                                                                    //x.StatusId == 1 &&
+                                                                    (filterText == null || ((x.FirstName + " " + x.LastName).Contains(filterText) || x.Taz.Contains(filterText) || x.Phone.Contains(filterText))) &&
+
+                                                                    (statusid == -1 || (x.StatusId == statusid)) &&
+                                                                    (factoryid == 0 || (x.FactoryId == factoryid)) &&
+                                                                    (divisionsid == 0 || (x.DivisionsId == divisionsid)) &&
+                                                                    (subdivisionsid == 0 || (x.SubDivisionsId == subdivisionsid)) &&
+                                                                    (departmentsid == 0 || (x.DepartmentsId == departmentsid)) &&
+                                                                    (subdepartmentsid == 0 || (x.SubDepartmentsId == subdepartmentsid)) &&
+
+                                                                   (CurrentRolesId == 0 ||
+                                                                   CurrentRolesId == 2 ||
+                                                                   AllowedDepartmentIds.Contains(x.FactoryId ?? -1) ||
+                                                                   AllowedDepartmentIds.Contains(x.DepartmentsId ?? -1)
+
+                                                                   ) &&
+
+                                                                     (!string.IsNullOrEmpty(x.FirstName.Trim()) || !string.IsNullOrEmpty(x.LastName.Trim()) || !string.IsNullOrEmpty(x.Taz.Trim()))
+                                                                )
+
+                                       from cs in Context.CampainsStatus.Where(x => x.CampainsId == c.Id && x.WorkersId == w.Id).DefaultIfEmpty()
+
+                                       from f in Context.FarmPDFFiles.Where(x => x.FarmId == CurrentFarmId && x.StatusId==1 && x.Is101).DefaultIfEmpty()
+                                       from csf in Context.CampainsStatus.Where(x => x.CampainsId == f.CampainsId && x.WorkersId == w.Id && x.StatusId==6 && x.ShnatMas!=shnatmas).DefaultIfEmpty()
+
+                                       from m in Context.CampainsStatusType.Where(x => x.Id == cs.MediaId && x.Type == 1).DefaultIfEmpty()
+                                       from css in Context.CampainsStatusType.Where(x => x.Id == cs.StatusId && x.Type == 2).DefaultIfEmpty()
+
+                                      // from w101 in Context.Workers101.Where(x => x.WorkersId == w.Id && x.IsNew && (shnatmas == null || (shnatmas != null && x.ShnatMas == shnatmas))).DefaultIfEmpty()
+
+                                       select new WorkerCampainItem
+                                       {
+                                           w = w,
+                                           cs = cs,
+                                           m = m,
+                                           css = css,
+                                           isworker101done= (csf == null) ? false : true
+                                           // shnatmas = (w101 == null) ? null : w101.ShnatMas
+
+
+                                       }).Where(x=>x.isworker101done).OrderByDescending(x => x.w.Id)
+                                       .Skip((page - 1) * pageSize)
+                                       .Take(pageSize)
+
+                                       .ToList();
+
+
+                        WorkersCampainResult workersResult = new WorkersCampainResult();
+                        workersResult.TotalCount = CurrentTotalCount;
+                        workersResult.Items = Results;
+
+                        return Ok(workersResult);
+
+
+
+                        //  return Ok(Results);
+
+                    }
+
+                    return Ok();
+                }
+
+                // שליפה של קמפיין לפי שנה
+                if (type == 444)
+                {
+
+
+                    var Campain = Context.Campains.Where(x => x.FarmId == -1 && x.StatusId == 1 && x.ShnatMas == shnatmas).FirstOrDefault();
+
+                    return Ok(Campain);
+
+                }
 
                 // שליפה של קמפיין לטובת משתמש שנכנס לקמפיין
                 if (type == 5)
@@ -1147,7 +1313,7 @@ namespace FarmsApi.Services
         [Route("sendLinktoWorkers")]
         [HttpPost]
         public IHttpActionResult sendLinktoWorkers(List<Workers> workers,int type,int campainid, int page = 1, int pageSize = 10, string filterText = null, int statusid = -1, int factoryid = 0, int divisionsid = 0,
-            int subdivisionsid = 0, int departmentsid = 0, int subdepartmentsid = 0, string Status101 = null)
+            int subdivisionsid = 0, int departmentsid = 0, int subdepartmentsid = 0, string Status101 = null, string shnatmas = null)
         {
 
 
@@ -1155,6 +1321,16 @@ namespace FarmsApi.Services
             {
 
                 var CurrentDate = DateTime.Now;
+
+                Campains c = Context.Campains.Where(x => x.Id == campainid).FirstOrDefault();
+
+                if (shnatmas != null)
+                {
+
+                    c = Context.Campains.Where(x => x.FarmId == -1 && x.ShnatMas == shnatmas && x.StatusId == 1).FirstOrDefault();
+                }
+
+
 
                 foreach (Workers worker in workers)
                 {
@@ -1174,19 +1350,25 @@ namespace FarmsApi.Services
 
 
 
-                    if (!string.IsNullOrEmpty(Phone) && Phone.Length > 7)
-                    {
+                    //if (!string.IsNullOrEmpty(Phone) && Phone.Length > 7)
+                    //{
 
-                        string SiteRegisterCampain = Helper.GetConfigureValue("SiteRegisterCampain");
 
-                        var Message = string.Format("שלום {0}\r\nלהשלמת הטופס ולחתימה לחצ/י כאן:\r\n{1}\r\n", FullName, SiteRegisterCampain + EncryptId + "/" + campainid.ToString() + "/");
 
-                        Campains c = Context.Campains.Where(x => x.Id == campainid).FirstOrDefault();
+                        string SiteUsersCampains = ConfigurationSettings.AppSettings["SiteUsersCampains"].ToString();
+
+                        var Message = string.Format("שלום רב {0}\r\nלצפיה ולחתימה על כל המסמכים שלך לחצ/י כאן:\r\n{1}\r\n", FullName, SiteUsersCampains + EncryptId + "/");
+
+                        //string SiteRegisterCampain = Helper.GetConfigureValue("SiteRegisterCampain");
+
+                        //var Message = string.Format("שלום {0}\r\nלהשלמת הטופס ולחתימה לחצ/י כאן:\r\n{1}\r\n", FullName, SiteRegisterCampain + EncryptId + "/" + c.Id.ToString() + "/");
+
+                      
 
                         bool IsSendWorkers = false;
 
                         // SMS
-                        if (type == 1)
+                        if (type == 1 && !string.IsNullOrEmpty(Phone) && Phone.Length > 7)
                         {
 
 
@@ -1235,7 +1417,7 @@ namespace FarmsApi.Services
                         if (IsSendWorkers)
                         {
 
-                            CampainsStatus cs = Context.CampainsStatus.Where(x => x.CampainsId == campainid && x.WorkersId == Id).FirstOrDefault();
+                            CampainsStatus cs = Context.CampainsStatus.Where(x => x.CampainsId == c.Id && x.WorkersId == Id).FirstOrDefault();
 
                             if (cs != null)
                             {
@@ -1253,6 +1435,7 @@ namespace FarmsApi.Services
                                 cs.MediaId = type;
                                 cs.WorkersId = Id;
                                 cs.DateSend = CurrentDate;
+                                cs.ShnatMas = shnatmas;
                                 Context.Entry(cs).State = System.Data.Entity.EntityState.Modified;
                             }
                             else
@@ -1261,11 +1444,11 @@ namespace FarmsApi.Services
                                 cs = new CampainsStatus();
 
                                 cs.StatusId = 5;
-                                cs.CampainsId = campainid;
+                                cs.CampainsId = c.Id;
                                 cs.MediaId = type;
                                 cs.WorkersId = Id;
                                 cs.DateSend = CurrentDate;
-
+                                cs.ShnatMas = shnatmas;
                                 Context.CampainsStatus.Add(cs);
 
                                 c.CountSend++;
@@ -1282,7 +1465,7 @@ namespace FarmsApi.Services
 
 
 
-                    }
+                  //  }
 
 
                 }
@@ -1290,16 +1473,7 @@ namespace FarmsApi.Services
 
 
 
-                //string res = id;
-
-                //if (Regex.Matches(id, @"[a-zA-Z]").Count > 0)
-                //{
-                //    id = id.Replace("@@", "+").Replace("ofekslash", "/");
-                //    res = UsersService.DecryptString(id);
-                //}
-
-
-                //int WorkerId = Convert.ToInt32(res);
+             
 
 
 
@@ -1309,8 +1483,8 @@ namespace FarmsApi.Services
 
 
             }
-            return GetSetCampainsData(4, campainid.ToString(), null, page,  pageSize ,  filterText ,  statusid,  factoryid,  divisionsid,
-             subdivisionsid,  departmentsid ,  subdepartmentsid ,  Status101 );
+            return GetSetCampainsData((shnatmas==null?4:44), campainid.ToString(), null, page,  pageSize ,  filterText ,  statusid,  factoryid,  divisionsid,
+             subdivisionsid,  departmentsid ,  subdepartmentsid ,  Status101,shnatmas);
 
 
             //return Ok();

@@ -195,9 +195,9 @@ namespace FarmsApi.Services
 
 
         // [Authorize]
-        [Route("getWorker/{id}")]
+        [Route("getWorker/{id}/{campainid}/{shnatmas}/")]
         [HttpGet]
-        public IHttpActionResult GetWorker(string id)
+        public IHttpActionResult GetWorker(string id,int campainid=-1,string shnatmas=null)
         {
             string res = id;
 
@@ -206,7 +206,7 @@ namespace FarmsApi.Services
                 id = id.Replace("@@", "+").Replace("ofekslash", "/");
                 res = UsersService.DecryptString(id);
             }
-            return Ok(UsersService.GetWorker(Convert.ToInt32(res)));
+            return Ok(UsersService.GetWorker(Convert.ToInt32(res), campainid, shnatmas));
         }
 
 
@@ -242,22 +242,23 @@ namespace FarmsApi.Services
 
                     if (Company == null) return Ok();
 
-
+                   // x.FarmId == Company.FarmId &&
                     var CampainsUsers = (
-                                         from c in Context.Campains.Where(x => x.FarmId == Company.FarmId && x.StatusId==1 && (!x.DateValidity.HasValue || (x.DateValidity.HasValue && x.DateValidity.Value >= CurrentDate)))
+                                         from c in Context.Campains.Where(x => (x.FarmId == Company.FarmId || x.FarmId ==-1) && x.StatusId==1 && (!x.DateValidity.HasValue || (x.DateValidity.HasValue && x.DateValidity.Value >= CurrentDate)))
                                          from cs in Context.CampainsStatus.Where(x => x.WorkersId == newId && c.Id==x.CampainsId)
                                          from cst in Context.CampainsStatusType.Where(x => x.Id == cs.StatusId).DefaultIfEmpty()
-
-                                        // where  !c.DateValidity.HasValue || (c.DateValidity.HasValue && c.DateValidity <= CurrentDate)
+                                         from farmpdffiles in Context.FarmPDFFiles.Where(x => x.CampainsId == c.Id && x.StatusId==1 && x.Is101).DefaultIfEmpty()
+                                             // where  !c.DateValidity.HasValue || (c.DateValidity.HasValue && c.DateValidity <= CurrentDate)
 
                                          select new 
                                   {
                                       cs,
                                       c,
-                                      cst
+                                      cst,
+                                      Is101 = (farmpdffiles==null)?false:true
 
 
-                                  }).OrderByDescending(x => x.c.DateRigster).ToList();
+                                         }).OrderBy(x => x.cs.StatusId).ThenByDescending(x => x.c.DateRigster).ToList();
 
                     return Ok(CampainsUsers);
                 }

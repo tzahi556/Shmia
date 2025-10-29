@@ -23,7 +23,7 @@
         }
     });
 
-    function WorkerController(usersService, farmsService, $scope, $state, sharedValues, filesService, $window, $timeout) {
+    function WorkerController(usersService, farmsService, $scope, $state, sharedValues, filesService, $window, $timeout, $stateParams) {
 
         this.sharedValues = sharedValues;
         this.scope = $scope;
@@ -66,6 +66,7 @@
         this.saveWorker = _saveWorker.bind(this);
         this.getFileName = _getFileName.bind(this);
         this.changeDateFormat = _changeDateFormat.bind(this);
+        this.refreshFields = _refreshFields.bind(this);
 
         
 
@@ -116,11 +117,47 @@
             }, []);
         }
 
-        function _init() {
 
+      
+
+
+        function _refreshFields() {
+
+            for (var i = 0; i < this.screendata.length; i++) {
+
+                if (!this.screendata[i].f2g) continue;
+
+                //*********************/
+
+                if (this.screendata[i].f.WorkerTableField) {
+
+                    var WorkerTableField = this.screendata[i].f.WorkerTableField;
+
+                    var WorkerTableFieldValue = this.worker.w[WorkerTableField];
+
+                    this.screendata[i].f2gwd.Value = WorkerTableFieldValue;
+
+                }
+
+            }
+
+
+        }
+
+
+        function _init() {
+            
            
             if (!this.worker.w101) {
-                this.worker.w101 = {ShnatMas:"2025"};
+
+
+                if ($stateParams.shnatmas) {
+                    this.worker.w101 = { ShnatMas: $stateParams.shnatmas };
+                } else {
+
+                    this.worker.w101 = { ShnatMas: (new Date().getFullYear()).toString() };
+                }
+
             }
 
             function setDateForArray(obj) {
@@ -150,9 +187,28 @@
 
             for (var i = 0; i < this.screendata.length; i++) {
 
+
                
 
+
+
                 if (!this.screendata[i].f2g) continue;
+
+
+                //************************************* */
+                if (this.screendata[i].f.WorkerTableField) {
+
+                    var WorkerTableField = this.screendata[i].f.WorkerTableField;
+
+                    var WorkerTableFieldValue = this.worker.w[WorkerTableField];
+
+                    this.screendata[i].f2gwd.Value = WorkerTableFieldValue;
+
+                }
+
+                //************************************* */
+
+
 
                 if (this.screendata[i].f2g.FieldsDataTypesId == 4 && this.screendata[i].f2gwd.Value)
                 {
@@ -180,13 +236,23 @@
        
             
             if ((this.worker.w101 && !this.worker.w101.ShnatMas))
-                this.worker.w101.ShnatMas = moment().format('YYYY');
 
+                if ($stateParams.shnatmas) {
+                    this.worker.w101.ShnatMas = $stateParams.shnatmas;
+                   
+                } else {
+
+                    this.worker.w101.ShnatMas = moment().format('YYYY');
+                }
                
             if (this.worker.w) setDateForArray(this.worker.w);
             if (this.worker.w101) setDateForArray(this.worker.w101);
-          
 
+            // באתי משנתי תכניס את השנה
+            if ($stateParams.shnatmas && $stateParams.fromshnati) {
+                this.worker.w101.ShnatMas = $stateParams.shnatmas;
+
+            } 
 
         
             setTimeout(function () {
@@ -211,7 +277,8 @@
 
             if (this.worker.w101)
             this.worker.w101.ZikuyToshavIsrael = (this.worker.w101.ToshavIsrael == 1 ? true : false)
-              
+
+          
 
             //}.bind(this));
 
@@ -683,7 +750,9 @@
                 }
             }
 
+            //debugger
 
+            //alert(self.campainid + ' ' + self.worker.w101.ShnatMas);
 
             farmsService.getSetWorkerAndCompanyData(2, self.worker.w.Id, fields2GroupsWorkerDataList, self.campainid).then(function (screendata) {
 
@@ -731,7 +800,7 @@
             try {
 
                 
-                
+               
                 this.worker.w101.IsNew = true;
               
 
@@ -807,7 +876,7 @@
                         SaveDynamicData(this.worker);
                         usersService.updateWorker(this.worker, this.files, this.childs, type, this.campainid).then(function (worker) {
 
-
+                           
                             var m = this.campainsstatustype.filter(x => x.Id == worker.w101.StatusId);
                             if (m.length > 0) {
 
@@ -851,7 +920,7 @@
 
                     SaveDynamicData(this.worker);
                     usersService.updateWorker(this.worker, this.files, this.childs, type, this.campainid).then(function (worker) {
-                       
+                       debugger
                        //$.unblockUI();
                         $window.open(this.uploadsUri + "Workers/" + this.worker.w.Id + "/" + this.campainid +"/AllPdfTemp.pdf", '_blank');
                         //$window.open(this.uploadsUri + "Workers/2/AllPdfTemp.pdf", '_blank');

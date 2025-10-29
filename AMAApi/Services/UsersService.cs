@@ -4,6 +4,7 @@ using HtmlAgilityPack;
 using iTextSharp.text;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using Org.BouncyCastle.Ocsp;
 using Org.BouncyCastle.Utilities.Collections;
 using RestSharp;
 using System;
@@ -395,6 +396,9 @@ namespace FarmsApi.Services
                 //{
 
 
+
+
+
                 var CurrentTotalCount = Context.Workers.Where(x =>
                                                               x.FarmId == CurrentFarmId &&
 
@@ -470,19 +474,19 @@ namespace FarmsApi.Services
 
 
 
-                foreach (var item in WorkersList)
-                {
-                    if (item?.w == null) continue;
+                //foreach (var item in WorkersList)
+                //{
+                //    if (item?.w == null) continue;
 
-                    if (item?.w101 == null)
-                    {
-                        item.w101 = new Workers101();
-                        item.w101.UserId = item.w.Id;
-                        item.w101.ShnatMas = "2025";
-                    }
-                    string filePath = Path.Combine(basePath, item.w.Id.ToString(), "-1", "AllPdfTemp.pdf");
-                    item.HasPdf = System.IO.File.Exists(filePath);
-                }
+                //    if (item?.w101 == null)
+                //    {
+                //        item.w101 = new Workers101();
+                //        item.w101.UserId = item.w.Id;
+                //        item.w101.ShnatMas = DateTime.Now.ToString("yyyy");
+                //    }
+                //    string filePath = Path.Combine(basePath, item.w.Id.ToString(), "-1", "AllPdfTemp.pdf");
+                //    item.HasPdf = System.IO.File.Exists(filePath);
+                //}
 
                 WorkersResult workersResult = new WorkersResult();
                 workersResult.TotalCount = CurrentTotalCount;
@@ -564,7 +568,7 @@ namespace FarmsApi.Services
             }
         }
 
-        public static WorkersWith101 GetWorker(int id)
+        public static WorkersWith101 GetWorker(int id, int campainid = -1, string shnatmas = null)
         {
 
 
@@ -607,13 +611,14 @@ namespace FarmsApi.Services
 
                     }
 
+                  
 
 
                     //var Worker = Context.Workers.Include(x => x.UserManager).Where(x => x.Id == id).FirstOrDefault();
 
 
                     var Worker = (from w1 in Context.Workers.Where(x => x.Id == id).DefaultIfEmpty()
-                                  from w1011 in Context.Workers101.Where(x => x.WorkersId == w1.Id).DefaultIfEmpty()
+                                  from w1011 in Context.Workers101.Where(x => x.WorkersId == w1.Id && x.ShnatMas==shnatmas).DefaultIfEmpty()
                                   from u in Context.Users.Where(x => x.Id == w1011.UserId).DefaultIfEmpty()
                                   select new WorkersWith101
                                   {
@@ -701,7 +706,7 @@ namespace FarmsApi.Services
         public static WorkersWith101 UpdateWorkerAndFiles(JArray dataObj, int type,int campainid=-1)
         {
 
-            WorkersWith101 workersWith101 = UpdateWorker(dataObj[0].ToObject<WorkersWith101>());
+            WorkersWith101 workersWith101 = UpdateWorker(dataObj[0].ToObject<WorkersWith101>(), campainid);
 
             List<Files> f = dataObj[1].ToObject<List<Files>>();
             if (f != null) UpdateFilesObject(f, workersWith101.w);
@@ -839,6 +844,55 @@ namespace FarmsApi.Services
                                 workersWith101.w101.StatusId = 10;
 
                                 AddToLogDB("", "", " שליחה למשרד של עובד/ת חדשה  " + workersWith101.w.Id, null, "", workersWith101.w.Id);
+
+                                if (campainid!=-1)
+                                {
+                                    var Campain = Context.Campains.Where(x => x.Id == campainid && x.StatusId == 1).FirstOrDefault();
+                                    CampainsStatus cs = Context.CampainsStatus.Where(x => x.CampainsId == campainid && x.WorkersId == workersWith101.w.Id).FirstOrDefault();
+
+
+                                    if (cs == null)
+                                    {
+                                        cs = new CampainsStatus();
+                                        cs.StatusId = 6;
+                                        cs.CampainsId = campainid;
+                                        cs.WorkersId = workersWith101.w.Id;
+                                        cs.DateConfirm = DateTime.Now;
+                                        cs.ShnatMas = workersWith101.w101.ShnatMas;
+                                        Context.CampainsStatus.Add(cs);
+
+
+                                        Campain.CountSign++;
+                                        Context.Entry(Campain).State = System.Data.Entity.EntityState.Modified;
+
+                                    }
+                                    else
+                                    {
+
+                                        // הוספה למספר החותמים
+                                        if (cs.DateConfirm == null)
+                                        {
+                                            Campain.CountSign++;
+                                            Context.Entry(Campain).State = System.Data.Entity.EntityState.Modified;
+                                        }
+
+
+                                        cs.StatusId = 6;
+                                        cs.CampainsId = campainid;
+                                        cs.WorkersId = workersWith101.w.Id;
+                                        cs.DateConfirm = DateTime.Now;
+                                        cs.ShnatMas = workersWith101.w101.ShnatMas;
+                                        Context.Entry(cs).State = System.Data.Entity.EntityState.Modified;
+                                    }
+
+
+
+
+                                    Context.SaveChanges();
+
+
+
+                                }
                             }
                             //101 שנתי 
                             else
@@ -1077,16 +1131,45 @@ namespace FarmsApi.Services
         }
 
 
-        public static WorkersWith101 UpdateWorker(WorkersWith101 WorkersWith101)
+        public static WorkersWith101 UpdateWorker(WorkersWith101 WorkersWith101, int campainid = -1)
         {
             //  System.Threading.Thread.Sleep(5000);
 
             using (var Context = new Context())
             {
+               
+
 
 
                 Workers w = WorkersWith101.w;
                 Workers101 w101 = WorkersWith101.w101;
+
+                Campains c = Context.Campains.Where(x => x.Id == campainid).FirstOrDefault();
+                if (c != null && c.FarmId == -1 && c.ShnatMas != null)
+                {
+                    Workers101 ExistShnati = Context.Workers101.Where(x => x.WorkersId == w.Id && x.ShnatMas == c.ShnatMas).FirstOrDefault();
+
+                    if (ExistShnati == null)
+                    {
+                        w101.Id = 0;
+
+                        w101.IsNew = false;
+
+                    }
+                    else
+                    {
+                        //ExistShnati.ImgData = w101.ImgData;
+                        //w101 = ExistShnati;
+
+                        
+
+                    }
+
+                }
+
+
+
+
 
                 //נתונים נשמרו
                 w101.StatusId = 12;

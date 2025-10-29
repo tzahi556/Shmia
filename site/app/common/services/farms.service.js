@@ -31,7 +31,7 @@
         this.sendLinktoWorkers = _sendLinktoWorkers;
         
 
-        function _sendLinktoWorkers(workers, type, campainsId, page, pageSize, filterText, statusid, factoryid, divisionsid, subdivisionsid, departmentsid, subdepartmentsid, status101) {
+        function _sendLinktoWorkers(workers, type, campainsId, page, pageSize, filterText, statusid, factoryid, divisionsid, subdivisionsid, departmentsid, subdepartmentsid, status101,shnatmas) {
 
           
             if (!campainsId) campainsId = -1;
@@ -52,7 +52,8 @@
                         subdivisionsid: subdivisionsid,
                         departmentsid: departmentsid,
                         subdepartmentsid: subdepartmentsid,
-                        status101: status101
+                        status101: status101,
+                        shnatmas: shnatmas
                     }
                 }
 
@@ -83,7 +84,7 @@
         }
 
 
-        function _getSetCampainsData(type, campainid, objects, page, pageSize, filterText, statusid, factoryid, divisionsid, subdivisionsid, departmentsid, subdepartmentsid, status101) {
+        function _getSetCampainsData(type, campainid, objects, page, pageSize, filterText, statusid, factoryid, divisionsid, subdivisionsid, departmentsid, subdepartmentsid, statuscampain, shnatmas) {
 
            
             var deferred = $q.defer();
@@ -101,7 +102,8 @@
                         subdivisionsid: subdivisionsid,
                         departmentsid: departmentsid,
                         subdepartmentsid: subdepartmentsid,
-                        status101: status101
+                        statuscampain: statuscampain,
+                        shnatmas: shnatmas
                     }
                 }
 
