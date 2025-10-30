@@ -676,7 +676,7 @@ namespace FarmsApi.Services
             {
                 var Worker = Context.Workers.SingleOrDefault(u => u.Id == Id);
 
-                AddToLogDB("", "", " מחיקת עובדת " + Worker.Id, null, "", Worker.Id);
+                AddToLogDB("", "", " מחיקת עובדת " + Worker.Id + " " + Worker.FullName, null, "", Worker.Id);
 
 
                 Context.Workers.Remove(Worker);
@@ -726,12 +726,12 @@ namespace FarmsApi.Services
                     {
                         PdfAPI pa = new PdfAPI();
 
-                        if (workersWith101.w101.IsNew)
-                        {
+                        //if (workersWith101.w101.IsNew)
+                        //{
                             if (type == 2) AddToLogDB("", "", " יצירת פדפ לעובד/ת חדשה  " + workersWith101.w.Id, null, "", workersWith101.w.Id);
                             //pa.CreatePDF(workersWith101);
                             pa.CreateNewCompanyPDF(workersWith101.w.FarmId, campainid, workersWith101);
-                        }
+                        //}
 
                         //else
                         //{
@@ -1147,9 +1147,9 @@ namespace FarmsApi.Services
                 Campains c = Context.Campains.Where(x => x.Id == campainid).FirstOrDefault();
                 if (c != null && c.FarmId == -1 && c.ShnatMas != null)
                 {
-                    Workers101 ExistShnati = Context.Workers101.Where(x => x.WorkersId == w.Id && x.ShnatMas == c.ShnatMas).FirstOrDefault();
+                    //Workers101 ExistShnati = Context.Workers101.Where(x => x.WorkersId == w.Id && x.ShnatMas == c.ShnatMas).FirstOrDefault();
 
-                    if (ExistShnati == null)
+                    if (!Context.Workers101.Any(x => x.WorkersId == w.Id && x.ShnatMas == c.ShnatMas))
                     {
                         w101.Id = 0;
 
@@ -1166,13 +1166,19 @@ namespace FarmsApi.Services
                     }
 
                 }
+                else
+                {
+                    // אם לא הגיע מקמפיין של שנתי
+                    w101.IsNew = true;
+
+                }
 
 
 
 
 
-                //נתונים נשמרו
-                w101.StatusId = 12;
+                    //נתונים נשמרו
+                    w101.StatusId = 12;
 
                 if (w101.Id == 0)
                 {

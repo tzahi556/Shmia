@@ -303,7 +303,7 @@
                                     <td>{{campain.c.Name}}</td>
                                     <td>{{campain.cst.Name}}</td>
                                     <!--<td> <button class="btn  btn-warning" ui-sref="workerall({id:worker.w.Id})">עדכון</button></td>-->
-                                    <td ng-if="campain.cs.StatusId==5 && campain.Is101"> <button class="btn  btn-warning" ui-sref="worker({id:campain.cs.WorkersId,campainid:campain.c.Id,shnatmas:campain.cs.shnatmas,fromshnati:true})">חתימה</button></td>
+                                    <td ng-if="campain.cs.StatusId==5 && campain.Is101"> <button class="btn  btn-warning" ui-sref="worker({id:campain.cs.WorkersId,campainid:campain.c.Id,shnatmas:campain.cs.ShnatMas,fromshnati:true})">חתימה</button></td>
                                     <td ng-if="campain.cs.StatusId==5 && !campain.Is101"> <button class="btn  btn-warning" ui-sref="workercampains({id:campain.cs.WorkersId,campainid:campain.c.Id})">חתימה</button></td>
 
                                     <td ng-if="campain.cs.StatusId==6"><a class="btn  btn-success" ng-href="{{$ctrl.uploadsUri + campain.cs.WorkersId +'/' + campain.c.Id +'/AllPdfTemp.pdf'}}" target="_blank">PDF</a></td>

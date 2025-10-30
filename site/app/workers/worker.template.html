@@ -57,7 +57,7 @@
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label>שנת מס</label>
-                                <select class="form-control" ng-model="$ctrl.worker.w101.ShnatMas" required>
+                                <select class="form-control" disabled ng-model="$ctrl.worker.w101.ShnatMas" required>
                                     <option value="">--בחר שנת מס--</option>
                                     <option value="2021">2021</option>
                                     <option value="2022">2022</option>
@@ -79,8 +79,8 @@
 
                         <div class="col-md-3" ng-if="$ctrl.role==2">
                             <div class="form-group">
-                                <label>מנהל אזור</label>
-                                <select class="form-control" ng-options="user.Id as user.FullName for user in $ctrl.users" ng-model="$ctrl.worker.w101.UserId">
+                                <label>משתמש מעדכן</label>
+                                <select class="form-control" disabled ng-options="user.Id as user.FullName for user in $ctrl.users" ng-model="$ctrl.worker.w101.UserId">
                                     <!--<option value="">--בחר מנהל אזור --</option>-->
 
                                 </select>

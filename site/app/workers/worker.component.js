@@ -148,6 +148,7 @@
         function _init() {
             
            
+           
             if (!this.worker.w101) {
 
 
@@ -799,9 +800,9 @@
            
             try {
 
-                
+                debugger
                
-                this.worker.w101.IsNew = true;
+                //this.worker.w101.IsNew = true;
               
 
                 var obj = this.worker.w; //angular.copy(this.worker.w);

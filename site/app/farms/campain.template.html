@@ -1037,7 +1037,7 @@
                         <div style="float:left" ng-if="$ctrl.currentFarm.FarmsTypesId==1">
                             <!--רק לעובדים אפשרות להקים מפה חדש-->
                             <!--<button ng-click="$ctrl.downloadExcel()" class="btn btn-success btn-xs">הורדת פרטי עובדים</button>-->
-                            <a ng-if="($ctrl.farmspdffiles | filter:{ Is101: true }).length > 0" class="btn btn-success btn-xs" ui-sref="worker({id:0,campainid:$ctrl.campain.Id,shnatmas:$ctrl.ShnatMas})">{{$ctrl.currentFarm.FarmsTypeNameOne}} חדש/ה</a>
+                            <a ng-if="($ctrl.farmspdffiles | filter:{ Is101: true }).length > 0" class="btn btn-success btn-xs" ui-sref="worker({id:0,campainid:$ctrl.campain.Id,shnatmas:($ctrl.ShnatMas?$ctrl.ShnatMas:$ctrl.ShnatMasTemp)})">{{$ctrl.currentFarm.FarmsTypeNameOne}} חדש/ה</a>
                             <a ng-if="($ctrl.farmspdffiles | filter:{ Is101: true }).length == 0" class="btn btn-success btn-xs" ui-sref="workerall({id:0,campainid:$ctrl.campain.Id})">{{$ctrl.currentFarm.FarmsTypeNameOne}} חדש/ה</a>
                         </div>
                     </div>
@@ -1202,7 +1202,7 @@
 
                                     <td><a ng-if="worker.css.Id==6" class="btn  btn-success" ng-href="{{$ctrl.uploadsUri + worker.w.Id +'/' + worker.cs.CampainsId +'/AllPdfTemp.pdf'}}" target="_blank">PDF</a></td>
                                     <td ng-if="($ctrl.farmspdffiles | filter:{ Is101: true }).length == 0"> <button class="btn  btn-warning" ui-sref="workercampains({id:worker.w.Id,campainid:$ctrl.campain.Id})">עדכון</button></td>
-                                    <td ng-if="($ctrl.farmspdffiles | filter:{ Is101: true }).length > 0"> <button class="btn  btn-warning" ui-sref="worker({id:worker.w.Id,campainid:$ctrl.campain.Id,shnatmas:$ctrl.ShnatMas})">עדכון</button></td>
+                                    <td ng-if="($ctrl.farmspdffiles | filter:{ Is101: true }).length > 0"> <button class="btn  btn-warning" ui-sref="worker({id:worker.w.Id,campainid:$ctrl.campain.Id,shnatmas:(worker.shnatmas?worker.shnatmas:$ctrl.ShnatMasTemp)})">עדכון</button></td>
 
                                     <td width="5%"><input style="width:52px;height:20px" type="checkbox" ng-model="worker.IsSelected"/></td>
 

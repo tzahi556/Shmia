@@ -59,7 +59,7 @@
         this.currentFarm = JSON.parse(localStorage.getItem('FarmObj'));
 
         this.uploadsUri = sharedValues.apiUrl + '/uploads/Workers/'
-       // this.ShnatMas = moment().format('YYYY');
+        this.ShnatMasTemp = moment().format('YYYY');
 
       // this.ShnatMas = moment().format('YYYY');
 
@@ -799,8 +799,8 @@
             if (selected.length > 0) {
                 var confirmBox = alertMessage(`האם לשלוח ${typename} לכל העובדים המסומנים?`, 4);
                 confirmBox.click(function () {
-                    
-                    farmsService.sendLinktoWorkers(workersSelected, type, ctrl.campain.Id, ctrl.currentPage, ctrl.pageSize, ctrl.filterText, ctrl.statusid, ctrl.factoryid, ctrl.divisionid, ctrl.subdivisionid, ctrl.departmentsid, ctrl.subdepartmentsid, ctrl.status101).then(function (res) {
+
+                    farmsService.sendLinktoWorkers(workersSelected, type, ctrl.campain.Id, ctrl.currentPage, ctrl.pageSize, ctrl.filterText, ctrl.statusid, ctrl.factoryid, ctrl.divisionid, ctrl.subdivisionid, ctrl.departmentsid, ctrl.subdepartmentsid, ctrl.status101, (ctrl.ShnatMas ? ctrl.ShnatMas : ctrl.ShnatMasTemp)).then(function (res) {
 
                         ctrl.workers = res;
                         ctrl.checkAllc = false;

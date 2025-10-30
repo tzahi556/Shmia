@@ -28,29 +28,29 @@
         this.scope = $scope;
         this.checkAll = _checkAll.bind(this);
         this.sendSMS = _sendSMS.bind(this);
-        
+
         this.farmsService = farmsService;
         this.SaveData = _SaveData.bind(this);
-      
+
         this.init = _init.bind(this);
         this.role = localStorage.getItem('currentRolesId');
 
-   
+
         this.currentFarm = JSON.parse(localStorage.getItem('FarmObj'));
 
-     
+
         this.ShnatMas = moment().format('YYYY');
 
-     
 
 
-   
+
+
 
 
 
         function _init(isfromRefresh) {
 
-          
+
             if (!isfromRefresh) {
                 if (this.role == 2) {
                     this.active = 0;   // טאב ראשון
@@ -71,7 +71,7 @@
 
             //******************************************************** */
 
-         
+
             var workersFilters = JSON.parse(localStorage.getItem('workersFilters'));
             if (workersFilters) {
                 self.statusid = workersFilters.statusid;
@@ -92,10 +92,10 @@
             }
 
 
-           
+
             var campainLast = JSON.parse(localStorage.getItem('campainLast'));
             if (campainLast) {
-               
+
                 //$scope.$applyAsync(() => { self.campain = campainLast; });
                 this.campain.Id = campainLast.Id;
                 //$scope.$apply(() => {
@@ -141,13 +141,13 @@
             });
 
 
-           // alert(this.campain.Id);
-           
+            // alert(this.campain.Id);
+
 
         }
 
-     
-       
+
+
         this.init();
 
         function _SaveData(type) {
@@ -295,7 +295,7 @@
 
                         window.open(url, '_blank');
 
-                       
+
                         farmsService.sendLinktoWorkers(workersSelected, type, ctrl.campain.Id).then(function (res) {
 
                             ctrl.workers = res;
@@ -394,7 +394,7 @@
             }
 
 
-           
+
             var workersFilters = {
                 statusid: self.statusid,
                 ShnatMas: self.ShnatMas,
@@ -413,7 +413,7 @@
         };
 
         this.onShnatmasChange = function () {
-          
+
             var ctrl = this;
 
             var statusid = this.statusid;
@@ -428,9 +428,10 @@
 
             farmsService.getSetCampainsData(444, "-1", null, ctrl.currentPage, ctrl.pageSize, ctrl.filterText, statusid, factoryid, divisionid, subdivisionid, departmentsid, subdepartmentsid, statuscampain, shnatmas).then(function (res) {
 
-               
-                ctrl.campain = res;
-                localStorage.setItem('campainLast', JSON.stringify(ctrl.campain));
+                if (res) {
+                    ctrl.campain = res;
+                    localStorage.setItem('campainLast', JSON.stringify(ctrl.campain));
+                }
             });
 
         };
@@ -453,16 +454,16 @@
             var shnatmas = this.ShnatMas;
 
 
-            
+
             farmsService.getSetCampainsData(44, ctrl.campain.Id, null, ctrl.currentPage, ctrl.pageSize, ctrl.filterText, statusid, factoryid, divisionid, subdivisionid, departmentsid, subdepartmentsid, statuscampain, shnatmas).then(function (res) {
 
 
                 ctrl.workers = res;
-               
+
             });
 
 
-        
+
 
         }
 

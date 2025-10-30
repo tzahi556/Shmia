@@ -52,7 +52,7 @@ namespace FarmsApi.Services
             using (var Context = new Context())
             {
 
-                CurrentFarm = Context.Farms.Where(x=>x.Id== FarmId).FirstOrDefault();
+                CurrentFarm = Context.Farms.Where(x => x.Id == FarmId).FirstOrDefault();
 
                 var BaseLinkCompany = System.Web.HttpContext.Current.Server.MapPath("~/Uploads/Companies/" + FarmId.ToString() + "/PDFS/");
                 var BaseLink = System.Web.HttpContext.Current.Server.MapPath("~/Uploads/Companies/" + FarmId.ToString() + "/PDFS/" + CampainsId + "/");
@@ -94,7 +94,7 @@ namespace FarmsApi.Services
                     }
                 }
 
-                var FarmPDFFilesList = Context.FarmPDFFiles.Where(x => (x.FarmId == FarmId || x.FarmId ==-1) && x.StatusId == 1 && x.CampainsId == CampainsId).OrderBy(x => x.Seq).ToList();
+                var FarmPDFFilesList = Context.FarmPDFFiles.Where(x => (x.FarmId == FarmId || x.FarmId == -1) && x.StatusId == 1 && x.CampainsId == CampainsId).OrderBy(x => x.Seq).ToList();
 
                 int Counter = 0;
 
@@ -335,22 +335,26 @@ namespace FarmsApi.Services
                     {
 
 
-                        if (workersWith101 != null && FarmPDFFilesList.Count>0 && FarmPDFFilesList[0].FarmId!=-1 && FarmPDFFilesList.Any(x=>x.Is101))
+                        if (workersWith101 != null && FarmPDFFilesList.Count > 0 && FarmPDFFilesList[0].FarmId != -1 && FarmPDFFilesList.Any(x => x.Is101))
                         {
 
 
-
-                            //sourceDir = BaseLinkSite;
-                            //files = Directory.GetFiles(sourceDir);
-                            files = Directory.GetFiles(sourceDirFilesUpload);
-
-                            var filesImages = files.Where(x => !x.Contains("Signature.png") && ImageExtensions.Contains(System.IO.Path.GetExtension(x).ToUpperInvariant())).ToList();
-                            if (filesImages.Count > 0)
+                            try
                             {
-                                var filePath = sourceDir + "/ImagesAll.pdf";
-                                CreateImagesPDF(sourceDir, pdf, filesImages);
+                                //sourceDir = BaseLinkSite;
+                                //files = Directory.GetFiles(sourceDir);
+                                files = Directory.GetFiles(sourceDirFilesUpload);
+
+                                var filesImages = files.Where(x => !x.Contains("Signature.png") && ImageExtensions.Contains(System.IO.Path.GetExtension(x).ToUpperInvariant())).ToList();
+                                if (filesImages.Count > 0)
+                                {
+                                    var filePath = sourceDir + "/ImagesAll.pdf";
+                                    CreateImagesPDF(sourceDir, pdf, filesImages);
+
+                                }
 
                             }
+                            catch { }
                         }
 
                         pdfDoc.Close();
@@ -505,7 +509,7 @@ namespace FarmsApi.Services
 
                 var res = workersWith101.w[PropertyName];
 
-                if (res == null && workersWith101.w101!=null)
+                if (res == null && workersWith101.w101 != null)
                 {
                     res = workersWith101.w101[PropertyName];
                 }
@@ -687,7 +691,7 @@ namespace FarmsApi.Services
 
                 else if (res != null && ((PropertyValue == null) || PropertyValue == res.ToString() || res.ToString() == "True") && res.ToString() != "False")
                 {
-                    if (item.Word.Contains("x") || res.ToString()=="true")
+                    if (item.Word.Contains("x") || res.ToString() == "true")
                         item.Word = "x"; //"✓"
                     else
                         item.Word = res.ToString();

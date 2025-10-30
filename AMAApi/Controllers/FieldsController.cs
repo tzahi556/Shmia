@@ -1324,11 +1324,11 @@ namespace FarmsApi.Services
 
                 Campains c = Context.Campains.Where(x => x.Id == campainid).FirstOrDefault();
 
-                if (shnatmas != null)
-                {
+                //if (shnatmas != null)
+                //{
 
-                    c = Context.Campains.Where(x => x.FarmId == -1 && x.ShnatMas == shnatmas && x.StatusId == 1).FirstOrDefault();
-                }
+                //    c = Context.Campains.Where(x => x.FarmId == -1 && x.ShnatMas == shnatmas && x.StatusId == 1).FirstOrDefault();
+                //}
 
 
 
@@ -1473,7 +1473,9 @@ namespace FarmsApi.Services
 
 
 
-             
+                return GetSetCampainsData((c.FarmId== -1 ? 44 : 4), campainid.ToString(), null, page, pageSize, filterText, statusid, factoryid, divisionsid,
+                       subdivisionsid, departmentsid, subdepartmentsid, Status101, shnatmas);
+
 
 
 
@@ -1483,8 +1485,6 @@ namespace FarmsApi.Services
 
 
             }
-            return GetSetCampainsData((shnatmas==null?4:44), campainid.ToString(), null, page,  pageSize ,  filterText ,  statusid,  factoryid,  divisionsid,
-             subdivisionsid,  departmentsid ,  subdepartmentsid ,  Status101,shnatmas);
 
 
             //return Ok();

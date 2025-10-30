@@ -284,7 +284,7 @@
                     controllerAs: '$ctrl',
                     resolve: {
                         worker: function (usersService, $stateParams) {
-
+                            debugger
                             return usersService.getWorker($stateParams.id, $stateParams.campainid, $stateParams.shnatmas);
                         },
                         files: function (usersService, $stateParams) {
