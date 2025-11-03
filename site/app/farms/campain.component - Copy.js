@@ -12,8 +12,6 @@
             grps: '<',
             btns2grps: '<',
             workers: '<',
-
-            fieldsddl: '<',
             departments: '<'
         }
     });
@@ -53,10 +51,6 @@
         this.actionFieldGroup = _actionFieldGroup.bind(this);
 
         this.init = _init.bind(this);
-        this.setScreenMode = _setScreenMode.bind(this);
-        
-
-
         this.role = localStorage.getItem('currentRolesId');
 
         // alert(this.role);
@@ -67,10 +61,6 @@
         this.uploadsUri = sharedValues.apiUrl + '/uploads/Workers/'
         this.ShnatMasTemp = moment().format('YYYY');
 
-
-        this.ScreenMode = localStorage.getItem("ScreenMode");
-        this.ScreenModeText = (this.ScreenMode == 1) ? "מוד רגיל" : "מוד טפסים";
-        
       // this.ShnatMas = moment().format('YYYY');
 
 
@@ -108,42 +98,11 @@
 
         };
 
-        function _setScreenMode() {
 
-            
-           
-            if (!this.ScreenMode || this.ScreenMode == 2) {
-
-                type = 1;
-                this.ScreenModeText = "מוד רגיל";
-
-            } else {
-                type = 2;
-                this.ScreenModeText = "מוד טפסים";
-
-            }
-
-
-            this.ScreenMode = type;
-            localStorage.setItem("ScreenMode", type);
-
-            const myTimeout = setTimeout(BuildEditPDF, 300);
-
-
-
-        }
      
         function _init(isfromRefresh) {
 
-
-            if (!this.ScreenMode) {
-
-                this.setScreenMode();
-
-            }
            
-          
-
             if (!isfromRefresh) {
                 if (this.role == 2) {
                     this.active = 0;   // טאב ראשון
@@ -395,6 +354,9 @@
 
         }
 
+
+
+
         $scope.getSetFields2PDF = function (type, Objects, FullLink, currentWidth, dir) {
 
 
@@ -441,14 +403,6 @@
 
             // עדכון או הוספה או מחיקה
             if (type == 2) {
-
-               
-                //if (Objects.Fields2GroupsId == -2) {
-
-                //    Objects.Fields2GroupsId = self.grps[0].Id;
-
-                //}
-
                 farmsService.actionFieldGroup(14, self.farm.Id, Objects, self.campain.Id).then(function (field2pdf) {
 
                     (async () => {
@@ -514,6 +468,10 @@
             });
 
         }
+
+
+
+
 
         function _SaveData(type) {
 
@@ -627,23 +585,8 @@
                     }
 
 
-
-
-
-
-
                     self.btns = btns;
-
-                    self.farmsService.actionFieldGroup(3, self.farm.Id, Objects, self.campain.Id).then(function (btns2grps) {
-                        self.btns2grps = btns2grps;
-                        const myTimeout = setTimeout(BuildEditPDF, 300);
-
-                    }.bind(this));
-
-
-
-
-                  
+                    const myTimeout = setTimeout(BuildEditPDF, 300);
 
 
                     // self.init();
@@ -758,10 +701,7 @@
             //עריכת שדה בקבוצה
             if (type == 12) {
 
-
                 var btns2grp = this.btns2grps.filter(x => x.f2g.Id == objid);
-
-              
 
                 if (btns2grp.length > 0) {
 
@@ -778,35 +718,6 @@
 
             }
 
-            ////עריכת שדה בקבוצה
-            //if (type == 122) {
-
-
-               
-            //    debugger
-            //    var btns2grp = this.btns2grps.filter(x => x.f2g.FieldsId == objid && x.f2g.FieldsGroupsId==this.grps[0].Id);
-
-
-               
-
-
-
-
-            //    if (btns2grp.length > 0) {
-
-
-
-            //        thisCtrl.btns2grp = btns2grp[0].f2g;
-            //        thisCtrl.btns2grp.Name = btns2grp[0].f.Name;
-
-            //        thisCtrl.btns2grp.FieldsDataTypesId = btns2grp[0].f2g.FieldsDataTypesId.toString();
-            //        OpenDialog(2);
-            //    }
-
-
-
-            //}
-
         }
 
         function _checkAll() {
@@ -814,7 +725,6 @@
 
             this.workers.Items.forEach(x => x.IsSelected = this.checkAllc);
         }
-
         function _sendSMS(type) {
 
 
@@ -905,6 +815,9 @@
 
 
         }
+
+
+
 
         //********************************************* */
 

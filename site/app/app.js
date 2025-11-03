@@ -284,7 +284,7 @@
                     controllerAs: '$ctrl',
                     resolve: {
                         worker: function (usersService, $stateParams) {
-                            debugger
+                          
                             return usersService.getWorker($stateParams.id, $stateParams.campainid, $stateParams.shnatmas);
                         },
                         files: function (usersService, $stateParams) {
@@ -847,8 +847,8 @@
             url: '/campain/{id}/',
             views: {
                 'main': {
-                    template: '<campain workers="$ctrl.workers" campain="$ctrl.campain" btns="$ctrl.btns"  grps="$ctrl.grps"  btns2grps="$ctrl.btns2grps" farm="$ctrl.farm" farmspdffiles="$ctrl.farmspdffiles" departments="$ctrl.departments"></campain>',
-                    controller: function (campain, farm, farmspdffiles, btns, grps, btns2grps, workers, departments) {
+                    template: '<campain workers="$ctrl.workers" campain="$ctrl.campain" fieldsddl="$ctrl.fieldsddl" btns="$ctrl.btns"  grps="$ctrl.grps"  btns2grps="$ctrl.btns2grps" farm="$ctrl.farm" farmspdffiles="$ctrl.farmspdffiles" departments="$ctrl.departments"></campain>',
+                    controller: function (campain, farm, farmspdffiles, btns, grps, btns2grps, workers, fieldsddl, departments) {
                         this.farm = farm;
                         this.campain = campain;
                         this.farmspdffiles = farmspdffiles;
@@ -857,6 +857,9 @@
                         this.btns2grps = btns2grps;
                         this.workers = workers;
                         this.departments = departments;
+                        this.fieldsddl = fieldsddl;
+
+                        
 
                     },
                     controllerAs: '$ctrl',
@@ -904,7 +907,19 @@
                                 return farmsService.getSetCampainsData(4, $stateParams.id, null);
                             }
                         },
-                       
+
+
+                        fieldsddl: function (farmsService, $stateParams) {
+
+                            return farmsService.getSetCampainsData(11, localStorage.getItem('FarmId'), null, $stateParams.id);
+                        },
+
+                        //fieldsdatatypes: function (farmsService, $stateParams) {
+
+                        //    return farmsService.getSetCampainsData(3, localStorage.getItem('FarmId'), null, $stateParams.id);
+                        //},
+
+                        
 
                         departments: function (farmsService, $stateParams) {
                             return farmsService.getSetCampainsData(9, localStorage.getItem('FarmId'), null);

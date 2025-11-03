@@ -55,6 +55,7 @@ namespace FarmsApi.DataModels
 
 
         public DbSet<FarmsTypes> FarmsTypes { get; set; }
+        public DbSet<Genders> Genders { get; set; }
 
         public Context() : base("Farms") {
 

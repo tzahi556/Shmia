@@ -84,6 +84,16 @@ namespace FarmsApi.DataModels
     }
 
 
+    public class Genders
+    {
+        [Key]
+        public int Id { get; set; }
+        public string Name { get; set; }
+
+
+    }
+
+
 
     [Table("Roles")]
     public class Roles

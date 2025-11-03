@@ -2,7 +2,7 @@
 
     var app = angular.module('app');
 
-   // https://test.dgtracking.co.il/#/worker/1880/
+    // https://test.dgtracking.co.il/#/worker/1880/
 
     app.component('worker', {
         templateUrl: 'app/workers/worker.template.html?v=3',
@@ -36,11 +36,11 @@
         this.farmid = localStorage.getItem('FarmId');
 
 
-        
 
 
 
-      
+
+
         this.uploadFile = _uploadFile.bind(this);
         this.uploadFileParud = _uploadFileParud.bind(this);
         this.uploadFileZikuyNeke = _uploadFileZikuyNeke.bind(this);
@@ -68,10 +68,11 @@
         this.changeDateFormat = _changeDateFormat.bind(this);
         this.refreshFields = _refreshFields.bind(this);
 
-        
 
+        this.ScreenMode = localStorage.getItem("ScreenMode");
+        this.hasAnyTrue = true;
         this.uploadsUri = sharedValues.apiUrl + '/uploads/'
-      
+
         this.foldertaz = "taz";
 
         self = this;
@@ -80,11 +81,11 @@
         // this.childs = [];
 
         this.ImageSignuture;
-       
+
         this.init();
 
 
-      
+
         $scope.getGroupsDetails = function (groupId) {
 
             return self.screendata.filter(x => x.f2g != null && x.f2g.FieldsGroupsId == groupId);
@@ -108,8 +109,7 @@
 
         function uniqueBy(arr, prop, prop2, tempRes) {
             return arr.reduce((a, d) => {
-                if (!a.includes(d[prop][prop2]))
-                {
+                if (!a.includes(d[prop][prop2])) {
                     a.push(d[prop][prop2]);
                     tempRes.push(d[prop]);
                 }
@@ -118,7 +118,7 @@
         }
 
 
-      
+
 
 
         function _refreshFields() {
@@ -146,9 +146,9 @@
 
 
         function _init() {
-            
-           
-           
+
+
+
             if (!this.worker.w101) {
 
 
@@ -166,10 +166,10 @@
                 Object.keys(obj).forEach(function (key, index) {
 
                     if (key.indexOf("Date") != -1 && obj[key] && key != "DateRigster") {
-                        
+
                         obj[key] = new Date(moment(obj[key]).format("YYYY-MM-DD"));// .startOf('day').toDate();
 
-                       
+
                     }
 
 
@@ -178,74 +178,96 @@
             }
 
 
-           
+
             this.groupsonly = [];
-           
+
             try {
                 uniqueBy(this.screendata, "fg", "Id", this.groupsonly);
             }
             catch { }
 
-            for (var i = 0; i < this.screendata.length; i++) {
 
 
+            
+            this.hasAnyTrue = this.screendata.some(x => x.IsExistsInPdfCanvas == true);
+
+            if (!this.hasAnyTrue) {
+                this.screendata = null;
+            }
+            else {
                
+                for (var i = 0; i < this.screendata.length; i++) {
 
 
 
-                if (!this.screendata[i].f2g) continue;
 
 
-                //************************************* */
-                if (this.screendata[i].f.WorkerTableField) {
 
-                    var WorkerTableField = this.screendata[i].f.WorkerTableField;
+                    if (!this.screendata[i].f2g) continue;
 
-                    var WorkerTableFieldValue = this.worker.w[WorkerTableField];
+                  
+                    ////************************************* */
+                    if (this.screendata[i].f.WorkerTableField) {
 
-                    this.screendata[i].f2gwd.Value = WorkerTableFieldValue;
+                        var WorkerTableField = this.screendata[i].f.WorkerTableField;
+
+                        var WorkerTableFieldValue = this.worker.w[WorkerTableField];
+
+                        this.screendata[i].f2gwd.Value = WorkerTableFieldValue;
+
+
+
+                    }
+
+                    ////************************************* */
+
+
+
+                    if (this.screendata[i].f2g.FieldsDataTypesId == 4 && this.screendata[i].f2gwd.Value) {
+                        this.screendata[i].f2gwd.Value = eval(this.screendata[i].f2gwd.Value);
+                    }
+
+                    if (this.screendata[i].f2g.FieldsDataTypesId == 3 && this.screendata[i].f2gwd.Value) {
+
+                        this.screendata[i].f2gwd.Value = new Date(moment(this.screendata[i].f2gwd.Value).format("YYYY-MM-DD"));
+
+
+                    }
+
+
+                    if (this.screendata[i].f2g.FieldsDataTypesId == 7 && this.screendata[i].f2g.FieldsDDLId > 0) {
+
+                        var f2g = this.screendata[i].f2g;
+                        this.screendata[i].f2gwd.Value = eval(this.screendata[i].f2gwd.Value);
+                        farmsService.getSetWorkerAndCompanyData(4, f2g.FieldsDDLId, null, 0).then(function (table) {
+                            f2g.FieldsDDL = table;
+                        }.bind(self));
+                        //this.screendata[i].f2gwd.Value = new Date(moment(this.screendata[i].f2gwd.Value).format("YYYY-MM-DD"));
+                    }
+
+
 
                 }
-
-                //************************************* */
-
-
-
-                if (this.screendata[i].f2g.FieldsDataTypesId == 4 && this.screendata[i].f2gwd.Value)
-                {
-                    this.screendata[i].f2gwd.Value = eval(this.screendata[i].f2gwd.Value);
-                }
-
-                if (this.screendata[i].f2g.FieldsDataTypesId == 3 && this.screendata[i].f2gwd.Value) {
-                    
-                    this.screendata[i].f2gwd.Value = new Date(moment(this.screendata[i].f2gwd.Value).format("YYYY-MM-DD"));
-
-                    
-                }
-
-                
 
             }
 
 
-           
-
 
             if (!this.worker.w.FarmId)
-                 this.worker.farmid = this.farmid;
+                this.worker.farmid = this.farmid;
 
-       
-            
+
+
             if ((this.worker.w101 && !this.worker.w101.ShnatMas))
 
                 if ($stateParams.shnatmas) {
                     this.worker.w101.ShnatMas = $stateParams.shnatmas;
-                   
+
                 } else {
 
                     this.worker.w101.ShnatMas = moment().format('YYYY');
                 }
-               
+
             if (this.worker.w) setDateForArray(this.worker.w);
             if (this.worker.w101) setDateForArray(this.worker.w101);
 
@@ -253,39 +275,39 @@
             if ($stateParams.shnatmas && $stateParams.fromshnati) {
                 this.worker.w101.ShnatMas = $stateParams.shnatmas;
 
-            } 
+            }
 
-        
+
             setTimeout(function () {
-                
+
 
                 autocomplete(document.getElementById("txtCity"), $scope.$ctrl.cities);
 
-                var allbanks = $scope.$ctrl.banks;
+                //var allbanks = $scope.$ctrl.banks;
 
-                for (var i in allbanks) {
-                    allbanks[i].Name = allbanks[i].Name + " - " + allbanks[i].Id ;
+                //for (var i in allbanks) {
+                //    allbanks[i].Name = allbanks[i].Name + " - " + allbanks[i].Id;
 
-                }
+                //}
 
-                autocomplete(document.getElementById("txtBanks"), allbanks);
+                //autocomplete(document.getElementById("txtBanks"), allbanks);
 
-                
-               // if ($scope.$ctrl.worker.BankNumName) { $scope.$ctrl.changeBank();}
 
-                
+                // if ($scope.$ctrl.worker.BankNumName) { $scope.$ctrl.changeBank();}
+
+
             }, 1000);
 
             if (this.worker.w101)
-            this.worker.w101.ZikuyToshavIsrael = (this.worker.w101.ToshavIsrael == 1 ? true : false)
+                this.worker.w101.ZikuyToshavIsrael = (this.worker.w101.ToshavIsrael == 1 ? true : false)
 
-          
+
 
             //}.bind(this));
 
 
 
-          
+
 
 
             this.tazfiles = this.getFileName(1);// this.files.filter(x => x.Type == 1)[0].FileName;
@@ -303,29 +325,29 @@
 
             this.filetiummastlush = this.getFileName(12);
 
-           
+
 
             // הכנסה של החתימה שתהיה בדף תמיד
             //var myCanvas = document.getElementById('maincanvas');
             //var ctx = myCanvas.getContext('2d');
             //var img = new Image;
-          
+
             //img.onload = function () {
             //    ctx.drawImage(img, 0, 0); // Or at whatever offset you like
             //};
 
             //img.src = this.uploadsUri + "/" + this.worker.Id + "/Signature.png";
-          
 
-           
+
+
         }
 
-        
+
 
         function _changeBank() {
 
 
-           
+
 
             this.worker.BrunchNumName = "";
             var allbanksbrunchs = [];
@@ -346,7 +368,7 @@
 
 
             //for (var i in this.banks) {
-                
+
             //    var BankNumName = this.banks[i].Name;
 
             //    if (BankNumName == this.worker.BankNumName) {
@@ -359,13 +381,13 @@
             //        }
 
             //        autocomplete(document.getElementById("txtBanksBrunchs"),allbanksbrunchs);
-                 
+
 
             //        break;
             //    }
 
             //}
-      //  alert(this.worker.BankNumName);
+            //  alert(this.worker.BankNumName);
 
         }
 
@@ -390,7 +412,7 @@
         function _uploadFile(file) {
 
 
-           
+
             if (file == "NoTaz") {
 
                 alertMessage("יש למלא תעודה זהות בשדה המיועד לכך!");
@@ -408,13 +430,13 @@
             this.tazfiles = this.tazfiles || [];
             var allfiles = file.split(",") || [];
 
-          
+
             for (var i in allfiles) {
                 var Obj = { "Id": 0, "Type": 1, "FileName": allfiles[i] };
                 this.files.push(Obj);
                 this.tazfiles.push(Obj);
             }
-            
+
         }
 
         function _uploadFileParud(file) {
@@ -605,11 +627,11 @@
 
 
 
-           
-            
-            var childBirthDate = this.changeDateFormat(this.newChild.BirthDate); 
 
-          
+
+            var childBirthDate = this.changeDateFormat(this.newChild.BirthDate);
+
+
 
             this.childs = this.childs || [];
             this.childs.push({ Id: this.newChild.Id, Name: this.newChild.Name, Taz: this.newChild.Taz, BirthDate: childBirthDate, IsInHouse: this.newChild.IsInHouse, IsBituaLeumi: this.newChild.IsBituaLeumi });
@@ -707,22 +729,22 @@
             //return yy + "-" + mm + "-" + dd;
 
 
-           
-            var d = new Date(dateVal),
-                    month = '' + (d.getMonth() + 1),
-                    day = '' + d.getDate(),
-                    year = d.getFullYear();
 
-                if (month.length < 2)
-                    month = '0' + month;
-                if (day.length < 2)
-                   day = '0' + day;
+            var d = new Date(dateVal),
+                month = '' + (d.getMonth() + 1),
+                day = '' + d.getDate(),
+                year = d.getFullYear();
+
+            if (month.length < 2)
+                month = '0' + month;
+            if (day.length < 2)
+                day = '0' + day;
 
             if (year < 1900 || year > 2100) return false;
 
 
-                return [year, month, day].join('-');
-           
+            return [year, month, day].join('-');
+
 
 
 
@@ -732,14 +754,14 @@
 
             var fields2GroupsWorkerDataList = [];
 
-          
+
 
             for (var i = 0; i < self.screendata.length; i++) {
                 if (!self.screendata[i].f2g) continue;
 
                 if (self.screendata[i].f2gwd) {
 
-                   
+
 
                     if (self.screendata[i].f2g.FieldsDataTypesId == 3 && self.screendata[i].f2gwd.Value)
                         self.screendata[i].f2gwd.Value = self.changeDateFormat(self.screendata[i].f2gwd.Value);
@@ -757,11 +779,11 @@
 
             farmsService.getSetWorkerAndCompanyData(2, self.worker.w.Id, fields2GroupsWorkerDataList, self.campainid).then(function (screendata) {
 
-               self.screendata = screendata;
+                self.screendata = screendata;
 
-               self.init();
+                self.init();
 
-               //debugger
+                //debugger
                 //alertMessage('הנתונים נשssssמרו בהצלחה!');
 
             }.bind(self));
@@ -796,14 +818,14 @@
             }
 
 
-           
-           
+
+
             try {
 
-                debugger
                
+
                 //this.worker.w101.IsNew = true;
-              
+
 
                 var obj = this.worker.w; //angular.copy(this.worker.w);
 
@@ -829,10 +851,10 @@
 
                     } else {
                         obj101["IsValid"] = false;
-                         
+
                     }
 
-                   
+
 
                     var Signature = $scope.accept();
                     if (!Signature.isEmpty) {
@@ -842,13 +864,13 @@
 
                     }
 
-                
+
 
                     usersService.updateWorker(this.worker, this.files, this.childs, type, this.campainid).then(function (worker) {
                         //  this.worker = worker;
                         SaveDynamicData(worker);
                         alertMessage('הנתונים נשמרו בהצלחה!');
-                       
+
                     }.bind(this));
 
                 }
@@ -864,7 +886,7 @@
                         }
 
 
-                      
+
                         var Signature = $scope.accept();
                         if (!Signature.isEmpty) {
                             obj101["ImgData"] = Signature.dataUrl;
@@ -873,11 +895,11 @@
 
                         }
 
-                       
+
                         SaveDynamicData(this.worker);
                         usersService.updateWorker(this.worker, this.files, this.childs, type, this.campainid).then(function (worker) {
 
-                           
+
                             var m = this.campainsstatustype.filter(x => x.Id == worker.w101.StatusId);
                             if (m.length > 0) {
 
@@ -890,14 +912,14 @@
 
                                 }
                             }
-                            
-                           
+
+
 
                         }.bind(this));
                     }
 
                     else {
-                        alertMessage("יש למלא את כל השדות המסומנים באדום , אלו שדות חובה",3);
+                        alertMessage("יש למלא את כל השדות המסומנים באדום , אלו שדות חובה", 3);
 
                     }
 
@@ -905,7 +927,7 @@
                 }
 
                 if (type == 3) {
-                   // $.blockUI({ css: {}, message: '<h5><div id="loader"></div><div class="tzahiStyle"> אנחנו כרגע מעבדים את הנתונים ומייצרים קובץ PDF  <br/>אנא המתנ/י...</div></h5>' });
+                    // $.blockUI({ css: {}, message: '<h5><div id="loader"></div><div class="tzahiStyle"> אנחנו כרגע מעבדים את הנתונים ומייצרים קובץ PDF  <br/>אנא המתנ/י...</div></h5>' });
 
                     var Signature = $scope.accept();
                     if (!Signature.isEmpty) {
@@ -916,21 +938,21 @@
                     }
 
 
-                    
+
 
 
                     SaveDynamicData(this.worker);
                     usersService.updateWorker(this.worker, this.files, this.childs, type, this.campainid).then(function (worker) {
-                       debugger
-                       //$.unblockUI();
-                        $window.open(this.uploadsUri + "Workers/" + this.worker.w.Id + "/" + this.campainid +"/AllPdfTemp.pdf", '_blank');
+                        
+                        //$.unblockUI();
+                        $window.open(this.uploadsUri + "Workers/" + this.worker.w.Id + "/" + this.campainid + "/AllPdfTemp.pdf?v=" + Date.now(), '_blank');
                         //$window.open(this.uploadsUri + "Workers/2/AllPdfTemp.pdf", '_blank');
                     }.bind(this));
 
                 }
             } catch (err) {
                 alertMessage(err.message, 3);
-              
+
 
             }
 

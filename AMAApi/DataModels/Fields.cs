@@ -27,6 +27,8 @@ namespace FarmsApi.DataModels
 
         public int CampainsId { get; set; }
 
+        public bool? IsDefault { get; set; }
+
         public string Name { get; set; }
 
         public int Seq { get; set; }
@@ -76,6 +78,8 @@ namespace FarmsApi.DataModels
 
         public int FieldsDataTypesId { get; set; }
 
+        public int? FieldsDDLId { get; set; }
+        
         public string Title { get; set; }
 
         public bool? IsWorkerHide { get; set; }
@@ -169,8 +173,8 @@ namespace FarmsApi.DataModels
     public class FieldsDDL
     {
         public int Id { get; set; }
-
-        public int FieldsGensId { get; set; }
+        
+        public string TableName { get; set; }
 
         public string Name { get; set; }
 
@@ -186,6 +190,8 @@ namespace FarmsApi.DataModels
         public Fields f { get; set; }
 
         public Fields2GroupsWorkerData f2gwd { get; set; }
+
+        public bool? IsExistsInPdfCanvas { get; set; }
 
     }
 

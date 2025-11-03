@@ -438,6 +438,9 @@ namespace FarmsApi.Services
                         fields2PDF_101.Comment = item.f.Name;
 
 
+
+
+
                         if (item.f.WorkerTableField == "1")
                         {
                             fields2PDF_101.Value = "Signuture";
@@ -462,6 +465,53 @@ namespace FarmsApi.Services
 
                         fields2PDF_101.FieldsDataTypesId = (item.f2g != null) ? item.f2g.FieldsDataTypesId : 0;
                         fields2PDF_101.Fields2GroupsWorkerDataValue = (item.f2gwd != null) ? item.f2gwd.Value : null;
+
+                        //מדובר בקומבו עם ערך
+                        if(item.f2gwd != null && !string.IsNullOrEmpty(item.f2gwd.Value) && fields2PDF_101.FieldsDataTypesId==7 && item.f2g.FieldsDDLId > 0)
+                        {
+
+
+                            var FieldsDDL = Context.FieldsDDL.Where(x => x.Id == item.f2g.FieldsDDLId).FirstOrDefault();
+
+                            var TableName = FieldsDDL.TableName;
+
+                            var results = new List<Dictionary<string, object>>();
+
+                            string Sql = $"SELECT * FROM [{TableName}] Where Id={item.f2gwd.Value}";
+
+                            using (var conn = new SqlConnection(Context.Database.Connection.ConnectionString))
+
+                            using (var cmd = new SqlCommand(Sql, conn))
+                            {
+                                conn.Open();
+                                using (var reader = cmd.ExecuteReader())
+                                {
+                                    while (reader.Read())
+                                    {
+                                        var row = new Dictionary<string, object>();
+                                        for (int i = 0; i < reader.FieldCount; i++)
+                                        {
+                                            row[reader.GetName(i)] = reader.IsDBNull(i) ? null : reader.GetValue(i);
+                                        }
+                                        results.Add(row);
+                                    }
+
+                                    if (results.Count > 0)
+                                    {
+
+                                        fields2PDF_101.Fields2GroupsWorkerDataValue = results[0]["Name"].ToString();
+                                    }
+
+                                
+                                }
+                            }
+
+                            //return Ok(results);
+
+
+                        }
+
+                        //************************************************************************************
                         Fields2PDF_101List.Add(fields2PDF_101);
 
                     }

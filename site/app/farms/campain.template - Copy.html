@@ -19,8 +19,8 @@
 
         $(function () {
 
-
-
+           
+           
 
 
             $("#sortable").sortable({
@@ -55,7 +55,7 @@
 
             $('#tab1,#tab2,#tab3,#tab4,#tab5').click(function (e) {
 
-
+                
 
 
                 var CurrentTab = $(this).attr("id");
@@ -80,7 +80,7 @@
                 var CurrentName = (angular.element(document.getElementById('mainControllerHorse')).scope().$ctrl.campain.Name);
                 if (!CurrentName || !IsSave) {
 
-
+                    
 
                     angular.element(document.getElementById('mainControllerHorse')).scope().$apply(function (scope) {
 
@@ -117,7 +117,7 @@
             });
 
 
-
+         
 
 
             const myTimeout = setTimeout(setCurrentFontSizeDrag
@@ -181,7 +181,7 @@
 
         function RefreshPage() {
 
-
+            
 
             PdfList = [];
 
@@ -466,7 +466,7 @@
                 drop: function (event, ui) {
 
 
-
+                    debugger
 
 
                     var x = ui.offset.left - $(this).offset().left;
@@ -515,13 +515,6 @@
 
                         }
 
-                        //else if (Fields2GroupsId.indexOf("btnField1_") > -1) {
-
-
-                        //    FieldsId = Fields2GroupsId.replace("btnField1_", "");
-                        //    Fields2GroupsId = -2;
-
-                        //}
 
 
                         $("#canvasContainer").append(ui.helper.clone(true).css({ left: x - 3, top: y }).addClass("btnGrpFieldHelper"));//.removeClass("btnGrpField"));
@@ -793,9 +786,9 @@
 
             <div class="col-md-5 colPadding0">
 
-                <!--<div class="col-md-12 colPadding0">-->
+                <div class="col-md-12 colPadding0">
 
-                    <div class="col-md-6 colPadding2" ng-if="$ctrl.ScreenMode==2">
+                    <div class="col-md-6 colPadding2">
                         <div class="panel panel-primary panelFields" style="z-index: 5 !important;">
                             <div class="panel-heading">
                                 שדות קיימים במערכת
@@ -809,13 +802,13 @@
 
                                     </div>
                                     <div class="col-md-4">
-                                        <button style="float:left" class="btn btn-success" title="הוספת שדה " ng-click="$ctrl.actionFieldGroup(4)">הוסף שדה</button>
+                                        <button class="btn btn-success" title="הוספת שדה " ng-click="$ctrl.actionFieldGroup(4)">הוסף שדה</button>
                                     </div>
                                     <div class="col-md-12">&nbsp;</div>
 
                                     <div class="col-md-6" ng-repeat="btn in $ctrl.btns | filter:FilterOnlySign ">
 
-                                        <div id="btnField_{{btn.Id}}" ng-style="{'float': (btn.WorkerTableField == '2' ? 'left' : 'right')}" class="btn btn-danger btnGrpField" title="יש לגרור לקבוצה הרצויה">
+                                        <div id="btnField_{{btn.Id}}" class="btn btn-danger btnGrpField" title="יש לגרור לקבוצה הרצויה">
                                             {{btn.Name}}
                                         </div>
 
@@ -831,7 +824,6 @@
                                     <div class="col-md-12" ng-repeat="btn in $ctrl.btns | filter:FilterWithoutSign">
 
                                         <div id="btnField_{{btn.Id}}" class="btn btn-primary btnField" title="יש לגרור לקבוצה הרצויה">
-                                            <!--btnField ng-click="$ctrl.actionFieldGroup(12,-2)"-->
                                             {{btn.Name}}
                                         </div>
                                         <div ng-if="btn.FarmId>0" class="btnLeft" ng-click="$ctrl.actionFieldGroup(5,btn.Id)">
@@ -841,180 +833,98 @@
 
 
 
+
                                 </div>
                             </div>
                         </div>
                     </div>
 
-
-                    <style>
-                        .video-container {
-                            position: relative;
-                            padding-bottom: 56.25%; /* יחס 16:9 */
-                            height: 0;
-                            overflow: hidden;
-                        }
-
-                            .video-container iframe {
-                                position: absolute;
-                                top: 0;
-                                left: 0;
-                                width: 100%;
-                                height: 100%;
-                            }
-
-
-
-                    </style>
-
-
-                    <div class="col-md-6 colPadding2" ng-if="$ctrl.ScreenMode==1">
-                        <div class="panel panel-primary panelFields" style="z-index: 5 !important;">
+                    <div class="col-md-6 colPadding2">
+                        <div class="panel panel-primary panelFields" style="z-index:4 !important;">
                             <div class="panel-heading">
-                                הסבר על התהליך
-                                <span></span>
+                                <div style="float:right">קבוצות שדות טופס</div>
+                                <div class="askIcon">
+                                    <img src="../../images/ask.png" class="imgAsk" />
+                                </div>
+                                <div>&nbsp;</div>
+
                             </div>
                             <div class="panel-body">
-                                <label>
-                                    להלן הסבר איך אנחנו יוצרים קמפיין<br />
-                                    שולחים לעובדים לחתימה וכו...
-                                </label>
-                                <div class="video-container">
-                                    <iframe width="560" height="315"
-                                            src="https://www.youtube.com/embed/dQw4w9WgXcQ"
-                                            title="YouTube video player"
-                                            frameborder="0"
-                                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                                            allowfullscreen>
-                                    </iframe>
-                                </div>
-                                </div>
-                            </div>
-                    </div>
-
-                <!--</div>-->
-
-                <div class="col-md-6 colPadding2">
-                    <div class="panel panel-primary panelFields" style="z-index:4 !important;">
-                        <div class="panel-heading">
-                            <div ng-if="$ctrl.ScreenMode==1" style="float:right">שדות קיימים במערכת</div>
-                            <div ng-if="$ctrl.ScreenMode==2" style="float:right">קבוצות שדות טופס</div>
 
 
-                            <a style="float:left" class="btn btn-info btn-xs" title="{{$ctrl.ScreenModeText}}">{{$ctrl.ScreenModeText}}</a> <!--ng-click="$ctrl.setScreenMode()"-->
-                            <!--<div class="askIcon">
-                                <img src="../../images/ask.png" class="imgAsk"  />
-                            </div>-->
-                            <div>&nbsp;</div>
+                                <div class="row">
 
-                        </div>
-                        <div class="panel-body">
-
-                            <!--רק במוד של גרירת שדות ללא מוד של טופס-->
-                            <div class="row" ng-if="$ctrl.ScreenMode==1">
-                                <div class="col-md-8" style="margin:0">
-
-                                    <input type="text" style="margin:0" class="form-control" ng-model="$ctrl.FieldName" placeholder="שם שדה" />
-
-                                </div>
-                                <div class="col-md-4">
-                                    <button style="float:left" class="btn btn-success" title="הוספת שדה" ng-click="$ctrl.actionFieldGroup(4)">הוסף שדה</button>
-                                </div>
-                                <div class="col-md-12">&nbsp;</div>
-
-                                <div class="col-md-6" ng-repeat="btn in $ctrl.btns | filter:FilterOnlySign">
-
-                                    <div id="btnField_{{btn.Id}}" ng-style="{'float': (btn.WorkerTableField == '2' ? 'left' : 'right')}" class="btn btn-danger btnGrpField" title="יש לגרור למקום הרצוי בקובץ">
-                                        {{btn.Name}}
+                                    <div class="col-md-8">
+                                        <input type="text" class="form-control" ng-model="$ctrl.GroupName" placeholder="שם קבוצה" />
                                     </div>
 
-                                </div>
-
-                                <div class="col-md-12">
-
-                                    <hr />
-
-                                </div>
-                            </div>
+                                    <div class="col-md-4 colPadding0">
 
 
-                            <!-- במוד של גרירת שדות  במוד של טופס-->
-                            <div class="row" ng-if="$ctrl.ScreenMode==2">
-
-                                <div class="col-md-8">
-                                    <input type="text" class="form-control" ng-model="$ctrl.GroupName" placeholder="שם קבוצה" />
-                                </div>
-
-                                <div class="col-md-4 colPadding0">
+                                        <button style="" class="btn btn-success" title="הוספת קבוצה" ng-click="$ctrl.actionFieldGroup(6)">הוסף קבוצה</button>
 
 
-                                    <button style="" class="btn btn-success" title="הוספת קבוצה" ng-click="$ctrl.actionFieldGroup(6)">הוסף קבוצה</button>
+                                    </div>
+
+                                    <div class="col-md-12">&nbsp;</div>
 
 
-                                </div>
+                                    <div class="panelGroup">
+                                        <div id="grp_{{grp.Id}}" class="col-md-12" ng-repeat="grp in $ctrl.grps">
 
-                                <div class="col-md-12">&nbsp;</div>
-                            </div>
+                                            <div class="panel panel-info">
 
+                                                <div class="panel-heading">
 
+                                                    <div style="float:right">{{grp.Name}}</div>
+                                                    <div class="btnLeft" ng-click="$ctrl.actionFieldGroup(7,grp.Id)">
+                                                        <img src="../../images/delete3.png" width="24px" />
+                                                    </div>
 
-                            <div class="row">
-                                <div class="panelGroup">
-                                    <div id="grp_{{grp.Id}}" class="col-md-12" ng-repeat="grp in $ctrl.grps">
-
-                                        <div class="panel panel-info">
-
-                                            <div class="panel-heading">
-
-                                                <div style="float:right">{{grp.Name}}</div>
-                                                <div class="btnLeft" ng-if="$ctrl.grps.length!=1" ng-click="$ctrl.actionFieldGroup(7,grp.Id)">
-                                                    <img src="../../images/delete3.png" width="24px" />
+                                                    <div class="btnLeft" style="margin-left:5px;" ng-click="$ctrl.actionFieldGroup(11,grp.Id)">
+                                                        <img src="../../images/edit.png" width="24px" />
+                                                    </div>
+                                                    <div>&nbsp;</div>
                                                 </div>
 
-                                                <div class="btnLeft" style="margin-left:5px;" ng-click="$ctrl.actionFieldGroup(11,grp.Id)">
-                                                    <img src="../../images/edit.png" width="24px" />
-                                                </div>
-                                                <div>&nbsp;</div>
-                                            </div>
+                                                <div class="panel-body grpBody" id="grpBody_{{grp.Id}}">
 
-                                            <div class="panel-body grpBody" id="grpBody_{{grp.Id}}">
-
-                                                <div class="col-md-12 colPadding0" style="" ng-if="btns2grp.f2g.FieldsGroupsId==grp.Id" ng-repeat="btns2grp in $ctrl.btns2grps">
+                                                    <div class="col-md-12 colPadding0" style="" ng-if="btns2grp.f2g.FieldsGroupsId==grp.Id" ng-repeat="btns2grp in $ctrl.btns2grps">
 
 
-                                                    <div class="col-md-11 colPadding0" style="">
+                                                        <div class="col-md-11 colPadding0" style="">
 
-                                                        <div id="btnGrpField_{{btns2grp.f2g.Id}}" ng-click="$ctrl.actionFieldGroup(12,btns2grp.f2g.Id)" class="btn btn-primary btnGrpField" title="יש לגרור למקום הרצוי בטופס ">
-                                                            {{btns2grp.f.Name}}
+                                                            <div id="btnGrpField_{{btns2grp.f2g.Id}}" ng-click="$ctrl.actionFieldGroup(12,btns2grp.f2g.Id)" class="btn btn-primary btnGrpField" title="יש לגרור למקום הרצוי בטופס ">
+                                                                {{btns2grp.f.Name}}
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="col-md-1 colPadding0" style="">
+                                                            <div class="" ng-click="$ctrl.actionFieldGroup(10,btns2grp.f2g.Id)">
+                                                                <img src="../../images/delete3.png" width="18px" />
+                                                            </div>
                                                         </div>
                                                     </div>
 
-                                                    <div class="col-md-1 colPadding0" style="">
-                                                        <div class="" ng-if="!btns2grp.f.WorkerTableField" ng-click="$ctrl.actionFieldGroup(10,btns2grp.f2g.Id)">
-                                                            <img src="../../images/delete3.png" width="18px" />
-                                                        </div>
-                                                    </div>
+
                                                 </div>
-
-
                                             </div>
                                         </div>
                                     </div>
                                 </div>
+
+
+
+
                             </div>
-
-
-
-
                         </div>
+
                     </div>
+
 
                 </div>
 
-
             </div>
-
-
             <div class="col-md-7">
 
                 <div class="col-md-4 colPadding2">
@@ -1052,8 +962,8 @@
 
                     <!--<span id="spxx"></span> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span id="spyy"></span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span id="spScale"></span>-->
                     <!--<br />
-                    <span id="spx"></span> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span id="spy"></span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-                    <br />W-<span id="spWidth"></span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<br />H-<span id="spHeight"></span>-->
+                <span id="spx"></span> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span id="spy"></span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+                <br />W-<span id="spWidth"></span>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<br />H-<span id="spHeight"></span>-->
                 </div>
 
 
@@ -1084,13 +994,13 @@
 
                         <div class="panel panel-primary">
                             <!--<div class="panel-heading">
-                                תצוגת קובץ PDF
+                            תצוגת קובץ PDF
 
-                                <div style="float:left;cursor:pointer" class="panelClose">
-                                    <img src="../../images/_notArrive.png" width="24px" />
-                                </div>
+                            <div style="float:left;cursor:pointer" class="panelClose">
+                                <img src="../../images/_notArrive.png" width="24px" />
+                            </div>
 
-                            </div>-->
+                        </div>-->
                             <div class="panel-body" id="panelBody">
                                 <div id="divContainerEnd"
                                      style="border:2px solid black;height:100%;overflow:auto;">
@@ -1133,27 +1043,27 @@
                     </div>
                     <div class="panel-body">
 
+                       
+                            <div class="col-md-2" ng-if="($ctrl.farmspdffiles | filter:{ Is101: true }).length > 0">
+                                <div class="form-group">
+                                    <label>שנת מס</label>
+                                    <select class="form-control" ng-model="$ctrl.ShnatMas" ng-change="$ctrl.onSearchChange()">
+                                        <option value="">--בחר שנת מס--</option>
+                                        <option value="2021">2021</option>
+                                        <option value="2022">2022</option>
+                                        <option value="2023">2023</option>
+                                        <option value="2024">2024</option>
+                                        <option value="2025">2025</option>
+                                        <option value="2026">2026</option>
+                                        <option value="2027">2027</option>
+                                        <option value="2028">2028</option>
+                                        <option value="2029">2029</option>
 
-                        <div class="col-md-2" ng-if="($ctrl.farmspdffiles | filter:{ Is101: true }).length > 0">
-                            <div class="form-group">
-                                <label>שנת מס</label>
-                                <select class="form-control" ng-model="$ctrl.ShnatMas" ng-change="$ctrl.onSearchChange()">
-                                    <option value="">--בחר שנת מס--</option>
-                                    <option value="2021">2021</option>
-                                    <option value="2022">2022</option>
-                                    <option value="2023">2023</option>
-                                    <option value="2024">2024</option>
-                                    <option value="2025">2025</option>
-                                    <option value="2026">2026</option>
-                                    <option value="2027">2027</option>
-                                    <option value="2028">2028</option>
-                                    <option value="2029">2029</option>
+                                    </select>
+                                </div>
 
-                                </select>
                             </div>
-
-                        </div>
-
+                            
 
                         <div class="col-md-2">
                             <label>חיפוש חופשי</label>
@@ -1294,7 +1204,7 @@
                                     <td ng-if="($ctrl.farmspdffiles | filter:{ Is101: true }).length == 0"> <button class="btn  btn-warning" ui-sref="workercampains({id:worker.w.Id,campainid:$ctrl.campain.Id})">עדכון</button></td>
                                     <td ng-if="($ctrl.farmspdffiles | filter:{ Is101: true }).length > 0"> <button class="btn  btn-warning" ui-sref="worker({id:worker.w.Id,campainid:$ctrl.campain.Id,shnatmas:(worker.shnatmas?worker.shnatmas:$ctrl.ShnatMasTemp)})">עדכון</button></td>
 
-                                    <td width="5%"><input style="width:52px;height:20px" type="checkbox" ng-model="worker.IsSelected" /></td>
+                                    <td width="5%"><input style="width:52px;height:20px" type="checkbox" ng-model="worker.IsSelected"/></td>
 
                                 </tr>
 
@@ -1395,7 +1305,7 @@
 
     </uib-tabset>
 
-
+   
 
 
     <div id="dialogContainerEditGroup" style="display:none">
@@ -1499,12 +1409,6 @@
                     </div>
 
                     <div class="form-group">
-                        <label>ערך דיפלוטיבי</label>
-                        <input type="text" class="form-control" ng-model="$ctrl.btns2grp.DefaultValue" />
-                    </div>
-
-
-                    <div class="form-group">
                         <label><br /><input type="checkbox" ng-model="$ctrl.btns2grp.IsWorkerHide" />  האם להסתיר מהעובד/ת  </label>
                     </div>
 
@@ -1531,24 +1435,13 @@
                             <option value="4">צ'קבוקס מאוזן</option>
                             <option value="6">צ'קבוקס אנכי</option>
                             <option value="5">טקסט רחב</option>
-                            <option value="7">רשימה</option>
                         </select>
                     </div>
 
-
-
-
-                    <div class="form-group" ng-if="$ctrl.btns2grp.FieldsDataTypesId==7">
-                        <label>בחירת רשימה </label>
-                        <select id="ddlFieldsDDL" class="form-control" ng-model="$ctrl.btns2grp.FieldsDDLId" ng-options="fieldddl.Id as fieldddl.Name for fieldddl in $ctrl.fieldsddl">
-                            <option value="">-- בחר/י רשימה --</option>
-
-                        </select>
+                    <div class="form-group">
+                        <label>ערך דיפלוטיבי</label>
+                        <input type="text" class="form-control" ng-model="$ctrl.btns2grp.DefaultValue" />
                     </div>
-
-
-
-
 
                 </div>
             </div>

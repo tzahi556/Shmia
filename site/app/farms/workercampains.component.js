@@ -35,9 +35,14 @@
         this.init = _init.bind(this);
         this.saveWorker = _saveWorker.bind(this);
         this.changeDateFormat = _changeDateFormat.bind(this);
+
+        this.getTable = _getTable.bind(this);
+
         this.ImageSignuture;
         this.uploadsUri = sharedValues.apiUrl + '/uploads/'
 
+        this.ScreenMode = localStorage.getItem("ScreenMode");
+        this.hasAnyTrue = true;
         this.init();
 
         self = this;
@@ -47,6 +52,19 @@
             return self.screendata.filter(x => x.f2g != null && x.f2g.FieldsGroupsId == groupId);
 
         };
+
+
+        function _getTable(FieldsDDLId) {
+
+          
+            farmsService.getSetWorkerAndCompanyData(4, FieldsDDLId, null, self.campain.Id).then(function (table) {
+
+            }.bind(self));
+          
+
+        };
+
+
 
         function uniqueBy(arr, prop, prop2, tempRes) {
             return arr.reduce((a, d) => {
@@ -88,24 +106,45 @@
             } catch { }
 
 
-            for (var i = 0; i < this.screendata.length; i++) {
 
 
-              
+            this.hasAnyTrue = this.screendata.some(x => x.IsExistsInPdfCanvas == true);
 
-                if (!this.screendata[i].f2g) continue;
+            if (!this.hasAnyTrue) {
+                this.screendata = null;
+            } else {
+                for (var i = 0; i < this.screendata.length; i++) {
 
-                if ((this.screendata[i].f2g.FieldsDataTypesId == 4 || this.screendata[i].f2g.FieldsDataTypesId == 6) && this.screendata[i].f2gwd.Value) {
-                    this.screendata[i].f2gwd.Value = eval(this.screendata[i].f2gwd.Value);
-                }
+                   
+
+                    if (!this.screendata[i].f2g) continue;
+
+                    if ((this.screendata[i].f2g.FieldsDataTypesId == 4 || this.screendata[i].f2g.FieldsDataTypesId == 6) && this.screendata[i].f2gwd.Value) {
+                        this.screendata[i].f2gwd.Value = eval(this.screendata[i].f2gwd.Value);
+                    }
 
 
-                if (this.screendata[i].f2g.FieldsDataTypesId == 3 && this.screendata[i].f2gwd.Value) {
+                    if (this.screendata[i].f2g.FieldsDataTypesId == 3 && this.screendata[i].f2gwd.Value) {
 
-                    this.screendata[i].f2gwd.Value = new Date(moment(this.screendata[i].f2gwd.Value).format("YYYY-MM-DD"));
+                        this.screendata[i].f2gwd.Value = new Date(moment(this.screendata[i].f2gwd.Value).format("YYYY-MM-DD"));
+                    }
+
+                    if (this.screendata[i].f2g.FieldsDataTypesId == 7 && this.screendata[i].f2g.FieldsDDLId > 0) {
+                       
+                        var f2g = this.screendata[i].f2g;
+                        this.screendata[i].f2gwd.Value = eval(this.screendata[i].f2gwd.Value);
+                        farmsService.getSetWorkerAndCompanyData(4, f2g.FieldsDDLId, null, 0).then(function (table) {
+                            f2g.FieldsDDL = table;
+                        }.bind(self));
+                        //this.screendata[i].f2gwd.Value = new Date(moment(this.screendata[i].f2gwd.Value).format("YYYY-MM-DD"));
+                    }
+
+
+
+
+
                 }
             }
-
 
             //alert(this.worker.IsHaveSignature);
             /* alert(this.campain.MustSign);*/
@@ -182,7 +221,7 @@
             //if (worker["ImgData"]) ObjPost.ImgData = { "ImgData": worker["ImgData"] };
 
 
-           
+
             farmsService.getSetWorkerAndCompanyData(22, self.worker.Id, ObjPost, self.campain.Id).then(function (screendata) {
 
                 //if (worker["ImgData"]) {
@@ -194,7 +233,7 @@
                 //    }.bind(self));
                 //}
 
-               
+
                 self.screendata = screendata;
 
 
@@ -279,7 +318,7 @@
                 if (type == 1) {
 
 
-                    
+
 
 
 
@@ -305,7 +344,7 @@
                             return;
 
                         }
-                      
+
 
 
 
@@ -366,7 +405,7 @@
 
 
 
-                   
+
                     //$.unblockUI();
 
                     //$window.open(this.uploadsUri + "Workers/2/AllPdfTemp.pdf", '_blank');
@@ -388,7 +427,7 @@
             //const today = new Date();
             //const timestamp = today.getTime(); //
 
-            $window.open(self.uploadsUri + "Workers/" + self.worker.Id + "/" + self.campain.Id + "/AllPdfTemp.pdf", '_blank');
+            $window.open(self.uploadsUri + "Workers/" + self.worker.Id + "/" + self.campain.Id + "/AllPdfTemp.pdf?v=" + Date.now(), '_blank');
 
         }
     }

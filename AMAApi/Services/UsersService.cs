@@ -769,7 +769,7 @@ namespace FarmsApi.Services
 
 
                             // אם עובדת חדש תשלח למשרד
-                            if (workersWith101.w101.IsNew)
+                            if (1==1) // workersWith101.w101.IsNew
                             {
 
                                 var Farm = Context.Farms.Where(x => x.Id == workersWith101.w.FarmId).FirstOrDefault();

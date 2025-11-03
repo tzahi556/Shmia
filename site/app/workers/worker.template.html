@@ -1850,7 +1850,7 @@
 
 
         <!--טופס הסכם-->
-        <div class="col-md-12">
+        <div class="col-md-12" ng-if="$ctrl.hasAnyTrue">
           
             <div class="row" ng-repeat="group in $ctrl.groupsonly">
                 <div ng-if="group.TitleTypeId!=2 && !group.ParentId">
@@ -1863,21 +1863,28 @@
 
                     </div>
 
-                    <div ng-if="screend.f2g.IsWorkerHide!=1 && group.TitleTypeId!=2" class="col-md-{{12/group.CountFieldsInRow}}" ng-repeat="screend in getGroupsDetails(group.Id)">
+                    <div ng-if="screend.f2g.IsWorkerHide!=1 && group.TitleTypeId!=2 && (screend.IsExistsInPdfCanvas ||  $ctrl.ScreenMode==2)" class="col-md-{{12/group.CountFieldsInRow}}" ng-repeat="screend in getGroupsDetails(group.Id)">
                         <div class="form-group" ng-if="screend.f2g.FieldsDataTypesId!=4 && screend.f2g.FieldsDataTypesId!=6">
-                            <label ng-if="!screend.f2g.Title">{{screend.f.Name}}</label>
-                            <label ng-if="screend.f2g.Title">{{screend.f2g.Title}}</label>
+                            <label ng-if="!screend.f2g.Title && (screend.f2g.FieldsDataTypesId!=7 || screend.f2g.FieldsDDLId>0)">{{screend.f.Name}}</label>
+                            <label ng-if="screend.f2g.Title  && (screend.f2g.FieldsDataTypesId!=7 || screend.f2g.FieldsDDLId>0)">{{screend.f2g.Title}}</label>
 
-                            <input ng-if="screend.f2g.FieldsDataTypesId==1" type="text" class="form-control" ng-model="screend.f2gwd.Value" />
-                            <input ng-if="screend.f2g.FieldsDataTypesId==2" type="number" class="form-control" ng-model="screend.f2gwd.Value" />
-                            <input ng-if="screend.f2g.FieldsDataTypesId==3" type="date" class="form-control date" ng-model="screend.f2gwd.Value" />
+                            <input ng-disabled="screend.f.WorkerTableField" ng-if="screend.f2g.FieldsDataTypesId==1" type="text" class="form-control" ng-model="screend.f2gwd.Value" />
+                            <input ng-disabled="screend.f.WorkerTableField" ng-if="screend.f2g.FieldsDataTypesId==2" type="number" class="form-control" ng-model="screend.f2gwd.Value" />
+                            <input ng-disabled="screend.f.WorkerTableField" ng-if="screend.f2g.FieldsDataTypesId==3" type="date" class="form-control date" ng-model="screend.f2gwd.Value" />
                             <!--<input ng-if="screend.f2g.FieldsDataTypesId==4" type="checkbox" class="form-check-input" />-->
-                            <textarea ng-if="screend.f2g.FieldsDataTypesId==5" type="text" class="form-control" ng-model="screend.f2gwd.Value" rows="4"></textarea> <!--ng-disabled="$ctrl.role!='farmAdmin' && $ctrl.role!='instructor'"-->
+                            <textarea ng-disabled="screend.f.WorkerTableField" ng-if="screend.f2g.FieldsDataTypesId==5" type="text" class="form-control" ng-model="screend.f2gwd.Value" rows="4"></textarea> <!--ng-disabled="$ctrl.role!='farmAdmin' && $ctrl.role!='instructor'"-->
+
+                            <select ng-disabled="screend.f.WorkerTableField" class="form-control" ng-if="screend.f2g.FieldsDataTypesId==7 && screend.f2g.FieldsDDLId>0"
+                                    ng-model="screend.f2gwd.Value"
+                                    ng-options="fieldddl.Id as fieldddl.Name for fieldddl in screend.f2g.FieldsDDL">
+                            </select>
+
+
                         </div>
                         <div class="col-md-12" ng-if="screend.f2g.FieldsDataTypesId==4">
 
                             <div class="checkbox">
-                                <input class="form-check-input"
+                                <input class="form-check-input" ng-disabled="screend.f.WorkerTableField"
                                        type="checkbox" ng-model="screend.f2gwd.Value" ng-true-value="true" ng-false-value="false" />
                                 <span ng-if="!screend.f2g.Title">
                                     {{screend.f.Name}}
@@ -1902,7 +1909,7 @@
                                     </span>
 
                                 </label><br />
-                                <input type="checkbox" ng-model="screend.f2gwd.Value">
+                                <input type="checkbox" ng-model="screend.f2gwd.Value" ng-disabled="screend.f.WorkerTableField">
                             </div>
 
                         </div>
@@ -1930,20 +1937,26 @@
 
                             </div>
 
-                            <div ng-if="screend.f2g.IsWorkerHide!=1" class="col-md-{{12/group2.CountFieldsInRow}}" ng-repeat="screend in getGroupsDetails(group2.Id)">
+                            <div ng-if="screend.f2g.IsWorkerHide!=1 && (screend.IsExistsInPdfCanvas ||  $ctrl.ScreenMode==2)" class="col-md-{{12/group2.CountFieldsInRow}}" ng-repeat="screend in getGroupsDetails(group2.Id)">
                                 <div class="form-group" ng-if="screend.f2g.FieldsDataTypesId!=4 && screend.f2g.FieldsDataTypesId!=6">
-                                    <label ng-if="!screend.f2g.Title">{{screend.f.Name}}</label>
-                                    <label ng-if="screend.f2g.Title">{{screend.f2g.Title}}</label>
+                                    <label ng-if="!screend.f2g.Title && (screend.f2g.FieldsDataTypesId!=7 || screend.f2g.FieldsDDLId>0)">{{screend.f.Name}}</label>
+                                    <label ng-if="screend.f2g.Title  && (screend.f2g.FieldsDataTypesId!=7 || screend.f2g.FieldsDDLId>0)">{{screend.f2g.Title}}</label>
 
-                                    <input ng-if="screend.f2g.FieldsDataTypesId==1" type="text" class="form-control" ng-model="screend.f2gwd.Value" />
-                                    <input ng-if="screend.f2g.FieldsDataTypesId==2" type="number" class="form-control" ng-model="screend.f2gwd.Value" />
-                                    <input ng-if="screend.f2g.FieldsDataTypesId==3" type="date" class="form-control date" ng-model="screend.f2gwd.Value" />
-                                    <textarea ng-if="screend.f2g.FieldsDataTypesId==5" type="text" class="form-control" ng-model="screend.f2gwd.Value" ng-disabled="$ctrl.role!='farmAdmin' && $ctrl.role!='instructor'" rows="4"></textarea>
+                                    <input ng-disabled="screend.f.WorkerTableField" ng-if="screend.f2g.FieldsDataTypesId==1" type="text" class="form-control" ng-model="screend.f2gwd.Value" />
+                                    <input ng-disabled="screend.f.WorkerTableField" ng-if="screend.f2g.FieldsDataTypesId==2" type="number" class="form-control" ng-model="screend.f2gwd.Value" />
+                                    <input ng-disabled="screend.f.WorkerTableField" ng-if="screend.f2g.FieldsDataTypesId==3" type="date" class="form-control date" ng-model="screend.f2gwd.Value" />
+                                    <textarea ng-disabled="screend.f.WorkerTableField" ng-if="screend.f2g.FieldsDataTypesId==5" type="text" class="form-control" ng-model="screend.f2gwd.Value" ng-disabled="$ctrl.role!='farmAdmin' && $ctrl.role!='instructor'" rows="4"></textarea>
+
+                                    <select ng-disabled="screend.f.WorkerTableField" class="form-control" ng-if="screend.f2g.FieldsDataTypesId==7 && screend.f2g.FieldsDDLId>0"
+                                            ng-model="screend.f2gwd.Value"
+                                            ng-options="fieldddl.Id as fieldddl.Name for fieldddl in screend.f2g.FieldsDDL">
+                                    </select>
+
                                 </div>
                                 <div class="col-md-12" ng-if="screend.f2g.FieldsDataTypesId==4">
 
                                     <div class="checkbox">
-                                        <input class="form-check-input"
+                                        <input class="form-check-input" ng-disabled="screend.f.WorkerTableField"
                                                type="checkbox" ng-model="screend.f2gwd.Value" ng-true-value="true" ng-false-value="false" />
                                         <span ng-if="!screend.f2g.Title">
                                             {{screend.f.Name}}
@@ -1968,7 +1981,7 @@
                                             </span>
 
                                         </label><br />
-                                        <input type="checkbox" ng-model="screend.f2gwd.Value">
+                                        <input type="checkbox" ng-model="screend.f2gwd.Value" ng-disabled="screend.f.WorkerTableField">
                                     </div>
 
                                 </div>
@@ -1978,21 +1991,27 @@
                         </div>
 
                         <div ng-if="!group.ParentId">
-                            <div ng-if="screend.f2g.IsWorkerHide!=1" class="col-md-{{12/group.CountFieldsInRow}}" ng-repeat="screend in getGroupsDetails(group.Id)">
-                                <div class="form-group" ng-if="screend.f2g.FieldsDataTypesId!=4 && screend.f2g.FieldsDataTypesId!=6">
-                                    <label ng-if="!screend.f2g.Title">{{screend.f.Name}}</label>
-                                    <label ng-if="screend.f2g.Title">{{screend.f2g.Title}}</label>
+                            <div ng-if="screend.f2g.IsWorkerHide!=1 && (screend.IsExistsInPdfCanvas ||  $ctrl.ScreenMode==2)" class="col-md-{{12/group.CountFieldsInRow}}" ng-repeat="screend in getGroupsDetails(group.Id)">
+                                <div  class="form-group" ng-if="screend.f2g.FieldsDataTypesId!=4 && screend.f2g.FieldsDataTypesId!=6" >
+                                    <label ng-if="!screend.f2g.Title && (screend.f2g.FieldsDataTypesId!=7 || screend.f2g.FieldsDDLId>0)">{{screend.f.Name}}</label>
+                                    <label ng-if="screend.f2g.Title  && (screend.f2g.FieldsDataTypesId!=7 || screend.f2g.FieldsDDLId>0)">{{screend.f2g.Title}}</label>
 
-                                    <input ng-if="screend.f2g.FieldsDataTypesId==1" type="text" class="form-control" ng-model="screend.f2gwd.Value" />
-                                    <input ng-if="screend.f2g.FieldsDataTypesId==2" type="number" class="form-control" ng-model="screend.f2gwd.Value" />
-                                    <input ng-if="screend.f2g.FieldsDataTypesId==3" type="date" class="form-control date" ng-model="screend.f2gwd.Value" />
+                                    <input ng-disabled="screend.f.WorkerTableField" ng-if="screend.f2g.FieldsDataTypesId==1" type="text" class="form-control" ng-model="screend.f2gwd.Value" />
+                                    <input ng-disabled="screend.f.WorkerTableField" ng-if="screend.f2g.FieldsDataTypesId==2" type="number" class="form-control" ng-model="screend.f2gwd.Value" />
+                                    <input ng-disabled="screend.f.WorkerTableField" ng-if="screend.f2g.FieldsDataTypesId==3" type="date" class="form-control date" ng-model="screend.f2gwd.Value" />
 
-                                    <textarea ng-if="screend.f2g.FieldsDataTypesId==5" type="text" class="form-control" ng-model="screend.f2gwd.Value" ng-disabled="$ctrl.role!='farmAdmin' && $ctrl.role!='instructor'" rows="4"></textarea>
+                                    <textarea ng-disabled="screend.f.WorkerTableField" ng-if="screend.f2g.FieldsDataTypesId==5" type="text" class="form-control" ng-model="screend.f2gwd.Value" ng-disabled="$ctrl.role!='farmAdmin' && $ctrl.role!='instructor'" rows="4"></textarea>
+
+                                    <select ng-disabled="screend.f.WorkerTableField" class="form-control" ng-if="screend.f2g.FieldsDataTypesId==7 && screend.f2g.FieldsDDLId>0"
+                                            ng-model="screend.f2gwd.Value"
+                                            ng-options="fieldddl.Id as fieldddl.Name for fieldddl in screend.f2g.FieldsDDL">
+                                    </select>
+
                                 </div>
                                 <div class="col-md-12" ng-if="screend.f2g.FieldsDataTypesId==4">
 
                                     <div class="checkbox">
-                                        <input class="form-check-input"
+                                        <input class="form-check-input" ng-disabled="screend.f.WorkerTableField"
                                                type="checkbox" ng-model="screend.f2gwd.Value" ng-true-value="true" ng-false-value="false" />
                                         <span ng-if="!screend.f2g.Title">
                                             {{screend.f.Name}}
@@ -2015,7 +2034,7 @@
                                             </span>
 
                                         </label><br />
-                                        <input type="checkbox" ng-model="screend.f2gwd.Value">
+                                        <input type="checkbox" ng-model="screend.f2gwd.Value" ng-disabled="screend.f.WorkerTableField">
                                     </div>
 
                                 </div>
