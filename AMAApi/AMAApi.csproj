@@ -246,7 +246,6 @@
     <Content Include="packages.config" />
     <Content Include="_App_Data\101.pdf" />
     <Content Include="_App_Data\Agree.pdf" />
-    <Content Include="_App_Data\Shiran.bak" />
     <None Include="Properties\PublishProfiles\IIS.pubxml" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -259,6 +258,7 @@
       <DependentUpon>Web.config</DependentUpon>
       <SubType>Designer</SubType>
     </None>
+    <Content Include="_App_Data\Shiran.bak" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="TODO.txt" />
