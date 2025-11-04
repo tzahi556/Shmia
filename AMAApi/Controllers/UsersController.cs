@@ -244,8 +244,8 @@ namespace FarmsApi.Services
 
                    // x.FarmId == Company.FarmId &&
                     var CampainsUsers = (
-                                         from c in Context.Campains.Where(x => (x.FarmId == Company.FarmId || x.FarmId ==-1) && x.StatusId==1 && (!x.DateValidity.HasValue || (x.DateValidity.HasValue && x.DateValidity.Value >= CurrentDate)))
-                                         from cs in Context.CampainsStatus.Where(x => x.WorkersId == newId && c.Id==x.CampainsId)
+                                         from c in Context.Campains.Where(x => (x.FarmId == Company.FarmId || x.FarmId ==-1) && x.StatusId==1)
+                                         from cs in Context.CampainsStatus.Where(x => x.WorkersId == newId && c.Id==x.CampainsId && (!c.DateValidity.HasValue || (c.DateValidity.HasValue && c.DateValidity.Value >= CurrentDate) || x.StatusId==6)) // יכולת לראות PDF
                                          from cst in Context.CampainsStatusType.Where(x => x.Id == cs.StatusId).DefaultIfEmpty()
                                          from farmpdffiles in Context.FarmPDFFiles.Where(x => x.CampainsId == c.Id && x.StatusId==1 && x.Is101).DefaultIfEmpty()
                                              // where  !c.DateValidity.HasValue || (c.DateValidity.HasValue && c.DateValidity <= CurrentDate)
