@@ -41,7 +41,7 @@
 
         this.ShnatMas = moment().format('YYYY');
 
-
+        this.uploadsUri = sharedValues.apiUrl + 'uploads/Workers/';
 
 
 

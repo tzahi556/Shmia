@@ -267,6 +267,9 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AppCode\PayPlus.cs" />
+    <Compile Include="AppCode\RestRequestJsonExtensions.cs" />
+    <Compile Include="Controllers\PaymentsController.cs" />
     <Compile Include="Controllers\SchedularController.cs" />
     <Compile Include="Controllers\FieldsController.cs" />
     <Compile Include="Controllers\FarmsController.cs" />

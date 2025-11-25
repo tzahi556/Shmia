@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.30330.147
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.36202.13
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "site", "site\", "{3D4D23D0-E02B-4708-BAC4-BE971E8E3363}"
 	ProjectSection(WebsiteProperties) = preProject

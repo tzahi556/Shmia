@@ -66,11 +66,17 @@ namespace FarmsApi
             await Task.Run(() =>
             {
 
+              
 
+                
+
+                 int FakeuserId = Helper.ConvertToInt(isfakeuser);
+
+               
             
 
 
-                var UserResult = GetUserWithDepartments(context.UserName, context.Password);
+                var UserResult = GetUserWithDepartments(context.UserName, context.Password, FakeuserId);
 
                 if (UserResult.User == null)
                 {
@@ -125,7 +131,7 @@ namespace FarmsApi
             });
         }
 
-        public UserResult GetUserWithDepartments(string email, string password)
+        public UserResult GetUserWithDepartments(string email, string password,int FakeuserId)
         {
 
 
@@ -147,6 +153,7 @@ namespace FarmsApi
                     cmd.CommandType = CommandType.StoredProcedure;
                     cmd.Parameters.AddWithValue("@Email", email);
                     cmd.Parameters.AddWithValue("@Password", password);
+                    cmd.Parameters.AddWithValue("@FakeuserId", FakeuserId);
 
                     using (var reader = cmd.ExecuteReader())
                     {

@@ -26,6 +26,8 @@
                     self.farmName = data.Name ? data.Name : DEFAULT_NAME;
                     authData.farmName = self.farmName;
 
+                   
+
                     localStorage.setItem('FarmObj', JSON.stringify(data));
                   
                     localStorage.setItem('FarmName', self.farmName);
@@ -34,6 +36,9 @@
                     localStorage.setItem('IsHiyuvInHashlama', data.IsHiyuvInHashlama);
                     localStorage.setItem('FarmStyle', data.Style);
                     localStorage.setItem('FarmId', res.FarmId);
+
+
+                    $rootScope.$broadcast('auth:login');
 
                 });
             });

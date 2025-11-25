@@ -17,15 +17,24 @@
 
         this.init = _init.bind(this);
        
-        this.currentFarm = JSON.parse(localStorage.getItem('FarmObj'));
+      
 
-       // alert(this.currentFarm.FarmsTypeName);
+       
 
         $rootScope.$on('$stateChangeSuccess', this.init);
-
+        $rootScope.$on('auth:login', this.init);
+        //$rootScope.$on('auth:login', function () {
+        //    vm.init();
+        //    $scope.$evalAsync(); // מבטיח עדכון ויזואלי
+        //});
         function _init() {
 
-         
+
+            debugger
+
+            this.currentFarm = JSON.parse(localStorage.getItem('FarmObj'));
+
+
             //$("#country").selectBoxIt({ /*autoWidth: false*/ });
             var role = localStorage.getItem('currentRolesId');
             this.role = role;

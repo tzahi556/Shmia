@@ -312,7 +312,7 @@ namespace FarmsApi.Services
 
             using (var Context = new Context())
             {
-                var User = Context.Users.Where(x => x.FarmId == FarmId).OrderBy(x => x.RolesId==2).FirstOrDefault();
+                var User = Context.Users.Where(x => x.FarmId == FarmId).OrderBy(x => x.RolesId).FirstOrDefault();
 
 
                 return Ok(User);

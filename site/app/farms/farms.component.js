@@ -18,7 +18,9 @@
 
             farmsService.getFarmsMainUser(farmId).then(function (res) {
 
-                
+
+                debugger
+
                 localStorage.setItem('isSystemEnter', true);
 
              
